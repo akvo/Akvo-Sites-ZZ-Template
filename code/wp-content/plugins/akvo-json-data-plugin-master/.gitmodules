@@ -1,3 +1,0 @@
-[submodule "modules/Pimple"]
-	path = modules/Pimple
-	url = git@github.com:fabpot/Pimple.git
