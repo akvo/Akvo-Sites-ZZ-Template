@@ -1,0 +1,706 @@
+[15/Sep/2015:10:36:31] Start site duplication : from site 23
+[15/Sep/2015:10:36:31] Admin email : lynn@akvo.org
+[15/Sep/2015:10:36:31] Domain : testclone.akvosites.akvo.org
+[15/Sep/2015:10:36:31] Path : /
+[15/Sep/2015:10:36:31] Site title : Test Clone
+[15/Sep/2015:10:36:32] Copy files from /var/akvo/akvosites/code/wp-content/uploads/sites/23/ to /var/akvo/akvosites/code/wp-content/uploads/sites/25/
+[15/Sep/2015:10:36:33] SQL :SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'akvosites' AND TABLE_NAME LIKE 'wp\\_23\\_%'
+[15/Sep/2015:10:36:33] Result :array (
+  0 => 'wp_23_commentmeta',
+  1 => 'wp_23_comments',
+  2 => 'wp_23_data_feeds',
+  3 => 'wp_23_icl_content_status',
+  4 => 'wp_23_icl_core_status',
+  5 => 'wp_23_icl_flags',
+  6 => 'wp_23_icl_languages',
+  7 => 'wp_23_icl_languages_translations',
+  8 => 'wp_23_icl_locale_map',
+  9 => 'wp_23_icl_message_status',
+  10 => 'wp_23_icl_node',
+  11 => 'wp_23_icl_reminders',
+  12 => 'wp_23_icl_string_positions',
+  13 => 'wp_23_icl_string_status',
+  14 => 'wp_23_icl_string_translations',
+  15 => 'wp_23_icl_strings',
+  16 => 'wp_23_icl_translate',
+  17 => 'wp_23_icl_translate_job',
+  18 => 'wp_23_icl_translation_status',
+  19 => 'wp_23_icl_translations',
+  20 => 'wp_23_links',
+  21 => 'wp_23_nf_objectmeta',
+  22 => 'wp_23_nf_objects',
+  23 => 'wp_23_nf_relationships',
+  24 => 'wp_23_ninja_forms_fav_fields',
+  25 => 'wp_23_ninja_forms_fields',
+  26 => 'wp_23_options',
+  27 => 'wp_23_postmeta',
+  28 => 'wp_23_posts',
+  29 => 'wp_23_term_relationships',
+  30 => 'wp_23_term_taxonomy',
+  31 => 'wp_23_terms',
+)
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_commentmeta`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_commentmeta` LIKE `akvosites`.`wp_23_commentmeta`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :INSERT `wp_25_commentmeta` SELECT * FROM `akvosites`.`wp_23_commentmeta`
+[15/Sep/2015:10:36:33] Result :0
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_comments`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_comments` LIKE `akvosites`.`wp_23_comments`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :INSERT `wp_25_comments` SELECT * FROM `akvosites`.`wp_23_comments`
+[15/Sep/2015:10:36:33] Result :1
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_data_feeds`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_data_feeds` LIKE `akvosites`.`wp_23_data_feeds`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :INSERT `wp_25_data_feeds` SELECT * FROM `akvosites`.`wp_23_data_feeds`
+[15/Sep/2015:10:36:33] Result :1
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_icl_content_status`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_content_status` LIKE `akvosites`.`wp_23_icl_content_status`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :INSERT `wp_25_icl_content_status` SELECT * FROM `akvosites`.`wp_23_icl_content_status`
+[15/Sep/2015:10:36:33] Result :0
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_icl_core_status`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_core_status` LIKE `akvosites`.`wp_23_icl_core_status`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :INSERT `wp_25_icl_core_status` SELECT * FROM `akvosites`.`wp_23_icl_core_status`
+[15/Sep/2015:10:36:33] Result :0
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_icl_flags`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_flags` LIKE `akvosites`.`wp_23_icl_flags`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :INSERT `wp_25_icl_flags` SELECT * FROM `akvosites`.`wp_23_icl_flags`
+[15/Sep/2015:10:36:33] Result :64
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_icl_languages`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_languages` LIKE `akvosites`.`wp_23_icl_languages`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :INSERT `wp_25_icl_languages` SELECT * FROM `akvosites`.`wp_23_icl_languages`
+[15/Sep/2015:10:36:33] Result :64
+[15/Sep/2015:10:36:33] SQL :DROP TABLE IF EXISTS `wp_25_icl_languages_translations`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:33] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_languages_translations` LIKE `akvosites`.`wp_23_icl_languages_translations`
+[15/Sep/2015:10:36:33] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_languages_translations` SELECT * FROM `akvosites`.`wp_23_icl_languages_translations`
+[15/Sep/2015:10:36:34] Result :4096
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_locale_map`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_locale_map` LIKE `akvosites`.`wp_23_icl_locale_map`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_locale_map` SELECT * FROM `akvosites`.`wp_23_icl_locale_map`
+[15/Sep/2015:10:36:34] Result :4
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_message_status`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_message_status` LIKE `akvosites`.`wp_23_icl_message_status`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_message_status` SELECT * FROM `akvosites`.`wp_23_icl_message_status`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_node`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_node` LIKE `akvosites`.`wp_23_icl_node`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_node` SELECT * FROM `akvosites`.`wp_23_icl_node`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_reminders`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_reminders` LIKE `akvosites`.`wp_23_icl_reminders`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_reminders` SELECT * FROM `akvosites`.`wp_23_icl_reminders`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_string_positions`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_string_positions` LIKE `akvosites`.`wp_23_icl_string_positions`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_string_positions` SELECT * FROM `akvosites`.`wp_23_icl_string_positions`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_string_status`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_string_status` LIKE `akvosites`.`wp_23_icl_string_status`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_string_status` SELECT * FROM `akvosites`.`wp_23_icl_string_status`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_string_translations`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_string_translations` LIKE `akvosites`.`wp_23_icl_string_translations`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_string_translations` SELECT * FROM `akvosites`.`wp_23_icl_string_translations`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_strings`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_strings` LIKE `akvosites`.`wp_23_icl_strings`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_strings` SELECT * FROM `akvosites`.`wp_23_icl_strings`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_translate`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_translate` LIKE `akvosites`.`wp_23_icl_translate`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_translate` SELECT * FROM `akvosites`.`wp_23_icl_translate`
+[15/Sep/2015:10:36:34] Result :24
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_translate_job`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_translate_job` LIKE `akvosites`.`wp_23_icl_translate_job`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_translate_job` SELECT * FROM `akvosites`.`wp_23_icl_translate_job`
+[15/Sep/2015:10:36:34] Result :8
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_translation_status`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_translation_status` LIKE `akvosites`.`wp_23_icl_translation_status`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_translation_status` SELECT * FROM `akvosites`.`wp_23_icl_translation_status`
+[15/Sep/2015:10:36:34] Result :4
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_icl_translations`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_icl_translations` LIKE `akvosites`.`wp_23_icl_translations`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_icl_translations` SELECT * FROM `akvosites`.`wp_23_icl_translations`
+[15/Sep/2015:10:36:34] Result :76
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_links`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_links` LIKE `akvosites`.`wp_23_links`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_links` SELECT * FROM `akvosites`.`wp_23_links`
+[15/Sep/2015:10:36:34] Result :0
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_nf_objectmeta`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_nf_objectmeta` LIKE `akvosites`.`wp_23_nf_objectmeta`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_nf_objectmeta` SELECT * FROM `akvosites`.`wp_23_nf_objectmeta`
+[15/Sep/2015:10:36:34] Result :75
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_nf_objects`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_nf_objects` LIKE `akvosites`.`wp_23_nf_objects`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_nf_objects` SELECT * FROM `akvosites`.`wp_23_nf_objects`
+[15/Sep/2015:10:36:34] Result :4
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_nf_relationships`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_nf_relationships` LIKE `akvosites`.`wp_23_nf_relationships`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_nf_relationships` SELECT * FROM `akvosites`.`wp_23_nf_relationships`
+[15/Sep/2015:10:36:34] Result :3
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_ninja_forms_fav_fields`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_ninja_forms_fav_fields` LIKE `akvosites`.`wp_23_ninja_forms_fav_fields`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_ninja_forms_fav_fields` SELECT * FROM `akvosites`.`wp_23_ninja_forms_fav_fields`
+[15/Sep/2015:10:36:34] Result :17
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_ninja_forms_fields`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_ninja_forms_fields` LIKE `akvosites`.`wp_23_ninja_forms_fields`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_ninja_forms_fields` SELECT * FROM `akvosites`.`wp_23_ninja_forms_fields`
+[15/Sep/2015:10:36:34] Result :5
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_options`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_options` LIKE `akvosites`.`wp_23_options`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_options` SELECT * FROM `akvosites`.`wp_23_options`
+[15/Sep/2015:10:36:34] Result :329
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_postmeta`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_postmeta` LIKE `akvosites`.`wp_23_postmeta`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_postmeta` SELECT * FROM `akvosites`.`wp_23_postmeta`
+[15/Sep/2015:10:36:34] Result :437
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_posts`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_posts` LIKE `akvosites`.`wp_23_posts`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_posts` SELECT * FROM `akvosites`.`wp_23_posts`
+[15/Sep/2015:10:36:34] Result :219
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_term_relationships`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_term_relationships` LIKE `akvosites`.`wp_23_term_relationships`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_term_relationships` SELECT * FROM `akvosites`.`wp_23_term_relationships`
+[15/Sep/2015:10:36:34] Result :25
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_term_taxonomy`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_term_taxonomy` LIKE `akvosites`.`wp_23_term_taxonomy`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_term_taxonomy` SELECT * FROM `akvosites`.`wp_23_term_taxonomy`
+[15/Sep/2015:10:36:34] Result :7
+[15/Sep/2015:10:36:34] SQL :DROP TABLE IF EXISTS `wp_25_terms`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :CREATE TABLE IF NOT EXISTS `wp_25_terms` LIKE `akvosites`.`wp_23_terms`
+[15/Sep/2015:10:36:34] Result :true
+[15/Sep/2015:10:36:34] SQL :INSERT `wp_25_terms` SELECT * FROM `akvosites`.`wp_23_terms`
+[15/Sep/2015:10:36:34] Result :7
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_icl_translation_status` SET `translation_package` = 'a:2:{s:3:\"url\";s:46:\"http://testclone.akvosites.akvo.org?page_id=25\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:28:\"R2VuZXJhbCBpbmZvcm1hdGlvbg==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:244:\"QWt2byBTaXRlcyBicmluZ3MgdG8gbGlmZSB0aGUgd29yayBvZiB5b3VyIG9yZ2FuaXNhdGlvbiBvciBjb25zb3J0aXVtLiBBa3ZvIHdpbGwgYnVpbGQgYW5kIGhvc3QgdGhlIHNpdGUgd2l0aCBhIGxvb2sgYW5kIGZlZWwgdGhhdCBpcyBjb25zaXN0ZW50IHdpdGggeW91ciBicmFuZC4NCg0KJm5ic3A7DQoNCiZuYnNwOw==\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:25;}}}' WHERE `translation_package` = 'a:2:{s:3:\"url\";s:36:\"http://akvosites.akvo.org?page_id=25\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:28:\"R2VuZXJhbCBpbmZvcm1hdGlvbg==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:244:\"QWt2byBTaXRlcyBicmluZ3MgdG8gbGlmZSB0aGUgd29yayBvZiB5b3VyIG9yZ2FuaXNhdGlvbiBvciBjb25zb3J0aXVtLiBBa3ZvIHdpbGwgYnVpbGQgYW5kIGhvc3QgdGhlIHNpdGUgd2l0aCBhIGxvb2sgYW5kIGZlZWwgdGhhdCBpcyBjb25zaXN0ZW50IHdpdGggeW91ciBicmFuZC4NCg0KJm5ic3A7DQoNCiZuYnNwOw==\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:25;}}}'
+[15/Sep/2015:10:36:35] Result :3
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_icl_translation_status` SET `translation_package` = 'a:2:{s:3:\"url\";s:46:\"http://testclone.akvosites.akvo.org?page_id=25\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:28:\"R2VuZXJhbCBpbmZvcm1hdGlvbg==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:244:\"QWt2byBTaXRlcyBicmluZ3MgdG8gbGlmZSB0aGUgd29yayBvZiB5b3VyIG9yZ2FuaXNhdGlvbiBvciBjb25zb3J0aXVtLiBBa3ZvIHdpbGwgYnVpbGQgYW5kIGhvc3QgdGhlIHNpdGUgd2l0aCBhIGxvb2sgYW5kIGZlZWwgdGhhdCBpcyBjb25zaXN0ZW50IHdpdGggeW91ciBicmFuZC4NCg0KJm5ic3A7DQoNCiZuYnNwOw==\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:25;}}}' WHERE `translation_package` = 'a:2:{s:3:\"url\";s:36:\"http://akvosites.akvo.org?page_id=25\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:28:\"R2VuZXJhbCBpbmZvcm1hdGlvbg==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:244:\"QWt2byBTaXRlcyBicmluZ3MgdG8gbGlmZSB0aGUgd29yayBvZiB5b3VyIG9yZ2FuaXNhdGlvbiBvciBjb25zb3J0aXVtLiBBa3ZvIHdpbGwgYnVpbGQgYW5kIGhvc3QgdGhlIHNpdGUgd2l0aCBhIGxvb2sgYW5kIGZlZWwgdGhhdCBpcyBjb25zaXN0ZW50IHdpdGggeW91ciBicmFuZC4NCg0KJm5ic3A7DQoNCiZuYnNwOw==\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:25;}}}'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_icl_translation_status` SET `translation_package` = 'a:2:{s:3:\"url\";s:46:\"http://testclone.akvosites.akvo.org?page_id=25\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:28:\"R2VuZXJhbCBpbmZvcm1hdGlvbg==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:244:\"QWt2byBTaXRlcyBicmluZ3MgdG8gbGlmZSB0aGUgd29yayBvZiB5b3VyIG9yZ2FuaXNhdGlvbiBvciBjb25zb3J0aXVtLiBBa3ZvIHdpbGwgYnVpbGQgYW5kIGhvc3QgdGhlIHNpdGUgd2l0aCBhIGxvb2sgYW5kIGZlZWwgdGhhdCBpcyBjb25zaXN0ZW50IHdpdGggeW91ciBicmFuZC4NCg0KJm5ic3A7DQoNCiZuYnNwOw==\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:25;}}}' WHERE `translation_package` = 'a:2:{s:3:\"url\";s:36:\"http://akvosites.akvo.org?page_id=25\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:28:\"R2VuZXJhbCBpbmZvcm1hdGlvbg==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:244:\"QWt2byBTaXRlcyBicmluZ3MgdG8gbGlmZSB0aGUgd29yayBvZiB5b3VyIG9yZ2FuaXNhdGlvbiBvciBjb25zb3J0aXVtLiBBa3ZvIHdpbGwgYnVpbGQgYW5kIGhvc3QgdGhlIHNpdGUgd2l0aCBhIGxvb2sgYW5kIGZlZWwgdGhhdCBpcyBjb25zaXN0ZW50IHdpdGggeW91ciBicmFuZC4NCg0KJm5ic3A7DQoNCiZuYnNwOw==\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:25;}}}'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_icl_translation_status` SET `translation_package` = 'a:2:{s:3:\"url\";s:46:\"http://testclone.akvosites.akvo.org?page_id=80\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:16:\"QWt2byB0b29scw==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:120:\"VGhlIHdvcmsgdGhhdCB5b3UgZG8gdXNpbmcgQWt2byB0b29scyBjYW4gYmUgZmVkIHRocm91Z2ggYW5kIHNob3djYXNlZCBvbiB5b3VyIEFrdm8gU2l0ZS4=\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:80;}}}' WHERE `translation_package` = 'a:2:{s:3:\"url\";s:36:\"http://akvosites.akvo.org?page_id=80\";s:8:\"contents\";a:3:{s:5:\"title\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:16:\"QWt2byB0b29scw==\";s:6:\"format\";s:6:\"base64\";}s:4:\"body\";a:3:{s:9:\"translate\";i:1;s:4:\"data\";s:120:\"VGhlIHdvcmsgdGhhdCB5b3UgZG8gdXNpbmcgQWt2byB0b29scyBjYW4gYmUgZmVkIHRocm91Z2ggYW5kIHNob3djYXNlZCBvbiB5b3VyIEFrdm8gU2l0ZS4=\";s:6:\"format\";s:6:\"base64\";}s:11:\"original_id\";a:2:{s:9:\"translate\";i:0;s:4:\"data\";i:80;}}}'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_options` SET `option_value` = 'a:16:{i:0;b:0;s:5:\"grijs\";s:7:\"#f2f0e8\";s:13:\"info_bar_blog\";s:7:\"#2c2a74\";s:13:\"info_bar_news\";s:7:\"#2c2a74\";s:14:\"info_bar_video\";s:7:\"#2c2a74\";s:15:\"info_bar_update\";s:7:\"#72cdff\";s:13:\"info_bar_page\";s:7:\"#2c2a74\";s:16:\"info_bar_project\";s:7:\"#72cdff\";s:12:\"info_bar_map\";s:7:\"#2c2a74\";s:20:\"info_bar_testimonial\";s:7:\"#2c2a74\";s:13:\"info_bar_flow\";s:7:\"#de8929\";s:14:\"info_bar_media\";s:7:\"#2c2a74\";s:18:\"nav_menu_locations\";a:1:{s:18:\"primary_navigation\";i:2;}s:9:\"akvo_logo\";s:116:\"http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/09/akvo-sites_RGB_interactive-preview_logo1.png\";s:10:\"main_color\";s:7:\"#ffd200\";s:10:\"background\";s:7:\"#ffffff\";}' WHERE `option_value` = 'a:16:{i:0;b:0;s:5:\"grijs\";s:7:\"#f2f0e8\";s:13:\"info_bar_blog\";s:7:\"#2c2a74\";s:13:\"info_bar_news\";s:7:\"#2c2a74\";s:14:\"info_bar_video\";s:7:\"#2c2a74\";s:15:\"info_bar_update\";s:7:\"#72cdff\";s:13:\"info_bar_page\";s:7:\"#2c2a74\";s:16:\"info_bar_project\";s:7:\"#72cdff\";s:12:\"info_bar_map\";s:7:\"#2c2a74\";s:20:\"info_bar_testimonial\";s:7:\"#2c2a74\";s:13:\"info_bar_flow\";s:7:\"#de8929\";s:14:\"info_bar_media\";s:7:\"#2c2a74\";s:18:\"nav_menu_locations\";a:1:{s:18:\"primary_navigation\";i:2;}s:9:\"akvo_logo\";s:106:\"http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/09/akvo-sites_RGB_interactive-preview_logo1.png\";s:10:\"main_color\";s:7:\"#ffd200\";s:10:\"background\";s:7:\"#ffffff\";}'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_options` SET `option_name` = 'wp_25_user_roles' WHERE `option_name` = 'wp_23_user_roles'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/RSR_PFM_EN_V06-2015.pdf' WHERE `meta_value` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/RSR_PFM_EN_V06-2015.pdf'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/09/AkvoFLOW_Vanuatu_WASH_assessment_complete_raw_data_clean-2.xlsx' WHERE `meta_value` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/09/AkvoFLOW_Vanuatu_WASH_assessment_complete_raw_data_clean-2.xlsx'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/09/201503121608_RSR-organisations-RSR-organisations-monthly-total.xlsx' WHERE `meta_value` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/09/201503121608_RSR-organisations-RSR-organisations-monthly-total.xlsx'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/' WHERE `meta_value` = 'http://akvosites.akvo.org/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/' WHERE `meta_value` = 'http://akvosites.akvo.org/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/media' WHERE `meta_value` = 'http://akvosites.akvo.org/media'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/flow' WHERE `meta_value` = 'http://akvosites.akvo.org/flow'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/blog' WHERE `meta_value` = 'http://akvosites.akvo.org/blog'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/testimonial/' WHERE `meta_value` = 'http://akvosites.akvo.org/testimonial/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/video/' WHERE `meta_value` = 'http://akvosites.akvo.org/video/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_postmeta` SET `meta_value` = 'http://testclone.akvosites.akvo.org/contact' WHERE `meta_value` = 'http://akvosites.akvo.org/contact'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/09/akvo-sites_RGB_interactive-preview_logo1.png' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/09/akvo-sites_RGB_interactive-preview_logo1.png'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/green-bike_800x450.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/green-bike_800x450.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/chart.jpeg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/chart.jpeg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/RSR-training-manualweb-icon.png' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/RSR-training-manualweb-icon.png'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/RSR_PFM_EN_V06-2015.pdf' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/RSR_PFM_EN_V06-2015.pdf'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/testimonial.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/testimonial.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/akvo-sites_RGB_example-page_logo.png' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/akvo-sites_RGB_example-page_logo.png'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/Sites_your-story.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/Sites_your-story.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/horse-hay_800x450.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/horse-hay_800x450.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/jungle-house_800x450.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/jungle-house_800x450.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/little-house_800x450.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/little-house_800x450.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/wandelenvoorwater_carousel_600x300.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/wandelenvoorwater_carousel_600x300.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/washalliance_sites_lifestyle-screengrab_carousel_600x300.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/washalliance_sites_lifestyle-screengrab_carousel_600x300.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/rain4food_sites_lifestyle-screengrab_carousel_600x300.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/rain4food_sites_lifestyle-screengrab_carousel_600x300.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/GNWP_sites_lifestyle-screengrab_carousel_600x300.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/GNWP_sites_lifestyle-screengrab_carousel_600x300.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/09/akvo-sites_RGB_interactive-preview_logo.png' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/09/akvo-sites_RGB_interactive-preview_logo.png'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/cow_800x450.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/cow_800x450.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/08/lady-farmer.jpg' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/08/lady-farmer.jpg'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/09/AkvoFLOW_Vanuatu_WASH_assessment_complete_raw_data_clean-2.xlsx' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/09/AkvoFLOW_Vanuatu_WASH_assessment_complete_raw_data_clean-2.xlsx'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/wp-content/uploads/sites/25/2015/09/201503121608_RSR-organisations-RSR-organisations-monthly-total.xlsx' WHERE `guid` = 'http://akvosites.akvo.org/wp-content/uploads/sites/23/2015/09/201503121608_RSR-organisations-RSR-organisations-monthly-total.xlsx'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=1' WHERE `guid` = 'http://akvosites.akvo.org/?p=1'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=2' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=2'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=10' WHERE `guid` = 'http://akvosites.akvo.org/?p=10'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=11' WHERE `guid` = 'http://akvosites.akvo.org/?p=11'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=12' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=12'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=carousel&#038;p=14' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=carousel&#038;p=14'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=testimonial&#038;p=16' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=testimonial&#038;p=16'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=carousel&#038;p=17' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=carousel&#038;p=17'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=blog&#038;p=18' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=blog&#038;p=18'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/14-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/14-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/1-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/1-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/26/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/26/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/16-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/16-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=25' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=25'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/25-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/25-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/2-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/2-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=28' WHERE `guid` = 'http://akvosites.akvo.org/?p=28'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=29' WHERE `guid` = 'http://akvosites.akvo.org/?p=29'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=30' WHERE `guid` = 'http://akvosites.akvo.org/?p=30'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=286' WHERE `guid` = 'http://akvosites.akvo.org/?p=286'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/14/151-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/14/151-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=video&#038;p=34' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=video&#038;p=34'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=35' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=35'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/35-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/35-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/56-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/56-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=map&#038;p=38' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=map&#038;p=38'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=281' WHERE `guid` = 'http://akvosites.akvo.org/?p=281'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/1-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/1-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/1-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/1-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=42' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=42'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/42-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/42-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=44' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=44'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=46' WHERE `guid` = 'http://akvosites.akvo.org/?p=46'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=flow&#038;p=48' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=flow&#038;p=48'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=50' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=50'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/50-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/50-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=53' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=53'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/53-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/53-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=55' WHERE `guid` = 'http://akvosites.akvo.org/?p=55'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=56' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=56'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/56-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/56-revision-v1/'
+[15/Sep/2015:10:36:35] Result :3
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/56-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/56-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/14/56-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/14/56-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=64' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=64'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=66' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=66'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/66-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/66-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=68' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=68'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/68-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/68-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=media&#038;p=71' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=media&#038;p=71'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=72' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=72'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/72-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/72-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=74' WHERE `guid` = 'http://akvosites.akvo.org/?p=74'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/14/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/14/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :3
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=76' WHERE `guid` = 'http://akvosites.akvo.org/?p=76'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=78' WHERE `guid` = 'http://akvosites.akvo.org/?p=78'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=79' WHERE `guid` = 'http://akvosites.akvo.org/?p=79'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=107' WHERE `guid` = 'http://akvosites.akvo.org/?p=107'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=80' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=80'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/80-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/80-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=82' WHERE `guid` = 'http://akvosites.akvo.org/?p=82'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=blog&#038;p=84' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=blog&#038;p=84'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=blog&#038;p=85' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=blog&#038;p=85'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=blog&#038;p=86' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=blog&#038;p=86'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=87' WHERE `guid` = 'http://akvosites.akvo.org/?p=87'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/87-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/87-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=89' WHERE `guid` = 'http://akvosites.akvo.org/?p=89'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/89-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/89-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=91' WHERE `guid` = 'http://akvosites.akvo.org/?p=91'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/17/91-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/17/91-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=media&#038;p=93' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=media&#038;p=93'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=carousel&#038;p=95' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=carousel&#038;p=95'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=98' WHERE `guid` = 'http://akvosites.akvo.org/?p=98'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/18-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/18-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=101' WHERE `guid` = 'http://akvosites.akvo.org/?p=101'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/1-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/1-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=104' WHERE `guid` = 'http://akvosites.akvo.org/?p=104'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/34-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/34-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=106' WHERE `guid` = 'http://akvosites.akvo.org/?p=106'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=109' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=109'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :5
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=111' WHERE `guid` = 'http://akvosites.akvo.org/?p=111'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=112' WHERE `guid` = 'http://akvosites.akvo.org/?p=112'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/109-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/109-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=121' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=121'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/121-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/121-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=123' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=123'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/123-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/123-revision-v1/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/18/123-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/18/123-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/14/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/14/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/14/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/14/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/27/14-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/27/14-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/25-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/25-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/44-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/44-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :3
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/64-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/64-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/87-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/87-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=137' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=137'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :3
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=139' WHERE `guid` = 'http://akvosites.akvo.org/?p=139'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/56-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/56-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/56-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/56-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/24/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/24/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :3
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/19/137-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/19/137-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=carousel&#038;p=183' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=carousel&#038;p=183'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=151' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=151'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/20/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/20/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :5
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=153' WHERE `guid` = 'http://akvosites.akvo.org/?p=153'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/20/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/20/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/20/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/20/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/20/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/20/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/20/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/20/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/25/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/25/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/24/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/24/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/15/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/15/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/25/109-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/25/109-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=169' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=169'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/25/169-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/25/169-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=171' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=171'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/25/171-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/25/171-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=173' WHERE `guid` = 'http://akvosites.akvo.org/?p=173'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=video&#038;p=177' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=video&#038;p=177'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/26/25-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/26/25-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/26/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/26/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/26/18-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/26/18-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/16-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/16-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/26/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/26/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/general-information-2/' WHERE `guid` = 'http://akvosites.akvo.org/general-information-2/'
+[15/Sep/2015:10:36:35] Result :3
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/general-information-2/' WHERE `guid` = 'http://akvosites.akvo.org/general-information-2/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/general-information-2/' WHERE `guid` = 'http://akvosites.akvo.org/general-information-2/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?page_id=209' WHERE `guid` = 'http://akvosites.akvo.org/?page_id=209'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/26/209-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/26/209-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/08/26/95-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/08/26/95-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/151-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/151-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/64-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/64-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/86-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/86-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :5
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/64-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/64-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/44-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/44-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/137-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/137-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :4
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/137-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/137-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/02/18-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/02/18-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=250' WHERE `guid` = 'http://akvosites.akvo.org/?p=250'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/183-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/183-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/87-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/87-revision-v1/'
+[15/Sep/2015:10:36:35] Result :5
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/87-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/87-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/87-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/87-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/87-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/87-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/87-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/87-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/1-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/1-revision-v1/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/80-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/80-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/80-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/80-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/44-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/44-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/25-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/25-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/25-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/25-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/205-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/205-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/206-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/206-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/207-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/207-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/53-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/53-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/53-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/53-revision-v1/'
+[15/Sep/2015:10:36:35] Result :2
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/53-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/53-revision-v1/'
+[15/Sep/2015:10:36:35] Result :0
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/35-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/35-revision-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:35] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/177-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/177-autosave-v1/'
+[15/Sep/2015:10:36:35] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/68-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/68-autosave-v1/'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/68-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/68-revision-v1/'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/93-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/93-autosave-v1/'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/85-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/85-autosave-v1/'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/84-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/84-autosave-v1/'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/08/1-revision-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/08/1-revision-v1/'
+[15/Sep/2015:10:36:36] Result :0
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/2015/09/09/95-autosave-v1/' WHERE `guid` = 'http://akvosites.akvo.org/2015/09/09/95-autosave-v1/'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=carousel&#038;p=283' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=carousel&#038;p=283'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=video&#038;p=293' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=video&#038;p=293'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=video&p=294' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=video&p=294'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?p=295' WHERE `guid` = 'http://akvosites.akvo.org/?p=295'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=testimonial&#038;p=297' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=testimonial&#038;p=297'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] SQL :UPDATE `wp_25_posts` SET `guid` = 'http://testclone.akvosites.akvo.org/?post_type=media&#038;p=299' WHERE `guid` = 'http://akvosites.akvo.org/?post_type=media&#038;p=299'
+[15/Sep/2015:10:36:36] Result :1
+[15/Sep/2015:10:36:36] End site duplication : new site ID = 25
