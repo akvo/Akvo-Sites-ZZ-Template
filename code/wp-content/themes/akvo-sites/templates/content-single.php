@@ -35,9 +35,6 @@ if(!empty($attached)) { ?>
                   'address' => $map
               ));
           }
-          else {
-            the_post_thumbnail( 'large' );
-          }
         }        
         ?>
       </div>
