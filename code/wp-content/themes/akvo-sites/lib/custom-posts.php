@@ -287,6 +287,7 @@ function blokmaker_rsr($cols, $type, $title, $text, $date, $thumb, $link) {
         <img src="<?php echo $thumb; ?>">
       </div>
       <div class="excerpt">
+        <style>.box-wrap div.excerpt p > a[href] {display: none;}</style>
         <?php echo $text; ?>
       </div>
     </div>
