@@ -151,7 +151,7 @@ run on your service just after it is created:
         $storage->...();
 
         return $storage;
-    });
+    };
 
 The first argument is the name of the service to extend, the second a function
 that gets access to the object instance and the container.
@@ -197,4 +197,4 @@ raw access to this function, you can use the ``raw()`` method:
 
     $sessionFunction = $container->raw('session');
 
-.. _Pimple 1.x documentation: https://github.com/silexphp/Pimple/tree/1.1
+.. _Pimple 1.x documentation: https://github.com/fabpot/Pimple/tree/1.1
