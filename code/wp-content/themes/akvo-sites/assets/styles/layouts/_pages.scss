@@ -79,6 +79,7 @@ a {
 
 .main-image {
 	img {
+
 		width: 100%;
 		height: auto;
 	}
@@ -115,7 +116,7 @@ a {
 
 //youtube
 .flickr,.ytcshort {
-	padding:10px 15px;	
+	padding:10px 15px;
 }
 
 .box-wrap {
@@ -129,6 +130,7 @@ a {
 		height: 60px;
 		padding:6px 15px;
 		display: table;
+                table-layout: fixed;
 		text-align: center;
 		width: 100%;
 		h2 {
@@ -136,6 +138,9 @@ a {
 			margin: 0;
 			display: table-cell;
   			vertical-align: middle;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
 		}
 	}
 	// &.middel {
