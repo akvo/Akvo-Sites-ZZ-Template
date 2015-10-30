@@ -43,14 +43,19 @@ class post_widget extends WP_Widget {
    */
   function widget( $args, $instance ) {
     extract( $args );
-
-    if (!isset($GLOBALS['do_not_duplicate'])) $GLOBALS['do_not_duplicate'][] = "";
-
-    if (!isset($GLOBALS['counter'])) $GLOBALS['counter'] = 0;
+    static $counters = array();
 
     /* Our variables from the widget settings. */
     $columns = $instance['columns'];
     $type = $instance['type'];
+
+    $type2 = $type;
+    if ($type == 'news') {
+      $type2 = 'post';
+    }
+    if (!isset($counters[$type2])) {
+      $counters[$type2] = 0;
+    }
 
     /* Before widget (defined by themes). */
     //echo $before_widget;
@@ -69,8 +74,9 @@ class post_widget extends WP_Widget {
     else {
       $amount = 3;
     }
+
     if ($type == 'project') {
-      $c = $GLOBALS['counter'];
+      $c = $counters[$type2];
       $date_format = get_option( 'date_format' );
       $data = do_shortcode('[data_feed name="rsr"]');
       $data = json_decode( str_replace('&quot;', '"', $data) );
@@ -82,22 +88,15 @@ class post_widget extends WP_Widget {
       $link = 'http://rsr.akvo.org'.$objects[$c]->absolute_url;
       $type = 'RSR update';
 
-      $GLOBALS['counter']++;
-
       blokmaker_rsr($amount, $type, $title, $text, $date, $thumb, $link);
+
     }
 
     else {
-
-      //hier inhoud
-      $type2 = $type;
-      if ($type == 'news') {
-        $type2 = 'post';
-      }
       $qargs = array(
         'post_type' => $type2,
         'posts_per_page' => 1,
-        'post__not_in' => $GLOBALS['do_not_duplicate']
+        'offset' => $counters[$type2],
       );
       $query = new WP_Query( $qargs );
       if ( $query->have_posts() ) { 
@@ -106,12 +105,12 @@ class post_widget extends WP_Widget {
           $query->the_post();
 
           blokmaker($amount, $type2);
-
-          $GLOBALS['do_not_duplicate'][] = get_the_ID();  
         }
         wp_reset_postdata();
       }
     }
+
+    $counters[$type2]++;
 
     /* After widget (defined by themes). */
     //echo $after_widget;
