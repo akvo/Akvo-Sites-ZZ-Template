@@ -1,0 +1,772 @@
+.infobar.akvopedia {
+  background-color: #be499b;
+}
+
+.box-wrap .infobar.akvopedia .type::before {
+  content: "";
+}
+
+.box-wrap .embedded-akvopedia img {
+    width: auto;
+    height: auto;
+    vertical-align: baseline;
+    padding: 0;
+}
+
+.embedded-akvopedia {
+    max-height: 30em;
+    overflow: scroll;
+
+    .mw-content-ltr {
+	/* @noflip */
+	direction: ltr;
+    }
+    .mw-content-rtl {
+	/* @noflip */
+	direction: rtl;
+    }
+    
+    /* Most input fields should be in site direction */
+    .sitedir-ltr textarea,
+    .sitedir-ltr input {
+	/* @noflip */
+	direction: ltr;
+    }
+    .sitedir-rtl textarea,
+    .sitedir-rtl input {
+	/* @noflip */
+	direction: rtl;
+    }
+    
+    /* User-Agent styles for new HTML5 elements */
+    mark {
+	background-color: yellow;
+	color: black;
+    }
+    
+    /* Input types that should follow user direction, like buttons */
+    /* TODO: What about buttons in wikipage content ? */
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"],
+    input[type="file"] {
+	direction: ltr;
+    }
+    
+    /* Override default values */
+    textarea[dir="ltr"],
+    input[dir="ltr"] {
+	/* @noflip */
+	direction: ltr;
+    }
+    textarea[dir="rtl"],
+    input[dir="rtl"] {
+	/* @noflip */
+	direction: rtl;
+    }
+    
+    /* Default style for semantic tags */
+    abbr[title],
+    .explain[title] {
+	border-bottom: 1px dotted;
+	cursor: help;
+    }
+    
+    /* Colored watchlist and recent changes numbers */
+    .mw-plusminus-pos {
+	color: #006400; /* dark green */
+    }
+    .mw-plusminus-neg {
+	color: #8b0000; /* dark red */
+    }
+    .mw-plusminus-null {
+	color: #aaa; /* gray */
+    }
+    
+    /**
+     * Links to redirects appear italicized on [[Special:AllPages]], [[Special:PrefixIndex]],
+     * [[Special:Watchlist/edit]] and in category listings.
+     */
+    .allpagesredirect,
+    .redirect-in-category,
+    .watchlistredir {
+	font-style: italic;
+    }
+    
+    /* Comment and username portions of RC entries */
+    span.comment {
+	font-style: italic;
+    }
+    
+    span.changedby {
+	font-size: 95%;
+    }
+    
+    /* Math */
+    .texvc {
+	direction: ltr;
+	unicode-bidi: embed;
+    }
+    img.tex {
+	vertical-align: middle;
+    }
+    span.texhtml {
+	font-family: serif;
+    }
+    
+    /**
+     * Add a bit of margin space between the preview and the toolbar.
+     * This replaces the ugly <p><br /></p> we used to insert into the page source
+     */
+    #wikiPreview.ontop {
+	margin-bottom: 1em;
+    }
+    
+    /**
+     * rev_deleted stuff
+     */
+    li span.deleted,
+    span.history-deleted {
+	text-decoration: line-through;
+	color: #888;
+	font-style: italic;
+    }
+    /**
+     * Image captions
+     */
+    /* @noflip */
+    .mw-content-ltr .thumbcaption {
+	text-align: left;
+    }
+    /* @noflip */
+    .mw-content-rtl .thumbcaption {
+	text-align: right;
+    }
+    /* @noflip */
+    .mw-content-ltr .magnify {
+	float: right;
+    }
+    /* @noflip */
+    .mw-content-rtl .magnify {
+	float: left;
+    }
+    /**
+     * Categories
+     */
+    #catlinks {
+	/**
+	 * Overrides text justification (user preference)
+	 * See bug 31990
+	 */
+	text-align: left;
+    }
+    .catlinks ul {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	list-style-type: none;
+	list-style-image: none;
+	vertical-align: middle !ie;
+    }
+
+    .catlinks li {
+	display: inline-block;
+	line-height: 1.25em;
+	border-left: 1px solid #AAA;
+	margin: 0.125em 0;
+	padding: 0 0.5em;
+	zoom: 1;
+	display: inline !ie;
+    }
+
+    .catlinks li:first-child {
+	padding-left: 0.25em;
+	border-left: none;
+    }
+
+    /* (bug 5346) make category redirects italic */
+    .catlinks li a.mw-redirect {
+	font-style: italic;
+    }
+    /**
+     * Hidden categories
+     */
+    .mw-hidden-cats-hidden {
+	display: none;
+    }
+    .catlinks-allhidden {
+	display: none;
+    }
+
+    /* Convenience links to edit block, delete and protect reasons */
+    p.mw-ipb-conveniencelinks,
+    p.mw-protect-editreasons,
+    p.mw-filedelete-editreasons,
+    p.mw-delete-editreasons,
+    p.mw-revdel-editreasons {
+	font-size: 90%;
+	text-align: right;
+    }
+    /**
+     * wikitable class for skinning normal tables
+     * keep in sync with commonPrint.css
+     */
+    table.wikitable {
+	margin: 1em 0;
+	background-color: #f9f9f9;
+	border: 1px #aaa solid;
+	border-collapse: collapse;
+	color: black;
+    }
+    table.wikitable > tr > th,
+    table.wikitable > tr > td,
+    table.wikitable > * > tr > th,
+    table.wikitable > * > tr > td {
+	border: 1px #aaa solid;
+	padding: 0.2em;
+    }
+    table.wikitable > tr > th,
+    table.wikitable > * > tr > th {
+	background-color: #f2f2f2;
+	text-align: center;
+    }
+    table.wikitable > caption {
+	font-weight: bold;
+    }
+    /**
+     * Hide collapsable rows in a collapsed table.
+     *
+     * Used by ImagePage and the mediawiki.action.view.metadata module.
+     */
+    table.collapsed tr.collapsable {
+	display: none;
+    }
+    
+    /* success and error messages */
+    .error,
+    .warning,
+    .success {
+	font-size: larger;
+    }
+    .error {
+	color: #cc0000;
+    }
+    .warning {
+	color: #705000;
+    }
+    .success {
+	color: #009000;
+    }
+
+    .errorbox,
+    .warningbox,
+    .successbox {
+	border: 1px solid;
+	padding: .5em 1em;
+	margin-bottom: 1em;
+	display: -moz-inline-block;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+    }
+    .errorbox h2,
+    .warningbox h2,
+    .successbox h2 {
+	font-size: 1em;
+	color: inherit;
+	font-weight: bold;
+	display: inline;
+	margin: 0 .5em 0 0;
+	border: none;
+    }
+    .errorbox {
+	color: #cc0000;
+	border-color: #fac5c5;
+	background-color: #fae3e3;
+    }
+    .warningbox {
+	color: #705000;
+	border-color: #fde29b;
+	background-color: #fdf1d1;
+    }
+    .successbox {
+	color: #009000;
+	border-color: #b7fdb5;
+	background-color: #e1fddf;
+    }
+    /**
+     * Data table style
+     *
+     * Transparent table with suddle borders
+     * and blue row-highlighting.
+     */
+    .mw-datatable {
+	border-collapse: collapse;
+    }
+    .mw-datatable,
+    .mw-datatable td,
+    .mw-datatable th {
+	border: 1px solid #aaaaaa;
+	padding: 0 0.15em 0 0.15em;
+    }
+    .mw-datatable th {
+	background-color: #ddddff;
+    }
+    .mw-datatable td {
+	background-color: #ffffff;
+    }
+    .mw-datatable tr:hover td {
+	background-color: #eeeeff;
+    }
+    /**
+     * TablePager tables generated by the TablePager PHP class
+     * in MediaWiki (e.g. Special:ListFiles).
+     */
+    .TablePager {
+	min-width: 80%;
+    }
+    .TablePager_nav {
+	margin: 0 auto;
+    }
+    .TablePager_nav td {
+	padding: 3px;
+	text-align: center;
+    }
+    .TablePager_nav a {
+	text-decoration: none;
+    }
+    .imagelist td,
+    .imagelist th {
+	white-space: nowrap;
+    }
+    .imagelist .TablePager_col_links {
+	background-color: #eeeeff;
+    }
+    .imagelist .TablePager_col_img_description {
+	white-space: normal;
+    }
+    .imagelist th.TablePager_sort {
+	background-color: #ccccff;
+    }
+    /* Classes for Exif data display */
+    table.mw_metadata {
+	font-size: 0.8em;
+	margin-left: 0.5em;
+	margin-bottom: 0.5em;
+	width: 400px;
+    }
+    
+    table.mw_metadata caption {
+	font-weight: bold;
+    }
+    
+    table.mw_metadata th {
+	font-weight: normal;
+    }
+    
+    table.mw_metadata td {
+	padding: 0.1em;
+    }
+    
+    table.mw_metadata {
+	border: none;
+	border-collapse: collapse;
+    }
+    
+    table.mw_metadata td,
+    table.mw_metadata th {
+	text-align: center;
+	border: 1px solid #aaaaaa;
+	padding-left: 5px;
+	padding-right: 5px;
+    }
+    
+    table.mw_metadata th {
+	background-color: #f9f9f9;
+    }
+    
+    table.mw_metadata td {
+	background-color: #fcfcfc;
+    }
+    
+    table.mw_metadata ul.metadata-langlist {
+	list-style-type: none;
+	list-style-image: none;
+	padding-right: 5px;
+	padding-left: 5px;
+	margin: 0;
+    }
+    
+    /* Correct directionality when page dir is different from site/user dir */
+    .mw-content-ltr ul,
+    .mw-content-rtl .mw-content-ltr ul {
+	/* @noflip */
+	margin: 0.3em 0 0 1.6em;
+	padding: 0;
+    }
+    .mw-content-rtl ul,
+    .mw-content-ltr .mw-content-rtl ul {
+	/* @noflip */
+	margin: 0.3em 1.6em 0 0;
+	padding: 0;
+    }
+    .mw-content-ltr ol,
+    .mw-content-rtl .mw-content-ltr ol {
+	/* @noflip */
+	margin: 0.3em 0 0 3.2em;
+	padding: 0;
+    }
+    .mw-content-rtl ol,
+    .mw-content-ltr .mw-content-rtl ol {
+	/* @noflip */
+	margin: 0.3em 3.2em 0 0;
+	padding: 0;
+    }
+    /* @noflip */
+    .mw-content-ltr dd,
+    .mw-content-rtl .mw-content-ltr dd {
+	margin-left: 1.6em;
+	margin-right: 0;
+    }
+    /* @noflip */
+    .mw-content-rtl dd,
+    .mw-content-ltr .mw-content-rtl dd {
+	margin-right: 1.6em;
+	margin-left: 0;
+    }
+    
+    /* Galleries */
+    /* These display attributes look nonsensical, but are needed to support IE and FF2 */
+    /* Don't forget to update commonPrint.css */
+    li.gallerybox {
+	vertical-align: top;
+	display: -moz-inline-box;
+	display: inline-block;
+    }
+    
+    ul.gallery,
+    li.gallerybox {
+	zoom: 1;
+	*display: inline;
+    }
+    
+    ul.gallery {
+	margin: 2px;
+	padding: 2px;
+	display: block;
+    }
+    
+    li.gallerycaption {
+	font-weight: bold;
+	text-align: center;
+	display: block;
+	word-wrap: break-word;
+    }
+    
+    li.gallerybox div.thumb {
+	text-align: center;
+	border: 1px solid #ccc;
+	background-color: #f9f9f9;
+	margin: 2px;
+    }
+    
+    li.gallerybox div.thumb img {
+	display: block;
+	margin: 0 auto;
+    }
+    
+    div.gallerytext {
+	overflow: hidden;
+	font-size: 94%;
+	padding: 2px 4px;
+	word-wrap: break-word;
+    }
+    
+    /* new gallery stuff */
+    ul.mw-gallery-nolines li.gallerybox div.thumb {
+	background-color: transparent;
+	border: none;
+    }
+    
+    ul.mw-gallery-nolines li.gallerybox div.gallerytext {
+	text-align: center;
+    }
+    
+    /* height constrained gallery */
+    
+    ul.mw-gallery-packed li.gallerybox div.thumb,
+    ul.mw-gallery-packed-overlay li.gallerybox div.thumb,
+    ul.mw-gallery-packed-hover li.gallerybox div.thumb {
+	background-color: transparent;
+	border: none;
+    }
+    ul.mw-gallery-packed li.gallerybox div.thumb img,
+    ul.mw-gallery-packed-overlay li.gallerybox div.thumb img,
+    ul.mw-gallery-packed-hover li.gallerybox div.thumb img {
+	margin: 0 auto;
+    }
+    
+    ul.mw-gallery-packed-hover li.gallerybox,
+    ul.mw-gallery-packed-overlay li.gallerybox {
+	position:relative;
+    }
+    
+    ul.mw-gallery-packed-hover div.gallerytextwrapper {
+	overflow: hidden;
+	height: 0;
+    }
+    
+    ul.mw-gallery-packed-hover li.gallerybox:hover div.gallerytextwrapper,
+    ul.mw-gallery-packed-overlay li.gallerybox div.gallerytextwrapper,
+    ul.mw-gallery-packed-hover li.gallerybox.mw-gallery-focused div.gallerytextwrapper {
+	position:absolute;
+	background: white;
+	background: rgba(255, 255, 255, 0.8);
+	padding: 5px 10px;
+	bottom: 0;
+	left: 0; /* Needed for IE */
+	height: auto;
+	font-weight: bold;
+	margin: 2px; /* correspond to style on div.thumb */
+    }
+    
+    ul.mw-gallery-packed-hover,
+    ul.mw-gallery-packed-overlay,
+    ul.mw-gallery-packed {
+	text-align: center;
+    }
+    /* Correct directionality when page dir is different from site/user dir */
+    /* @noflip */ .mw-content-ltr .toc ul,
+    .mw-content-ltr #toc ul,
+    .mw-content-rtl .mw-content-ltr .toc ul,
+    .mw-content-rtl .mw-content-ltr #toc ul {
+	text-align: left;
+    }
+    /* @noflip */ .mw-content-rtl .toc ul,
+    .mw-content-rtl #toc ul,
+    .mw-content-ltr .mw-content-rtl .toc ul,
+    .mw-content-ltr .mw-content-rtl #toc ul {
+	text-align: right;
+    }
+    /* @noflip */ .mw-content-ltr .toc ul ul,
+    .mw-content-ltr #toc ul ul,
+    .mw-content-rtl .mw-content-ltr .toc ul ul,
+    .mw-content-rtl .mw-content-ltr #toc ul ul {
+	margin: 0 0 0 2em;
+    }
+    /* @noflip */ .mw-content-rtl .toc ul ul,
+    .mw-content-rtl #toc ul ul,
+    .mw-content-ltr .mw-content-rtl .toc ul ul,
+    .mw-content-ltr .mw-content-rtl #toc ul ul {
+	margin: 0 2em 0 0;
+    }
+    /* Images */
+    
+    /* @noflip */ div.tright,
+    div.floatright,
+    table.floatright {
+	clear: right;
+	float: right;
+    }
+    /* @noflip */ div.tleft,
+    div.floatleft,
+    table.floatleft {
+	float: left;
+	clear: left;
+    }
+    div.floatright,
+    table.floatright,
+    div.floatleft,
+    table.floatleft {
+	position: relative;
+    }
+    
+    /* bug 12205 */
+    #mw-credits a {
+	unicode-bidi: embed;
+    }
+    .mw-editsection,
+    .toctoggle,
+    #jump-to-nav {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+    }
+    
+    /* Display editsection links smaller and next to headings */
+    .mw-editsection,
+    .mw-editsection-like {
+	font-size: small;
+	font-weight: normal;
+	margin-left: 1em;
+	vertical-align: baseline;
+	/* Reset line-height; headings tend to have it set to larger values */
+	line-height: 1em;
+	/* As .mw-editsection is a <span> (inline element), it is treated as part */
+	/* of the heading content when selecting text by multiple clicks and thus */
+	/* selected together with heading content, despite the user-select: none; */
+	/* rule set above. This enforces non-selection without changing the look. */
+	display: inline-block;
+    }
+    
+    /* Correct directionality when page dir is different from site/user dir */
+    /* @noflip */
+    .mw-content-ltr .mw-editsection,
+    .mw-content-rtl .mw-content-ltr .mw-editsection {
+	margin-left: 1em;
+    }
+    /* @noflip */
+    .mw-content-rtl .mw-editsection,
+    .mw-content-ltr .mw-content-rtl .mw-editsection {
+	margin-right: 1em;
+    }
+    
+    /* Prevent citations and subscripts from interfering with the line-height */
+    sup,
+    sub {
+	line-height: 1;
+    }
+    img {
+        width: auto;
+        height: auto;
+        vertical-align: baseline;
+        padding: 0;
+    }
+    .RSSReader-head h3 {
+        font-size: 100%;
+        overflow:hidden;
+    }
+
+    /* Link colors */
+
+    div#mw-panel div.portal div.body ul li a, div#mw-panel div.portal div.body ul li a:visited {
+        color: #434343;
+    }
+
+    div#bodyContent a {
+        color: #BE499B;
+        font-weight: bold;
+    }
+
+    div#bodyContent a.new, div#bodyContent a.new:visited {
+        color: #ba0000;
+    }
+
+    div#bodyContent a:visited {
+        color: #995e8c;
+    }
+
+    /* Hide table of contents */
+    .toc, #toc { display: none; }
+
+    /* Reduce size of title. */
+    div#content #firstHeading {
+        font-size: 130%;
+        font-weight: bold;
+    }
+
+    /* Sidebar panel headings. */
+    #mw-panel.collapsible-nav .portal > h3:first-of-type {
+        font-weight: bold;
+    }
+    #p-Other_navigation h3 {
+        display: none;
+    }
+
+    #mw-panel #n-Rainwater-Harvesting {
+        padding-left: 1em;
+    }
+
+    /* Malayalam fonts */
+    @font-face {
+        font-family: Akvopedia;
+        unicode-range: U+D00-D7F;
+        src: local('Meera'), url('/resources/fonts/Meera_04.woff') format('woff'),
+        url('/resources/fonts/Meera_04.ttf') format('truetype');
+    }
+
+    html body {
+        // font-family: Akvopedia, sans-serif;
+    }
+
+    /* Quotation marks */
+    blockquote:before {
+        float:left;
+        content:url(https://akvopedia.org/s_wiki/images/f/f2/Quote-left-cs.png);
+        position: relative;
+        right: 3em;
+        width: 0;
+        overflow: visible;
+    }
+    blockquote:after {
+        float:right;
+        content:url(https://akvopedia.org/s_wiki/images/a/a2/Quote-right-cs.png);
+        width: 0;
+        overflow: visible;
+    }
+    blockquote {
+        margin-left: 3em;
+        margin-right: 3em;
+    }
+
+    /* Akvopedia menu pages */
+
+    .akvo-menu {
+        width:100%;
+        display:table;
+        text-align:center;
+        margin-top:3em;
+        margin-bottom:3em;
+    }
+
+    .akvo-menu-title {
+        font-size:larger;
+        border: 1px solid rgb(216, 216, 216);
+        display:table-caption;
+        padding:0.2em;
+    }
+
+    .akvo-menu-body {
+        width:100%;
+        background-color: rgb(239, 239, 239);
+        display:table-row;
+    }
+
+    .akvo-menu-entry-caption-text {
+        width:160px;
+        display:inline-block;
+    }
+
+    .akvo-menu-entry {
+        display:table-cell;
+        border-top: 1px solid rgb(222, 222, 222);
+        border-bottom: 2px solid rgb(222, 222, 222);
+    }
+
+    .akvo-menu-entry:first-child {
+        border-left: 2px solid rgb(222, 222, 222);
+    }
+
+    .akvo-menu-entry:nth-last-child(2) {
+        border-right: 2px solid rgb(222, 222, 222);
+    }
+    /* Akvopedia portal pages */
+
+    .akvo-portal {
+        display: table;
+        text-align: center;
+        width: 100%;
+    }
+
+    .akvo-portal-group-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        min-height: 3.5em;
+    }
+
+    .akvo-portal-body {
+        display: table-row;
+    }
+}
