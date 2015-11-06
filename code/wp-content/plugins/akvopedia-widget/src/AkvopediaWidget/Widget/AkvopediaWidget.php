@@ -8,6 +8,8 @@ class AkvopediaWidget extends \WP_Widget {
 
 	const COLUMNS = 'akvopedia_columns';
 
+	const CATCH_CLICKS = 'akvopedia_catch_clicks';
+
 	public function __construct()
 	{
 		parent::__construct(
@@ -50,7 +52,8 @@ class AkvopediaWidget extends \WP_Widget {
 		$(document).ready(function () {
 				$('#<?php echo $id; ?>').akvopedia({
 					  page: '<?php echo $title; ?>',
-					  server: 'https://akvopedia.org'
+  					  server: 'https://akvopedia.org',
+					  catchLinkClicks: <?php echo ($instance[self::CATCH_CLICKS] == 'on' ? 'true' : 'false'); ?>
 				});
                 $('#<?php echo $id; ?>').on('akvopedia:title-updated', function(event, title) {
 					  $('#<?php echo $title_id; ?>').html(title);
@@ -83,7 +86,8 @@ class AkvopediaWidget extends \WP_Widget {
 		$w = (array) $instance;
 		$w = array_merge( array(
 				self::AKVOPEDIA_ARTICLE => 'Main Page',
-				self::COLUMNS => 1
+				self::COLUMNS => 1,
+				self::CATCH_CLICKS => 'on'
 			), $w);
 		$this->text_field( self::AKVOPEDIA_ARTICLE, \__('Akvopedia article:', 'akvopedia'), $w);
 		$this->select_field( self::COLUMNS, \__('Columns:', 'akvopedia'), $w,  array(
@@ -92,6 +96,8 @@ class AkvopediaWidget extends \WP_Widget {
 				3 => 3,
 				4 => 4,
 			));
+
+		$this->checkbox_field( self::CATCH_CLICKS, \__("Catch link clicks:", 'akvopedia'), $w);
 	}
 
 	private function field( $field, $label, $instance, $template ) {
@@ -109,6 +115,13 @@ class AkvopediaWidget extends \WP_Widget {
 	private function text_field( $field, $label, $instance ) {
 		$this->field( $field, $label, $instance,
 		'<p><label for=\"$id\">$label</label><input id=\"$id\" name=\"$name\" type=\"text\" value=\"$value\" class=\"widefat\" style=\"width:100%;\" /></p>' );
+	}
+
+	private function checkbox_field( $field, $label, $instance ) {
+		$this->field( $field, $label, $instance,
+			'<p><label for=\"$id\">$label</label><input id=\"$id\" name=\"$name\" type=\"checkbox\" ' .
+			($instance[$field] == 'on' ? 'checked=\"checked\"' : '')
+			. '/></p>' );
 	}
 
 	private function option( $key, $value, $selected )
@@ -134,6 +147,9 @@ class AkvopediaWidget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		// processes widget options to be saved
+		if (!isset($new_instance[self::CATCH_CLICKS])) {
+			$old_instance[self::CATCH_CLICKS] = 'off';
+		}
 		return array_merge($old_instance, $new_instance);
 	}
 
