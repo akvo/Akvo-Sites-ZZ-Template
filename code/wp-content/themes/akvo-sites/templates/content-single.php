@@ -12,6 +12,12 @@ if(!empty($attached)) { ?>
 <?php } ?>
   <?php while (have_posts()) : the_post(); 
   $type = get_post_type();
+  $titleAttrs = '';
+  if ($type == 'akvopedia') {
+    $akvopedia_title_id = 'akvopedia-title-' . get_the_ID();
+    $akvopedia = true;
+    $titleAttrs = ' id="' . $akvopedia_title_id . '"';
+  }
   ?>
   <article <?php post_class(); ?>>
     <div class="bg">
@@ -35,6 +41,9 @@ if(!empty($attached)) { ?>
                   'address' => $map
               ));
           }
+          else {
+            the_post_thumbnail( 'large' );
+          }
         }        
         ?>
       </div>
@@ -42,7 +51,7 @@ if(!empty($attached)) { ?>
       <div class="row">
         <div class="col-lg-10 col-lg-offset-1">
           <header>
-            <h1 class="entry-title"><?php the_title(); ?></h1>
+            <h1 class="entry-title"<?php echo $titleAttrs;?>><?php the_title(); ?></h1>
           </header>
         </div>
         <div class="col-lg-12">
@@ -70,12 +79,12 @@ if(!empty($attached)) { ?>
                   $filename3 = basename($dld3).PHP_EOL;
                   $dld4 = get_post_meta( $id, '_media_lib_file4', true );
                   $filename4 = basename($dld4).PHP_EOL;
-                  $filearray = [
+                  $filearray = array(
                     $dld => $filename,
                     $dld2 => $filename2,
                     $dld3 => $filename3,
                     $dld4 => $filename4
-                  ];
+                  );
                   $location = get_the_terms( $id, 'countries' );
                   $language = get_the_terms( $id, 'languages' );
                   $category = get_the_terms( $id, 'category' );

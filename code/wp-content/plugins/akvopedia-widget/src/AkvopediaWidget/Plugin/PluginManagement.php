@@ -2,6 +2,8 @@
 
 namespace AkvopediaWidget\Plugin;
 
+use AkvopediaWidget\Post\AkvopediaPost;
+
 class PluginManagement
 {
 	public static function activation()
@@ -19,6 +21,7 @@ class PluginManagement
 	public static function widgets_init()
 	{
 		\register_widget( 'AkvopediaWidget\Widget\AkvopediaWidget' );
+		AkvopediaPost::register();
 	}
 
 	public static function wp_enqueue_scripts()

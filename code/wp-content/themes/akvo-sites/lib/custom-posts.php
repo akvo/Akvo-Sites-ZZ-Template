@@ -141,6 +141,25 @@ function create_post_type() {
       ),
     )
   );
+
+  /*
+  register_post_type( 'akvopedia',
+    array(
+      'labels' => array(
+        'name' => __( 'Akvopedia' ),
+        'singular_name' => __( 'Akvopedia' )
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'menu_position' => 20,
+      'menu_icon' => 'dashicons-book-alt',
+      'supports' => array(
+        'title',
+      ),
+    )
+  );
+  */
+
 }
 
 function convertYoutubeImg($string) {
@@ -176,7 +195,7 @@ function truncate($string, $length, $stopanywhere=false) {
 }
 
 function blokmaker($cols, $types) {
-
+  $titleAttrs = '';
   if ($types == 'video') {
     $thumb = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
     $thumb = '<img src="'.$thumb.'">';
@@ -218,6 +237,10 @@ function blokmaker($cols, $types) {
       $thumb = '<div class="icon-wrap"><i class="fa fa-inverse fa-4x '.$fa.'"></i></div>';
     }
   }
+  elseif ($types == 'akvopedia') {
+    $akvopedia_title_id = 'akvopedia-title-' . get_the_ID();
+    $titleAttrs = ' id="' . $akvopedia_title_id . '"';
+  }
   else {
     if (has_post_thumbnail()) {
       $thumb_id = get_post_thumbnail_id();
@@ -248,7 +271,7 @@ function blokmaker($cols, $types) {
     <div class="box-wrap static <?php echo $size; ?> <?php if(is_front_page()) echo 'home'; ?>">
       <a href="<?php the_permalink(); ?>" class="boxlink"></a>
       <div class="header-wrap">
-        <h2><?php echo $title; ?></h2>
+  <h2<?php echo $titleAttrs; ?>><?php echo $title; ?></h2>
       </div>
       <div <?php post_class('infobar'); ?>>
         <time class="updated date" datetime="<?= get_the_time('c'); ?>"><?= get_the_date(); ?></time>
@@ -287,7 +310,6 @@ function blokmaker_rsr($cols, $type, $title, $text, $date, $thumb, $link) {
         <img src="<?php echo $thumb; ?>">
       </div>
       <div class="excerpt">
-        <style>.box-wrap div.excerpt p > a[href] {display: none;}</style>
         <?php echo $text; ?>
       </div>
     </div>

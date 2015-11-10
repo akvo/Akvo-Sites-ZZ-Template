@@ -2,6 +2,8 @@
 
 namespace AkvopediaWidget\Widget;
 
+use AkvopediaWidget\Gadget\AkvopediaGadget;
+
 class AkvopediaWidget extends \WP_Widget {
 
 	const AKVOPEDIA_ARTICLE = 'akvopedia_article';
@@ -45,23 +47,9 @@ class AkvopediaWidget extends \WP_Widget {
 			$columns = 1;
 		}
 		$amount = 3 * $columns;
+		$gadget = new AkvopediaGadget( $title, $title_id, $id, array( 'catchLinkClicks' => $instance[self::CATCH_CLICKS] == 'on' ) );
+		echo $gadget->getScript();
 		?>
-		<script>
-  //<!--
-    (function($, document) {
-		$(document).ready(function () {
-				$('#<?php echo $id; ?>').akvopedia({
-					  page: '<?php echo $title; ?>',
-  					  server: 'https://akvopedia.org',
-					  catchLinkClicks: <?php echo ($instance[self::CATCH_CLICKS] == 'on' ? 'true' : 'false'); ?>
-				});
-                $('#<?php echo $id; ?>').on('akvopedia:title-updated', function(event, title) {
-					  $('#<?php echo $title_id; ?>').html(title);
-				});
-		});
-    })(jQuery, document);
-  //-->
-		</script>
 		<div class="col-md-<?php echo $amount; ?> eq">
           <div class="box-wrap dyno <?php if(\is_front_page()) echo 'home'; ?>">
 		    <div class="header-wrap">
@@ -71,7 +59,7 @@ class AkvopediaWidget extends \WP_Widget {
 	          <span>&nbsp;</span>
               <span class="type"><span>Akvopedia</span></span>
 		    </div>
-		    <div class="embedded-akvopedia" id="<?php echo $id ?>"><noscript><iframe style="position: absolute; top: 4em; right:1em; left:1em; bottom:1em; height:90%; width:97%;" src="http://akvopedia.org/contentonly/<?php echo $title ?>"></iframe></noscript></div>
+		    <?php  echo $gadget->getHtmlElement(); ?>
 		   </div>
 	    </div>
 		<?php
