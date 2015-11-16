@@ -8,10 +8,12 @@ class PluginManagement
 {
 	public static function activation()
 	{
+		\flush_rewrite_rules();
 	}
 
 	public static function deactivation()
 	{
+		\flush_rewrite_rules();
 	}
 
 	public static function uninstall()
@@ -21,6 +23,10 @@ class PluginManagement
 	public static function widgets_init()
 	{
 		\register_widget( 'AkvopediaWidget\Widget\AkvopediaWidget' );
+	}
+
+	public static function init()
+	{
 		AkvopediaPost::register();
 	}
 

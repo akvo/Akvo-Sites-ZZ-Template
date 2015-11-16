@@ -75,7 +75,7 @@ class AkvopediaWidget extends \WP_Widget {
 		$w = array_merge( array(
 				self::AKVOPEDIA_ARTICLE => 'Main Page',
 				self::COLUMNS => 1,
-				self::CATCH_CLICKS => 'on'
+				self::CATCH_CLICKS => 'off'
 			), $w);
 		$this->text_field( self::AKVOPEDIA_ARTICLE, \__('Akvopedia article:', 'akvopedia'), $w);
 		$this->select_field( self::COLUMNS, \__('Columns:', 'akvopedia'), $w,  array(

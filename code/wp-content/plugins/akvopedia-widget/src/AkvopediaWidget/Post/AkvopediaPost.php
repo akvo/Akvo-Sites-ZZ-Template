@@ -22,19 +22,25 @@ class AkvopediaPost {
 					'title',
 					'excerpt',
 				),
+				'rewrite' => array( 'slug' => 'akvopedia' )
 			)
 		);
 		add_action( 'the_content', 'AkvopediaWidget\Post\AkvopediaPost::inject_post_content' );
 	}
 
-	public static function inject_post_content( $content ) {
+	public static function inject_post_content( $content )
+	{
 		global $post;
 		if ($post->post_type != 'akvopedia') {
 			return $content;
 		}
 		$title_id = 'akvopedia-title-' . $post->ID;
 		$div_id = 'akvopedia-' . $post->ID;
-		$gadget = new AkvopediaGadget( $post->post_title, $title_id, $div_id, array( 'scrollToElement' => 'body' ) );
+		$gadget = new AkvopediaGadget( $post->post_title, $title_id, $div_id,
+			array(
+				'scrollToElement' => 'body',
+				'catchLinkClicks' => false
+			) );
 		return $gadget->getRendered();
 	}
 }

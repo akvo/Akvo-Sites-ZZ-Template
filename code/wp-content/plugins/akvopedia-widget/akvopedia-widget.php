@@ -19,6 +19,6 @@ register_uninstall_hook( __FILE__, 'AkvopediaWidget\Plugin\PluginManagement::uni
 define( 'AKVOPEDIA_WIDGET_PLUGIN_DIR', __DIR__ );
 define( 'AKVOPEDIA_WIDGET_VERSION', '1.1' );
 
-foreach ( array( 'wp_enqueue_scripts', 'widgets_init' ) as $a ) {
+foreach ( array( 'wp_enqueue_scripts', 'widgets_init', 'init' ) as $a ) {
 	add_action( $a, array( 'AkvopediaWidget\Plugin\PluginManagement', $a ) );
 }
