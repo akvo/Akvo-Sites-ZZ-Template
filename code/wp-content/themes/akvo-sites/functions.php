@@ -37,3 +37,29 @@ foreach ($sage_includes as $file) {
   require_once $filepath;
 }
 unset($file, $filepath);
+
+function sage_customize_footer_register($wp_customize){
+    
+    $wp_customize->add_section('sage_footer_scheme', array(
+        'title'    => __('Footer', 'sage'),
+        'description' => '',
+        'priority' => 120,
+    ));
+ 
+    //  =============================
+    //  = Checkbox                  =
+    //  =============================
+    $wp_customize->add_setting('sage_footer_options[checkbox_twitter]', array(
+        'capability' => 'edit_theme_options',
+        'type'       => 'option',
+    ));
+ 
+    $wp_customize->add_control('display_twitter_feed', array(
+        'settings' => 'sage_footer_options[checkbox_twitter]',
+        'label'    => __('Display Twitter Feed'),
+        'section'  => 'sage_footer_scheme',
+        'type'     => 'checkbox',
+    ));
+}
+ 
+add_action('customize_register', 'sage_customize_footer_register');
