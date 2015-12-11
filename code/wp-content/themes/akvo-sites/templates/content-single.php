@@ -10,7 +10,7 @@ if(!empty($attached)) { ?>
 <?php } else { ?>
 <div class="col-md-12">
 <?php } ?>
-  <?php while (have_posts()) : the_post(); 
+  <?php while (have_posts()) : the_post();
   $type = get_post_type();
   $titleAttrs = '';
   if ($type == 'akvopedia') {
@@ -23,7 +23,7 @@ if(!empty($attached)) { ?>
     <div class="bg">
       <?php if ($type != 'media') { ?>
       <div class="main-image">
-        <?php 
+        <?php
         if (in_array($type, array('video','testimonial'), true )) {
           $url = convertYoutube(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
           ?>
@@ -44,14 +44,14 @@ if(!empty($attached)) { ?>
           else {
             the_post_thumbnail( 'large' );
           }
-        }        
+        }
         ?>
       </div>
       <?php } ?>
       <div class="row">
         <div class="col-lg-10 col-lg-offset-1">
           <header>
-            <h1 class="entry-title"<?php echo $titleAttrs;?>><?php the_title(); ?></h1>
+            <h1 class="entry-title"<?php echo $titleAttrs;?>><?php the_title(); ?></h2>
           </header>
         </div>
         <div class="col-lg-12">
@@ -91,37 +91,37 @@ if(!empty($attached)) { ?>
                   $type_tax = get_the_terms( $id, 'types' );
                   if (!empty($author)) { ?>
                   <p><b>Author</b>: <?php echo $author;?></p>
-                  <?php } 
+                  <?php }
                   if (!empty($location)) { ?>
-                  <p><b>Location</b>: <?php 
+                  <p><b>Location</b>: <?php
                   foreach($location as $loc) {
                     echo $loc->name;
                   }
                   ?></p>
                   <?php }
                   if (!empty($language)) { ?>
-                  <p><b>Language</b>: <?php 
+                  <p><b>Language</b>: <?php
                   foreach($language as $lang) {
                     echo $lang->name;
                   }
                   ?></p>
                   <?php }
                   if (!empty($category)) { ?>
-                  <p><b>Category</b>: <?php 
+                  <p><b>Category</b>: <?php
                   foreach($category as $cat) {
                     echo $cat->name;
                   }
                   ?></p>
                   <?php }
                   if (!empty($type_tax)) { ?>
-                  <p><b>Type</b>: <?php 
+                  <p><b>Type</b>: <?php
                   foreach($type_tax as $type) {
                     echo $type->name;
                   }
                   ?></p>
                   <?php } ?>
                   <p>
-                  <?php 
+                  <?php
                   foreach ($filearray as $file => $name) {
                     if (!empty($file)) {
                       echo "<a href=\"$file\" class=\"btn btn-default\">$name</a> ";
@@ -131,7 +131,7 @@ if(!empty($attached)) { ?>
                   </p>
                   <?php
                 } ?>
-                
+
               </div>
             </div>
           </div>
@@ -190,10 +190,10 @@ if(!empty($attached)) {
   <div class="related">
     <h2 class="head">Related posts</h2>
     <div class="row">
-    <?php 
-    $the_query = new WP_Query( array( 
+    <?php
+    $the_query = new WP_Query( array(
       'post__in' => $attached,
-      'post_type' => 'any' 
+      'post_type' => 'any'
     ) );
     if ( $the_query->have_posts() ) :
       while ( $the_query->have_posts() ) : $the_query->the_post();
