@@ -99,6 +99,17 @@ nav {
 	}
 }
 
+.logo{
+	@media (max-width: $screen-xs-max) {
+		text-align: center;
+	}
+}
+.menu-mobile{
+	background: #F2F2F2;
+	padding: 0 10px;
+	margin-top: 20px; 
+}
+
 @media (min-width: $screen-sm-min) {
 	nav {
 		#menu-main-nav {
@@ -136,7 +147,7 @@ nav {
 			}
 			.dropdown:hover {
 				.dropdown-menu {
-				    display: block;
+					display: block;
 				}
 			}
 			.dropdown-menu {
