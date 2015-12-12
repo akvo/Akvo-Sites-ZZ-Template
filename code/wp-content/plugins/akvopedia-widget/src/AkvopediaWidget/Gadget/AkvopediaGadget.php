@@ -14,6 +14,8 @@ class AkvopediaGadget {
 
 	private $clazz;
 
+	private static $gadget_loaded = false;
+
 	public function __construct( $title, $title_id, $div_id, $options = array(), $clazz = null )
 	{
 		$this->title = $title;
@@ -27,7 +29,7 @@ class AkvopediaGadget {
 	private function javascript() {
 		$script = "//<!--\n" .
 			'(function($, document) {' .
-			'  $(document).ready(function () {' .
+			'    var init = function() { ' .
 			'    $("#' . $this->div_id . '").akvopedia({';
 		$first = true;
 		foreach ($this->options as $key => $value ) {
@@ -57,6 +59,13 @@ class AkvopediaGadget {
 			'    $("#' . $this->div_id . '").on("akvopedia:title-updated", function(event, title) {' .
 			'       $("#' . $this->title_id . '").html(title);' .
 			'    });' .
+			'  };' .
+			'  $(document).ready(function () {' .
+            '       if ( typeof($.fn["akvopedia"]) !== "function" ) {' .
+            '           $(window).on("akvopedia:gadget-loaded", init);' .
+			'       } else {' .
+            '          init();' .
+            '       }' .
 			'  });' .
 			'})(jQuery, document);' .
 			"\n//-->";
@@ -71,7 +80,12 @@ class AkvopediaGadget {
 	}
 
 	private function script() {
-		return '<script>' . $this->javascript() . '</script>';
+		$s = '';
+		if ( !self::$gadget_loaded ) {
+			self::$gadget_loaded = true;
+			$s = '<script async="async" defer="defer" src="http://akvopedia.org/resources/akvopedia-gadget/akvopedia-gadget-1.9.js"></script>';
+		}
+		return $s . '<script>' . $this->javascript() . '</script>';
 	}
 
 	public function getRendered() {
