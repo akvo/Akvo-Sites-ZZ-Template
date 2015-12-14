@@ -13,7 +13,7 @@ if ($sidebar) { ?>
 <?php } else { ?>
 <div class="col-md-12">
 <?php } ?>
-  <?php while (have_posts()) : the_post(); 
+  <?php while (have_posts()) : the_post();
   $type = get_post_type();
   $titleAttrs = '';
   if ($type == 'akvopedia') {
@@ -26,7 +26,7 @@ if ($sidebar) { ?>
     <div class="bg">
       <?php if ($type != 'media') { ?>
       <div class="main-image">
-        <?php 
+        <?php
         if (in_array($type, array('video','testimonial'), true )) {
           $url = convertYoutube(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
           ?>
@@ -44,10 +44,10 @@ if ($sidebar) { ?>
                   'address' => $map
               ));
           }
-          else {
-            the_post_thumbnail( 'full' );
-          }
-        }        
+/* else {
+the_post_thumbnail( 'small' );
+} */
+        }
         ?>
       </div>
       <?php } ?>
@@ -94,37 +94,37 @@ if ($sidebar) { ?>
                   $type_tax = get_the_terms( $id, 'types' );
                   if (!empty($author)) { ?>
                   <p><b>Author</b>: <?php echo $author;?></p>
-                  <?php } 
+                  <?php }
                   if (!empty($location)) { ?>
-                  <p><b>Location</b>: <?php 
+                  <p><b>Location</b>: <?php
                   foreach($location as $loc) {
                     echo $loc->name;
                   }
                   ?></p>
                   <?php }
                   if (!empty($language)) { ?>
-                  <p><b>Language</b>: <?php 
+                  <p><b>Language</b>: <?php
                   foreach($language as $lang) {
                     echo $lang->name;
                   }
                   ?></p>
                   <?php }
                   if (!empty($category)) { ?>
-                  <p><b>Category</b>: <?php 
+                  <p><b>Category</b>: <?php
                   foreach($category as $cat) {
                     echo $cat->name;
                   }
                   ?></p>
                   <?php }
                   if (!empty($type_tax)) { ?>
-                  <p><b>Type</b>: <?php 
+                  <p><b>Type</b>: <?php
                   foreach($type_tax as $type) {
                     echo $type->name;
                   }
                   ?></p>
                   <?php } ?>
                   <p>
-                  <?php 
+                  <?php
                   foreach ($filearray as $file => $name) {
                     if (!empty($file)) {
                       echo "<a href=\"$file\" class=\"btn btn-default\">$name</a> ";
@@ -134,7 +134,7 @@ if ($sidebar) { ?>
                   </p>
                   <?php
                 } ?>
-                
+
               </div>
             </div>
           </div>
