@@ -6,7 +6,7 @@
 * @param int
 * @return array $orgtables
 */
-function select($result, $connection2 = null, $orgtables = array(), $limit = 0) {
+function adminer_select($result, $connection2 = null, $orgtables = array(), $limit = 0) {
 	global $jush;
 	$links = array(); // colno => orgtable - create links from these columns
 	$indexes = array(); // orgtable => array(column => colno) - primary keys
@@ -234,6 +234,7 @@ function type_class($type) {
 */
 function edit_fields($fields, $collations, $type = "TABLE", $foreign_keys = array(), $comments = false) {
 	global $connection, $inout;
+	$fields = array_values($fields);
 	?>
 <thead><tr class="wrap">
 <?php if ($type == "PROCEDURE") { ?><td>&nbsp;<?php } ?>

@@ -180,11 +180,11 @@ class PrisnaGWTConfig {
 				
 				<code>%s</code><br /><br />
 				
-				- Copy and paste the following code into pages, posts, etc...<br /><br />
+				- Or copy and paste the following code into pages, posts, etc...<br /><br />
 				
 				<code>[prisna-google-website-translator]</code><br /><br />
 				
-				- Copy and paste the following code into any PHP file<br /><br />
+				- Or copy and paste the following code into any page, post or front end PHP file<br /><br />
 				
 				<code>&lt;?php echo do_shortcode(\'[prisna-google-website-translator]\'); ?&gt;</code><br />
 				
@@ -400,7 +400,38 @@ class PrisnaGWTConfig {
 				'dependence_show_value' => 'true',
 				'group' => 2
 			),
+
+			'callbacks_heading' => array(
+				'title_message' => __('Javascript callbacks', 'prisna-gwt'),
+				'description_message' => '',
+				'value' => 'false',
+				'id' => 'prisna_callbacks_heading',
+				'type' => 'heading',
+				'group' => 2
+			),
 			
+			'on_before_load' => array(
+				'title_message' => __('On before load', 'prisna-gwt'),
+				'description_message' => __('Defines a javascript routine that runs before the translator is loaded.', 'prisna-gwt'),
+				'id' => 'prisna_on_before_load',
+				'type' => 'textarea',
+				'value' => '',
+				'dependence' => 'callbacks_heading',
+				'dependence_show_value' => 'true',
+				'group' => 2
+			),
+
+			'on_after_load' => array(
+				'title_message' => __('On after load', 'prisna-gwt'),
+				'description_message' => __('Defines a javascript routine that runs after the translator is loaded.', 'prisna-gwt'),
+				'id' => 'prisna_on_after_load',
+				'type' => 'textarea',
+				'value' => '',
+				'dependence' => 'callbacks_heading',
+				'dependence_show_value' => 'true',
+				'group' => 2
+			),
+
 			'templates_heading' => array(
 				'title_message' => __('Templates', 'prisna-gwt'),
 				'description_message' => '',
@@ -429,7 +460,7 @@ class PrisnaGWTConfig {
 				'id' => 'prisna_flag_template',
 				'type' => 'textarea',
 				'value' => '<li class="prisna-gwt-flag-container prisna-gwt-language-{{ language_code }}">
-	<a href="javascript:;" onclick="PrisnaGWT.translate(\'{{ language_code }}\'); return false;" title="{{ language_name }}"><img src="{{ flags_path }}{{ language_name_no_space }}.gif" alt="{{ language_name }}"/></a>
+	<a href="javascript:;" onclick="PrisnaGWT.translate(\'{{ language_code }}\'); return false;" title="{{ language_name }}"></a>
 </li>',
 				'dependence' => 'templates_heading',
 				'dependence_show_value' => 'true',
@@ -453,7 +484,7 @@ class PrisnaGWTConfig {
 				'value' => 'hide',
 				'values' => array(
 					'hide' => __('Completely hide the translation banner', 'prisna-gwt'),
-					'true' => __('Automatically display translation banner', 'prisna-gwt'),
+					/*'true' => __('Automatically display translation banner', 'prisna-gwt'), Disabled feature until Google fixes it */
 					'false' => __('Don\'t display translation banner automatically', 'prisna-gwt')
 				),
 				'dependence' => 'other_customizations',

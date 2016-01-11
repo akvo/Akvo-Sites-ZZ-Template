@@ -1,7 +1,7 @@
 /*------------------------------------------------------------
 Plugin Name: Youtube Channel Gallery
 Plugin URI: http://www.poselab.com/
-Version: 2.3.2
+Version: 2.4
 Description: Show a youtube video and a gallery of thumbnails for a youtube channel.
 ------------------------------------------------------------*/
 jQuery(document).ready(function($) {
@@ -108,7 +108,7 @@ jQuery(document).ready(function($) {
           playlist = $this.data('playlist'),
           cid = $this.data('cid'),
           wid = $widget.find('[id^=ytc-]').attr('id'),
-          $search = $widget.find('.search'),
+          $search = $widget.find('.search-field'),
           $searchSelect = $widget.find('.search-select');
 
       if (PAGE[wid]) {
@@ -160,7 +160,7 @@ jQuery(document).ready(function($) {
 	  return true;
     });
 
-    $('.youtubechannelgallery').on('keyup blur', '.search', function(e) {
+    $('.youtubechannelgallery').on('keyup blur', '.search-field', function(e) {
 
       var $this = $(this);
 
@@ -216,7 +216,7 @@ jQuery(document).ready(function($) {
       var $widget = $this.parents('.youtubechannelgallery'),
           wid = $widget.find('[id^=ytc-]').attr('id'),
           cid = $this.data('cid'),
-          $search = $widget.find('.search');
+          $search = $widget.find('.search-field');
 
       $.ajax({
         url: ytcAjax.ajaxurl,

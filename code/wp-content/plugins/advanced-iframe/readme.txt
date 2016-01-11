@@ -3,8 +3,8 @@ Contributors: mdempfle, Michael Dempfle
 Donate link: http://www.tinywebgallery.com
 Tags: iframe, embed, resize, content, advanced, shortcode, modify css, widget 
 Requires at least: 2.8.6
-Tested up to: 4.3
-Stable tag: 6.5.3
+Tested up to: 4.4
+Stable tag: 6.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,16 @@ select the one you like and save again.
 
 
 == Changelog ==
+= 6.5.6 =
+- New: Wordpress 4.4 is supported
+- Fix: Icons where not aligned anymore because of changes in the css of Wordpress.
+
+= 6.5.5 =
+- Fix: Some spaces at the end of advanced-iframe-main-read-config.php gave a  "headers already sent by" warning on some setups.
+
+= 6.5.4 =
+- Fix: include_url was broken. Now it works fine again.
+
 = 6.5.3 =
 - Fix: https iframe on https did show an error message which is wrong. Now the message only is shown if http pages are included to https pages.
 
