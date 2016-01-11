@@ -1069,6 +1069,8 @@ select.prisna_gwt_select {
 	background-position: -47px -155px !important;
 }
 
+#section_prisna_on_before_load .prisna_gwt_icon,
+#section_prisna_on_after_load .prisna_gwt_icon,
 #section_prisna_custom_html .prisna_gwt_icon,
 #section_prisna_flags_container_template .prisna_gwt_icon,
 #section_prisna_flag_template .prisna_gwt_icon {

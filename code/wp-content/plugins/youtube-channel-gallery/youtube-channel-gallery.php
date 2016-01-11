@@ -4,8 +4,9 @@
 	Plugin URI: http://www.poselab.com/
 	Description: Show a youtube video and a gallery of thumbnails for a youtube channel.
 	Author: Javier Gómez Pose
+  Text Domain: youtube-channel-gallery
 	Author URI: http://www.poselab.com/
-	Version: 2.3.2
+	Version: 2.4
 	License: GPL2
 
 		Copyright 2013 Javier Gómez Pose  (email : javierpose@gmail.com)
@@ -77,18 +78,20 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 
       $thumb = $this->getThumbsDetails($youtubeid, $ytchag_key, $wid);
 
-      echo '<div class="ytcplayercontent">';
+      if ($ytchag_player_title || $ytchag_player_publishedAt || $ytchag_player_description) {
 
-      if ($ytchag_player_title) {
-        include 'templates/title.php';
+        echo '<div class="ytcplayercontent">';
+          if ($ytchag_player_title) {
+            include 'templates/title.php';
+          }
+          if ($ytchag_player_publishedAt) {
+            include 'templates/publishedAt.php';
+          }
+          if ($ytchag_player_description) {
+            include 'templates/desc.php';
+          }
+        echo '</div>';
       }
-      if ($ytchag_player_publishedAt) {
-        include 'templates/publishedAt.php';
-      }
-      if ($ytchag_player_description) {
-        include 'templates/desc.php';
-      }
-      echo '</div>';
 
       if(isset($ajax_request)){
 
@@ -108,21 +111,21 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
       $ytchag_playlist = $_POST['playlist'];
       $ytchag_id = $_POST['cid'];
       $search = $_POST['search'];
-      $ytchag_search_restrict = $_POST['tag'];
+      $ytchag_search_select_default = $_POST['tag'];
 
       $plugincount = str_replace('ytc-', '', $wid);
 
-      if ($ytchag_search_playlists && $ytchag_id && $ytchag_feed == 'user') {
+      if ($ytchag_search_select_options && $ytchag_id && $ytchag_feed == 'user') {
         $ytchag_feed_url = 'https://www.googleapis.com/youtube/v3/search';
         $ytchag_feed_url .= '?part=snippet';
         $ytchag_feed_url .= '&channelId=' . $ytchag_id;
         $ytchag_feed_url .= '&maxResults=' . $ytchag_maxitems;
 
-        if ($ytchag_search_restrict) {
-          $q = $ytchag_search_restrict;
+        if ($ytchag_search_select_default) {
+          $q = $ytchag_search_select_default;
         }
         else {
-          $q = implode(urlencode('|'), array_map('toTag', explode('#', $ytchag_search_playlists)));
+          $q = implode(urlencode('|'), array_map('toTag', explode('#', $ytchag_search_select_options)));
         }
 
         $q .= $seach ? urlencode('+' . $search) : '';
@@ -197,7 +200,7 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
       extract($instance);
 
       $term = $_POST['q'];
-      $ytchag_search_restrict = $_POST['tag'];
+      $ytchag_search_select_default = $_POST['tag'];
       $ytchag_id = $_POST['cid'];
 
       $plugincount = str_replace('ytc-', '', $wid);
@@ -207,11 +210,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
       $ytchag_feed_url .= '&channelId=' . $ytchag_id;
       $ytchag_feed_url .= '&maxResults=' . $ytchag_maxitems;
 
-      if ($ytchag_search_restrict) {
-        $q = $ytchag_search_restrict;
+      if ($ytchag_search_select_default) {
+        $q = $ytchag_search_select_default;
       }
-      elseif ($ytchag_search_playlists) {
-        $q = implode(urlencode('|'), array_map('toTag', explode('#', $ytchag_search_playlists)));
+      elseif ($ytchag_search_select_options) {
+        $q = implode(urlencode('|'), array_map('toTag', explode('#', $ytchag_search_select_options)));
       }
 
       if ($q && $term) {
@@ -417,11 +420,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		$instance['ytchag_player_order'] = strip_tags( $new_instance['ytchag_player_order'] );
 
         // Search options
-		$instance['ytchag_search_input'] = strip_tags( $new_instance['ytchag_search_input'] );
-		$instance['ytchag_search_playlists'] = strip_tags( $new_instance['ytchag_search_playlists'] );
-		$instance['ytchag_search_restrict'] = strip_tags( $new_instance['ytchag_search_restrict'] );
+		$instance['ytchag_search_input_text'] = strip_tags( $new_instance['ytchag_search_input_text'] );
+		$instance['ytchag_search_select_options'] = strip_tags( $new_instance['ytchag_search_select_options'] );
+		$instance['ytchag_search_select_default'] = strip_tags( $new_instance['ytchag_search_select_default'] );
 		$instance['ytchag_search_input_show'] = strip_tags( $new_instance['ytchag_search_input_show'] );
-		$instance['ytchag_search_playlists_show'] = strip_tags( $new_instance['ytchag_search_playlists_show'] );
+		$instance['ytchag_search_select_show'] = strip_tags( $new_instance['ytchag_search_select_show'] );
 		$instance['ytchag_search_order'] = strip_tags( $new_instance['ytchag_search_order'] );
 
 		// Thumbnail options
@@ -435,6 +438,8 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		$instance['ytchag_nofollow'] = strip_tags( $new_instance['ytchag_nofollow'] );
 		$instance['ytchag_thumb_window'] = strip_tags( $new_instance['ytchag_thumb_window'] );
 		$instance['ytchag_thumb_pagination'] = strip_tags( $new_instance['ytchag_thumb_pagination'] );
+    $instance['ytchag_prev_text'] = strip_tags( $new_instance['ytchag_prev_text'] );
+    $instance['ytchag_next_text'] = strip_tags( $new_instance['ytchag_next_text'] );
 		$instance['ytchag_thumb_order_thumb'] = strip_tags( $new_instance['ytchag_thumb_order_thumb'] );
 		$instance['ytchag_thumb_order_title'] = strip_tags( $new_instance['ytchag_thumb_order_title'] );
     $instance['ytchag_thumb_order_publishedAt'] = strip_tags( $new_instance['ytchag_thumb_order_publishedAt'] );
@@ -522,11 +527,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 			'ytchag_player_order' => '1',
 
             // Search options
-			'ytchag_search_input' => '',
-			'ytchag_search_playlists' => '',
-			'ytchag_search_restrict' => '',
+			'ytchag_search_input_text' => __( 'Search...', 'youtube-channel-gallery' ),
+			'ytchag_search_select_options' => '',
+			'ytchag_search_select_default' => '',
 			'ytchag_search_input_show' => '',
-			'ytchag_search_playlists_show' => '',
+			'ytchag_search_select_show' => '',
 			'ytchag_search_order' => '2',
 
 			// Thumbnail options
@@ -540,6 +545,8 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 			'ytchag_nofollow' => '',
 			'ytchag_thumb_window' => '',
 			'ytchag_thumb_pagination' => '1',
+      'ytchag_prev_text' => '',
+      'ytchag_next_text' => '',
 			'ytchag_thumb_order_thumb' => '1',
 			'ytchag_thumb_order_title' => '2',
       'ytchag_thumb_order_publishedAt' => '3',
@@ -616,11 +623,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		$ytchag_player_order = apply_filters( 'ytchag_player_order', $instance['ytchag_player_order'] );
 
         // Search options
-		$ytchag_search_input = apply_filters( 'ytchag_search_input', $instance['ytchag_search_input'] );
-		$ytchag_search_playlists = apply_filters( 'ytchag_search_playlists', $instance['ytchag_search_playlists'] );
-		$ytchag_search_restrict = apply_filters( 'ytchag_search_restrict', $instance['ytchag_search_restrict'] );
+		$ytchag_search_input_text = apply_filters( 'ytchag_search_input_text', $instance['ytchag_search_input_text'] );
+		$ytchag_search_select_options = apply_filters( 'ytchag_search_select_options', $instance['ytchag_search_select_options'] );
+		$ytchag_search_select_default = apply_filters( 'ytchag_search_select_default', $instance['ytchag_search_select_default'] );
 		$ytchag_search_input_show = apply_filters( 'ytchag_search_input_show', $instance['ytchag_search_input_show'] );
-		$ytchag_search_playlists_show = apply_filters( 'ytchag_search_playlists_show', $instance['ytchag_search_playlists_show'] );
+		$ytchag_search_select_show = apply_filters( 'ytchag_search_select_show', $instance['ytchag_search_select_show'] );
 		$ytchag_search_order = apply_filters( 'ytchag_search_order', $instance['ytchag_search_order'] );
 
 		// Thumbnail options
@@ -634,6 +641,8 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		$ytchag_nofollow = apply_filters( 'ytchag_nofollow', $instance['ytchag_nofollow'] );
 		$ytchag_thumb_window = apply_filters( 'ytchag_thumb_window', $instance['ytchag_thumb_window'] );
 		$ytchag_thumb_pagination = apply_filters( 'ytchag_thumb_pagination', $instance['ytchag_thumb_pagination'] );
+    $ytchag_prev_text = apply_filters( 'ytchag_prev_text', $instance['ytchag_prev_text'] );
+    $ytchag_next_text = apply_filters( 'ytchag_next_text', $instance['ytchag_next_text'] );
 		$ytchag_thumb_order_thumb = apply_filters( 'ytchag_thumb_order_thumb', $instance['ytchag_thumb_order_thumb'] );
 		$ytchag_thumb_order_title = apply_filters( 'ytchag_thumb_order_title', $instance['ytchag_thumb_order_title'] );
     $ytchag_thumb_order_publishedAt = apply_filters( 'ytchag_thumb_order_publishedAt', $instance['ytchag_thumb_order_publishedAt'] );
@@ -689,11 +698,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		$ytchag_player_order = isset( $ytchag_player_order ) ? $ytchag_player_order : '1'; // order
 
         // Search options
-		$ytchag_search_input = isset( $ytchag_search_input) ? $ytchag_search_input: ''; // search
-		$ytchag_search_playlists = isset( $ytchag_search_playlists) ? $ytchag_search_playlists: ''; // search playlists
-		$ytchag_search_restrict = isset( $ytchag_search_restrict) ? $ytchag_search_restrict: ''; // search
+		$ytchag_search_input_text = isset( $ytchag_search_input_text) ? $ytchag_search_input_text: __( 'Search...', 'youtube-channel-gallery' ); // search
+		$ytchag_search_select_options = isset( $ytchag_search_select_options) ? $ytchag_search_select_options: ''; // search playlists
+		$ytchag_search_select_default = isset( $ytchag_search_select_default) ? $ytchag_search_select_default: ''; // search
 		$ytchag_search_input_show = isset( $ytchag_search_input_show) ? $ytchag_search_input_show : ''; // search
-		$ytchag_search_playlists_show = isset( $ytchag_search_playlists_show) ? $ytchag_search_playlists_show : ''; // search playlists
+		$ytchag_search_select_show = isset( $ytchag_search_select_show) ? $ytchag_search_select_show : ''; // search playlists
 		$ytchag_search_order = isset( $ytchag_search_order) ? $ytchag_search_order: ''; // search order
 
 		// Thumbnail options
@@ -749,18 +758,18 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
               $ytchag_user_likes = isset($playlists['likes']) ? $playlists['likes'] : null;
             }
 
-            if ($ytchag_search_playlists && $ytchag_id) {
+            if ($ytchag_search_select_options && $ytchag_id) {
 
               $ytchag_feed_url = 'https://www.googleapis.com/youtube/v3/search';
               $ytchag_feed_url .= '?part=snippet';
               $ytchag_feed_url .= '&channelId=' . $ytchag_id;
               $ytchag_feed_url .= '&maxResults=' . $ytchag_maxitems;
 
-              if ($ytchag_search_restrict) {
-                $ytchag_feed_url .= '&q=' . $ytchag_search_restrict;
+              if ($ytchag_search_select_default) {
+                $ytchag_feed_url .= '&q=' . $ytchag_search_select_default;
               }
               else {
-                $ytchag_feed_url .= '&q=' . implode(urlencode('|'), array_map('toTag', explode('#', $ytchag_search_playlists)));
+                $ytchag_feed_url .= '&q=' . implode(urlencode('|'), array_map('toTag', explode('#', $ytchag_search_select_options)));
               }
 
               $ytchag_feed_url .= '&type=video';
@@ -983,6 +992,9 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		wp_enqueue_style( 'youtube-channel-gallery' );
 		wp_register_style( 'jquery.magnific-popup', plugins_url( '/magnific-popup.css', __FILE__ ) );
 		wp_enqueue_style( 'jquery.magnific-popup' );
+    if ( is_rtl() ) {
+      wp_enqueue_style( 'youtube-channel-gallery-rtl',  plugins_url('/rtl.css', __FILE__) );
+    }
 	}
 
 	// load js
@@ -1052,11 +1064,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
             'player_order' => '1',
 
             // Search options
-            'search_input' => '',
-            'search_playlists' => '',
-            'search_restrict' => '',
+            'search_input_text' => '',
+            'search_select_options' => '',
+            'search_select_default' => '',
             'search_input_show' => '',
-            'search_playlists_show' => '',
+            'search_select_show' => '',
             'search_order' => '2',
 
             // Thumbnail options
@@ -1070,6 +1082,8 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
             'nofollow' => '',
             'thumb_window' => '',
             'thumb_pagination' => '1',
+            'prev_text' => '',
+            'next_text' => '',
             'thumb_order_thumb' => '1',
             'thumb_order_title' => '2',
             'thumb_order_publishedAt' => '3',
@@ -1128,11 +1142,11 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		$instance['ytchag_player_order'] = $player_order;
 
         // Search options
-		$instance['ytchag_search_input'] = $search_input;
-		$instance['ytchag_search_playlists'] = $search_playlists;
-		$instance['ytchag_search_restrict'] = $search_restrict;
+		$instance['ytchag_search_input_text'] = $search_input_text;
+		$instance['ytchag_search_select_options'] = $search_select_options;
+		$instance['ytchag_search_select_default'] = $search_select_default;
 		$instance['ytchag_search_input_show'] = $search_input_show;
-		$instance['ytchag_search_playlists_show'] = $search_playlists_show;
+		$instance['ytchag_search_select_show'] = $search_select_show;
 		$instance['ytchag_search_order'] = $search_order;
 
 		// Thumbnail options
@@ -1146,6 +1160,8 @@ class YoutubeChannelGallery_Widget extends WP_Widget {
 		$instance['ytchag_nofollow'] = $nofollow;
 		$instance['ytchag_thumb_window'] = $thumb_window;
 		$instance['ytchag_thumb_pagination'] = $thumb_pagination;
+    $instance['ytchag_prev_text'] = $prev_text;
+    $instance['ytchag_next_text'] = $next_text;
 		$instance['ytchag_thumb_order_thumb'] = $thumb_order_thumb;
 		$instance['ytchag_thumb_order_title'] = $thumb_order_title;
     $instance['ytchag_thumb_order_publishedAt'] = $thumb_order_publishedAt;

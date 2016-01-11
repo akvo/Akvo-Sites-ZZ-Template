@@ -27,7 +27,7 @@ jQuery( function ( $ ) {
 				changeplayerType( $(this) );
 				changeAlignThumb( $(this) );
 				add_tooltips( $(this) );
-				//searchTab( $(this) );
+				searchTab( $(this) );
 			});
 		}
 
@@ -243,10 +243,10 @@ jQuery( function ( $ ) {
 
 		  $widget = $(widget);
 
-	      $widget.on('keyup', '[id$="ytchag_search_playlists"]', function(e) {
+	      $widget.on('keyup', '[id$="ytchag_search_select_options"]', function(e) {
 
 	        var campos = this.value.split('#'),
-	            $select =  $widget.find('[id$="ytchag_search_restrict"]'),
+	            $select =  $widget.find('[id$="ytchag_search_select_default"]'),
 	            restrict = '',
 	            options = '';
 

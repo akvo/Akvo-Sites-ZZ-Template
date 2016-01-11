@@ -10,9 +10,9 @@ msgstr ""
 "Project-Id-Version: WP-Piwik\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-piwik\n"
 "POT-Creation-Date: 2015-07-22 10:25:29+00:00\n"
-"PO-Revision-Date: 2015-07-22 10:33+0000\n"
+"PO-Revision-Date: 2016-01-09 19:35+0000\n"
 "Last-Translator: André Bräkling\n"
-"Language-Team: Italian (Italy) (http://www.transifex.com/projects/p/wp-piwik/language/it_IT/)\n"
+"Language-Team: Italian (Italy) (http://www.transifex.com/piwik/wp-piwik/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -314,7 +314,7 @@ msgstr "Mostra un grafico dei visitatori degli ultimi 30 giorni nella barra degl
 
 #: classes/WP_Piwik/Admin/Settings.php:164
 msgid "Display stats to"
-msgstr ""
+msgstr "Mostra statistiche per"
 
 #: classes/WP_Piwik/Admin/Settings.php:171
 msgid "Choose user roles allowed to see the statistics page."
@@ -322,15 +322,15 @@ msgstr "Seleziona il ruolo per poter  accedere alla pagina di statistiche."
 
 #: classes/WP_Piwik/Admin/Settings.php:173
 msgid "Show per post stats"
-msgstr ""
+msgstr "Mostra statistiche per post"
 
 #: classes/WP_Piwik/Admin/Settings.php:173
 msgid "Show stats about single posts at the post edit admin page."
-msgstr ""
+msgstr "Mostra statistiche sui singoli post nella pagina amministrativa di modifica post."
 
 #: classes/WP_Piwik/Admin/Settings.php:175
 msgid "Piwik shortcut"
-msgstr ""
+msgstr "Scorciatoia di Piwik"
 
 #: classes/WP_Piwik/Admin/Settings.php:175
 msgid "Display a shortcut to Piwik itself."
@@ -338,7 +338,7 @@ msgstr "Visualizzare una scorciatoia per il Piwik principale."
 
 #: classes/WP_Piwik/Admin/Settings.php:177
 msgid "WP-Piwik display name"
-msgstr ""
+msgstr "Nome visualizzato in WP-Piwik"
 
 #: classes/WP_Piwik/Admin/Settings.php:177
 msgid "Plugin name shown in WordPress."
@@ -527,7 +527,7 @@ msgstr "Mostra la casella variabili personalizzate"
 
 #: classes/WP_Piwik/Admin/Settings.php:224
 msgid " Show a &quot;custom variables&quot; edit box on post edit page."
-msgstr ""
+msgstr "Mostra il box di modifica &quot;variabili personalizzate&quot; nella pagina di modifica post."
 
 #: classes/WP_Piwik/Admin/Settings.php:226
 msgid "Add new file types for download tracking"
@@ -609,7 +609,7 @@ msgstr "Traccia i feed RSS"
 
 #: classes/WP_Piwik/Admin/Settings.php:251
 msgid "Enable to track posts in feeds via tracking pixel."
-msgstr ""
+msgstr "Abilita la possibilità di tracciare i post nei feed tramite un tracking pixel."
 
 #: classes/WP_Piwik/Admin/Settings.php:253
 msgid "Track RSS feed links as campaign"
@@ -625,7 +625,7 @@ msgstr "Keyword: nome post."
 
 #: classes/WP_Piwik/Admin/Settings.php:257
 msgid "Enable heartbeat timer"
-msgstr ""
+msgstr "Abilita un timer heartbeat"
 
 #: classes/WP_Piwik/Admin/Settings.php:257
 msgid ""
@@ -634,7 +634,7 @@ msgid ""
 "between the pings in seconds (Piwik default: 15) to enable or 0 to disable "
 "this feature. <strong>Note:</strong> This will cause a lot of additional "
 "HTTP requests on your site."
-msgstr ""
+msgstr "Abilita un timer heartbeat per ottenere durate delle visite più precise inviando un ping HTTP periodico per tutto il tempo in cui il sito resta aperto. Inserisci il tempo, in secondi, tra i ping (predefinito: 15) per abilitare, oppure 0 per disabilitare questa funzione. <strong>Nota:</strong> Questo provocherà molte richieste HTTP supplementari al tuo sito."
 
 #: classes/WP_Piwik/Admin/Settings.php:262
 msgid ""
@@ -889,7 +889,7 @@ msgstr "è utilizzato."
 
 #: classes/WP_Piwik/Admin/Settings.php:573
 msgid "Determined Piwik base URL is"
-msgstr ""
+msgstr "L'URL base di Piwik è stata individuata in"
 
 #: classes/WP_Piwik/Admin/Settings.php:577
 msgid "Tools"
@@ -897,11 +897,11 @@ msgstr "Strumenti"
 
 #: classes/WP_Piwik/Admin/Settings.php:579
 msgid "Run testscript"
-msgstr ""
+msgstr "Esegui script di prova"
 
 #: classes/WP_Piwik/Admin/Settings.php:580
 msgid "Sitebrowser"
-msgstr ""
+msgstr "Sitebrowser"
 
 #: classes/WP_Piwik/Admin/Settings.php:581
 msgid "Clear cache"
@@ -1237,7 +1237,7 @@ msgstr "E' successo un errore"
 
 #: classes/WP_Piwik.php:1191
 msgid "Cheatin&#8217; uh?"
-msgstr ""
+msgstr "Stai &#8217;barando&#8217, vero?"
 
 #: wp-piwik.php:60
 msgid ""
