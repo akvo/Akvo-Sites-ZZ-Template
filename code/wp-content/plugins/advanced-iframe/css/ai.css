@@ -17,17 +17,25 @@
 	line-height: 1.1;
 }
 #ai .icon_ai {
-	float: left;
+	display: table-cell;
+  vertical-align: middle;
 	height: 36px;
-	margin-top: 8px;
-	margin-right: 6px;
-	margin-bottom: 0pt;
-	margin-left: 0pt;
 	width: 36px;
 	background-image: url(../img/jfu_logo_32x32.png) !important;
 	background-repeat: no-repeat;
 	background-position: -0px -0px !important;
 }
+
+#ai h2 {
+  display: table-cell;
+  vertical-align: middle;
+  padding-top: 2px;
+}
+
+#ai h2 small {
+  font-weight: 400;
+}
+
 #ai .shortcode span {
 	font-weight: bold;
 }
@@ -326,7 +334,7 @@ display: none;
 font-size:1.1em
 }
 
-#ai input[type="text"]#ai_config_id, #ai input[type="text"]#ai_custom_id   {
+#ai input[type="text"]#ai_config_id, #ai input[type="text"]#ai_custom_id, #ai input[type="text"]#ai_custom_header_id {
   width: 150px;
 }
 
@@ -441,3 +449,16 @@ margin-bottom: 10px;
 #ai .manage-menus {
   margin-top: 0;
 }
+
+#ai .i-20- {
+  padding-left:20px;
+}
+
+#ai .i-40- {
+  padding-left:40px;
+}
+
+#ai .ai-pro th {
+  color: #003399;
+}
+

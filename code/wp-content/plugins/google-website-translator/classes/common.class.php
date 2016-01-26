@@ -31,6 +31,13 @@ class PrisnaGWTCommon {
 		return preg_replace('/^(:\/\/|[^\/])+/', '', $_url);
 		
 	}
+
+	public static function renderCSS($_code) {
+	
+		if (!empty($_code))
+			echo '<style type="text/css">' . $_code . '</style>';
+		
+	}
 	
 	public static function getHost($_url) {
 	
@@ -139,9 +146,129 @@ class PrisnaGWTCommon {
 		
 	}
 
-	public static function getLanguages() {
+	public static function getLanguageCoordinates($_language) {
+		
+		$languages = array(
+			'en' => array(0, 0),
+			'fr' => array(-22, 0),
+			'nl' => array(-44, 0),
+			'el' => array(-66, 0),
+			'la' => array(-66, 0),
+			'de' => array(-88, 0),
+			'es' => array(-110, 0),
+			'zh-cn' => array(-132, 0),
+			'zh-tw' => array(-154, 0),
+			'pl' => array(-176, 0),
+			'pt' => array(-198, 0),
+			'th' => array(0, -16),
+			'pa' => array(-22, -16),
+			'ur' => array(-22, -16),
+			'ro' => array(-44, -16),
+			'ru' => array(-66, -16),
+			'no' => array(-88, -16),
+			'da' => array(-110, -16),
+			'fi' => array(-132, -16),
+			'hi' => array(-154, -16),
+			'gu' => array(-154, -16),
+			'kn' => array(-154, -16),
+			'ml' => array(-154, -16),
+			'mr' => array(-154, -16),
+			'ta' => array(-154, -16),
+			'te' => array(-154, -16),
+			'it' => array(-176, -16),
+			'ja' => array(-198, -16),
+			'af' => array(0, -32),
+			'st' => array(0, -32),
+			'zu' => array(0, -32),
+			'sq' => array(-22, -32),
+			'ar' => array(-44, -32),
+			'hy' => array(-66, -32),
+			'az' => array(-88, -32),
+			'eu' => array(-110, -32),
+			'be' => array(-132, -32),
+			'bn' => array(-154, -32),
+			'bs' => array(-176, -32),
+			'bg' => array(-198, -32),
+			'ca' => array(0, -48),
+			'ceb' => array(-22, -48),
+			'tl' => array(-22, -48),
+			'ny' => array(-44, -48),
+			'hr' => array(-66, -48),
+			'cs' => array(-88, -48),
+			'et' => array(-110, -48),
+			'gl' => array(-132, -48),
+			'ka' => array(-154, -48),
+			'ht' => array(-176, -48),
+			'ha' => array(-198, -48),
+			'ig' => array(-198, -48),
+			'iw' => array(0, -64),
+			'yi' => array(0, -64),
+			'hmn' => array(-22, -64),
+			'vi' => array(-22, -64),
+			'hu' => array(-44, -64),
+			'is' => array(-66, -64),
+			'id' => array(-88, -64),
+			'jw' => array(-88, -64),
+			'su' => array(-88, -64),
+			'ga' => array(-110, -64),
+			'kk' => array(-132, -64),
+			'km' => array(-154, -64),
+			'ko' => array(-176, -64),
+			'lo' => array(-198, -64),
+			'lv' => array(0, -80),
+			'lt' => array(-22, -80),
+			'mk' => array(-44, -80),
+			'mg' => array(-66, -80),
+			'ms' => array(-88, -80),
+			'mt' => array(-110, -80),
+			'mi' => array(-132, -80),
+			'mn' => array(-154, -80),
+			'my' => array(-176, -80),
+			'ne' => array(-198, -80),
+			'fa' => array(0, -96),
+			'tg' => array(0, -96),
+			'sr' => array(-22, -96),
+			'si' => array(-44, -96),
+			'sk' => array(-66, -96),
+			'sl' => array(-88, -96),
+			'so' => array(-110, -96),
+			'sw' => array(-110, -96),
+			'sv' => array(-132, -96),
+			'tr' => array(-154, -96),
+			'uk' => array(-176, -96),
+			'uz' => array(-198, -96),
+			'cy' => array(0, -112),
+			'yo' => array(-22, -112),
+			'eo' => array(-44, -112)
+		);
+		
+		return array_key_exists($_language, $languages) ? $languages[$_language] : false;
+		
+	}
 	
-		return array(
+	public static function getLanguages($_sort=true) {
+	
+		$languages = array(
+			'en' => 'English',
+			'fr' => 'French',
+			'nl' => 'Dutch',
+			'el' => 'Greek',
+			'de' => 'German',
+			'es' => 'Spanish',
+			'zh-CN' => 'Chinese Simplified',
+			'zh-TW' => 'Chinese Traditional',
+			'pl' => 'Polish',
+			'pt' => 'Portuguese',
+			'th' => 'Thai',
+			'pa' => 'Punjabi',
+			'ro' => 'Romanian',
+			'ru' => 'Russian',
+			'no' => 'Norwegian',
+			'da' => 'Danish',
+			'fi' => 'Finnish',
+			'hi' => 'Hindi',
+			'it' => 'Italian',
+			'ja' => 'Japanese',
 			'af' => 'Afrikaans',
 			'sq' => 'Albanian',
 			'ar' => 'Arabic',
@@ -154,35 +281,26 @@ class PrisnaGWTCommon {
 			'bg' => 'Bulgarian',
 			'ca' => 'Catalan',
 			'ceb' => 'Cebuano',
-			'zh-CN' => 'Chinese',
-			'zh-TW' => 'Chinese Traditional',
+			'ny' => 'Chichewa',
 			'hr' => 'Croatian',
 			'cs' => 'Czech',
-			'da' => 'Danish',
-			'nl' => 'Dutch',
-			'en' => 'English',
-			'eo' => 'Esperanto',
 			'et' => 'Estonian',
-			'tl' => 'Filipino',
-			'fi' => 'Finnish',
-			'fr' => 'French',
+			'st' => 'Sesotho',
 			'gl' => 'Galician',
 			'ka' => 'Georgian',
-			'de' => 'German',
-			'el' => 'Greek',					
-			'gu' => 'Gujarati',		
+			'gu' => 'Gujarati',
 			'ht' => 'Haitian Creole',
+			'ha' => 'Hausa',
 			'iw' => 'Hebrew',
-			'hi' => 'Hindi',
 			'hmn' => 'Hmong',
 			'hu' => 'Hungarian',
 			'is' => 'Icelandic',
+			'ig' => 'Igbo',
 			'id' => 'Indonesian',
 			'ga' => 'Irish',
-			'it' => 'Italian',
-			'ja' => 'Japanese',
-			'jv' => 'Javanese',
+			'jw' => 'Javanese',
 			'kn' => 'Kannada',
+			'kk' => 'Kazakh',
 			'km' => 'Khmer',
 			'ko' => 'Korean',
 			'lo' => 'Lao',
@@ -190,48 +308,47 @@ class PrisnaGWTCommon {
 			'lv' => 'Latvian',
 			'lt' => 'Lithuanian',
 			'mk' => 'Macedonian',
+			'mg' => 'Malagasy',
 			'ms' => 'Malay',
+			'ml' => 'Malayalam',
 			'mt' => 'Maltese',
+			'mi' => 'Maori',
 			'mr' => 'Marathi',
-			'no' => 'Norwegian',
+			'mn' => 'Mongolian',
+			'my' => 'Burmese',
+			'ne' => 'Nepali',
 			'fa' => 'Persian',
-			'pl' => 'Polish',
-			'pt' => 'Portuguese',
-			'ro' => 'Romanian',
-			'ru' => 'Russian',
 			'sr' => 'Serbian',
+			'tl' => 'Filipino',
+			'si' => 'Sinhala',
 			'sk' => 'Slovak',
 			'sl' => 'Slovenian',
-			'es' => 'Spanish',
+			'so' => 'Somali',
+			'su' => 'Sundanese',
 			'sw' => 'Swahili',
 			'sv' => 'Swedish',
+			'tg' => 'Tajik',
 			'ta' => 'Tamil',
-			'te' => 'Telugu',
-			'th' => 'Thai',
 			'tr' => 'Turkish',
 			'uk' => 'Ukrainian',
 			'ur' => 'Urdu',
+			'uz' => 'Uzbek',
 			'vi' => 'Vietnamese',
 			'cy' => 'Welsh',
-			'yi' => 'Yiddish'
+			'yi' => 'Yiddish',
+			'yo' => 'Yoruba',
+			'zu' => 'Zulu',
+			'te' => 'Telugu',
+			'eo' => 'Esperanto'
 		);
+		
+		if ($_sort)
+			asort($languages);
+		
+		return $languages;
 		
 	}
 
-	public static function areFolderFilesWritable($_folder) {
-		
-		$contents = @scandir($_folder);
-		
-		foreach ($contents as $name) {
-			$file = $_folder . '/' . $name;
-			if (self::endsWith($name, '.xml') && @is_file($file) && !@is_writable($file))
-				return $name;
-		}
-		
-		return true;
-		
-	}
-	
 	public static function getArrayItems($_items, $_array) {
 		
 		$result = array();
@@ -741,7 +858,7 @@ class PrisnaGWTUI extends WP_Widget {
 		}
 
 		if ($display_mode == 'inline') {
-			$title = isset($_instance['title']) ? $_instance['title'] : __('', 'prisna-gwt');
+			$title = isset($_instance['title']) ? $_instance['title'] : '';
 			$class_name .= ' prisna_gwt_widget_has_title';
 			echo '<p><label for="' . $this->get_field_id('title') . '">' . __('Title:', 'prisna-gwt') . '</label><input class="widefat" id="' . $this->get_field_id('title') . '" name="'. $this->get_field_name('title') . '" type="text" value="' . esc_attr($title) . '"></p>';
 		}
@@ -774,7 +891,7 @@ class PrisnaGWTUI extends WP_Widget {
 	public function widget($_arguments, $_instance) {
 
 		$display_mode = PrisnaGWTConfig::getSettingValue('display_mode');
-		$title = apply_filters('widget_title', $_instance['title']);
+		$title = array_key_exists('title', $_instance) ? apply_filters('widget_title', $_instance['title']) : null;
 		
 		extract($_arguments, EXTR_SKIP);
  

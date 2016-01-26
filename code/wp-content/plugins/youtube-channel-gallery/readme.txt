@@ -3,8 +3,8 @@ Contributors: javitxu123
 Donate link: http://poselab.com/
 Tags: widget, gallery, youtube, channel, user, sidebar, video, youtube playlist, html5, iframe, Youtube channel, youtube videos, API 3
 Requires at least: 2.8
-Tested up to: 3.8.8
-Stable tag: 2.3.2
+Tested up to: 4.3.1
+Stable tag: 2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,7 +102,16 @@ Description of the different fields of the plugin:
 
 * **Description words number:** the maximum number of words displayed in the description of the video of the player. Shortcode attribute: player_description_words_number; value: Number. (Optional).
 
-* **Order:** order of player. Shortcode attribute: player_order; values: Number. 1 (default). (Optional).
+* **Tab order:** order of player. Shortcode attribute: player_order; values: Number. 1 (default). (Optional).
+
+
+**Search tab:**
+
+* **Search input text:** The text to be displayed on the search input to search in the youtube account. Shortcode attribute: search_input_text; values: String. Search... (default). (Optional).
+
+* **Show search box:** select where you want to play the video. Shortcode attribute: search_input_show; values: 0, 1 (default) or 2. (Optional).
+
+* **Tab order:** order of Search tab. Shortcode attribute: thumb_order; values: Number. 2 (default). (Optional).
 
 
 **Thumbnails tab:**
@@ -154,6 +163,8 @@ Description of the different fields of the plugin:
 
 * **Show link to thank the developer:** option to add a small link to home page of the developer . Shortcode attribute: promotion; values: 0 or 1 (default). (Optional).
 
+* **Tab 0rder:** order of Link tab. Shortcode attribute: link_order; values: Number. 4 (default). (Optional).
+
 
 = Shortcode syntax: =
 Example of shortcode use, remember to change your_Google_API_key for your own. Look at the [help](http://poselab.com/en/youtube-channel-gallery-help):
@@ -165,6 +176,7 @@ Example of shortcode use, remember to change your_Google_API_key for your own. L
 * Brazilian portuguese (pt_BR) - [lojainterativa.com](http://www.lojainterativa.com).
 * Italian (it_IT) - [Marco Milesi](https://profiles.wordpress.org/milmor).
 * Norwegian bokmål (nb_NO) - Harald Fjogstad
+* Serbo-Croatian (sr_RS) - [WebHostingGeeks.com](http://webhostinggeeks.com)
 * Spanish (es_ES) - [PoseLab](http://poselab.com/)
 
 If you have created your own language pack, or have an update of an existing one, you can [send me](mailto:javier@poselab.com) your gettext PO and MO so that I can bundle it into the Youtube Channel Gallery.
@@ -214,6 +226,18 @@ You have to purge or delete de cache of the CDN, plugin chache or minification p
 
 
 == Changelog ==
+
+= 2.4 =
+* Added search tab.
+* Fixed thumbnail alignment not working correctly.
+* Added Serbo-Croatian translation (sr_RS).
+* RTL language Support in the front-end.
+* Added Arab translation with "Next»" and "«Previous" strings to check RTL language support.
+* Updated Magnific Popup to v1.0.0 - 2015-09-17.
+* Added Text Domain in the plugin header to be imported into the translate.wordpress.org translation system.
+* Fields for change text of pagination.
+* Improvements in CSS.
+
 
 = 2.3.2 =
 * Deleted file_get_contents function for avoid error in some hostings.

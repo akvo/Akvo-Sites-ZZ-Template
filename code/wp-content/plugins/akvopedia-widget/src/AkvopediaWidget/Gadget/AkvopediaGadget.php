@@ -28,9 +28,9 @@ class AkvopediaGadget {
 
 	private function javascript() {
 		$script = "//<!--\n" .
-			'(function($, document) {' .
-			'    var init = function() { ' .
-			'    $("#' . $this->div_id . '").akvopedia({';
+			"(function(\$, document) {\n" .
+			"    var init = function() {\n" .
+			'    $("#' . $this->div_id . "\").akvopedia({\n";
 		$first = true;
 		foreach ($this->options as $key => $value ) {
 			if ($first) {
@@ -55,26 +55,26 @@ class AkvopediaGadget {
 			}
 		}
 		$script .=
-			'    });' .
-			'    $("#' . $this->div_id . '").on("akvopedia:title-updated", function(event, title) {' .
-			'       $("#' . $this->title_id . '").html(title);' .
-			'    });' .
-			'  };' .
-			'  $(document).ready(function () {' .
-            '       if ( typeof($.fn["akvopedia"]) !== "function" ) {' .
-            '           $(window).on("akvopedia:gadget-loaded", init);' .
-			'       } else {' .
-            '          init();' .
-            '       }' .
-			'  });' .
-			'})(jQuery, document);' .
+			"    });\n" .
+			'    $("#' . $this->div_id . "\").on('akvopedia:title-updated', function(event, title) {\n" .
+			'       $("#' . $this->title_id . "\").html(title);\n" .
+			"    });\n" .
+			"  };\n" .
+			"  \$(document).ready(function () {\n" .
+            "       if ( typeof(\$.fn['akvopedia']) !== 'function' ) {\n" .
+            "           \$(window).on('akvopedia:gadget-loaded', init);\n" .
+			"       } else {\n" .
+            "          init();\n" .
+            "       }\n" .
+			"  });\n" .
+			"})(jQuery, document);\n" .
 			"\n//-->";
 		return $script;
 	}
 
 	private function html()  {
 		$html = '<div class="' . $this->clazz . '" id="' . $this->div_id . '"><noscript>' .
-			'<iframe style="position: absolute; top: 4em; right:1em; left:1em; bottom:1em; height:90%; width:97%;" src="https://akvopedia.org/contentonly/' . $this->title . '</iframe>' .
+			'<iframe style="position: absolute; top: 4em; right:1em; left:1em; bottom:1em; height:90%; width:97%;" src="https://akvopedia.org/contentonly/' . $this->title . '"></iframe>' .
 			'</noscript></div>';
 		return $html;
 	}

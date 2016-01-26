@@ -1,4 +1,9 @@
 <?php
+
+if (!defined('ABSPATH')) {
+	exit;
+}
+
 /**
 * class for managing the plugin
 */
@@ -41,7 +46,7 @@ class FlxMapPlugin {
 		else {
 			// non-admin actions and filters for this plugin
 			add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
-			add_action('wp_print_footer_scripts', array($this, 'justInTimeLocalisation'), 9);
+			add_action('wp_footer', array($this, 'justInTimeLocalisation'));
 
 			// custom actions and filters for this plugin
 			add_filter('flexmap_getmap', array($this, 'getMap'), 10, 1);
@@ -61,7 +66,7 @@ class FlxMapPlugin {
 		$this->locale = get_locale();
 
 		// load translation strings for the admin
-		load_plugin_textdomain('flexible-map', false, basename(dirname(FLXMAP_PLUGIN_FILE)) . '/languages/');
+		load_plugin_textdomain('wp-flexible-map', false, basename(dirname(FLXMAP_PLUGIN_FILE)) . '/languages/');
 	}
 
 	/**
@@ -79,8 +84,8 @@ class FlxMapPlugin {
 	*/
 	public function enqueueScripts() {
 		// allow others to override the Google Maps API URL
-		$args = apply_filters('flexmap_google_maps_api_args', array('v' => '3.20', 'sensor' => 'false'));
-		$apiURL = apply_filters('flexmap_google_maps_api_url', add_query_arg($args, "https://maps.google.com/maps/api/js"));
+		$args = apply_filters('flexmap_google_maps_api_args', array('v' => '3.22'));
+		$apiURL = apply_filters('flexmap_google_maps_api_url', add_query_arg($args, 'https://maps.google.com/maps/api/js'));
 		if (!empty($apiURL)) {
 			wp_register_script('google-maps', $apiURL, false, null, true);
 		}
@@ -107,7 +112,7 @@ class FlxMapPlugin {
 	*/
 	public function justInTimeLocalisation() {
 		if (!empty($this->locales)) {
-			$domain = 'flexible-map';
+			$domain = 'wp-flexible-map';
 			$i18n = array();
 
 			// map old two-character language-only locales that now need to target language_country translations

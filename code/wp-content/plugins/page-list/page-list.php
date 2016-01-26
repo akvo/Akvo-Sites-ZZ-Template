@@ -3,13 +3,13 @@
 Plugin Name: Page-list
 Plugin URI: http://wordpress.org/plugins/page-list/
 Description: [pagelist], [subpages], [siblings] and [pagelist_ext] shortcodes
-Version: 5.0
+Version: 5.1
 Author: webvitaly
 Author URI: http://web-profile.com.ua/wordpress/plugins/
 License: GPLv3
 */
 
-define('PAGE_LIST_VERSION', '5.0');
+define('PAGE_LIST_VERSION', '5.1');
 
 $pagelist_unq_settings = array(
 	'version' => PAGE_LIST_VERSION,
