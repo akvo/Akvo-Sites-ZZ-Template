@@ -10,6 +10,9 @@
     "modernizr": "2.8.2",
     "bootstrap-sass-official": "3.3.4"
   },
+  "devDependencies": {
+    "jquery": "1.11.3"
+  },
   "overrides": {
     "modernizr": {
       "main": "./modernizr.js"
