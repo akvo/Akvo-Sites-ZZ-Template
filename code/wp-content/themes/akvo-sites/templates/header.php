@@ -40,6 +40,11 @@
 				</div>
 				<?php } ?>
 			</div>
+			<div id="sub-header" class="clearfix">
+			<?php if ( is_active_sidebar( 'sub-header' ) ) : ?>
+				<?php dynamic_sidebar( 'sub-header' ); ?>
+			<?php endif; ?>
+			</div>
 		</div>
 	</div>
 	<div class="row">
