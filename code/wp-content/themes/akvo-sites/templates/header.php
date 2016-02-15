@@ -32,19 +32,13 @@
 					<i class="fa fa-search fa-2x"></i>
 				</button>
 
-				<?php 
-				if ( ! function_exists( 'is_plugin_active' ) ) require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-				if ( is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' ) ) { ?>
-				<div class="langbar">
-					<?php do_action('icl_language_selector');  ?>
-				</div>
-				<?php } ?>
+				
 			</div>
+      <?php if ( is_active_sidebar( 'sub-header' ) ) : ?>
 			<div id="sub-header" class="clearfix">
-			<?php if ( is_active_sidebar( 'sub-header' ) ) : ?>
-				<?php dynamic_sidebar( 'sub-header' ); ?>
-			<?php endif; ?>
+					<?php dynamic_sidebar( 'sub-header' ); ?>
 			</div>
+      <?php endif; ?>
 		</div>
 	</div>
 	<div class="row">
