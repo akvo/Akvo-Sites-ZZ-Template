@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "asset-builder": "^1.1.0",
-    "browser-sync": "^2.11.1",
+    "browser-sync": "^2.11.2",
     "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
@@ -55,6 +55,6 @@
     "minimist": "^1.2.0",
     "run-sequence": "^1.1.5",
     "traverse": "^0.6.6",
-    "wiredep": "^3.0.0"
+    "wiredep": "^4.0.0"
   }
 }
