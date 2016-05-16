@@ -7,22 +7,20 @@ $target         = filter_input( INPUT_GET, 'target', FILTER_SANITIZE_FULL_SPECIA
 $auto_resize    = filter_input( INPUT_GET, 'auto_resize', FILTER_VALIDATE_BOOLEAN | FILTER_NULL_ON_FAILURE  );
 $unload_cb      = filter_input( INPUT_GET, 'unload_cb', FILTER_SANITIZE_FULL_SPECIAL_CHARS | FILTER_NULL_ON_FAILURE  );
 
-
 // Adding a translator
 if ( preg_match( '|^@select-translators;([^;]+);([^;]+)@|', $target, $matches ) ) {
-	$source_language = $matches[ 1 ];
-	$target_language = $matches[ 2 ];
-
-
-	$project = TranslationProxy::get_current_project();
-
+	$source_language = $matches[1];
+	$target_language = $matches[2];
+	$project         = TranslationProxy::get_current_project();
 	try {
-		$iclsettings[ 'language_pairs' ] = $sitepress->get_setting( 'language_pairs', array() );
-		if ( !isset( $iclsettings[ 'language_pairs' ][ $source_language ][ $target_language ] ) || $iclsettings[ 'language_pairs' ][ $source_language ][ $target_language ] == 0 ) {
-			$iclsettings[ 'language_pairs' ][ $source_language ][ $target_language ] = 1;
-			TranslationProxy_Translator::update_language_pairs( $project, $iclsettings[ 'language_pairs' ] );
-			$sitepress->save_settings( $iclsettings );
+		$lp_setting_index = 'language_pairs';
+		$language_pairs   = $sitepress->get_setting( $lp_setting_index, array() );
+		if ( ! isset( $language_pairs[ $source_language ][ $target_language ] ) || $language_pairs[ $source_language ][ $target_language ] == 0 ) {
+			$language_pairs[ $source_language ][ $target_language ] = 1;
+			TranslationProxy_Translator::update_language_pairs( $project, $language_pairs );
+			$sitepress->set_setting( $lp_setting_index, $language_pairs, true );
 		}
+		$target = $project->select_translator_iframe_url( $source_language, $target_language );
 	} catch ( Exception $e ) {
 		if ( $e->getCode() == ICL_LANGUAGE_NOT_SUPPORTED ) {
 			printf( __( '<p>Requested languages are not supported by the translation service (%s). Please <a%s>contact us</a> for support. </p>', 'sitepress' ), $e->getMessage(), ' target="_blank" href="http://wpml.org/?page_id=5255"' );
@@ -35,9 +33,6 @@ if ( preg_match( '|^@select-translators;([^;]+);([^;]+)@|', $target, $matches ) 
 		}
 		exit;
 	}
-
-	$target = $project->select_translator_iframe_url( $source_language, $target_language );
-
 }
 
 $target .= ( strpos( $target, '?' ) === false ) ? '?' : '&';

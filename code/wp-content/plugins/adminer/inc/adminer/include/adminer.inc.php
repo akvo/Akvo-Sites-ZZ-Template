@@ -9,7 +9,7 @@ class Adminer {
 	* @return string HTML code
 	*/
 	function name() {
-		return "<a href='http://www.adminer.org/' target='_blank' id='h1'>Adminer</a>";
+		return "<a href='https://www.adminer.org/' target='_blank' id='h1'>Adminer</a>";
 	}
 
 	/** Connection parameters
@@ -643,14 +643,14 @@ username.form['auth[driver]'].onchange();
 				foreach (fields($table) as $name => $field) {
 					$fields[] = idf_escape($name) . " $field[full_type]";
 				}
-				$create = "CREATE TABLE " . adminer_table($table) . " (" . implode(", ", $fields) . ")";
+				$create = "CREATE TABLE " . table($table) . " (" . implode(", ", $fields) . ")";
 			} else {
 				$create = create_sql($table, $_POST["auto_increment"]);
 			}
 			set_utf8mb4($create);
 			if ($style && $create) {
 				if ($style == "DROP+CREATE" || $is_view == 1) {
-					echo "DROP " . ($is_view == 2 ? "VIEW" : "TABLE") . " IF EXISTS " . adminer_table($table) . ";\n";
+					echo "DROP " . ($is_view == 2 ? "VIEW" : "TABLE") . " IF EXISTS " . table($table) . ";\n";
 				}
 				if ($is_view == 1) {
 					$create = remove_definer($create);
@@ -702,7 +702,7 @@ username.form['auth[driver]'].onchange();
 						dump_csv($row);
 					} else {
 						if (!$insert) {
-							$insert = "INSERT INTO " . adminer_table($table) . " (" . implode(", ", array_map('idf_escape', $keys)) . ") VALUES";
+							$insert = "INSERT INTO " . table($table) . " (" . implode(", ", array_map('idf_escape', $keys)) . ") VALUES";
 						}
 						foreach ($row as $key => $val) {
 							$field = $fields[$key];
@@ -778,7 +778,7 @@ username.form['auth[driver]'].onchange();
 		?>
 <h1>
 <?php echo $this->name(); ?> <span class="version"><?php echo $VERSION; ?></span>
-<a href="http://www.adminer.org/#download" target="_blank" id="version"><?php echo (version_compare($VERSION, $_COOKIE["adminer_version"]) < 0 ? h($_COOKIE["adminer_version"]) : ""); ?></a>
+<a href="https://www.adminer.org/#download" target="_blank" id="version"><?php echo (version_compare($VERSION, $_COOKIE["adminer_version"]) < 0 ? h($_COOKIE["adminer_version"]) : ""); ?></a>
 </h1>
 <?php
 		if ($missing == "auth") {

@@ -133,39 +133,46 @@
 					(self.get('Navigator')).item_count(item_count);
 				}
 
-				if (parseInt(item_count) > 0) {
-								self.set('loaded', true);
+				if (parseInt(item_count, 10) > 0) {
+					self.set('loaded', true);
+				} else {
+					self.set('loaded', false);
+				}
+
+				var groups = [];
+
+				/** @namespace json.data.metrics */
+				/** @namespace json.data.metrics.batch_metrics */
+
+				_.each(
+					grouped_data, function (group, index) {
+						if (group.length) {
+							var data_item = {};
+							var metrics = batch_metrics [index];
+							data_item.display_from = metrics.display_from;
+							data_item.overall_count = metrics.item_count;
+							data_item.display_to = metrics.display_to;
+							data_item.batch_name = metrics.batch_name;
+							if (metrics.batch_url) {
+								data_item.batch_url = metrics.batch_url;
 							}
-
-							var groups = [];
-
-							/** @namespace json.data.metrics */
-							/** @namespace json.data.metrics.batch_metrics */
-
-							_.each(
-								grouped_data, function (group, index) {
-									if (group.length) {
-										var data_item = {};
-										var metrics = batch_metrics [index];
-										data_item.display_from = metrics.display_from;
-										data_item.overall_count = metrics.item_count;
-										data_item.display_to = metrics.display_to;
-										data_item.batch_name = metrics.batch_name;
-										if (metrics.batch_url) {
-											data_item.batch_url = metrics.batch_url;
-										}
-										data_item.batch_id = group[0].batch_id;
-										data_item.last_update = metrics.last_update;
-										data_item.kind = 'Group';
-										data_item.items = group;
-										/** @namespace metrics.status_array */
-										data_item.statuses = metrics.status_array;
-										data_item.languages = _.groupBy(group, 'lang_text');
-										groups[index] = data_item;
-									}
-								}
-							);
-							self.parse_data(groups);
+							if (metrics.batch_id) {
+								data_item.tp_batch_id = metrics.batch_id;
+							}
+							data_item.in_active_ts = metrics.in_active_ts;
+							data_item.notifications = metrics.notifications;
+							data_item.batch_id = group[0].batch_id;
+							data_item.last_update = metrics.last_update;
+							data_item.kind = 'Group';
+							data_item.items = group;
+							/** @namespace metrics.status_array */
+							data_item.statuses = metrics.status_array;
+							data_item.languages = _.groupBy(group, 'lang_text');
+							groups[index] = data_item;
+						}
+					}
+				);
+				self.parse_data(groups);
 
 				return self;
 			},

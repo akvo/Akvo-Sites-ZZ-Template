@@ -3,17 +3,30 @@
 		<th colspan="6">
 			<div class="listing-heading-inner-wrap">
 				<div class="group-name">
-					<h4><?php _e( 'Translation Batch sent on ', 'wpml-translation-management' ) ?><%= TJ.last_update
-						%></h4>
-					<%= TJ.batch_name ? '<p><?php _e( 'Batch Name: ', 'wpml-translation-management' ) ?> <strong>' +
-							TJ.batch_name + '</strong></p>' : '' %>
+					<h4><?php _e( 'Translation Batch sent on ', 'wpml-translation-management' ) ?><%= TJ.last_update %></h4>
+					<%= TJ.batch_name ? '<p><?php _e( 'Batch Name: ', 'wpml-translation-management' ) ?> <strong>' + TJ.batch_name + '</strong></p>' : '' %>
 				</div>
+				<% if(TJ.tp_batch_id && TJ.in_active_ts) { %>
+				<div class="group-check-wrapper">
+					<div class="wpml_tp_sync_status" style="display:none"><p></p></div>
+					<span class="spinner"></span>
+					<input type="button"
+								 class="button-secondary group-action group-check"
+								 value="<?php echo __( "Synchronize status", "sitepress" ); ?>"
+								 data-message-sent="<?php echo __( 'Your request has been sent. Please wait a few minutes to synchronize the status with the Translation service', 'wpml-translation-management' ); ?>"
+								 data-message-request-sending="<?php echo __( 'Sending request...', 'wpml-translation-management' ); ?>"
+								 data-message-request-sent="<?php echo __( 'Your request was sent.', 'wpml-translation-management' ); ?>"
+								 data-action="<?php echo 'wpml_check_batch_status'; ?>"
+								 data-nonce="<?php echo wp_create_nonce( 'wpml_check_batch_status' ); ?>"/>
+					<input type="hidden" class="group-check-batch-id" value="<%= TJ.tp_batch_id%>"/>
+				</div>
+				<% } %>
 			</div>
 			<div class="buttons">
 				<div href="#" class="button-secondary group-action group-expand"><span
-						class="dashicons dashicons-plus"></span>&nbsp;<?php echo __( 'Expand', 'sitepress' ); ?></div>
+						class="dashicons dashicons-plus"></span>&nbsp;<?php echo __( 'Expand', 'wpml-translation-management' ); ?></div>
 				<div href="#" class="button-secondary group-action group-collapse"><span
-						class="dashicons dashicons-minus"></span>&nbsp;<?php echo __( 'Collapse', 'sitepress' ); ?>
+						class="dashicons dashicons-minus"></span>&nbsp;<?php echo __( 'Collapse', 'wpml-translation-management' ); ?>
 				</div>
 			</div>
 			<div class="listing-heading-summary">
@@ -21,20 +34,20 @@
 					<li class="js-group-info">
 						<span id="group-displayed-jobs" class="value"><%=TJ.how_many%></span>
 						<span id="group-out-of-text" style="display:<%=TJ.show_out_of%>;"><?php echo __( 'out of',
-																										 'sitepress' ); ?></span>
+																										 'wpml-translation-management' ); ?></span>
 						<span id="group-all-jobs" class="value" style="display:<%=TJ.show_out_of%>;"><%=TJ.how_many_overall%></span> <?php echo __( 'Jobs',
-																																					'sitepress' ); ?>
+																																					'wpml-translation-management' ); ?>
 						<br>
 
 						<div>
 							<a href="#" id="group-previous-jobs"
 							   style="display:<%=TJ.show_previous%>;"><?php echo __( '&laquo; continue from the previous page',
-																					 'sitepress' ); ?><br></a>
+																					 'wpml-translation-management' ); ?><br></a>
 						</div>
 						<div>
 							<a href="#" id="group-remaining-jobs"
 							   style="display:<%=TJ.show_remaining%>;"> <?php echo __( 'continue on the next page &raquo;',
-																					   'sitepress' ); ?></a>
+																					   'wpml-translation-management' ); ?></a>
 						</div>
 					</li>
 					<%

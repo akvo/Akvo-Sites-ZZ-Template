@@ -29,7 +29,7 @@
 .prisna-gwt-social-wrapper {
 	position: absolute;
 	right: 0;
-	top: -5px;
+	top: 0;
 }
 .prisna-promote-wrapper .prisna-logo td {
     padding: 0 5px !important;
@@ -437,11 +437,6 @@
 							<table cellpadding="0" cellspacing="0">
 								<tr>
 									<td>
-										<div class="prisna-gwt-social">Subscribe and don't miss any promotion!</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
 										<div class="prisna-gwt-social">
 											<div class="prisna-gwt-fb">
 												<table cellspacing="0" cellpadding="0">
@@ -508,7 +503,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="prisna-center prisna-special-discount"><a href="https://www.prisna.net/get-the-translation-plugin/?d=96bf1f652e7648e6a8163cdd0a8fba41" target="_blank">Special 20% discount for <em>Google Website Translator by Prisna.net</em> users!</a></td>
+								<td class="prisna-center prisna-special-discount"><a href="https://www.prisna.net/get-the-translation-plugin/?d=96bf1f652e7648e6a8163cdd0a8fba41" target="_blank">Special discount for <em>Google Website Translator by Prisna.net</em> users!</a></td>
 							</tr>
 							<tr>
 								<td class="prisna-center">

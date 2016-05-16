@@ -11,28 +11,27 @@ Administration include
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-functions.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-quickstart.php';
 
-$version = '6.5.6';
+$version = '7.1.1';
 $updated = false;
 $evanto = (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php"));
 if (is_user_logged_in() && is_admin()) {
     $scrollposition = 0;
-    $current_tab=0;
     $devOptions = $this->getAiAdminOptions();
-        
-    if (!$evanto) {
+    
+    if ($evanto) {
+      $devOptions['demo'] = 'false';
+    } else {
       $devOptions['accordeon_menu'] = 'false';
       $devOptions['alternative_shortcode'] = '';
     }
+    
+    
     if ( $devOptions['accordeon_menu'] == 'false') {
         if (isset($_POST['scrollposition'])) {
           $scrollposition = urlencode($_POST['scrollposition']); 
         }
     }
     
-    if (isset($_POST['current_tab'])) {
-      $current_tab = urlencode($_POST['current_tab']); 
-    }
-  
     $is_latest = true;
     if ($evanto) {
       $latest_version = ai_getlatestVersion(); 
@@ -48,9 +47,12 @@ if (is_user_logged_in() && is_admin()) {
       $is_latest = false;
     }
     
-    $script_name = dirname(__FILE__) . '/js/ai_external.js'; 
-    
-    processConfigActions();
+    $current_tab = ($devOptions['donation_bottom'] === 'false') ? 0:1;
+      
+    if (isset($_POST['current_tab'])) {
+      $current_tab = urlencode($_POST['current_tab']); 
+    }
+    $current_tab = processConfigActions($current_tab);
     
     if (isset($_POST['update_iframe-loader'])) { //save option changes
         $adminSettings = array('securitykey', 'src', 'width', 'height', 'scrolling',
@@ -93,7 +95,15 @@ if (is_user_logged_in() && is_admin()) {
             'additional_js_file_iframe', 'additional_css_file_iframe',
             'add_css_class_iframe','iframe_zoom_ie8',
             'enable_lazy_load_reserve_space','editorbutton',
-            'hide_content_until_iframe_color', 'include_html'  
+            'hide_content_until_iframe_color', 'include_html',
+            'enable_ios_mobile_scolling', 'sandbox',
+            'show_iframe_as_layer_header_file', 'show_iframe_as_layer_header_height',
+            'show_iframe_as_layer_header_position', 'show_iframe_as_layer_full',
+            'demo', 'show_part_of_iframe_zoom',
+            'external_height_workaround_delay',  
+            'add_document_domain','document_domain',
+            'multi_domain_enabled','check_shortcode',
+            'use_post_message' 
             );  
         if (!wp_verify_nonce($_POST['twg-options'], 'twg-options')) die('Sorry, your nonce did not verify.');
         
@@ -113,13 +123,21 @@ if (is_user_logged_in() && is_admin()) {
                        || $item == 'show_iframe_loader' || $item == 'enable_lazy_load_manual' 
                        || $item == 'accordeon_menu' || $item == 'single_save_button'
                        || $item == 'show_iframe_as_layer' || $item == 'add_iframe_url_as_param'
-                       || $item == 'auto_zoom') {
+                       || $item == 'auto_zoom' || $item == 'show_part_of_iframe_zoom'
+                       || $item == 'demo' ||  $item == 'enable_ios_mobile_scolling') {
                           $text = 'false';
                      } else if ($item == 'show_menu_link') {
                          $text = 'true';
                      } else if ($item == 'resize_on_element_resize_delay') {
                          $text = '250';
-                     } else {
+                     }  else if ($item == 'show_iframe_as_layer_header_height') {
+                         $text = '100';
+                     } else if ($item == 'show_iframe_as_layer_header_position') {
+                         $text = 'top';
+                     } else if ($item == 'external_height_workaround_delay') {
+                         $text = '0';
+                     }
+                     else {
                          $text = '';
                      }
                  }
@@ -178,48 +196,8 @@ if (is_user_logged_in() && is_admin()) {
         update_option($this->adminOptionsName, $devOptions);
 
         // create the external js file with the url of the wordpress installation
-        $template_name = dirname(__FILE__) . '/js/ai_external.template.js';
+        $this->saveExternalJsFile();
         
-        $jquery_path =  site_url() . '/wp-includes/js/jquery/jquery.js';
-        $resize_path =  site_url() . '/wp-content/plugins/advanced-iframe/includes/scripts/jquery.ba-resize.min.js';
-        
-        $content = file_get_contents($template_name);
-        $new_content = str_replace('WORDPRESS_SITE_URL', get_site_url(), $content);
-        $new_content = str_replace('PARAM_ID', $devOptions['id'], $new_content);
-        $new_content = str_replace('PARAM_IFRAME_HIDE_ELEMENTS', $devOptions['iframe_hide_elements'], $new_content);
-        $new_content = str_replace('PARAM_ONLOAD_SHOW_ELEMENT_ONLY', $devOptions['onload_show_element_only'], $new_content);
-        $new_content = str_replace('PARAM_IFRAME_CONTENT_ID',  $devOptions['iframe_content_id'], $new_content);
-        $new_content = str_replace('PARAM_IFRAME_CONTENT_STYLES',  $devOptions['iframe_content_styles'], $new_content);
-        $new_content = str_replace('PARAM_CHANGE_IFRAME_LINKS_TARGET',  $devOptions['change_iframe_links_target'], $new_content);
-        $new_content = str_replace('PARAM_CHANGE_IFRAME_LINKS',  $devOptions['change_iframe_links'], $new_content);
-        $new_content = str_replace('PARAM_ENABLE_EXTERNAL_HEIGHT_WORKAROUND', $devOptions['enable_external_height_workaround'], $new_content);
-        $new_content = str_replace('PARAM_KEEP_OVERFLOW_HIDDEN', $devOptions['keep_overflow_hidden'], $new_content);
-        $new_content = str_replace('PARAM_HIDE_PAGE_UNTIL_LOADED_EXTERNAL', $devOptions['hide_page_until_loaded_external'], $new_content);
-        $new_content = str_replace('PARAM_IFRAME_REDIRECT_URL', $devOptions['iframe_redirect_url'] , $new_content);
-        $new_content = str_replace('PARAM_ENABLE_RESPONSIVE_IFRAME', $devOptions['enable_responsive_iframe'] , $new_content);
-        $new_content = str_replace('PARAM_WRITE_CSS_DIRECTLY', $devOptions['write_css_directly'] , $new_content);
-        $new_content = str_replace('PARAM_RESIZE_ON_ELEMENT_RESIZE_DELAY', $devOptions['resize_on_element_resize_delay'] , $new_content);
-        $new_content = str_replace('PARAM_RESIZE_ON_ELEMENT_RESIZE', $devOptions['resize_on_element_resize'] , $new_content);
-        $new_content = str_replace('PARAM_URL_ID', $devOptions['pass_id_by_url'] , $new_content);
-        
-        $new_content = str_replace('PARAM_JQUERY_PATH', $jquery_path , $new_content);
-        $new_content = str_replace('PARAM_RESIZE_PATH', $resize_path , $new_content);
-        $new_content = str_replace('PARAM_ADD_IFRAME_URL_AS_PARAM', $devOptions['add_iframe_url_as_param'], $new_content);
-        $new_content = str_replace('PARAM_ADDITIONAL_CSS_FILE_IFRAME', $devOptions['additional_css_file_iframe'], $new_content);
-        $new_content = str_replace('PARAM_ADDITIONAL_JS_FILE_IFRAME', $devOptions['additional_js_file_iframe'], $new_content);
-        $new_content = str_replace('PARAM_ADD_CSS_CLASS_IFRAME', $devOptions['add_css_class_iframe'], $new_content);
-        $new_content = str_replace('PARAM_TIMESTAMP', date("Y-m-d H:i:s"), $new_content);
-
-        if (file_exists($script_name)) {
-            @unlink($script_name);
-        }
-        $fh = fopen($script_name, 'w');
-        if ($fh) {
-            fwrite($fh, $new_content);
-            fclose($fh);
-        } else {
-        printError(__('The file "advanced-iframe/js/ai_external.js" can not be saved. Please check the permissions of the js folder and save the settings again. This file is needed for the external workaround!', "advanced-iframe"));
-        }
         ?>
 <?php if ($devOptions['single_save_button'] == 'false') { ?> 
 <div class="updated">
@@ -241,6 +219,18 @@ if (is_user_logged_in() && is_admin()) {
   }
 }
 
+$isDemo =  $devOptions['demo'] == 'true';
+    
+if ($isDemo) { ?>
+<div class="updated top-10">
+  <p>
+     <strong>
+      <?php _e('The administration is running in the pro modus. Please note that the blue settings of the pro version are not working. They only show what is possible!', 'advanced-iframe'); ?>
+     </strong>
+  </p>
+</div>
+<?php
+}
     if ($evanto && clearstatscache($devOptions)) {
       printError(__('Yo'+'ur ver'+'sion of Adv'+'anced iFr'+'ame Pro s'+'eems to be an ill'+'egal co'+'py and is now wo'+'rking in the fr'+ 'eeware m'+'ode ag'+'ain.<br />Ple'+'ase get the of'+'fical v'+'ersion from co'+'decanyon or co'+'ntact the au'+'thor thr'+'ough code'+'canyon if you th'+'ink this is a fa'+'lse al'+'arm.', 'advanced-iframe'));
     }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              if (clearstatscache($devOptions)) {$evanto = false; }
@@ -249,24 +239,37 @@ if (is_user_logged_in() && is_admin()) {
 </style>
 <div id="ai" class="wrap">
   <!-- options-general.php?page=advanced-iframe.php -->
-  <form name="ai_form" method="post" action="">
+  <form name="ai_form" method="post" action="options-general.php?page=advanced-iframe.php">
     <input type="hidden" id="current_tab" name="current_tab" value="<?php echo $current_tab; ?>">
     <?php wp_nonce_field('twg-options', 'twg-options'); ?>
 
       <div id="icon-options-general" class="icon_ai show-always">
       <br />
       </div>
-<h2 class="show-always"><?php
+<h1 class="show-always" class="full-width"><?php
         _e('Advanced iFrame ', 'advanced-iframe');
         if ($evanto) {
         _e('Pro', 'advanced-iframe');
         } 
         echo ' <small>v' . $version. '</small>';  
-        if ($is_latest) {
-          echo ' <small class="hide-print"><small><small>' . __('(Your installation is up to date - <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">view history</a>)', 'advanced-iframe') . '</small></small></small>';  
+        if ($evanto) {
+          if ($is_latest) {
+            echo ' <small class="hide-print"><small><small>' . __('(Your installation is up to date - <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">view history</a>)', 'advanced-iframe') . '</small></small></small>';  
+          } else {
+             echo ' <small class="hide-print"><small><small>' . __('(<a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">Version '.$latest_version.'</a> is available. <a href="http://codecanyon.net/downloads" target="_blank">Download</a> it from CodeCanyon and follow the <a href="http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle#item-description__upgrade" _target="blank">update instructions</a>!', 'advanced-iframe') . '</small></small></small>';
+          }
+        } else {
+           echo ' <small class="hide-print"><small><small>' . __('(<a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">view history</a>)', 'advanced-iframe') . '</small></small></small>';  
         }
-        ?><span id="help-header">&nbsp;attribute help</span></h2>
+        if (!$evanto && !$isDemo) {  
+            echo '<div class="pro-hint">' . __('Test the pro administration:<br />Enable it on the introduction tab', 'advanced-iframe') . '</div>';
+        }
+        echo '<div class="header-help">' . __('If you start using advanced iframe please read the quickstart guide on the introduction tab first. After that continue with an iframe like described on the basic tab. Only if the iframe appears add additional features. Go to the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0" target="_blank">free</a> and the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo" target="_blank">pro demos</a> page for running examples.', 'advanced-iframe') . '</div>';     
+        
+        ?><span id="help-header">&nbsp;<?php __('attribute help', 'advanced-iframe'); ?></span></h1>
+<?php if (!$isDemo) { ?>
 <br />
+<?php } ?>
 <?php if ($devOptions['accordeon_menu'] == 'false') { 
 
 
@@ -276,25 +279,25 @@ No settings found for this search term.
 </div><div id="ai-input-search-result-show">&nbsp;</div>
 <div style="clear:left;"></div>
 <div id="ai-input-search-help">
-The filter text does look for the search term in the label and the description of each setting on all tabs. It does not search in the additional documentation that does exist in each section. Please use the browser search for a full text of this page.
+The filter text does look for the search term in the label and the description of each setting on all tabs. Tabs with findings are marked yellow. It does not search in the additional documentation that does exist in each section. Please use the browser search for a full text of this page.
 </div>', 'advanced-iframe');
 
 _e('<h2 class="nav-tab-wrapper show-always">', 'advanced-iframe');
 if ($devOptions['donation_bottom'] === 'false') {
-  _e('<a id="tab_0" class="nav-tab nav-tab-active" href="#introduction">Introduction</a>
-      <a id="tab_1" class="nav-tab" href="#basic">Basic Settings</a>
-      <a id="tab_2" class="nav-tab advanced-settings-tab" href="#advanced">Advanced Settings</a>
-      <a id="tab_3" class="nav-tab external-workaround" href="#external-workaround">External workaround</a>
-      <a id="tab_4" class="nav-tab" href="#add-files">Add/Include files</a>
-      <a id="tab_5" class="nav-tab help-tab" href="#help">Help</a>
+  _e('<a id="tab_0" class="nav-tab nav-tab-active" href="#introduction"><span>Introduction</span></a>
+      <a id="tab_1" class="nav-tab" href="#basic"><span>Basic Settings</span></a>
+      <a id="tab_2" class="nav-tab advanced-settings-tab" href="#advanced"><span>Advanced Settings</span></a>
+      <a id="tab_3" class="nav-tab external-workaround" href="#external-workaround"><span>External workaround</span></a>
+      <a id="tab_4" class="nav-tab" href="#add-files"><span>Add/Include files</span></a>
+      <a id="tab_5" class="nav-tab help-tab" href="#help"><span>Help / FAQ</span></a>
       ', 'advanced-iframe');
 } else {
-  _e('<a id="tab_0" class="nav-tab nav-tab-active" href="#basic">Basic Settings</a>
-    <a id="tab_1" class="nav-tab advanced-settings-tab" href="#advanced">Advanced Settings</a>
-    <a id="tab_2" class="nav-tab external-workaround" href="#external-workaround">External workaround</a>
-    <a id="tab_3" class="nav-tab" href="#add-files">Add/Include files</a>
-    <a id="tab_4" class="nav-tab help-tab" href="#help">Help</a>
-    <a id="tab_5" class="nav-tab" href="#introduction">Introduction</a>', 'advanced-iframe');
+  _e('<a id="tab_1" class="nav-tab nav-tab-active" href="#basic"><span>Basic Settings</span></a>
+    <a id="tab_2" class="nav-tab advanced-settings-tab" href="#advanced"><span>Advanced Settings</span></a>
+    <a id="tab_3" class="nav-tab external-workaround" href="#external-workaround"><span>External workaround</span></a>
+    <a id="tab_4" class="nav-tab" href="#add-files"><span>Add/Include files</span></a>
+    <a id="tab_5" class="nav-tab help-tab" href="#help"><span>Help / FAQ</span></a>
+    <a id="tab_0" class="nav-tab" href="#introduction"><span>Introduction</span></a>', 'advanced-iframe');
 }
 _e('
 </h2>
@@ -321,7 +324,7 @@ _e('Please open the section where you want to change a default setting. Please s
 
 if ($devOptions['donation_bottom'] === 'false') {
   if ($devOptions['accordeon_menu'] == 'false') {
-    echo '<section id="section-quickstart">';
+    echo '<section id="section-quickstart" class="tab_0">';
   }
   printDonation($devOptions, $evanto);
   echo "</div>";
@@ -330,32 +333,34 @@ if ($devOptions['donation_bottom'] === 'false') {
   }
 }
 if ($devOptions['accordeon_menu'] == 'false') {
-  echo '<section id="section-default">';
+  echo '<section id="section-default" class="tab_1">';
 }
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-default.php';
 if ($devOptions['accordeon_menu'] == 'false') {
-  echo '</section><section id="section-advanced">';
+  echo '</section><section id="section-advanced" class="tab_2">';
 }
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-advanced.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-resize.php';
-include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-lazy-load.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-zoom.php';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-lazy-load.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-parameters.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-modify-parent.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-modify-iframe.php';
 if ($devOptions['accordeon_menu'] == 'false') {
-echo '</section><section id="section-external-workaround">';
+echo '</section><section id="section-external-workaround" class="tab_3">';
 }
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-external-workaround.php';
 if ($devOptions['accordeon_menu'] == 'false') {
-echo '</section><section id="section-add-files">';
+echo '</section><section id="section-add-files" class="tab_4">';
 }
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-add-files.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-include-directly.php';
 if ($devOptions['accordeon_menu'] == 'false') {
-echo '</section><section  id="section-help">';
+echo '</section><section  id="section-help" class="tab_5">';
 }
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-video.php';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-faq.php';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-forum.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-support.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-jquery.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-browser.php';
@@ -365,7 +370,7 @@ echo '</section>';
 }
 if ($devOptions['donation_bottom'] === 'true') {
   if ($devOptions['accordeon_menu'] == 'false') {
-  echo '<section>';
+  echo '<section id="section-quickstart" class="tab_0">';
   }
   printDonation($devOptions, $evanto);
   echo "</div>";
@@ -382,7 +387,7 @@ if ($devOptions['donation_bottom'] === 'true') {
         <?php 
         if ($updated) { 
           $updated_display_text = "visible";
-          echo '<script>setTimeout(function() { jQuery("#updated_text").css("visibility","hidden")}, 4000);</script>'; 
+          echo '<script type="text/javascript">setTimeout(function() { jQuery("#updated_text").css("visibility","hidden")}, 4000);</script>'; 
         } else {
           $updated_display_text = "hidden";
         }
@@ -404,12 +409,10 @@ if ($devOptions['donation_bottom'] === 'true') {
 <?php } ?>
 </form>
 </div>
-<script>
+<script type="text/javascript">
 jQuery(function() {
   initAdminConfiguration(<?php echo ($evanto) ? "true" : "false"; ?>,<?php echo '"' .$devOptions['accordeon_menu'] . '"'; ?>);  
-  <?php if ($current_tab != 0) {  ?>
   document.getElementById('tab_<?php echo $current_tab; ?>').click();
-  <?php } ?>
   jQuery(document).scrollTop(<?php echo $scrollposition; ?>);
 });
 </script>

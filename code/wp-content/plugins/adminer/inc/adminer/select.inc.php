@@ -32,10 +32,10 @@ $order = $adminer->selectOrderProcess($fields, $indexes);
 $limit = $adminer->selectLimitProcess();
 $from = ($select ? implode(", ", $select) : "*" . ($oid ? ", $oid" : ""))
 	. convert_fields($columns, $fields, $select)
-	. "\nFROM " . adminer_table($TABLE);
+	. "\nFROM " . table($TABLE);
 $group_by = ($group && $is_group ? "\nGROUP BY " . implode(", ", $group) : "") . ($order ? "\nORDER BY " . implode(", ", $order) : "");
 
-if ($_GET["val"] && is_adminer_ajax()) {
+if ($_GET["val"] && js_adminer_ajax()) {
 	header("Content-Type: text/plain; charset=utf-8");
 	foreach ($_GET["val"] as $unique_idf => $row) {
 		$as = convert_field($fields[key($row)]);
@@ -106,7 +106,7 @@ if ($_POST && !$error) {
 			}
 			if ($_POST["delete"] || $set) {
 				if ($_POST["clone"]) {
-					$query = "INTO " . adminer_table($TABLE) . " (" . implode(", ", array_keys($set)) . ")\nSELECT " . implode(", ", $set) . "\nFROM " . adminer_table($TABLE);
+					$query = "INTO " . table($TABLE) . " (" . implode(", ", array_keys($set)) . ")\nSELECT " . implode(", ", $set) . "\nFROM " . table($TABLE);
 				}
 				if ($_POST["all"] || ($unselected === array() && is_array($_POST["check"])) || $is_group) {
 					$result = ($_POST["delete"]
@@ -142,7 +142,7 @@ if ($_POST && !$error) {
 					$message = lang('Item%s has been inserted.', " $last_id");
 				}
 			}
-			queries_adminer_redirect(remove_from_uri($_POST["all"] && $_POST["delete"] ? "page" : ""), $message, $result);
+			queries_redirect(remove_from_uri($_POST["all"] && $_POST["delete"] ? "page" : ""), $message, $result);
 			if (!$_POST["delete"]) {
 				edit_form($TABLE, $fields, (array) $_POST["fields"], !$_POST["clone"]);
 				page_footer();
@@ -173,7 +173,7 @@ if ($_POST && !$error) {
 					}
 					$affected += $connection->affected_rows;
 				}
-				queries_adminer_redirect(remove_from_uri(), lang('%d item(s) have been affected.', $affected), $result);
+				queries_redirect(remove_from_uri(), lang('%d item(s) have been affected.', $affected), $result);
 			}
 
 		} elseif (!is_string($file = get_file("csv_file", true))) {
@@ -207,15 +207,15 @@ if ($_POST && !$error) {
 			if ($result) {
 				$driver->commit();
 			}
-			queries_adminer_redirect(remove_from_uri("page"), lang('%d row(s) have been imported.', $affected), $result);
-			$driver->rollback(); // after queries_adminer_redirect() to not overwrite error
+			queries_redirect(remove_from_uri("page"), lang('%d row(s) have been imported.', $affected), $result);
+			$driver->rollback(); // after queries_redirect() to not overwrite error
 
 		}
 	}
 }
 
 $table_name = $adminer->tableName($table_status);
-if (is_adminer_ajax()) {
+if (js_adminer_ajax()) {
 	page_headers();
 	ob_start();
 } else {
@@ -340,7 +340,7 @@ if (!$columns && support("table")) {
 
 			echo ($backward_keys ? "<th>" . lang('Relations') : "") . "</thead>\n";
 
-			if (is_adminer_ajax()) {
+			if (js_adminer_ajax()) {
 				if ($limit % 2 == 1 && $page % 2 == 1) {
 					odd();
 				}
@@ -372,7 +372,7 @@ if (!$columns && support("table")) {
 					if (isset($names[$key])) {
 						$field = $fields[$key];
 						if ($val != "" && (!isset($email_fields[$key]) || $email_fields[$key] != "")) {
-							$email_fields[$key] = (is_adminer_mail($val) ? $names[$key] : ""); //! filled e-mails can be contained on other pages
+							$email_fields[$key] = (js_adminer_mail($val) ? $names[$key] : ""); //! filled e-mails can be contained on other pages
 						}
 
 						$link = "";
@@ -405,7 +405,7 @@ if (!$columns && support("table")) {
 								$link .= where_link($i++, $k, $v);
 							}
 						}
-
+						
 						$val = select_value($val, $link, $field, $text_length);
 						$id = h("val[$unique_idf][" . bracket_escape($key) . "]");
 						$value = $_POST["val"][$unique_idf][bracket_escape($key)];
@@ -428,13 +428,13 @@ if (!$columns && support("table")) {
 				echo "</tr>\n"; // close to allow white-space: pre
 			}
 
-			if (is_adminer_ajax()) {
+			if (js_adminer_ajax()) {
 				exit;
 			}
 			echo "</table>\n";
 		}
 
-		if (($rows || $page) && !is_adminer_ajax()) {
+		if (($rows || $page) && !js_adminer_ajax()) {
 			$exact_count = true;
 			if ($_GET["page"] != "last") {
 				if (!+$limit) {
@@ -534,7 +534,7 @@ if (!$columns && support("table")) {
 	}
 }
 
-if (is_adminer_ajax()) {
+if (js_adminer_ajax()) {
 	ob_end_clean();
 	exit;
 }

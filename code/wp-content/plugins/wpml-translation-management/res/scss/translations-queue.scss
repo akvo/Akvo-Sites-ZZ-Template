@@ -107,29 +107,6 @@ input {
 	background-color: #FFC0CB;
 }
 
-
-#icl_dashboard_advanced_filters {
-	fieldset {
-		display:         table;
-		border-spacing:  4px;
-		border-collapse: separate;
-
-		.fieldset_row {
-			display: table-row;
-		}
-		label {
-			display:        table-cell;
-			padding-right:  2em;
-			height:         100%;
-			vertical-align: top;
-		}
-		input, select {
-			display:        table-cell;
-			vertical-align: top;
-		}
-	}
-}
-
 #icl_tm_languages {
 	table {
 		border: none;

@@ -60,11 +60,17 @@ class MC4WP_Field_Map {
 	public $custom_fields = array();
 
 	/**
+	 * @var MC4WP_Field_Formatter
+	 */
+	private $formatter;
+
+	/**
 	 * @param array $raw_data
 	 * @param array $list_ids
 	 */
 	public function __construct( array $raw_data, array $list_ids ) {
 
+		$this->formatter = new MC4WP_Field_Formatter();
 		$this->raw_data = $raw_data;
 		$this->lists = $this->fetch_lists( $list_ids );
 
@@ -78,8 +84,8 @@ class MC4WP_Field_Map {
 		$this->extract_list_fields();
 
 		// 4. Add all leftover fields to data but make sure not to overwrite known fields
-		$this->formatted_data = array_merge( $this->custom_fields, $this->formatted_data );
-		$this->pretty_data = array_merge( $this->custom_fields, $this->pretty_data );
+		$this->formatted_data = $this->merge( $this->custom_fields, $this->formatted_data );
+		$this->pretty_data = $this->merge( $this->custom_fields, $this->pretty_data );
 	}
 
 	/**
@@ -106,7 +112,6 @@ class MC4WP_Field_Map {
 	 */
 	protected function extract_list_fields() {
 		array_walk( $this->lists, array( $this, 'extract_fields_for_list' ) );
-		$this->list_fields = array_filter( $this->list_fields );
 		$this->formatted_data[ '_MC4WP_LISTS' ] = wp_list_pluck( $this->lists, 'name' );
 		$this->pretty_data[ 'Lists' ] = $this->formatted_data[ '_MC4WP_LISTS' ];
 	}
@@ -133,7 +138,7 @@ class MC4WP_Field_Map {
 		// if we have values at this point, add global fields
 		if( ! empty( $this->list_fields[ $list->id ] ) ) {
 			// add global fields (fields belong to ALL lists automatically)
-			$this->list_fields[ $list->id ] = array_merge( $this->list_fields[ $list->id ], $this->global_fields );
+			$this->list_fields[ $list->id ] = $this->merge( $this->list_fields[ $list->id ], $this->global_fields );
 		}
 
 	}
@@ -247,43 +252,8 @@ class MC4WP_Field_Map {
 
 		$field_type = strtolower( $field_type );
 
-		switch( $field_type ) {
-
-			case 'number':
-				$field_value = floatval( $field_value );
-				break;
-
-			case 'date':
-				$field_value = (string) date('Y-m-d', strtotime( $field_value ) );
-				break;
-
-			// birthday fields need to be MM/DD for the MailChimp API
-			case 'birthday':
-				$field_value = (string) date( 'm/d', strtotime( $field_value ) );
-				break;
-
-			case 'address':
-
-				// auto-format if this is a string
-				if( is_string( $field_value ) ) {
-
-					// addr1, addr2, city, state, zip, country
-					$address_pieces = explode( ',', $field_value );
-
-					// try to fill it.... this is a long shot
-					$field_value = array(
-						'addr1' => $address_pieces[0],
-						'city'  => ( isset( $address_pieces[1] ) ) ?   $address_pieces[1] : '',
-						'state' => ( isset( $address_pieces[2] ) ) ?   $address_pieces[2] : '',
-						'zip'   => ( isset( $address_pieces[3] ) ) ?   $address_pieces[3] : ''
-					);
-				} elseif( is_array( $field_value ) ) {
-					// merge with array of empty defaults to allow skipping certain fields
-					$default = array_fill_keys( array( 'addr1', 'city', 'state', 'zip' ), '' );
-					$field_value = array_merge( $default, $field_value );
-				}
-
-				break;
+		if( method_exists( $this->formatter, $field_type ) ) {
+			$field_value = call_user_func( array( $this->formatter, $field_type ), $field_value );
 		}
 
 		/**
@@ -298,6 +268,22 @@ class MC4WP_Field_Map {
 		$field_value = apply_filters( 'mc4wp_format_field_value', $field_value, $field_type );
 
 		return $field_value;
+	}
+
+	/**
+	 * @param array $one
+	 * @param array $two
+	 *
+	 * @return array
+	 */
+	protected function merge( array $one, array $two ) {
+
+		// fallback for PHP 5.2
+		if( ! function_exists( 'array_replace_recursive' ) ) {
+			return array_merge( $one, $two );
+		}
+
+		return array_replace_recursive( $one, $two );
 	}
 
 }

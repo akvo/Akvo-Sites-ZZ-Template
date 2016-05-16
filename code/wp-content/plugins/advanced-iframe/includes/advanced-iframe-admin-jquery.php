@@ -31,11 +31,11 @@ if ($devOptions['accordeon_menu'] == 'false') { ?>
       <p>
         There are three categories of jQuery selectors: Basic CSS selectors, Positional selectors, and Custom jQuery selectors.
       </p><p>
-The Basic Selectors are known as "find selectors" as they are used to find elements within the DOM. The Positional and Custom Selectors are "filter selectors" as they filter a set of elements (which defaults to the entire set of elements in the DOM). This extract only shows the basic selectors as they are most important and will cover most of your needs.
+The Basic Selectors are known as "find selectors" as they are used to find elements within the DOM. The Positional and Custom Selectors are "filter selectors" as they filter a set of elements (which defaults to the entire set of elements in the DOM). This extract will focus on the basic selectors as they are most important and will cover most of your needs.
       </p>
 
       <h4>Basic CSS Selectors</h4>
-      <p>These selectors follow standard CSS3 syntax and semantics.</p>
+      <p>These selectors follow standard CSS3 syntax and semantics. For more selectors and examples go to <a href="http://api.jquery.com/category/selectors" target="_blank">http://api.jquery.com//category/selectors</a>.</p>
        <table cellspacing="0" cellpadding="0">
   			<thead>
   				<tr>
@@ -69,10 +69,6 @@ The Basic Selectors are known as "find selectors" as they are used to find eleme
   					<td class="right_td_colored">Matches all elements with tag name F that are preceded
 by any sibling of tag name E.</td>
   				</tr>
-					<tr>
-  					<td class="left_td_colored">E:has(F)</td>
-  					<td class="right_td_colored">Matches all elements with tag name E that have at least one descendant with tag name F.</td>
-  				</tr>
   				<tr>
   					<td class="left_td_colored">E.c</td>
   					<td class="right_td_colored">Matches all elements E that possess a class name of c.
@@ -103,8 +99,33 @@ Omitting E is identical to *#i.</td>
   					<td class="left_td_colored">E[a*=v]</td>
   					<td class="right_td_colored">Matches all elements E that posses an attribute a whose value contains v.</td>
   				</tr>
+  				
 				</tbody>
 				</table>
+        
+        <h4>Additional useful selectors</h4>
+      <p>These selectors are basic filters provided by jQuery I found useful using in this plugin. For more selectors and examples go to <a href="http://api.jquery.com/category/selectors" target="_blank">http://api.jquery.com//category/selectors</a>.</p>
+       <table cellspacing="0" cellpadding="0">
+  			<thead>
+        <tr>
+  					<td class="left_td_colored">E:not(selector)</td>
+  					<td class="right_td_colored">Remove elements from the set of matched elements.</td>
+  				</tr>
+          <tr>
+  					<td class="left_td_colored">E:eq(index)</td>
+  					<td class="right_td_colored">Select the element at index n within the matched set.</td>
+  				</tr>
+           <tr>
+  					<td class="left_td_colored">E:last()</td>
+  					<td class="right_td_colored">Selects the last matched element.</td>
+  				</tr>
+           <tr>
+  					<td class="left_td_colored">E:nth-child(index)</td>
+  					<td class="right_td_colored">Selects all elements that are the nth-child of their parent.</td>
+  				</tr>
+        	</tbody>
+				</table>
+        
         <h4>Examples</h4>
         <ul>
 				<li>$("div") selects all &lt;div&gt; elements</li>
@@ -118,6 +139,9 @@ Omitting E is identical to *#i.</td>
 				<li>$("img[alt]") selects all &lt;img&gt; elements that possess an alt attribute</li>
 				<li>$("a[href$=.pdf]") selects all &lt;a&gt; elements that possess an href attribute that ends in .pdf</li>
 				<li>$("button[id*=test]") selects all buttons whose id attributes contain test</li>
+        <li>$("tr:not(.keep)") selects all table row that don\'t have the class "keep"</li>
+        <li>$("table:nth-child(1)") selects the 2nd row of a table</li>
+
 				</ul>
         <p>You can create the union of multiple disparate selectors by listing them, separated by commas. For example, the following matches all &lt;div&gt; and &lt;p&gt; elements: div,p</p>
       </div>', 'advanced-iframe');

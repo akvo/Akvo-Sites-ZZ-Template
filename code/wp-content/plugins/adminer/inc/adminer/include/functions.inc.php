@@ -105,7 +105,7 @@ function nl_br($string) {
 	return str_replace("\n", "<br>", $string); // nl2br() uses XHTML before PHP 5.3
 }
 
-/** Generate HTML adminer_checkbox
+/** Generate HTML checkbox
 * @param string
 * @param string
 * @param bool
@@ -542,7 +542,7 @@ function auth_url($vendor, $server, $username, $db = null) {
 /** Find whether it is an AJAX request
 * @return bool
 */
-function is_adminer_ajax() {
+function js_adminer_ajax() {
 	return ($_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest");
 }
 
@@ -565,7 +565,7 @@ function adminer_redirect($location, $message = null) {
 	}
 }
 
-/** Execute query and adminer_redirect if successful
+/** Execute query and redirect if successful
 * @param string
 * @param string
 * @param string
@@ -575,7 +575,7 @@ function adminer_redirect($location, $message = null) {
 * @param string
 * @return bool
 */
-function query_adminer_redirect($query, $location, $message, $adminer_redirect = true, $execute = true, $failed = false, $time = "") {
+function query_redirect($query, $location, $message, $redirect = true, $execute = true, $failed = false, $time = "") {
 	global $connection, $error, $adminer;
 	if ($execute) {
 		$start = microtime(true);
@@ -592,7 +592,7 @@ function query_adminer_redirect($query, $location, $message, $adminer_redirect =
 		$error = error() . $sql;
 		return false;
 	}
-	if ($adminer_redirect) {
+	if ($redirect) {
 		adminer_redirect($location, $message . $sql);
 	}
 	return true;
@@ -638,9 +638,9 @@ function apply_queries($query, $tables, $escape = 'table') {
 * @param bool
 * @return bool
 */
-function queries_adminer_redirect($location, $message, $adminer_redirect) {
+function queries_redirect($location, $message, $redirect) {
 	list($queries, $time) = queries(null);
-	return query_adminer_redirect($queries, $location, $message, $adminer_redirect, false, !$adminer_redirect, $time);
+	return query_redirect($queries, $location, $message, $redirect, false, !$redirect, $time);
 }
 
 /** Format elapsed time
@@ -1008,7 +1008,7 @@ function search_tables() {
 	foreach (table_status('', true) as $table => $table_status) {
 		$name = $adminer->tableName($table_status);
 		if (isset($table_status["Engine"]) && $name != "" && (!$_POST["tables"] || in_array($table, $_POST["tables"]))) {
-			$result = $connection->query("SELECT" . limit("1 FROM " . adminer_table($table), " WHERE " . implode(" AND ", $adminer->selectSearchProcess(fields($table), array())), 1));
+			$result = $connection->query("SELECT" . limit("1 FROM " . table($table), " WHERE " . implode(" AND ", $adminer->selectSearchProcess(fields($table), array())), 1));
 			if (!$result || $result->fetch_row()) {
 				if (!$found) {
 					echo "<ul>\n";
@@ -1066,7 +1066,7 @@ function apply_sql_function($function, $column) {
 /** Get path of the temporary directory
 * @return string
 */
-function get_adminer_temp_dir() {
+function adminer_get_temp_dir() {
 	$return = ini_get("upload_tmp_dir"); // session_save_path() may contain other storage path
 	if (!$return) {
 		if (function_exists('sys_get_temp_dir')) {
@@ -1088,7 +1088,7 @@ function get_adminer_temp_dir() {
 * @return string or false if the file can not be created
 */
 function password_file($create) {
-	$filename = get_adminer_temp_dir() . "/adminer.key";
+	$filename = adminer_get_temp_dir() . "/adminer.key";
 	$return = @file_get_contents($filename); // @ - may not exist
 	if ($return || !$create) {
 		return $return;
@@ -1133,13 +1133,13 @@ function select_value($val, $link, $field, $text_length) {
 		$link = $adminer->selectLink($val, $field);
 	}
 	if ($link === null) {
-		if (is_adminer_mail($val)) {
+		if (js_adminer_mail($val)) {
 			$link = "mailto:$val";
 		}
 		if ($protocol = is_url($val)) {
 			$link = (($protocol == "http" && $HTTPS) || preg_match('~WebKit~i', $_SERVER["HTTP_USER_AGENT"]) // WebKit supports noreferrer since 2009
 				? $val // HTTP links from HTTPS pages don't receive Referer automatically
-				: "$protocol://www.adminer.org/adminer_redirect/?url=" . urlencode($val) // intermediate page to hide Referer
+				: "https://www.adminer.org/redirect/?url=" . urlencode($val) // intermediate page to hide Referer
 			);
 		}
 	}
@@ -1162,7 +1162,7 @@ function select_value($val, $link, $field, $text_length) {
 * @param string
 * @return bool
 */
-function is_adminer_mail($email) {
+function js_adminer_mail($email) {
 	$atom = '[-a-z0-9!#$%&\'*+/=?^_`{|}~]'; // characters of local-name
 	$domain = '[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])'; // one domain component
 	$pattern = "$atom+(\\.$atom+)*@($domain?\\.)+$domain";
@@ -1195,7 +1195,7 @@ function is_shortable($field) {
 */
 function count_rows($table, $where, $is_group, $group) {
 	global $jush;
-	$query = " FROM " . adminer_table($table) . ($where ? " WHERE " . implode(" AND ", $where) : "");
+	$query = " FROM " . table($table) . ($where ? " WHERE " . implode(" AND ", $where) : "");
 	return ($is_group && ($jush == "sql" || count($group) == 1)
 		? "SELECT COUNT(DISTINCT " . implode(", ", $group) . ")$query"
 		: "SELECT COUNT(*)" . ($is_group ? " FROM (SELECT 1$query$group_by) x" : $query)

@@ -2,6 +2,32 @@
 /**
  *  Print the donation details depending on the version type
  */
+ 
+ 
+function printQuickstartGuide() {
+_e('<h3>Quick start guide</h3>
+ <p>
+      <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-video-tutorials" target="_blank" id="vid" class="button-primary">Show me the quickstart video</a>    
+</p>
+
+<p>To include a web page to your page please check the following things first:</p>
+<ul>
+<li>- Check if your page you want to include is allowed to be included:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker">http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker</a>!</li>
+<li>- Check if the iframe page and the parent page are one the same domain. www.example.com and text.example.com are different domains!</li>
+<li>- Can you modify the page that should be included?</li>
+</ul>
+<p>Most likely you have one of the following setups:</p>
+<ol>
+<li>iframe cannot be included: You cannot include the content because the owner does not allow this. </li>
+<li>iframe can be included and you are on a different domain: See the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-comparison-chart" target="_blank">feature comparison chart</a> and the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-features-availability-overview" target="_blank">features availability overview</a>. To resize the content to the height/width or modify css you <strong>need to modify the remote iframe page</strong> by adding one line of Javascript to enable the provided workaround.</li>
+<li>Iframe can be included and you are on the same domain: All features of the plugin can be used.</li>
+</ol>', 'advanced-iframe');
+
+_e('<p>Advanced users that have their own server might also setup a reverse proxy if the iframe page is on a different domain and cannot use the external workaround. See <a href="http://www.tinywebgallery.com/blog/using-a-reverse-proxy-to-enable-all-features-of-advanced-iframe-pro" target="_blank">this blog</a> for details.<br />', 'advanced-iframe');
+_e('If you mix http and https read <a href="http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https" target="_blank">this blog</a>. Parent https and iframe http does not work on all browsers!</p>', 'advanced-iframe');
+
+} 
+ 
 function printDonation($devOptions, $evanto) {
 if ($evanto) {
   if ($devOptions['accordeon_menu'] == 'false') { 
@@ -22,7 +48,7 @@ if ($evanto) {
   _e('
    <h3>Warning: Illegal copies of Advanced iFrame Pro</h3>
    <p>
-   Unfortuatelly for most good plugins on codecanyon also illegal versions can be found in the internet. Please make sure you got your version from codecanyon. Very often, this scripts will have modified code inserted into them which allows hackers to access your server. These are very dangerous to use! I already found hacked versions that do include backdoors!<br />
+   Unfortuatelly for most good plugins on codecanyon also illegal versions can be found in the internet. Please make sure you got your version from codecanyon. Very often, the scripts are modified and allow hackers to access your server. These are very dangerous to use! I already found hacked versions with backdoors!<br />
    </p><p>
    The only offical version of Advanced iFrame Pro can be found here: <a href="http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle" target="_blank">http://codecanyon.net/item/advanced-iframe-pro/5344999</a>  
    </p>
@@ -30,27 +56,8 @@ if ($evanto) {
    Thank you.
    </p>', 'advanced-iframe');
   }
-_e('<h3>Quick start guide</h3>
- <p>
-      <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-video-tutorials" target="_blank" id="vid" class="button-primary">Show me the quickstart video</a>    
-</p>
 
-<p>To include a web page to your page please check the following things first:</p>
-<ul>
-<li>- Check if your page you want to include is allowed to be included:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker">http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker</a>!</li>
-<li>- Check if the iframe page and the parent page are one the same domain. www.example.com and text.example.com are different domains!</li>
-<li>- Can you modify the page that should be included?</li>
-</ul>
-<p>Most likely you have one of the following setups:</p>
-<ol>
-<li>iframe cannot be included:  You cannot include the content because the owner does not allow this. </li>
-<li>iframe can be included and you are on a different domain: See the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-comparison-chart" target="_blank">feature comparison chart</a>. To resize the content to the height/width or modify css you <strong>need to modify the remote iframe page</strong> by adding one line of Javascript to enable the provided workaround.</li>
-<li>Iframe can be included and you are on the same domain: All features of the plugin can be used.</li>
-</ol>', 'advanced-iframe');
-
-_e('<p>Advanced users that have their own server might also setup a reverse proxy if the iframe page is on a different domain and cannot use the external workaround. See <a href="http://www.tinywebgallery.com/blog/using-a-reverse-proxy-to-enable-all-features-of-advanced-iframe-pro" target="_blank">this blog</a> for details.<br />', 'advanced-iframe');
-_e('If you mix http and https read <a href="http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https" target="_blank">this blog</a>. Parent https and iframe http does not work on all browsers!</p>', 'advanced-iframe');
-
+printQuickstartGuide();
 
     _e('<h3 class="hide-print">Advanced iFrame Pro Widget</h3><p class="hide-print">The pro version also does offer a widget where you can include the iframe. The usage is really simple. Go to Appearance -> Widgets and insert the shortcode you would normally put into a page into the text field of the "Advanced iFrame Pro Widget" .</p>', 'advanced-iframe' );
    
@@ -60,19 +67,20 @@ _e('If you mix http and https read <a href="http://www.tinywebgallery.com/blog/i
   
       _e('<h3 class="hide-print">Plugin options</h3>', 'advanced-iframe' );
   echo '<table class="form-table hide-print">';
-      printTrueFalse($devOptions, __('Show this section as last tab/at the bottom', 'advanced-iframe'), 'donation_bottom', __('<strong class="move-bottom">Please move this section as last tab/to the bottom after you have read it.</strong>', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Enable expert mode', 'advanced-iframe'), 'expert_mode', __('If you enable the expert mode the description is only shown if you click on the label of the setting. You see more settings at once but only one description at once. Also the padding between the table rows are reduced a lot. So you see a lot of more settings on one screen. Use this if you are common with the settings.', 'advanced-iframe'), 'false');
-      printTrueFalse($devOptions, __('Use footer save button', 'advanced-iframe'), 'single_save_button', __('The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section.', 'advanced-iframe'), 'false');
+      printTrueFalse(false,$devOptions, __('Show this section as last tab/at the bottom', 'advanced-iframe'), 'donation_bottom', __('<strong class="move-bottom">Please move this section as last tab/to the bottom after you have read it.</strong>', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Check shortcode', 'advanced-iframe'), 'check_shortcode', __('<strong class="move-bottom">If you enable this the plugin does check if the shortcode attributes are known. You will find typos, wrong quotes and missing spaces. It does not check the values! The only reason this is not enabled by default is to make sure that old shortcodes don\'t show a warning after an update! I stongly recommend to enable this setting!</strong>', 'advanced-iframe'), true);  
+      printTrueFalse(false,$devOptions, __('Enable expert mode', 'advanced-iframe'), 'expert_mode', __('If you enable the expert mode the description is only shown if you click on the label of the setting. You see more settings at once but only one description at once. Also the padding between the table rows are reduced a lot. So you see a lot of more settings on one screen. Use this if you are common with the settings.', 'advanced-iframe'), 'false');
+      printTrueFalse(false,$devOptions, __('Use footer save button', 'advanced-iframe'), 'single_save_button', __('The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section.', 'advanced-iframe'), 'false');
       printAccordeon($devOptions, __('Use accordeon menu', 'advanced-iframe'), 'accordeon_menu', __('The accordeon menu does not show the different sections in one big page but does only show the sections you open. You can define the default section which is open by default here also. Sections do not close if you open another one because sometimes is is useful to open several sections at once. Also the quick jump links at the top are removed because they do not make sense then anymore. The menu is used after you saved this setting. Only important sections are offered in the dropdown.', 'advanced-iframe'), 'false');
-      printTextInput($devOptions, __('Alternative shortcode', 'advanced-iframe'), 'alternative_shortcode', __('You can define an alternative shortcode the plugin should evaluate. This is e.g. useful if you chance/upgrade from iframe to advanced iframe (pro). Simply insert "iframe" in the text field. Most if the parameters do already match! Make sure to deactivate the other plugin that used the shortcode. With using iframe also the BBCode [iframe]url[/iframe] is supported. IMPORTANT: If you use this, security codes are NOT checked anymore. So anyone who can e.g. write a post can also insert an iframe!', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Show plugin in main menu', 'advanced-iframe'), 'show_menu_link', __('Show the "Advanced iFrame Pro" Menu link also in the main menu. If set to "False" it is only shown in the settings menu.', 'advanced-iframe'), 'true');
+      printTextInput(false,$devOptions, __('Alternative shortcode', 'advanced-iframe'), 'alternative_shortcode', __('You can define an alternative shortcode the plugin should evaluate. This is e.g. useful if you chance/upgrade from iframe to advanced iframe (pro). Simply insert "iframe" in the text field. Most if the parameters do already match! Make sure to deactivate the other plugin that used the shortcode. With using iframe also the BBCode [iframe]url[/iframe] is supported. IMPORTANT: If you use this, security codes are NOT checked anymore. So anyone who can e.g. write a post can also insert an iframe!', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Show plugin in main menu', 'advanced-iframe'), 'show_menu_link', __('Show the "Advanced iFrame Pro" Menu link also in the main menu. If set to "False" it is only shown in the settings menu.', 'advanced-iframe'), 'true');
  
-      printTrueFalse($devOptions, __('Allow shortcode attributes', 'advanced-iframe'), 'shortcode_attributes', __('Allow to set attributes in the shortcode. All of the attributes can be overwritten in the shortcode if you set \'Yes\'. Otherwise the settings you specify here are used.', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Use shortcode attributes only', 'advanced-iframe'), 'use_shortcode_attributes_only', __('All iframes you use in your pages use the settings below. With shortcode attributes you can overwrite these settings. When you use several iframes with different settings this can lead to strange behavior because you do not see the whole configuration in the shortcode. By setting this option to true only the parameters defined as attributes are used. So the minimum you need to define is: securitykey and src of the iframe. You can set this for a single iframe as well with the shortcode attribute use_shortcode_attributes_only="true". A minimal shortcode would then look like this: [advanced_iframe securitykey="', 'advanced-iframe') . $devOptions['securitykey'] . __('" use_shortcode_attributes_only="true" src="http://www.tinywebgallery.com"].  Shortcode attribute: use_shortcode_attributes_only="true" or use_shortcode_attributes_only="false"', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Include ai.js in the footer', 'advanced-iframe'), 'include_scripts_in_footer', __('By default now the needed Javascripts are included at the footer. So you can include jQuery also at the footer if you like. If you like/need it in the header set this value to false. Before Wordpress 3.3 jQuery is needed in the header if you want to use lazy-loading! The ai.js has also to be in the footer if it should only be loaded when the shortcode is on the page. This setting cannot be set as shortcode!', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Load jQuery as dependency', 'advanced-iframe'), 'load_jquery', __('By default jQuery is loaded as dependeny. If you have a theme or another plugin that does not stick to the Wordpress way to load the scripts you might have to disable the dependeny. This avoids that jQuery is loaded again and other plugins do maybe not work anymore.', 'advanced-iframe'), true);
-      printTextInput($devOptions, __('Editor button', 'advanced-iframe'), 'editorbutton', __('With this setting you can add a "advanced iframe" button to the text editor of Wordpress. The button does add the shortcode with the current security code. So the default settings are used then. Currently only "securitykey" enables the button. All other settings don\'t  show the button right now. For further versions it is planned that you can define the attributes of the button here.', 'advanced-iframe'));     
-        
+      printTrueFalse(false,$devOptions, __('Allow shortcode attributes', 'advanced-iframe'), 'shortcode_attributes', __('Allow to set attributes in the shortcode. All of the attributes can be overwritten in the shortcode if you set \'Yes\'. Otherwise the settings you specify here are used.', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Use shortcode attributes only', 'advanced-iframe'), 'use_shortcode_attributes_only', __('All iframes you use in your pages use the settings below. With shortcode attributes you can overwrite these settings. When you use several iframes with different settings this can lead to strange behavior because you do not see the whole configuration in the shortcode. By setting this option to true only the parameters defined as attributes are used. So the minimum you need to define is: securitykey and src of the iframe. You can set this for a single iframe as well with the shortcode attribute use_shortcode_attributes_only="true". A minimal shortcode would then look like this: [advanced_iframe securitykey="', 'advanced-iframe') . $devOptions['securitykey'] . __('" use_shortcode_attributes_only="true" src="http://www.tinywebgallery.com"].  Shortcode attribute: use_shortcode_attributes_only="true" or use_shortcode_attributes_only="false"', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Include ai.js in the footer', 'advanced-iframe'), 'include_scripts_in_footer', __('By default now the needed Javascripts are included at the footer. So you can include jQuery also at the footer if you like. If you like/need it in the header set this value to false. Before Wordpress 3.3 jQuery is needed in the header if you want to use lazy-loading! The ai.js has also to be in the footer if it should only be loaded when the shortcode is on the page. This setting cannot be set as shortcode!', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Load jQuery as dependency', 'advanced-iframe'), 'load_jquery', __('By default jQuery is loaded as dependeny. If you have a theme or another plugin that does not stick to the Wordpress way to load the scripts you might have to disable the dependeny. This avoids that jQuery is loaded again and other plugins do maybe not work anymore.', 'advanced-iframe'), true);
+      printTextInput(false,$devOptions, __('Editor button', 'advanced-iframe'), 'editorbutton', __('With this setting you can add a "advanced iframe" button to the text editor of Wordpress. The button does add the shortcode with the current security code. So the default settings are used then. Currently only "securitykey" enables the button. All other settings don\'t  show the button right now. For further versions it is planned that you can define the attributes of the button here.', 'advanced-iframe')); 
+          
   echo '</table><p>';
   echo '<p class="button-submit">
         <input class="button-primary" type="submit" name="update_iframe-loader" value="';
@@ -168,16 +176,22 @@ _e('<p><strong>Current status</strong>: ', 'advanced-iframe');
 echo get_option('default_a_options') / 100 . ' % of views for this month used.';
 _e('</p>', 'advanced-iframe');
 echo '</p>';
+
+printQuickstartGuide();
+
+ _e('<h3 class="hide-print">Plugin options</h3>', 'advanced-iframe' );
 echo '<table class="form-table">';
-      printTrueFalse($devOptions, __('Show this section as last tab/at the bottom', 'advanced-iframe'), 'donation_bottom', __('Please move this section as last tab/to the bottom if it bothers you or if you have already supported the development. Feel also free to contact me if you are missing a feature. Sorry for moving this section to the top but at the bottom it seems to be ignored completely.', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Use footer save button', 'advanced-iframe'), 'single_save_button', __('The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section.', 'advanced-iframe'), 'false');
- 
-      printTrueFalse($devOptions, __('Allow shortcode attributes', 'advanced-iframe'), 'shortcode_attributes', __('Allow to set attributes in the shortcode. All of the attributes can be overwritten in the shortcode if you set \'Yes\'. Otherwise the settings you specify here are used.', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Use shortcode attributes only', 'advanced-iframe'), 'use_shortcode_attributes_only', __('All iframes you use in your pages use the settings below. With shortcode attributes you can overwrite these settings. When you use several iframes with different settings this can lead to strange behavior because you do not see the whole configuration in the shortcode. By setting this option to true only the parameters defined as attributes are used. So the minimum you need to define is: securitykey and src of the iframe. You can set this for a single iframe as well with the shortcode attribute use_shortcode_attributes_only="true". A minimal shortcode would then look like this: [advanced_iframe securitykey="', 'advanced-iframe') . $devOptions['securitykey'] . __('" use_shortcode_attributes_only="true" src="http://www.tinywebgallery.com"].  Shortcode attribute: use_shortcode_attributes_only="true" or use_shortcode_attributes_only="false"', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Include ai.js in the footer', 'advanced-iframe'), 'include_scripts_in_footer', __('By default now the needed Javascripts are included at the footer. So you can include jQuery also at the footer if you like. If you like/need it in the header set this value to false. Before Wordpress 3.3 jQuery is needed in the header if you want to use lazy-loading! The ai.js has also to be in the footer if it should only be loaded when the shortcode is on the page. This setting cannot be set as shortcode!', 'advanced-iframe'));
-      printTrueFalse($devOptions, __('Load jQuery as dependency', 'advanced-iframe'), 'load_jquery', __('By default jQuery is loaded as dependeny. If you have a theme or another plugin that does not stick to the Wordpress way to load the scripts you might have to disable the dependeny. This avoids that jQuery is loaded again and other plugins do maybe not work anymore.', 'advanced-iframe'), true);
-      printTextInput($devOptions, __('Editor button', 'advanced-iframe'), 'editorbutton', __('With this setting you can add a "advanced iframe" button to the text editor of Wordpress. The button does add the shortcode with the current security code. So the default settings are used then. Currently only "securitykey" enables the button. All other settings don\'t  show the button right now. For further versions it is planned that you can define the attributes of the button here.', 'advanced-iframe'));     
-            
+       printTrueFalse(false,$devOptions, __('Show this section as last tab/at the bottom', 'advanced-iframe'), 'donation_bottom', __('<strong class="move-bottom">Please move this section as last tab/to the bottom after you have read it.</strong>', 'advanced-iframe'));
+       printTrueFalse(false,$devOptions, __('Check shortcode', 'advanced-iframe'), 'check_shortcode', __('<strong class="move-bottom">If you enable this the plugin does check if the shortcode attributes are known. You will find typos, wrong quotes and missing spaces. It does not check the values! The only reason this is not enabled by default is to make sure that old shortcodes don\'t show a warning after an update! I stongly recommend to enable this setting!</strong>', 'advanced-iframe'), true);
+      printTrueFalse(false,$devOptions, __('Show the administration of the pro version', 'advanced-iframe'), 'demo', __('<strong class="move-bottom">You can enable the administration of the pro version to see the available features there. Everything except the additional buttons are shown there. NONE of this settings do work if you enable them. It is only for demonstration. All pro features have a blue label or differences are described in the documentation!</strong>', 'advanced-iframe'));
+      
+      printTrueFalse(false,$devOptions, __('Use footer save button', 'advanced-iframe'), 'single_save_button', __('The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section.', 'advanced-iframe'), 'false');
+      printTrueFalse(false,$devOptions, __('Allow shortcode attributes', 'advanced-iframe'), 'shortcode_attributes', __('Allow to set attributes in the shortcode. All of the attributes can be overwritten in the shortcode if you set \'Yes\'. Otherwise the settings you specify here are used.', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Use shortcode attributes only', 'advanced-iframe'), 'use_shortcode_attributes_only', __('All iframes you use in your pages use the settings below. With shortcode attributes you can overwrite these settings. When you use several iframes with different settings this can lead to strange behavior because you do not see the whole configuration in the shortcode. By setting this option to true only the parameters defined as attributes are used. So the minimum you need to define is: securitykey and src of the iframe. You can set this for a single iframe as well with the shortcode attribute use_shortcode_attributes_only="true". A minimal shortcode would then look like this: [advanced_iframe securitykey="', 'advanced-iframe') . $devOptions['securitykey'] . __('" use_shortcode_attributes_only="true" src="http://www.tinywebgallery.com"].  Shortcode attribute: use_shortcode_attributes_only="true" or use_shortcode_attributes_only="false"', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Include ai.js in the footer', 'advanced-iframe'), 'include_scripts_in_footer', __('By default now the needed Javascripts are included at the footer. So you can include jQuery also at the footer if you like. If you like/need it in the header set this value to false. Before Wordpress 3.3 jQuery is needed in the header if you want to use lazy-loading! The ai.js has also to be in the footer if it should only be loaded when the shortcode is on the page. This setting cannot be set as shortcode!', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Load jQuery as dependency', 'advanced-iframe'), 'load_jquery', __('By default jQuery is loaded as dependeny. If you have a theme or another plugin that does not stick to the Wordpress way to load the scripts you might have to disable the dependeny. This avoids that jQuery is loaded again and other plugins do maybe not work anymore.', 'advanced-iframe'), true);
+      printTextInput(false,$devOptions, __('Editor button', 'advanced-iframe'), 'editorbutton', __('With this setting you can add a "advanced iframe" button to the text editor of Wordpress. The button does add the shortcode with the current security code. So the default settings are used then. Currently only "securitykey" enables the button. All other settings don\'t  show the button right now. For further versions it is planned that you can define the attributes of the button here.', 'advanced-iframe'));     
+                 
 echo '
      </table>
     <p class="button-submit">

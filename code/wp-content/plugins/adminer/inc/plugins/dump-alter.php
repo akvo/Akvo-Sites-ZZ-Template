@@ -1,7 +1,7 @@
 <?php
 
 /** Exports one database (e.g. development) so that it can be synced with other database (e.g. production)
-* @link http://www.adminer.org/plugins/#use
+* @link https://www.adminer.org/plugins/#use
 * @author Jakub Vrana, http://www.vrana.cz/
 * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2 (one or other)
@@ -133,7 +133,7 @@ CREATE PROCEDURE adminer_alter (INOUT alter_command text) BEGIN
 	UNTIL done END REPEAT;
 	CLOSE columns;
 	IF @alter_table != '' OR add_columns != '' THEN
-		SET alter_command = CONCAT(alter_command, 'ALTER TABLE " . adminer_table($table) . "', SUBSTR(CONCAT(add_columns, @alter_table), 2), ';\\n');
+		SET alter_command = CONCAT(alter_command, 'ALTER TABLE " . table($table) . "', SUBSTR(CONCAT(add_columns, @alter_table), 2), ';\\n');
 	END IF;
 END;;
 DELIMITER ;

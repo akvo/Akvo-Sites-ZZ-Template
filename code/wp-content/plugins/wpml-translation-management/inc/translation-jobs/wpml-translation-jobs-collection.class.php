@@ -105,32 +105,38 @@ class WPML_Translation_Jobs_Collection extends WPML_Abstract_Job_Collection{
 	 *
 	 * @return array
 	 */
-	private function get_jobs_table( array $args = array(), array $pagination_args = array( 'page' => 1, 'per_page' => 10)) {
+	private function get_jobs_table( array $args = array(), array $pagination_args = array( 'page' => 1, 'per_page' => 10 ) ) {
 		$where_jobs        = $this->build_where_clause( $args );
-		$where_string_jobs = $this->build_string_where( $args );
-		$jobs_table_union  = $this->get_jobs_union_table_sql( $where_jobs, $where_string_jobs );
+		$jobs_table_union  = $this->get_jobs_union_table_sql( $where_jobs, $args );
 
-		$only_ids_query = '	SELECT 	SQL_CALC_FOUND_ROWS jobs.job_id,
-                                    jobs.translator_id,
-									jobs.job_id,
-									jobs.batch_id,
-									jobs.element_type_prefix
-							FROM ' . $jobs_table_union . '
-                            LIMIT %d, %d';
-		$only_ids_query = $this->wpdb->prepare( $only_ids_query,
-		                                  array(
-				                                  max( ( $pagination_args['page'] - 1 ),
-						                                  0 ) * $pagination_args['per_page'],
-				                                  $pagination_args['per_page']
-		                                  ) );
+		$only_ids_query = 'SELECT SQL_CALC_FOUND_ROWS ';
+		$only_ids_query .= 'jobs.job_id, jobs.translator_id, jobs.job_id, jobs.batch_id, jobs.element_type_prefix ';
+		$only_ids_query .= 'FROM ' . $jobs_table_union . ' ';
+		$only_ids_query .= 'LIMIT %d, %d';
+
+		$page           = max( ( $pagination_args['page'] - 1 ), 0 ) * $pagination_args['per_page'];
+
+		$only_ids_query = $this->wpdb->prepare( $only_ids_query, array( $page, $pagination_args['per_page'] ) );
 		$data           = $this->wpdb->get_results( $only_ids_query );
 		$count          = $this->wpdb->get_var( 'SELECT FOUND_ROWS()' );
 
-		return (bool)$data === true
-				? $this->calculate_batch_counts( $data, $count, $pagination_args, $jobs_table_union )
-				: array( array(), $count, 0, 0, 0, 0 );
+		$result = array( array(), $count, 0, 0, 0, 0 );
+
+		if ( true === (bool) $data ) {
+			$result = $this->calculate_batch_counts( $data, $count, $pagination_args, $jobs_table_union );
+		}
+
+		return $result;
 	}
 
+	/**
+	 * @param array  $data
+	 * @param int    $count
+	 * @param array  $pagination_args
+	 * @param string $jobs_table_union
+	 *
+	 * @return array
+	 */
 	private function calculate_batch_counts( $data, $count, $pagination_args, $jobs_table_union ) {
 		$first_job                 = reset( $data );
 		$last_job                  = end( $data );
@@ -165,13 +171,16 @@ class WPML_Translation_Jobs_Collection extends WPML_Abstract_Job_Collection{
 				$count_before,
 				$count_after,
 				$count_first,
-				$count_last
+				$count_last,
 		);
 	}
 
-	private function get_jobs_union_table_sql( $where_jobs, $where_string_jobs ) {
+	private function get_jobs_union_table_sql( $where_jobs, $args ) {
+		$union_sql      = '';
+		$sql_statements = array();
 
-		return "(SELECT s.translator_id,
+		if ( $where_jobs ) {
+			$sql_statements[] = "SELECT s.translator_id,
 						j.job_id,
 						IF(p.post_type IS NOT NULL, 'post', 'package') AS element_type_prefix,
 						s.batch_id
@@ -184,47 +193,25 @@ class WPML_Translation_Jobs_Collection extends WPML_Abstract_Job_Collection{
 				JOIN {$this->wpdb->prefix}icl_translations o
 					ON o.trid = t.trid
 						AND o.language_code = t.source_language_code
-				LEFT JOIN {$this->wpdb->posts} p
+				JOIN " . apply_filters( 'wpml_post_translation_original_table', $this->wpdb->posts ) . " p
 					ON o.element_id = p.ID
-						AND o.element_type = CONCAT('post_', p.post_type)
-				WHERE " . $where_jobs . "
-			    UNION ALL
-				SELECT  st.translator_id,
-						st.id AS job_id,
-						'string' AS element_type_prefix,
-						st.batch_id
-				FROM {$this->wpdb->prefix}icl_string_translations st
-					JOIN {$this->wpdb->prefix}icl_strings s
-						ON s.id = st.string_id
-                WHERE " . $where_string_jobs . "
-                ) jobs
-                JOIN {$this->wpdb->prefix}icl_translation_batches b
+						AND ( o.element_type = CONCAT('post_', p.post_type) OR p.post_type IS NULL )
+				JOIN {$this->wpdb->prefix}icl_translate tr_rows
+                    ON tr_rows.job_id = j.job_id
+                        AND tr_rows.field_type = 'original_id'
+                        AND tr_rows.field_data = o.element_id
+				WHERE " . $where_jobs;
+		}
+
+		$sql_statements = apply_filters( 'wpml_tm_jobs_union_table_sql', $sql_statements, $args );
+
+		if ( count( $sql_statements ) > 0 ) {
+			$union_sql = '(' . implode( "\nUNION ALL\n", $sql_statements ) . ") jobs
+                INNER JOIN {$this->wpdb->prefix}icl_translation_batches b
                     ON b.id = jobs.batch_id
                 ORDER BY jobs.batch_id DESC, jobs.element_type_prefix, jobs.job_id DESC";
-	}
+		}
 
-	private function build_string_where( $args ) {
-		$translator_id = '';
-		$from          = '';
-		$to            = '';
-		$status        = '';
-		$service       = false;
-
-		extract( $args, EXTR_OVERWRITE );
-
-		$where = (bool) $from === true ? $this->wpdb->prepare( ' AND s.language = %s ', $from ) : '';
-		$where .= (bool) $to === true ? $this->wpdb->prepare( ' AND st.language = %s ', $to ) : '';
-		$where .= $status ? $this->wpdb->prepare( ' AND st.status = %d ',
-		                                          (int) $status === ICL_TM_IN_PROGRESS
-			                                          ? ICL_TM_WAITING_FOR_TRANSLATOR
-			                                          : $status ) : '';
-
-		$service = is_numeric( $translator_id ) ? 'local' : $service;
-		$service = $service !== 'local' && strpos( $translator_id, 'ts-' ) !== false ? substr( $translator_id, 3 )
-			: $service;
-		$where .= $service === 'local' ? $this->wpdb->prepare( ' AND st.translator_id = %s ', $translator_id ) : '';
-		$where .= $service !== false ? $this->wpdb->prepare( ' AND st.translation_service = %s ', $service ) : '';
-
-		return '1 ' . $where;
+		return $union_sql;
 	}
 }

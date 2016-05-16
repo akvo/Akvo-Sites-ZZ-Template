@@ -47,27 +47,36 @@ class WPML_Translation_Batch extends WPML_Abstract_Job_Collection{
 	}
 
 	public function get_batch_meta_array() {
-		$batch_url  = $this->get_batch_url();
-		$batch_name = $batch_url ? $this->get_batch_name() : '';
-		$item_count = $this->get_item_count();
+		$in_active_ts   = $this->belongs_to_active_ts();
+		$notifications  = $this->ts_supports_notifications();
+		$batch_id       = $this->get_batch_tp_id();
+		$batch_url      = $this->get_batch_url();
+		$batch_name     = $batch_url ? $this->get_batch_name() : '';
+		$item_count     = $this->get_item_count();
 
 		return array(
-			'batch_url'    => $batch_url,
-			'batch_name'   => $batch_name,
-			'item_count'   => $item_count,
-			'last_update'  => $this->get_last_update(),
-			'status_array' => $this->get_status_array(),
-			'display_from' => 1,
-			'display_to'   => $item_count
+			'in_active_ts'  => $in_active_ts,
+			'notifications' => $notifications,
+			'batch_id'      => $batch_id,
+			'batch_url'     => $batch_url,
+			'batch_name'    => $batch_name,
+			'item_count'    => $item_count,
+			'last_update'   => $this->get_last_update(),
+			'status_array'  => $this->get_status_array(),
+			'display_from'  => 1,
+			'display_to'    => $item_count
 		);
 	}
 
 	/**
 	 * Cancels all remote translation jobs in this batch
 	 */
-	function cancel_all_remote_jobs() {
-		/** @var wpdb $wpdb */
-		/** @var TranslationManagement $iclTranslationManagement */
+	public function cancel_all_remote_jobs() {
+		/**
+		 * @var wpdb                    $wpdb
+		 * @var TranslationManagement   $iclTranslationManagement
+		 * @var WPML_String_Translation $WPML_String_Translation
+		 */
 		global $wpdb, $iclTranslationManagement, $WPML_String_Translation;
 
 		$translation_ids = $wpdb->get_col(
@@ -145,6 +154,10 @@ class WPML_Translation_Batch extends WPML_Abstract_Job_Collection{
 		return $this->name;
 	}
 
+	public function get_batch_tp_id() {
+		return TranslationManagement::get_batch_tp_id( $this->id );
+ 	}
+
 	public function get_status_array() {
 		$status_array = array();
 		foreach ( $this->job_objects as $job ) {
@@ -163,5 +176,24 @@ class WPML_Translation_Batch extends WPML_Abstract_Job_Collection{
 
 	private function generate_generic_batch_name() {
 		return 'Manual Translations from ' . date( 'F \t\h\e jS\, Y' );
+	}
+
+	private function belongs_to_active_ts() {
+		global $wpdb;
+
+		$service_id = TranslationProxy::get_current_service_id();
+		$batch_id   = $this->get_id();
+
+		$result = false;
+		if ( $service_id ) {
+			$result = $wpdb->get_var( $wpdb->prepare( "SELECT rid FROM {$wpdb->prefix}icl_translation_status WHERE batch_id = %d AND translation_service = %s LIMIT 1", array( $batch_id, $service_id ) ) );
+			$result |= $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}icl_string_translations WHERE batch_id = %d AND translation_service = %s LIMIT 1", array( $batch_id, $service_id ) ) );
+		}
+		return $result;
+	}
+
+	private function ts_supports_notifications() {
+		$translation_service = TranslationProxy::get_current_service();
+		return $supports_notifications = isset($translation_service->notification) ? $translation_service->notification : true;
 	}
 }

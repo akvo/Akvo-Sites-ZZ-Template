@@ -2,7 +2,7 @@
 /*
 Plugin Name: Advanced iFrame 
 Plugin URI: http://www.tinywebgallery.com/blog/advanced-iframe
-Version: 6.5.6
+Version: 7.1.1
 Text Domain: advanced-iframe
 Domain Path: /languages
 Author: Michael Dempfle
@@ -23,6 +23,7 @@ Description: This plugin includes any webpage as shortcode in an advanced iframe
 */
 if (!class_exists('advancediFrame')) {
     class advancediFrame {
+        
         var $adminOptionsName = 'advancediFrameAdminOptions';
         var $scriptsNeeded = false;
         /*
@@ -52,7 +53,7 @@ if (!class_exists('advancediFrame')) {
             $iframeAdminOptions = array(
                 'securitykey' => sha1(AUTH_KEY . time() ),
                 'src' => '//www.tinywebgallery.com', 'width' => '100%',
-                'height' => '600', 'scrolling' => 'auto', 'marginwidth' => '0', 'marginheight' => '0',
+                'height' => '600', 'scrolling' => 'none', 'marginwidth' => '0', 'marginheight' => '0',
                 'frameborder' => '0', 'transparency' => 'true', 'content_id' => '', 'content_styles' => '',
                 'hide_elements' => '', 'class' => '', 'shortcode_attributes' => 'true', 'url_forward_parameter' => '',
                 'id' => 'advanced_iframe', 'name' => '',
@@ -85,7 +86,7 @@ if (!class_exists('advancediFrame')) {
                 'allowfullscreen' => 'false', 'iframe_height_ratio' => '',
                 'enable_lazy_load' => 'false', 'enable_lazy_load_threshold' => '3000',
                 'enable_lazy_load_fadetime' => '0', 'enable_lazy_load_manual' => 'false',
-                'pass_id_by_url' => '', 'include_scripts_in_footer' => 'false',
+                'pass_id_by_url' => '', 'include_scripts_in_footer' => 'true',
                 'write_css_directly' => 'false', 'resize_on_element_resize' => '',
                 'resize_on_element_resize_delay' => '250', 'add_css_class_parent' => 'false',
                 'auto_zoom'  => 'false', 'auto_zoom_by_ratio' => '',
@@ -100,9 +101,26 @@ if (!class_exists('advancediFrame')) {
                 'add_css_class_iframe' => 'false', 'editorbutton' => 'securitykey',
                 'iframe_zoom_ie8' => 'false', 'enable_lazy_load_reserve_space' => 'true',
                 'hide_content_until_iframe_color' => '', 'use_zoom_absolute_fix' => 'false',
-                'include_html' => ''                  
+                'include_html' => '', 'enable_ios_mobile_scolling' => 'false',
+                'sandbox' => '', 'show_iframe_as_layer_header_file' => '', 
+                'show_iframe_as_layer_header_height' => '100', 'show_iframe_as_layer_header_position' => 'top',
+                'resize_min_height' => '1', 'show_iframe_as_layer_full' => 'false',
+                'demo' => 'false', 'show_part_of_iframe_zoom' => 'false',
+                'external_height_workaround_delay' => '0',
+                'add_document_domain' => 'false','document_domain' => '',
+                'multi_domain_enabled' => 'false', 'check_shortcode' => 'false',
+                'use_post_message' => 'false'
                 );
             return $iframeAdminOptions;
+        }
+
+        function printError($message) {
+         echo '   
+           <div class="error">
+              <p><strong>' . $message . '
+                 </strong>
+              </p>
+           </div>';
         }
 
         /**
@@ -190,20 +208,15 @@ if (!class_exists('advancediFrame')) {
                             'version_counter' => $options['version_counter'],
                             'enable_lazy_load' => $options['enable_lazy_load'],
                             'include_scripts_in_footer' => $options['include_scripts_in_footer'], 
-                            'add_css_class_parent' => $options['add_css_class_parent'],                       
+                            'add_css_class_parent' => $options['add_css_class_parent'],
                 $atts));
-               
               $to_footer = ($include_scripts_in_footer === 'true' && $add_css_class_parent === 'false');
   
               $older_version = version_compare(get_bloginfo('version'), '3.3') < 0; // wp < 3.3 - older version need to be included here
-              if ($additional_css != '' && $older_version) { // wp < 3.3 
-                  wp_enqueue_style( 'additional-advanced-iframe-css', $additional_css, false, $version_counter);
-              }
-              if ($additional_js != '' && $older_version ) {  
-                  wp_enqueue_script( 'additional-advanced-iframe-js', $additional_js, false, $version_counter, $to_footer);
-              }
+              $this->include_additional_files($additional_css, $additional_js, $version_counter, $older_version, $to_footer);
+
               $dep = ($options['load_jquery'] === 'true') ? array( 'jquery') : array();
-              wp_enqueue_script('ai-js',plugins_url( 'js/ai.js' , __FILE__ ), $dep, $version_counter, $to_footer); 
+              wp_enqueue_script('ai-js',plugins_url( 'js/ai.js' , __FILE__ ), $dep, $version_counter, $to_footer);
         }
 
         /**
@@ -223,7 +236,7 @@ if (!class_exists('advancediFrame')) {
 	              $value_check = stripcslashes($value_check); 
 	          }  
             // If all chars are in the whitelist no additional encoding is done!
-            if (preg_match('/^[\.@a-zA-Z0-9À-ÖØ-öø-ÿ\/\:\&\?\-\|\)\(]*$/', $value_check)) {
+            if (preg_match('/^[\.@a-zA-Z0-9À-ÖØ-öø-ÿ\/\:\-\|\)\(]*$/', $value_check)) {
                 return $value;
             } else {
                 return urlencode($value);
@@ -240,9 +253,12 @@ if (!class_exists('advancediFrame')) {
         }
         
         function addPx($value) {
-             $value = trim($value);
-             if (strpos($value, '%') === false) { 
-                $value = $value . 'px';
+             if (strpos($value, '-') === false && strpos($value, '+') === false ) {
+               $value = trim($value);
+               if (strpos($value, '%') === false && strpos($value, '%') === false && 
+                   strpos($value, 'vw') === false && strpos(strtolower($value), 'vh') === false) { 
+                  $value = $value . 'px';
+               }
              }
              return $value;
         }
@@ -252,980 +268,53 @@ if (!class_exists('advancediFrame')) {
          */
         function do_iframe_script($atts, $content = null) {
             global $aip_standalone, $iframeStandaloneDefaultOptions, $iframeStandaloneOptions ;
-            
-            // check if $atts does only include valid shortcode attributes and print a message otherwise.
-            // Needed to find out configuration errors !
-            // print_r($atts);
+
+            $isValidBrowser = true;
+            $html = ''; // the output
             
             include dirname(__FILE__) . '/includes/advanced-iframe-main-read-config.php';
            
-            // start to build the html
-            $html = ''; // the output
-            
-            if ($browser != '' || (!empty($iframe_zoom))) {           
-              if (file_exists(dirname(__FILE__) . "/includes/advanced-iframe-browser-detection.php")) {
-                  if ( !defined( 'AIP' ) ) {
-                      define("AIP", "Advanced iFrame Pro");
-                  }
-                  include_once dirname(__FILE__) . "/includes/advanced-iframe-browser-detection.php";
-                  if (!is_selected_browser($browser,$id)) {
-                    return;
-                  }
-              }
+            if (!$isValidBrowser) {
+              return;
             }
-
-            // inline css to prevent loading of the whole ai.css
-             $error_css = '<style type="text/css">
-                 .errordiv { padding:10px; margin:10px; border: 1px solid #555555;color: #000000;background-color: #f8f8f8; text-align:center; width:500px; }
-                 #ai-div-hide-content-'.$id.' { width:100%;height:100%;position:fixed;z-index:999;top:0px;left:0px;background-color:'.esc_html($hide_content_until_iframe_color).'; }
-                 </style>';
-                 
-             $html .= $error_css;    
-             // generate css for partly shown iframe
-             $html .= '<style type="text/css">';
-             if ($show_part_of_iframe == 'true') {
-                 $html .= '
-                  #ai-div-'.$id.'
-                  {
-                      width    : '.esc_html($show_part_of_iframe_width).'px;
-                      height   : '.esc_html($show_part_of_iframe_height).'px;
-                      overflow : hidden;
-                      position : relative;';
-                  if ($show_part_of_iframe_allow_scrollbar_horizontal == 'true') {
-                     $html .= 'overflow-x : auto;';
-                  }
-                  if ($show_part_of_iframe_allow_scrollbar_vertical == 'true') {
-                     $html .= 'overflow-y : auto;';
-                  }
-                  if (!empty($show_part_of_iframe_style)) {
-                      $html .= esc_html($show_part_of_iframe_style);
-                  }
-                  $html .= '
-                  }
-                  #'.$id.'
-                  {
-                      position : absolute;
-                      top      : -'.esc_html($show_part_of_iframe_y).'px;
-                      left     : -'.esc_html($show_part_of_iframe_x).'px;
-                      width    : '.esc_html($width).';
-                      height   : '.esc_html($height).';
-                  }';
-             }
-             
-            $scale_width = $width; 
-            $scale_height = $height; 
+                
+            include dirname(__FILE__) . '/includes/advanced-iframe-main-css.php';
+             // check if the ai_external.js does exist
             
-            $enable_ie_8_support = false; 
-            if (!empty($iframe_zoom)) {
-                 if ($width != 'not set' && $width != '') {
-                     $scale_width = $this->scale_value($width, $iframe_zoom); 
-                 } else {
-                    return $error_css . '<div class="errordiv">' . __('Configration error: Zoom does need a specified width.', 'advanced-iframe') . '</div>';         
-                 }
-                 if ($height != 'not set' && $height != '') {
-                      $scale_height = $this->scale_value($height, $iframe_zoom); 
-                 } else {
-                     return $error_css . '<div class="errordiv">' . __('Configration error: Zoom does need a specified height.', 'advanced-iframe') . '</div>'; 
-                 }
-                  
-                 $html .= '#ai-zoom-div-'.$id.'
-                  {
-                    width: '.$scale_width.';
-                    height: '.$scale_height.'; 
-                    padding: 0;
-                    overflow: hidden;
-                  }
-                  #'.$id.'
-                  {';
-                     if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
-                       $enable_ie_8_support = ($iframe_zoom_ie8 == 'true') && $this->checkIE8();
-                       if ($enable_ie_8_support) {
-                         $html .= '-ms-zoom:'.$iframe_zoom.';'; 
-                       }
-                     }
-                     $html .= '-ms-transform: scale('.$iframe_zoom.');
-                        -ms-transform-origin: 0 0;
-                        -moz-transform: scale('.$iframe_zoom.');
-                        -moz-transform-origin: 0 0;
-                        -o-transform: scale('.$iframe_zoom.');
-                        -o-transform-origin: 0 0;
-                        -webkit-transform: scale('.$iframe_zoom.');
-                        -webkit-transform-origin: 0 0;
-                        transform: scale('.$iframe_zoom.');
-                        transform-origin: 0 0;
-                        ';   
-                        if ($use_zoom_absolute_fix == 'true') {
-                           $html .=  ' position:absolute;  ';
-                        }
-                    $html .= '
-                        }';         
-            } 
-            
-            if ($show_iframe_loader == 'true') {
-                    // div for the loader 
-                    if ($show_part_of_iframe == 'true') {  // size is show part of the iframe  
-                        $loader_width = $show_part_of_iframe_width;
-                        $loader_height = $show_part_of_iframe_height; 
-                    } else  if (!empty($iframe_zoom)) { // or zoom size
-                        $loader_width = $scale_width;
-                        $loader_height = $scale_height; 
-                    } else { // the iframe size.
-                        $loader_width = $width;
-                        $loader_height = $height;
-                    }   
-                 $html .= '#ai-div-container-'.$id.'
-                 { 
-                     position: relative;
-                     width: ' . $this->addPx($loader_width);
-                     if ($enable_responsive_iframe == 'true') {
-                      $html .= '; max-width: 100%';
-                     }
-                 $html .= ';}
-                 #ai-div-loader-'.$id.'
-                 {
-                    position: absolute;
-                    z-index:1000;
-                    margin-left:-33px;
-                    left: 50%;';
-                 if ($show_part_of_iframe == 'true') {
-                   $itop = ($show_part_of_iframe_height / 2) - 33;
-                   if ($itop > 150) {
-                       $itop = 150;
-                   }
-                   $html .= '   top: ' . floor($itop) . 'px;';
-                 } else {
-                   $html .= '   top: 150px;
-                   }';
-                 }
-                  $html .= '#ai-div-loader-'.$id.' img
-                 {
-                    border: none;
-                 }';
+            $script_name = dirname(__FILE__) . '/js/ai_external.js';
+            if (!isset($aip_standalone) && !file_exists($script_name)) {
+              $retValue = $this->saveExternalJsFile(false);
+              if (!empty($retValue)) {
+                  return $error_css . '<div class="errordiv">' . $retValue . '</div>';   
+              }    
             }
-            
-            if ($enable_lazy_load == 'true') {
-              $html .= '.ai-lazy-load-'.$id.' {';  
-              if ($enable_lazy_load_reserve_space) {
-                $html .= '
-                  width: '.$scale_width.';
-                  height: '.$scale_height.';';
-              } 
-              $html .= '
-                padding: 0;
-                margin: 0;
-              }';
-            }
-            
-            if ($hide_page_until_loaded  == 'true' || $hide_page_until_loaded_external == 'true') {
-              $html .= '#'.$id.' { visibility:hidden; } ';
-              if (!empty($hide_part_of_iframe)) { 
-                 $html .= '.wrapper-div-'.$id.' { visibility:hidden; } ';
-              }   
-            }
-            
-            $html .= '</style>';
            
-            $html .= '<script type="text/javascript">';
-            $html .= '   var ai_iframe_width_'.$id.' = 0;';
-            $html .= '   var ai_iframe_height_'.$id.' = 0;';
-            
-  
-            if (version_compare(PHP_VERSION, '5.3.0') >= 0 && !empty($iframe_zoom)) { 
-               $html .= ($enable_ie_8_support) ? 'var aiIsIe8=true;' : 'var aiIsIe8=false;';
-            }
-            if ($store_height_in_cookie == 'true') {
-                $html .=  'var aiEnableCookie=true; aiId="' . $id . '";';
-            }
-            if ($additional_height != 0) {
-                $html .=  'var aiExtraSpace=' . esc_html($additional_height) . ';';
-            }
-            if (!empty($iframe_zoom)) {
-                $html .= ' var zoom_' . $id.' = ' .esc_html($iframe_zoom). ';'; 
-            }
-            // $html .= 'var aiReadyCallbacks = ( typeof aiReadyCallbacks !== \'undefined\' && aiReadyCallbacks instanceof Array ) ? aiReadyCallbacks : [];'; 
-			// is written like this to avoid && which is encoded to &#038;&#038; depending on the wordpress settings!
-			
-			$html .= '
-			if (typeof aiReadyCallbacks === \'undefined\') {
-			    var aiReadyCallbacks = [];  
-			} else if (!(aiReadyCallbacks instanceof Array)) {
-			    var aiReadyCallbacks = [];			
-			}';
-			
-            $html .= 'var onloadFired'.$id.' = false; ';       
-            $html .= '    function aiShowIframe() { jQuery("#'.$id.'").css("visibility", "visible");';
-            if (!empty($hide_part_of_iframe)) {                  
-                $html .= '        jQuery(".wrapper-div-'.$id.'").css("visibility", "visible");';
-            }
-            $html .= '    }';
-            $html .= '    function aiShowIframeId(id_iframe) { jQuery("#"+id_iframe).css("visibility", "visible");';
-            if (!empty($hide_part_of_iframe)) {
-                $html .= '        jQuery(".wrapper-div-"+id_iframe).css("visibility", "visible");';
-            }
-            $html .= '    }';
-           
-            $html .= '    function aiResizeIframeHeight(height) { aiResizeIframeHeight(height,'.$id.'); }'; 
-              // the external height is rendered always for easier configuration
-              $html .= '    function aiResizeIframeHeightId(height,width,id) {'; 
-              if ($auto_zoom == 'remote') { 
-                  $html .= '   aiAutoZoomExternal(id, width,"' . $enable_responsive_iframe . '");';
-                  $html .= '   ai_iframe_width_'.$id.' = width;';
-                  $html .= '   ai_iframe_height_'.$id.' = height;';
-              }
-              if (!empty($iframe_zoom)) { 
-                $html .= ' var zoom_height = parseInt(height * parseFloat(window["zoom_" + id]))+1;';
-                $html .= ' jQuery(\'#ai-zoom-div-\' + id).css("height",zoom_height);';
-              }            
-              if ($show_part_of_iframe === 'true') {
-                $html .= ' resetShowPartOfAnIframe(id);';
-              }
-              $html .= 'aiResizeIframeHeightById(id,height);';
-              $html .= '}';
-              // end aiResizeIframeHeightId
-            $html .= '</script>';
             if ($options['securitykey'] != $securitykey && empty($alternative_shortcode)) {
                 return $error_css . '<div class="errordiv">' . __('No valid security key found. Please use at least the following shortcode:<br>&#91;advanced_iframe securitykey="&lt;your security key - see settings&gt;"&#93;<br /> Please also check in the html mode that your shortcode does only contain normal spaces and not a &amp;nbsp; instead.  It is also possible that you use wrong quotes like &#8220; or &#8221;. Only &#34; is valid!', 'advanced-iframe') . '</div>';
             } else if ( $src == "not set" && empty($include_url) &&  empty($include_html)) {
                 return $error_css . '<div class="errordiv">' . __('You have set "Use shortcode attributes only" (use_shortcode_attributes_only) to "true" which means that you have to specify all parameters as shortcode attributes. Please specify at least "securitykey" and "src". Examples are available in the administration.', 'advanced-iframe') . '</div>';
             } else {
-                // add parameters
-                if ($url_forward_parameter != '') {
-                    $sep = (strpos($src, '?') === false)? '?': "&amp;";
-                    if ($url_forward_parameter == 'ALL') {
-                        $parameters = array();
-                        foreach ($_GET as $key => $value) {
-                            $parameters[] = $key;
-                        }  
-						foreach ($_POST as $key => $value) {
-                            $parameters[] = $key;
-                        }  
-                    } else {
-                        $parameters = explode(",", $url_forward_parameter);
-                    }
-                    foreach ($parameters as $parameter) {
-                        // check for mapping urlname|iframe name
-                        $parameter_mapping = explode("|", $parameter);
-                        if (count($parameter_mapping) == 1) {
-                            $parameter_mapping[1] = $parameter_mapping[0];
-                        }
-                        $read_param_url = $this->param($parameter_mapping[0]);
-                        if ($read_param_url != '') {
-                            $src .= $sep . $parameter_mapping[1] . "=" . ($read_param_url);
-                            $sep = "&amp;";
-                        }
-                    }
-                }
-                
-                
-                if (!empty($pass_id_by_url)) {
-                    $sep = (strpos($src, '?') === false)? '?': "&amp;";
-                    $src .= $sep . $pass_id_by_url . "=" . $id;  
-                }  
-                  
-                // Evaluate shortcodes and replace placeholders for the src - they are not encoded! 
-                // This has to be done by the shortcode that is used
-                $src = $this->ai_replace_placeholders($src , $enable_replace);
-
-                $src_orig = $src;
-                if (!empty($map_parameter_to_url)) {
-                    $parameters = explode(",", $map_parameter_to_url); 
-                    foreach ($parameters as $parameter) {
-                        // check for mapping parameter|value|url
-                        $parameter_url_mapping = explode("|", $parameter);
-                         if (count($parameter_url_mapping) == 3) {
-                            $read_param_url = $this->param($parameter_url_mapping[0]);
-                            if ($read_param_url == $parameter_url_mapping[1]) {
-                                $src = $parameter_url_mapping[2]; 
-                            }  
-                         } else if (count($parameter_url_mapping) == 1) {
-                            $src_url = $this->param($parameter_url_mapping[0]);
-                            if (!empty($src_url)) { 
-                                $src = urldecode($src_url);   
-                                $prefix = urldecode($add_iframe_url_as_param_prefix);
-                                if (!$this->ai_startsWith($src,"http")) {
-                                   if ($this->ai_startsWith($src,"s|")) { 
-                                     $src = "https://" . $prefix . substr($src,2);
-                                   } else {
-                                     $src = "http://" . $prefix . $src;
-                                   }  
-                                }  
-                            }
-                         } else {
-                            return $error_css . '<div class="errordiv">' . __('ERROR: map_parameter_to_url does not have the required 1 or 3 parameters', 'advanced-iframe') . '</div>';
-                         }
-                    }        
-                }
-				
-				// pdf
-				if ($this->ai_endsWith($src, '.pdf')) {
-				    if ($this->ai_startsWith($src, 'NATIVE:')) {
-               $src = substr($src, 7);
-            } else {
-               $src = '//docs.google.com/gview?url=' . $src . '&embedded=true';
-            }     
-				}
-
-                if (empty($include_url) && empty($include_html)) {
-                  if ((!empty($content_id) && !empty($content_styles)) ||
-                       !empty($hide_elements) || !empty($change_parent_links_target)
-                       || $enable_lazy_load == 'true' || $add_css_class_parent == 'true'
-                       || $show_iframe_as_layer == 'external') {
-
-                    // hide elements is called directy in the page to hide elements as fast as quickly
-                    $hidehtml = '';
-                     // Add class to all parent elements for easier styling
-                    if ($add_css_class_parent == 'true') {
-                        $hidehtml .= " if (window.aiAddCssClassAllParents) { aiAddCssClassAllParents('#".$id."'); }";
-                    }
-                                        
-                    if (!empty($hide_elements)) {
-                        $hidehtml .= "jQuery('" . esc_html($hide_elements) . "').css('display', 'none');";
-                    }
-                    if (!empty($content_id)) {
-                        $elements = esc_html($content_id); // this field should not have a problem if they are encoded.
-                        $values = esc_html($content_styles); // this field style should not have a problem if they are encoded.
-                        $elementArray = explode("|", $elements);
-                        $valuesArray = explode("|", $values);
-                        if (count($elementArray) != count($valuesArray)) {
-                            return $error_css . '<div class="errordiv">' . __('Configuration error: The attributes content_id and content_styles have to have the amount of value sets separated by |.', 'advanced-iframe') . '</div>';
-                        } else {
-                            for ($x = 0; $x < count($elementArray); ++$x) {
-                                $valuesArrayPairs = explode(";", trim($valuesArray[$x], " ;:"));
-                                for ($y = 0; $y < count($valuesArrayPairs); ++$y) {
-                                    $elements = explode(":", $valuesArrayPairs[$y]);
-                                    $sel = trim($elementArray[$x]);
-                                    $sel = str_replace('##', '>', $sel ); 
-                                    $hidehtml .= "jQuery('" . $sel . "').css('" . trim(strtolower($elements[0])) . "', '" . trim(strtolower($elements[1])) . "');";
-                                }
-                            }
-                        }
-                    }
-
-                    $html .= '<script type="text/javascript">';
-                    $html .= 'function loadElem_'.$id.'(elem)
-                     {'; 
-                     if ($enable_lazy_load_fadetime != '0') {
-                     $html .= ' 
-                        elem.fadeOut(0, function() {
-                          elem.fadeIn('.$enable_lazy_load_fadetime.');
-                        });';
-                     }
-                     $html .= '}';
- 
-                    $html .= 'function aiModifyParent_' . $id . '() { ';
-                    $html .=  $hidehtml;
-                    $html .= '}';
-                    
-                    $aiReady = '';
-                    //  Change parent links target
-                    if (!empty($change_parent_links_target) && $show_iframe_as_layer !== 'external') {
-                      $elementArray = explode("|", $change_parent_links_target);
-                      for ($x = 0; $x < count($elementArray); ++$x) {
-                          $aiReady .= 'jQuery("'. trim($elementArray[$x]) .'").attr("target", "'.$id.'");';
-                      }
-                       
-                      if ($show_iframe_as_layer == 'true') {
-                        $aiReady .=  'jQuery("'.$change_parent_links_target.'").on( "click", function() { ai_showLayerIframe("' . $id . '","'.site_url() . $aiPath.'/img/"); });'; 
-                      }      
-                    }
-                    if ($show_iframe_as_layer == 'external') {   
-                         $aiReady .=  'jQuery("a").each(function () {
-                          if (this.host !== location.host) {
-                            jQuery(this).attr("target", "'.$id.'");
-                            jQuery(this).on("click", function() { ai_showLayerIframe("' . $id . '","'.site_url() . $aiPath.'/img/"); });
-                          }
-                      });';
-                    }
-
-                    $aiReady .= 'aiModifyParent_' . $id . '();';
-                    
-                    if ($enable_lazy_load == 'true') { 
-                       // the 50 ms timeout is used because tabs need a little bit to initialize and hide the content.
-                       $initLazyIframe = 'setTimeout(function() { jQuery("#ai-lazy-load-'.$id.'").lazyload({threshold: '.$enable_lazy_load_threshold.', load: loadElem_'.$id.'}); },50);';   
-                       if ($enable_lazy_load_manual != 'auto') {
-                           $initLazyIframe .= "jQuery.lazyload.setInterval(0);"; 
-                       }
-                       if ($enable_lazy_load_manual == 'true') {
-                           $html .= 'function aiLoadIframe_' . $id . '() { ';
-                           $html .=  $initLazyIframe;
-                           $html .= '};'; 
-                           
-                            if (!empty($enable_lazy_load_manual_element)) {
-                               $html .= ' function trigger_manual_' . $id . '() { '; 
-                               $html .= 'jQuery( "' . esc_html($enable_lazy_load_manual_element) . '" ).click(function() { ';
-                               $html .= 'window.setTimeout(function(){'; 
-                               $html .= '  aiLoadIframe_' . $id . '(); ';  
-                               $html .= '}, 10);';
-                               $html .= 'return false;';
-                               $html .= '});'; 
-                               $html .= '}';  
-                               $aiReady .= 'trigger_manual_' . $id . '();';
-                            }    
-                       } else {
-                           $aiReady .= $initLazyIframe; 
-                       } 
-                    }
-                    $html .= 'var aiReadyAiFunct_' . $id . ' = function aiReadyAi_' . $id . '() { ';
-                    $html .=  $aiReady;
-                    $html .= '};';
-                    $html .= 'aiReadyCallbacks.push(aiReadyAiFunct_' . $id . ');';
-                    //$html .= 'jQuery(document).ready(function() { ';
-                    //$html .= 'aiReadyAiFunct_' . $id . '();';
-                    //$html .= ' });';
-                    
-                    // Modify parent is called right away to do the modifications even when the dom is not ready yet.
-                    // It is called again on dom ready 
-                    $html .= 'if (window.jQuery) { aiModifyParent_' . $id . '(); }';
-                    $html .= '</script>';
-                }
-
-                    
-                    // jQuery("#advanced_iframe").contents().find("#iframe-div").css("border","4px solid blue");
-                    $hideiframehtml = '';
-    
-                    if ((!empty($iframe_content_id) && !empty($iframe_content_styles))|| !empty($iframe_hide_elements) 
-                       || (!empty($change_iframe_links) && !empty($change_iframe_links_target)) || !empty($iframe_content_css)
-                       || !empty($additional_js_file_iframe) || !empty($additional_css_file_iframe)
-                       ) {
-                    if ($add_css_class_iframe) {
-                       // get the url from the iframe - create a hash and add this as class to the body. 
-                       // this enables us to distinguish between sites with the same structure but where 
-                       // different thing e.g. should be hidden.
-                       $hideiframehtml .= "var iframeHref".$id." = jQuery('#".$id."').contents().get(0).location.href; 
-                       if (iframeHref".$id.".substr(-1) == '/') {
-                           iframeHref".$id." = iframeHref".$id.".substr(0, iframeHref".$id.".length - 1);
-                       }
-                       var lastIndex".$id." = iframeHref".$id.".lastIndexOf('/');
-                       var result".$id." = iframeHref".$id.".substring(lastIndex".$id." + 1);
-                       var newClass".$id." = result".$id.".replace(/[^A-Za-z0-9]/g, '-');
-                       var iframeBody".$id." = jQuery('#".$id."').contents().find('body');
-                       iframeBody".$id.".addClass('ai-' + newClass".$id.");
-                       iframeBody".$id.".children().each(function (i) {
-                             jQuery(this).addClass('ai-' + newClass".$id." + '-child-' + (i+1)); 
-                        });
-                       "; 
-                    }
-                    
-                    
-                    if (!empty($iframe_hide_elements)) {
-                        $hideiframehtml .= "jQuery('#".$id."').contents().find('" .
-                            esc_html($iframe_hide_elements) . "').css('display', 'none').css('width', '0').css('height','0');";
-                    }
-                    if (!empty($iframe_content_id)) {
-                        $elements = esc_html($iframe_content_id); // this field should not have a problem if they are encoded.
-                        $values = esc_html($iframe_content_styles); // this field style should not have a problem if they are encoded.
-                        $elementArray = explode("|", $elements);
-                        $valuesArray = explode("|", $values);
-                        if (count($elementArray) != count($valuesArray)) {
-                            return $error_css . '<div class="errordiv">' . __('Configuration error: The attributes iframe_content_id and iframe_content_styles have to have the amount of value sets separated by |.', 'advanced-iframe') . '</div>';
-                        } else {
-                            for ($x = 0; $x < count($elementArray); ++$x) {
-                                $valuesArrayPairs = explode(";", trim($valuesArray[$x], " ;:"));
-                                for ($y = 0; $y < count($valuesArrayPairs); ++$y) {
-                                    $elements = explode(":", $valuesArrayPairs[$y]);
-                                    $hideiframehtml .= "jQuery('#".$id."').contents().find('" . trim($elementArray[$x])
-                                      . "').css('" . trim(strtolower($elements[0])) . "', '" . trim(strtolower($elements[1])) . "');";
-                                }
-                            }
-                        }
-                    }
-
-                    // change_iframe_links
-                    if (!empty($change_iframe_links)) {
-                        $links = esc_html($change_iframe_links); // this field should not have a problem if they are encoded.
-                        $targets = esc_html($change_iframe_links_target); // this field style should not have a problem if they are encoded.
-                        $linksArray = explode("|", $links);
-                        $targetArray = explode("|", $targets);
-                        if (count($linksArray) != count($targetArray)) {
-                            return $error_css . '<div class="errordiv">' . __('Configuration error: The attributes change_iframe_links and change_iframe_links_target have to have the amount of value sets separated by |.', 'advanced-iframe') . '</div>';
-                        } else {
-                            for ($x = 0; $x < count($linksArray); ++$x) {
-                                $hideiframehtml .= "jQuery('#".$id."').contents().find('" . trim($linksArray[$x])
-                                      . "').attr('target', '".trim($targetArray[$x])."');";
-                            }
-                        }
-                    }
-                    if (!empty($iframe_content_css)) {
-                        $hideiframehtml .= 'aiAddCss("#'.$id.'","'.urlencode($iframe_content_css).'");';
-                    }
-                    if (!empty($additional_css_file_iframe)) {
-                        $hideiframehtml .= 'aiAddCssFile("#'.$id.'","'.$additional_css_file_iframe.'");';
-                    }
-                    if (!empty($additional_js_file_iframe)) {
-                        $hideiframehtml .= 'aiAddJsFile("#'.$id.'","'.$additional_js_file_iframe.'");';
-                    }
-                    
-                    if ($hideiframehtml != '') {
-                    $html .= '<script type="text/javascript">';
-                    $html .= 'function aiModifyIframe_' . $id . '() { ';
-                    $html .= 'try {';
-                    $html .=  $hideiframehtml;
-                    $html .=  '}  catch(e) {';
-                    $html .=  '  if (console) {';
-                    $html .=  '    if (console.log) {';
-                    $html .=  '      console.log("Advanced iframe configuration error: You have enabled the modification of the iframe for pages on the same domain. But you use an iframe page on a different domain. You need to use the pro version of external workaround like described in the settings. Also check the next log. There the browser message for this error is displayed."); ';
-                    $html .=  '      console.log(e);';
-					$html .=  '    }';
-                    $html .=  '  }';
-                    $html .=  '}';
-                    $html .= '}';
-                    $html .= '</script>';
-                    }
-                }
-                
-               
-                if (!empty($hide_content_until_iframe_color)) {
-                    $html .= '<div id="ai-div-hide-content-'.$id.'"><!-- hides the content --></div>';
-                }
-                
-                if ($show_iframe_loader == 'true') {
-                   // div around 
-                   $html .= '<div id="ai-div-container-'.$id.'">';
-                   // div for the loader 
-                   $html .= '<div id="ai-div-loader-'.$id.'"><img src="' . site_url() . $aiPath . '/img/loader.gif" width="66" height="66" title="Loading" alt="Loading"></div>';
-                 }
-                
-                 if (!empty($hide_part_of_iframe)) {
-                      $rectangles = explode('|' , $hide_part_of_iframe);
-                      for($hi=0;$hi<count($rectangles);++$hi){
-                         $values = explode(',' , $rectangles[$hi]);
-                         $html .= '<div class="wrapper-div-'.$id.'" style="position:relative">';
-                         $num_values = count($values);
-                         if ($num_values == 6 || $num_values == 7 || $num_values == 8) {
-                            // add px or %
-                            $r_width = $this->addPx($values[2]);
-                            $r_height = $this->addPx($values[3]);
-                            $display_type = 'div';
-                            $hide_href = '';
-                            if ($num_values == 7 || $num_values == 8 ) {
-                               $display_type = 'a';
-                               $hide_href = ' href="'.esc_html(trim($values[6])).'"';
-                            }
-                            if ($num_values == 8) {
-                               $hide_href .= ' target="'.esc_html(trim($values[7])).'"';
-                            }
-                            
-                            $html .= '<'.$display_type.$hide_href.' style="position:absolute;z-index:'.esc_html(trim($values[5])).';left:'.esc_html(trim($values[0])).'px;top:'.esc_html(trim($values[1])).'px;width:'.$r_width.';height:'.$r_height.';background-color:'.esc_html(trim($values[4])).'"><!-- --></'.$display_type.'>';
-                         } else {
-                            return $error_css . '<div class="errordiv">' . __('ERROR: hide part of iframe does not have the required 6 parameters', 'advanced-iframe') . '</div>';
-                         }
-                     }
-                  }
-
-                if ($show_part_of_iframe == 'true') {
-                    $html .= '<div id="ai-div-'.$id.'">';
-                }
-                if (!empty($iframe_zoom)) {
-                     $html .= '<div id="ai-zoom-div-'.$id.'">';
-                }
-                if ($enable_lazy_load == 'true') {
-                     $html .= '<div id="ai-lazy-load-'.$id.'" class="ai-lazy-load-'.$id.'"><!--';
-                }
-                
-                // show a warning if https pages are shown in http pages.
-                
-                $parent_http = site_url();
-                if ($this->ai_startsWith(strtolower($src), "http:") && 
-                    $this->ai_startsWith(strtolower($parent_http), "https:")) {
-                  $html .= 'Http iframes are not shown in https pages in many major browsers. Please read <a href="http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https" target="_blank">this post</a> for details.';
-                } 
-                
-                // calculates dynamic width and height for + and -   
-                if ($pro) {
-                  if (strpos($width, '-') !== false || strpos($width, '+') !== false ) {       
-                     // + and - needs a space before and after the + and -. Otherwise is does not work in Firefox
-                     $width = str_replace("-", " - ", $width);
-                     $width = str_replace("+", " + ", $width);
-                     $style .= ';width: calc('.esc_html(trim($width)).');';
-                     $width = '';   
-                  }
-                  if (strpos($height, '-') !== false || strpos($height, '+') !== false ) {       
-                     $height = str_replace("-", " - ", $height);
-                     $height = str_replace("+", " + ", $height);
-                     $style .= ';height: calc('.esc_html(trim($height)).');'; 
-                     $height = '';   
-                  } 
-                } 
-                
-  
-                $html .= "<iframe id='" . $id . "' ";
-                if (!empty ($name)) {
-                    $html .= " name='" . $name . "' ";
-                }
-                $html .= " src='" . trim($src) . "' ";
-                if ($width != 'not set' && $width != '') {
-                     $html .= " width='" . esc_html(trim($width)) . "' ";
-                }
-                 if ($height != 'not set' && $height != '') {
-                     $html .= " height='" . esc_html(trim($height)) . "' ";
-                }
-
-                // default is auto - enables to add scrolling with css!
-                if ($scrolling != 'none') {
-                     $html .= " scrolling='" . esc_html(trim($scrolling)) . "' ";
-                }
-
-                if (!empty ($marginwidth)) {
-                    $html .= " marginwidth='" . esc_html(trim($marginwidth)) . "' ";
-                }
-                if (!empty ($marginheight)) {
-                    $html .= " marginheight='" . esc_html(trim($marginheight)) . "' ";
-                }
-                if ($frameborder != '') {
-                    $html .= " frameborder='" . esc_html(trim($frameborder)) . "' ";
-                    if ($frameborder == 0) {
-                       $html .= " border='0' ";
-                    }
-                }
-                if (!empty ($transparency)) {
-                    $html .= " allowtransparency='" . esc_html(trim($transparency)) . "' ";
-                }
-                if (!empty ($class)) {
-                    $html .= " class='" . esc_html(trim($class)) . "' ";
-                }
-                
-                if (!empty ($style) || $show_part_of_iframe == 'true' || $enable_responsive_iframe == 'true') {
-                    if (strpos($style, 'max-width') === false) {
-                      if ($show_part_of_iframe == 'true') {
-                          $style .= 'max-width:none;';
-                      } else if ($enable_responsive_iframe == 'true') {
-                          $style .= 'max-width:100%;';
-                      }
-                    }
-                    $html .= " style='" . esc_html(trim($style)) . "' ";
-                }
-                
-                if ($allowfullscreen != 'false') {
-                     $html .= " allowfullscreen ";
-                }
-                
-                
-                // create onload string
-                $onload_str = '';
-                 if (!empty ($onload)) {
-                    $onload_str .= esc_html($onload);
-                }
-                
-               
-                if (!empty ($tab_hidden)) {
-                  $split_hidden_array = explode(',', $tab_hidden);   
-                  $hidden_counter = 0;
-                  foreach ($split_hidden_array as $split_hidden) {  
-                     if ($hidden_counter++ == 0) {
-                          // measure the width of the sorounding element
-                         if (!empty ($tab_visible)) {
-                             $onload_str .= ';jQuery("'. $split_hidden .'").css("width",jQuery("'. $tab_visible .'").width());';
-                         }
-                         $onload_str .= ';jQuery("'. $split_hidden .'").css("position", "absolute").css("top", "-20000px").css("visibility", "hidden").show();';
-                     } else {
-                         $onload_str .= ';jQuery("'. $split_hidden .'").show();';
-                     }
-                  }
-                }
-               
-               
-                if ($show_iframe_loader == 'true') {
-                    $onload_str .= ';jQuery("#ai-div-loader-'.$id.'").hide();';
-                }
-                
-                if (!empty($hide_content_until_iframe_color)) {
-                    $onload_str .= ';jQuery("#ai-div-hide-content-'.$id.'").hide();'; 
-                }
-                
-                if ($show_part_of_iframe == 'true' && (!empty ($show_part_of_iframe_new_window) ||
-                    !empty ($show_part_of_iframe_new_url) || !empty ($show_part_of_iframe_next_viewports) ||
-                    ($show_part_of_iframe_next_viewports_hide == 'true') )) {
-                   $onload_str .= ';modifyOnLoad'.$id.'();';
-                }
-                if ($auto_zoom == 'same') {
-                   if (!empty($onload_resize_delay)) {
-                        $onload_str .= ';setTimeout(function() { zoomOnLoad'.$id.'(); },'.$onload_resize_delay.');';
-                    } else {
-                        $onload_str .= ';zoomOnLoad'.$id.'();';
-                    } 
-                }
-                
-                if ($hideiframehtml != '') {
-                    $onload_str .= ';aiModifyIframe_' . $id . '();';
-                }
-
-                if (!empty($onload_show_element_only)) {
-                    $onload_str .= ';aiShowElementOnly("#'.$id.'","'.$onload_show_element_only.'");';
-                }
-                if ($onload_resize == 'true') {
-                    if (!empty($onload_resize_delay)) {
-                        $onload_str .= ';setTimeout(function() { aiResizeIframe(ifrm_'.$id.', "'.$onload_resize_width.'"); },'.$onload_resize_delay.');';
-                    } else {
-                        $onload_str .= ';aiResizeIframe(this, "'.$onload_resize_width.'");';
-                    }
-                }
-                
-                if (!empty($iframe_height_ratio)) {
-                    $onload_str .= ';aiResizeIframeRatio(this, "'.$iframe_height_ratio.'");';
-                }
-                
-                if ($onload_scroll_top == 'true') {
-                    $onload_str .= ';aiScrollToTop();';
-                }
-                // hide_page_until_loaded
-                if ($hide_page_until_loaded  == 'true') {
-                    $onload_str .= 'jQuery("#'.$id.'").css("visibility", "visible");';
-                    if (!empty($hide_part_of_iframe)) {
-                        $onload_str .= 'jQuery(".wrapper-div-'.$id.'").css("visibility", "visible");';
-                    } 
-                }   
-                 
-                if (!empty($resize_on_element_resize)) {
-                    $onload_str .= 'onloadFired'.$id.' = true;';
-                }
-                
-                if ($add_iframe_url_as_param == 'same') {
-                    $onload_str .= 'aiChangeUrlParam(aigetIframeLocation("'.$id.'"), "'.$map_parameter_to_url.'","'.$src_orig.'","'.$add_iframe_url_as_param_prefix.'");';
-                }
-  
-                if ($onload_str != '') {
-                   $html .= " onload='" . esc_js($onload_str) . "' ";
-                }
-
-                $html .= '></iframe>';
-                if ($enable_lazy_load == 'true') {
-                    $html .= '--></div>';
-                } 
-                if (!empty($iframe_zoom)) {
-                    $html .= '</div>';
-                }
-                if ($show_part_of_iframe == 'true') {
-                    $html .= '</div>';
-                }
-                if (!empty($hide_part_of_iframe)) {
-                    $html .= '</div>';
-                }
-                if ($show_iframe_loader == 'true') {
-                   $html .= '</div>';
-                }
-                $html .= '<script type="text/javascript">var ifrm_'.$id.' = document.getElementById("'.$id.'");</script>';
-
-                $html .= '<script type="text/javascript">
-                var hiddenTabsDone'.$id.' = false;
-                function resizeCallback'.$id.'() {';
-                if (!empty ($tab_hidden)) {
-                  $split_hidden_array = explode(',', $tab_hidden);   
-                  $hidden_counter = 0;
-                  $html .= 'if (!hiddenTabsDone'.$id.') { '; 
-                  foreach ($split_hidden_array as $split_hidden) { 
-                      if ($hidden_counter++ == 0) {
-                          $html .= 'jQuery("' . $split_hidden . '").css("position", "static").hide().css("visibility", "visible");';
-                          // for one level resize works mu
-                          $html .= 'hiddenTabsDone'.$id.' = false;';
-                      } else {
-                          $html .= ';jQuery("'. $split_hidden .'").hide();';
-                          $html .= 'hiddenTabsDone'.$id.' = true;';
-                      }
-                  }
-                  $html .= '}';
-                }
-                $html .= '}';
-                
-                 $html .= 'function aiChangeUrl(loc) {';
-                    if ($add_iframe_url_as_param == 'remote') {
-                        $html .= '  aiChangeUrlParam(loc,"'.$map_parameter_to_url.'","'.$src_orig.'","'.$add_iframe_url_as_param_prefix.'");';
-                    }
-                 $html .= '}';
-                
-                $html .= '</script>';
-                                  
-               
-                if ($store_height_in_cookie == 'true') {
-                   $html .= '<script type="text/javascript">if (window.aiUseCookie) { aiUseCookie(); }</script>';
-                }
-                if ($show_part_of_iframe == 'true' && (!empty ($show_part_of_iframe_new_window) ||
-                    !empty ($show_part_of_iframe_new_url) || !empty ($show_part_of_iframe_next_viewports) ||
-                    ($show_part_of_iframe_next_viewports_hide == 'true'))) {
-                   $html .= '<script type="text/javascript">
-                      var countAlert'.$id.' = 0;
-                      var maxStep'.$id.' = getViewPortCount'.$id.'();
-                      function modifyOnLoad'.$id.'() {
-                            if (maxStep'.$id.' == countAlert'.$id.') {';
-                            if ($show_part_of_iframe_next_viewports_loop == 'true') {
-                                $html .= '
-                                    jQuery("#ai-div-'.$id.'").css("width","'.$show_part_of_iframe_width.'px");
-                                    jQuery("#ai-div-'.$id.'").css("height","'.$show_part_of_iframe_height.'px");
-                                    jQuery("#'.$id.'").css("left","-'.$show_part_of_iframe_x.'px");
-                                    jQuery("#'.$id.'").css("top","-'.$show_part_of_iframe_y.'px");
-                                    countAlert'.$id.' = 0;';
-                            } else if ($show_part_of_iframe_next_viewports_hide == 'true') {
-                                $html .= 'jQuery("#'.$id.'").hide();';
-                            } else {
-                                $reload_url = $src;
-                                if (!empty($show_part_of_iframe_new_url)) {
-                                    $reload_url = $show_part_of_iframe_new_url;
-                                }
-                                if (!empty ($show_part_of_iframe_new_window)) {
-                                   if  ('_blank' == $show_part_of_iframe_new_window) {
-                                       // reload in new window
-                                       $html .= 'window.open("'.$reload_url.'");';
-                                   } else if ('_top' == $show_part_of_iframe_new_window) {
-                                       // reload in parent window
-                                       $html .= 'location.href = "'.$reload_url.'";';
-                                   } // else nothing to do
-                                }
-                            }
-                     $html .= '} else if (countAlert'.$id.' > 0)  { // viewport change!
-                              setNewViewPort'.$id.'(countAlert'.$id.'-1);
-                          }
-                          countAlert'.$id.'++;   
-                      }
-                      function getViewPortCount'.$id.'() {
-                        var variable = "' . $show_part_of_iframe_next_viewports . '";
-                        if (variable != "") {
-                        var elements = variable.split(";");
-                            return elements.length+1;
-                        } else {
-                            return 1;
-                        }
-                      }
-                       function setNewViewPort'.$id.'(num) {
-                        var variable = "' . $show_part_of_iframe_next_viewports . '";
-                        var elements = variable.split(";");
-                        var paramList = elements[num];
-                        var params = paramList.split(",");
-                        if (params.length != 4) {
-                            alert("Please check the view port settings. Exact 4 variables are needed");
-                        } else {
-                            // modify the css with jquery.
-                            jQuery("#ai-div-'.$id.'").css("width",params[2] + "px");
-                            jQuery("#ai-div-'.$id.'").css("height",params[3] + "px");
-                            jQuery("#'.$id.'").css("left","-" + params[0] + "px");
-                            jQuery("#'.$id.'").css("top","-" + params[1] + "px");
-                        }
-                      }
-                      </script>';
-                 }
-                 
-                 if ($auto_zoom == 'same' ) {
-                       $html .= '<script type="text/javascript">
-                           function zoomOnLoad'.$id.'() {
-                                   aiAutoZoom("'.$id.'","' . $enable_responsive_iframe . '","'.$auto_zoom_by_ratio.'");
-                           }
-                           </script>';     
-                 }
-                 
-                 if ($enable_responsive_iframe == 'true') {
-                     $html .= '<script type="text/javascript">
-                        function initResponsiveIframe'.$id.'() {  
-                          jQuery(window).resize(function() {'; 
-                     if ($enable_lazy_load == 'true') {
-                         $html .= 'ifrm_'.$id.' = document.getElementById("'.$id.'");';
-                     }
-                      if (!empty($iframe_height_ratio)) {           
-                          $html .= '  aiResizeIframeRatio(ifrm_'.$id.', "'.$iframe_height_ratio.'");';
-                      } else  if ($auto_zoom == 'same') {
-                         $html .= 'aiAutoZoom("'.$id.'","' . $enable_responsive_iframe . '","'.$auto_zoom_by_ratio.'");';
-                      } else  if ($auto_zoom == 'remote') {
-                         $html .= 'aiAutoZoomExternalHeight("'.$id.'",ai_iframe_width_'.$id.',ai_iframe_height_'.$id.',"' . $enable_responsive_iframe . '" );';
-                      } else if ($onload_resize) {            
-                          $html .= '  aiResizeIframe(ifrm_'.$id.', "'.$onload_resize_width.'");';
-                      }   
-                    $html .= '
-                        });
-                        }
-                        aiReadyCallbacks.push(initResponsiveIframe' . $id . ');
-                        </script>';
-                }  
-                
-                if ($reload_interval != '') {
-                  $html .= '<script type="text/javascript">';
-                  $html .= 'setInterval(
-                    function() {  
-                      jQuery( "#'.$id.'" ).attr( "src", function ( i, val ) { return val; })
-                    }, '.$reload_interval.');';
-                  $html .= '</script>';
-                }
-                     
-            } else {
-                  if (empty($include_html)) {
-                    $ai_height = (empty ($include_height)) ? '' : (' style="height:'.$include_height.';" ');
-  
-                    $html = '<div '.$ai_height.' id="ai-temp-'.$id.'"><!-- --></div>';
-                    $html .= '<script type="text/javascript">';
-                    if  ($include_hide_page_until_loaded === 'true') {
-                      $html .= 'jQuery("body").css("display", "none");';
-                    }
-                    $html .= 'jQuery("#ai-temp-'.$id.'").load("' . $include_url;
-                    if  (!empty ($include_content)) {
-                      $html .= ' ' . $include_content;
-                    }
-                    $html .= '" , function() {';
-                    if  ($include_hide_page_until_loaded === 'true') {
-                    $html .= ' jQuery("body").css("display", "block"); ';
-                    }
-                    $html .= ' })';
-                    if  (!empty ($include_fade)) {
-                      $html .= '.hide().fadeIn('.$include_fade.');';
-                    }
-                    $html .= '</script>';
-                  } else {
-                    echo $include_html;
-                  }  
-            }
-            
-            $newer_version = !isset($aip_standalone) && version_compare(get_bloginfo('version'), '3.3') >= 0 ; 
-      
-            if ($enable_lazy_load == 'true') {
-              if ($newer_version) {
-                  $dep = ($options['load_jquery'] === 'true') ? array( 'jquery') : array();
-                  wp_enqueue_script('ai-lazy-js',plugins_url( 'includes/scripts/jquery.lazyload-any.min.js' , __FILE__ ), $dep , $version_counter, true);
+              if (empty($include_url) && empty($include_html)) {
+                include dirname(__FILE__) . '/includes/advanced-iframe-main-prepare.php'; 
+                include dirname(__FILE__) . '/includes/advanced-iframe-main-iframe.php'; 
+                include dirname(__FILE__) . '/includes/advanced-iframe-main-after-iframe.php';
               } else {
-                  $html .= '<script type="text/javascript" src="' . site_url() . $aiPath . '/includes/scripts/jquery.lazyload-any.min.js" ></script>';
+                include dirname(__FILE__) . '/includes/advanced-iframe-main-include-directly.php'; 
               }
+              return $html;
             }
-
-            if (!empty($resize_on_element_resize)) {
-              if ($newer_version) {
-                  $dep_resize = ($options['load_jquery'] === 'true') ? array( 'jquery', 'ai-js') : array('ai-js');
-                  wp_enqueue_script('ai-change-js',plugins_url( 'includes/scripts/jquery.ba-resize.min.js' , __FILE__ ), $dep_resize, $version_counter, true);
-              } else {
-                  $html .= '<script type="text/javascript" src="' . site_url() . $aiPath .'/includes/scripts/jquery.ba-resize.min.js" ></script>';
-              }
-              $html .= '<script type="text/javascript">';
-              $html .= 'function initResizeIframe'.$id.'() {
-                        if (onloadFired'.$id.' === false) {
-                          // onload is not fired yet. we wait 100 ms and retry
-                          window.setTimeout("initResizeIframe'.$id.'()",100);
-                          return;
-                        }
-                        onloadFired'.$id.' = true; 
-              ';
-              
-              // minimum delay is 50 ms !
-              if (!empty($resize_on_element_resize_delay) &&
-                 ((int)$resize_on_element_resize_delay) >= 50 ) {
-                  $html .= 'jQuery.resize.delay='.esc_html($resize_on_element_resize_delay).';';
-              }
-              $html .= 'jQuery("#'.$id.'").contents().find("'.esc_html($resize_on_element_resize).'").resize(function(){ 
-                               aiResizeIframe(ifrm_'.$id.', "'.$onload_resize_width.'");
-                           });
-                        }';
-              $html .= 'aiReadyCallbacks.push(initResizeIframe' . $id . ');';
-              $html .= '</script>';
+        }
+        
+        /**
+         * Enqueue the additional js or css 
+         */
+        function include_additional_files($additional_css, $additional_js, $version_counter, $version, $to_footer) {
+           if ($additional_css != '' && $version) {  // wp >= 3.3
+               wp_enqueue_style( 'additional-advanced-iframe-css', $additional_css, false, $version_counter);
             }
-            
-            
-            if ($additional_css != '' && $newer_version) {  // wp >= 3.3
-               wp_enqueue_style( 'additional-advanced-iframe-css', $additional_css, false, $version_counter);   
+            if ($additional_js != '' && $version) {  // wp >= 3.3 
+                wp_enqueue_script( 'additional-advanced-iframe-js', $additional_js, false, $version_counter, $to_footer);
             }
-            
-            if ($additional_js != '' && $newer_version) {  // wp >= 3.3 
-                wp_enqueue_script( 'additional-advanced-iframe-js', $additional_js, false, $version_counter, true);
-            }
-
-            $html .= $this->interceptAjaxResize($id, $onload_resize_width, $resize_on_ajax, $resize_on_ajax_jquery,
-                                                $resize_on_click,  $resize_on_click_elements);
-             if ($default_options > 100*100) {
-                $html =  __('You reached the view limit for this month.<br />Please get the advanced iframe pro version.<br />Go to the administration for details.', 'advanced-iframe');
-             }
-            return $html;
-          }
         }
 
         function add_script_footer() {
@@ -1243,19 +332,81 @@ if (!class_exists('advancediFrame')) {
             require_once('advanced-iframe-admin-page.php');
         }
         
+        function saveExternalJsFile($backend = true) {
+          $devOptions = $this->getAiAdminOptions();
+          $template_name = dirname(__FILE__) . '/js/ai_external.template.js';
+          
+          $jquery_path =  site_url() . '/wp-includes/js/jquery/jquery.js';
+          $resize_path =  plugins_url() . '/advanced-iframe/includes/scripts/jquery.ba-resize.min.js';
+          
+          $content = file_get_contents($template_name);
+          $new_content = str_replace('PLUGIN_URL', plugins_url() . '/advanced-iframe', $content);
+          $new_content = str_replace('PARAM_ID', $devOptions['id'], $new_content);
+          $new_content = str_replace('PARAM_IFRAME_HIDE_ELEMENTS', $devOptions['iframe_hide_elements'], $new_content);
+          $new_content = str_replace('PARAM_ONLOAD_SHOW_ELEMENT_ONLY', $devOptions['onload_show_element_only'], $new_content);
+          $new_content = str_replace('PARAM_IFRAME_CONTENT_ID',  $devOptions['iframe_content_id'], $new_content);
+          $new_content = str_replace('PARAM_IFRAME_CONTENT_STYLES',  $devOptions['iframe_content_styles'], $new_content);
+          $new_content = str_replace('PARAM_CHANGE_IFRAME_LINKS_TARGET',  $devOptions['change_iframe_links_target'], $new_content);
+          $new_content = str_replace('PARAM_CHANGE_IFRAME_LINKS',  $devOptions['change_iframe_links'], $new_content);
+          
+          $delay = empty($devOptions['external_height_workaround_delay']) ? '0' : $devOptions['external_height_workaround_delay'];
+          $new_content = str_replace('PARAM_ENABLE_EXTERNAL_HEIGHT_WORKAROUND_DELAY', $delay, $new_content);
+          
+          $new_content = str_replace('PARAM_ENABLE_EXTERNAL_HEIGHT_WORKAROUND', $devOptions['enable_external_height_workaround'], $new_content);
+          $new_content = str_replace('PARAM_KEEP_OVERFLOW_HIDDEN', $devOptions['keep_overflow_hidden'], $new_content);
+          $new_content = str_replace('PARAM_HIDE_PAGE_UNTIL_LOADED_EXTERNAL', $devOptions['hide_page_until_loaded_external'], $new_content);
+          $new_content = str_replace('PARAM_IFRAME_REDIRECT_URL', $devOptions['iframe_redirect_url'] , $new_content);
+          $new_content = str_replace('PARAM_ENABLE_RESPONSIVE_IFRAME', $devOptions['enable_responsive_iframe'] , $new_content);
+          $new_content = str_replace('PARAM_WRITE_CSS_DIRECTLY', $devOptions['write_css_directly'] , $new_content);
+          $new_content = str_replace('PARAM_RESIZE_ON_ELEMENT_RESIZE_DELAY', $devOptions['resize_on_element_resize_delay'] , $new_content);
+          $new_content = str_replace('PARAM_RESIZE_ON_ELEMENT_RESIZE', $devOptions['resize_on_element_resize'] , $new_content);
+          $new_content = str_replace('PARAM_URL_ID', $devOptions['pass_id_by_url'] , $new_content);
+          
+          $new_content = str_replace('PARAM_JQUERY_PATH', $jquery_path , $new_content);
+          $new_content = str_replace('PARAM_RESIZE_PATH', $resize_path , $new_content);
+          $new_content = str_replace('PARAM_ADD_IFRAME_URL_AS_PARAM', $devOptions['add_iframe_url_as_param'], $new_content);
+          $new_content = str_replace('PARAM_ADDITIONAL_CSS_FILE_IFRAME', $devOptions['additional_css_file_iframe'], $new_content);
+          $new_content = str_replace('PARAM_ADDITIONAL_JS_FILE_IFRAME', $devOptions['additional_js_file_iframe'], $new_content);
+          $new_content = str_replace('PARAM_ADD_CSS_CLASS_IFRAME', $devOptions['add_css_class_iframe'], $new_content);
+          $new_content = str_replace('PARAM_TIMESTAMP', date("Y-m-d H:i:s"), $new_content);          
+              
+          $new_content = str_replace('MULTI_DOMAIN_ENABLED', $devOptions['multi_domain_enabled'], $new_content);
+          $new_content = str_replace('USE_POST_MESSAGE', $devOptions['use_post_message'], $new_content);
+          
+          $asParts = parse_url( site_url() ); // PHP function
+          $home_url = $asParts['scheme'] . '://' . $asParts['host'];
+          $post_domain = ($devOptions['multi_domain_enabled'] == 'true') ? '*' : $home_url;
+          $new_content = str_replace('POST_MESSAGE_DOMAIN', $post_domain, $new_content);
+          
+          $script_name = dirname(__FILE__) . '/js/ai_external.js';
+          if (file_exists($script_name)) {
+              @unlink($script_name);
+          }
+          $fh = fopen($script_name, 'w');
+          if ($fh) {
+              fwrite($fh, $new_content);
+              fclose($fh);
+          } else {
+              $errorText = __('The file "advanced-iframe/js/ai_external.js" can not be saved. Please check the permissions of the js folder and save the settings again. This file is needed for the external workaround! If you don\'t use the external workaround please create a empty file with the name ai_external.js in the js folder of the plugin.', "advanced-iframe"); 
+              if ($backend) {
+                  printError($errorText);
+              } else {
+                  return $errorText; 
+              }
+          }
+          return '';
+        }
+        
+        
         function ai_startsWith($haystack, $needle) {
-		  return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
-		}
-			   
-		function ai_endsWith($haystack, $needle) {
-		  return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
-		}
+          return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
+        }
+        
+        function ai_endsWith($haystack, $needle) {
+          return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+        }
     
-    function checkIE8() {
-       $filenamedir  = dirname(__FILE__) . '/../advanced-iframe-custom/browser-check-failed.txt'; 
-       if (file_exists($filenamedir)) {
-           return false;
-       } else {
+        function ai_createCustomFolder() {
           $filenamedir  = dirname(__FILE__) . '/../advanced-iframe-custom';
           if (!@file_exists($filenamedir)) {
              if (!@mkdir($filenamedir)) {
@@ -1263,21 +414,24 @@ if (!class_exists('advancediFrame')) {
                 return false; 
              }
           } 
-          $fh = @fopen($filenamedir, 'w');
-          if ($fh) {
-              @fwrite($fh, "Browser detection crashed. Please increase your php memory, delete this file and retry.");
-              @fclose($fh);
-          }
-          @unlink($filenamedir);
-          return ai_is_ie(8);
-       }    
-    }
-    
-     
-        
-        function maybe_dequeue_script () {  
         }
         
+        function checkIE8() {
+           $filenamedir  = dirname(__FILE__) . '/../advanced-iframe-custom/browser-check-failed.txt'; 
+           if (file_exists($filenamedir)) {
+               return false;
+           } else {
+              $this->ai_createCustomFolder();
+              $fh = @fopen($filenamedir, 'w');
+              if ($fh) {
+                  @fwrite($fh, "Browser detection crashed. Please increase your php memory, delete this file and retry.");
+                  @fclose($fh);
+              }
+              @unlink($filenamedir);
+              return ai_is_ie(8);
+           }    
+        }
+            
         function ai_plugin_action_links($links, $file) {
             $plugin_file = basename(__FILE__);
             $file = basename($file);
@@ -1288,136 +442,147 @@ if (!class_exists('advancediFrame')) {
             return $links;
         }
 
-        /**
-         *  Intercepts the Ajax resize events in iframes.
-         */
-        function interceptAjaxResize( $iframe_id, $resize_width, $timeout, $resize_on_ajax_jquery,
-                                      $click_timeout,  $resize_on_click_elements) {
-          $debug = false;
-          $val = '';
-          if ($timeout != '' || $click_timeout != '') {
-            $val .= '<script>';
-            $val .= 'function local_resize_'.$iframe_id.'(timeout) {
-              if (timeout != 0) {
-                 setTimeout(function() { aiResizeIframe(ifrm_'.$iframe_id.', "'.$resize_width.'")},timeout);
-              } else {
-                 aiResizeIframe(ifrm_'.$iframe_id.', "'.$resize_width.'");
+      /**
+       *  Intercepts the Ajax resize events in iframes.
+       */
+      function interceptAjaxResize( $iframe_id, $resize_width, $timeout, $resize_on_ajax_jquery,
+                                    $click_timeout,  $resize_on_click_elements, $resize_min_height) {
+        $debug = false;
+        $val = '';
+        if ($timeout != '' || $click_timeout != '') {
+          $val .= '<script type="text/javascript">';
+          $val .= 'function local_resize_'.$iframe_id.'(timeout) {
+            if (timeout != 0) {
+               setTimeout(function() { aiResizeIframe(ifrm_'.$iframe_id.', "'.$resize_width.'","'.$resize_min_height.'")},timeout);
+            } else {
+               aiResizeIframe(ifrm_'.$iframe_id.', "'.$resize_width.'","'.$resize_min_height.'");
+            }
+          }';
+          $val .= '</script>';
+
+          if ($resize_on_ajax_jquery == 'true' || $click_timeout != '') {
+            $val .=  '<script type="text/javascript">
+                function ai_jquery_ajax_resize_'.$iframe_id.'() {
+                    jQuery("#'.$iframe_id.'").bind("load",function(){
+                    doc = this.contentWindow.document;';
+            if ($timeout != '' && $resize_on_ajax_jquery == 'true') {
+              $val .= 'var instance = this.contentWindow.jQuery;';
+              $val .= 'instance(doc).ajaxComplete(function(){';
+              if ($debug) {
+                 $val .= 'alert("AJAX request completed.");';
               }
+              $val .= 'local_resize_'.$iframe_id.'('.$timeout.');';
+              $val .= '});';
+            }
+            if ($click_timeout != '' && $resize_on_click_elements != '') {
+              $val .= 'doc.addEventListener("click", function(evt) { ';
+              $val .= '  if (checkIfValidTarget(evt,"'.$resize_on_click_elements.'")) {';
+              if ($debug) {
+                 $val .= 'alert("Click event intercepted.");';
+              }
+              $val .= '   local_resize_'.$iframe_id.'('.$click_timeout.');';
+              $val .= '  }';
+              $val .= '}, true);';
+            }
+            $val .= '});
             }';
+            $val .= 'ai_jquery_ajax_resize_'.$iframe_id.'();';
+
             $val .= '</script>';
-
-            if ($resize_on_ajax_jquery == 'true' || $click_timeout != '') {
-              $val .=  '<script>
-                  function ai_jquery_ajax_resize_'.$iframe_id.'() {
-                      jQuery("#'.$iframe_id.'").bind("load",function(){
-                      doc = this.contentWindow.document;';
-              if ($timeout != '' && $resize_on_ajax_jquery == 'true') {
-                $val .= 'var instance = this.contentWindow.jQuery;';
-                $val .= 'instance(doc).ajaxComplete(function(){';
-                if ($debug) {
-                   $val .= 'alert("AJAX request completed.");';
-                }
-                $val .= 'local_resize_'.$iframe_id.'('.$timeout.');';
-                $val .= '});';
-              }
-              if ($click_timeout != '' && $resize_on_click_elements != '') {
-                $val .= 'doc.addEventListener("click", function(evt) { ';
-                $val .= '  if (checkIfValidTarget(evt,"'.$resize_on_click_elements.'")) {';
-                if ($debug) {
-                   $val .= 'alert("Click event intercepted.");';
-                }
-                $val .= '   local_resize_'.$iframe_id.'('.$click_timeout.');';
-                $val .= '  }';
-                $val .= '}, true);';
-              }
-              $val .= '});
-              }';
-              $val .= 'ai_jquery_ajax_resize_'.$iframe_id.'();';
-
-              $val .= '</script>';
-            }
-            if ($resize_on_ajax_jquery == 'false' && $timeout != '') {
-              $val .=  '<script>';
-              $val .= '
-
-                var send_'.$iframe_id.' = ifrm_'.$iframe_id.'.contentWindow.XMLHttpRequest.prototype.send,
-                    onReadyStateChange_'.$iframe_id.';
-
-                function sendReplacement_'.$iframe_id.'(data) {
-                    if(this.onreadystatechange) {
-                        this._onreadystatechange_'.$iframe_id.' = this.onreadystatechange;
-                    }
-                    this.onreadystatechange = onReadyStateChangeReplacement_'.$iframe_id.';
-                    return send_'.$iframe_id.'.apply(this, arguments);
-                }
-
-                function onReadyStateChangeReplacement_'.$iframe_id.'() {
-                    if(this.readyState == 4 ) {
-                        var retValue;
-                        if (this._onreadystatechange_'.$iframe_id.') {
-                            retValue = this._onreadystatechange_'.$iframe_id.'.apply(this, arguments);
-                        }';
-                $val .= 'local_resize_'.$iframe_id.'('.$timeout.');';
-                $val .= 'return retValue;
-                    }
-                }';
-                $val .= '  ifrm_'.$iframe_id.'.contentWindow.XMLHttpRequest.prototype.send = sendReplacement_'.$iframe_id.';';
-                $val .= '</script>';
-                }
-            }
-            return $val;
           }
-          
-          function ai_replace_placeholders($str_input, $enable_replace) {
-            global $aip_standalone;
-            if ($enable_replace) {
-                $str_input = str_replace('{host}', $_SERVER['HTTP_HOST'], $str_input);
-                $str_input = str_replace('{port}', $_SERVER['SERVER_PORT'], $str_input);
-                
-                if (!isset($aip_standalone)) {
-                  $str_input = str_replace('{site}', site_url(), $str_input);
-                  
-                  global $current_user;
-                  get_currentuserinfo();
-                  
-                  $str_input = str_replace('{userid}', urlencode($current_user->ID), $str_input);
-                  if ( 0 == $current_user->ID ) {
-                    $str_input = str_replace('{username}', '', $str_input);
-                    $str_input = str_replace('{useremail}', '', $str_input);
-                  } else {
-                    $str_input = str_replace('{username}', urlencode($current_user->user_login), $str_input);
-                    $str_input = str_replace('{useremail}', urlencode($current_user->user_email), $str_input); 
-                  
-                    // dynamic $propertyName = 'id'; print($phpObject->{$propertyName});
-                    if (strpos($str_input,'{userinfo') !== false) {
-                       
-                       $regex = '/{(userinfo.*?)}/';
-                       $result = preg_match_all( $regex, $str_input, $match);  
-                       if ($result) {
-                         foreach ($match[1] as $hits) {
-                           $key = substr($hits, 9);
-                           $str_input = str_replace('{'.$hits.'}', urlencode($current_user->$key), $str_input); 
-                         } 
-                       }   
-                    }
-                    if (strpos($str_input,'{usermeta') !== false) {
-                       $regex = '/{(usermeta.*?)}/';
-                       $result = preg_match_all( $regex, $str_input, $match);  
-                       if ($result) {
-                         foreach ($match[1] as $hits) {
-                           $key = substr($hits, 9);
-                           $user_last = get_user_meta( $current_user->ID, $key, true );  
-                           $str_input = str_replace('{'.$hits.'}', urlencode($current_user->$key), $str_input); 
-                         } 
-                       }   
-                    }
+          if ($resize_on_ajax_jquery == 'false' && $timeout != '') {
+            $val .=  '<script type="text/javascript">';
+            $val .= '
+
+              var send_'.$iframe_id.' = ifrm_'.$iframe_id.'.contentWindow.XMLHttpRequest.prototype.send,
+                  onReadyStateChange_'.$iframe_id.';
+
+              function sendReplacement_'.$iframe_id.'(data) {
+                  if(this.onreadystatechange) {
+                      this._onreadystatechange_'.$iframe_id.' = this.onreadystatechange;
                   }
-                   
-                  $admin_email = get_option( 'admin_email' );
-                  $str_input = str_replace('{adminemail}', urlencode($admin_email), $str_input); 
-                  
+                  this.onreadystatechange = onReadyStateChangeReplacement_'.$iframe_id.';
+                  return send_'.$iframe_id.'.apply(this, arguments);
+              }
+
+              function onReadyStateChangeReplacement_'.$iframe_id.'() {
+                  if(this.readyState == 4 ) {
+                      var retValue;
+                      if (this._onreadystatechange_'.$iframe_id.') {
+                          retValue = this._onreadystatechange_'.$iframe_id.'.apply(this, arguments);
+                      }';
+              $val .= 'local_resize_'.$iframe_id.'('.$timeout.');';
+              $val .= 'return retValue;
+                  }
+              }';
+              $val .= '  ifrm_'.$iframe_id.'.contentWindow.XMLHttpRequest.prototype.send = sendReplacement_'.$iframe_id.';';
+              $val .= '</script>';
+              }
+          }
+          return $val;
+        }
+        
+        /**
+         * Replace placeholders in the url and fill them with proper values.
+         */
+        function ai_replace_placeholders($str_input, $enable_replace) {
+          global $aip_standalone;
+
+          // wordpress does encode ' by default which does kill urls that contain this char
+          $str_input = str_replace('&#8242;', '%27', $str_input);
+          $str_input = str_replace('&#8217;', '%27', $str_input);
+
+          if ($enable_replace) {
+              $str_input = str_replace('{host}', $_SERVER['HTTP_HOST'], $str_input);
+              $str_input = str_replace('{port}', $_SERVER['SERVER_PORT'], $str_input);
+              
+              if (!isset($aip_standalone)) {
+                $str_input = str_replace('{site}', site_url(), $str_input);
+                
+                $current_user = wp_get_current_user();
+                $str_input = str_replace('{userid}', urlencode($current_user->ID), $str_input);
+                if ( 0 == $current_user->ID ) {
+                  $str_input = str_replace('{username}', '', $str_input);
+                  $str_input = str_replace('{useremail}', '', $str_input);
+                } else {
+                  $str_input = str_replace('{username}', urlencode($current_user->user_login), $str_input);
+                  $str_input = str_replace('{useremail}', urlencode($current_user->user_email), $str_input); 
+                
+                  // dynamic $propertyName = 'id'; print($phpObject->{$propertyName});
+                  if (strpos($str_input,'{userinfo') !== false) {
+                     
+                     $regex = '/{(userinfo.*?)}/';
+                     $result = preg_match_all( $regex, $str_input, $match);  
+                     if ($result) {
+                       foreach ($match[1] as $hits) {
+                         $key = substr($hits, 9);
+                         $str_input = str_replace('{'.$hits.'}', urlencode($current_user->$key), $str_input); 
+                       } 
+                     }   
+                  }
+                  if (strpos($str_input,'{usermeta') !== false) {
+                     $regex = '/{(usermeta.*?)}/';
+                     $result = preg_match_all( $regex, $str_input, $match);  
+                     if ($result) {
+                       foreach ($match[1] as $hits) {
+                         $key = substr($hits, 9);
+                         $user_last = get_user_meta( $current_user->ID, $key, true ); 
+                         $str_input = str_replace('{'.$hits.'}', urlencode($user_last), $str_input); 
+                       } 
+                     }   
+                  }
+                }
+                
+                // postmeta! https://codex.wordpress.org/Custom_Fields
+                
+                 
+                $admin_email = get_option( 'admin_email' );
+                $str_input = str_replace('{adminemail}', urlencode($admin_email), $str_input); 
+                
+                $uri = $_SERVER['REQUEST_URI'];
+                
+                if (strpos($str_input,'{urlpath') !== false) {
                   // part of the url are extracted {urlpath1} = first path element
-                  $uri = $_SERVER['REQUEST_URI'];
                   $path_elements = explode("/", trim($uri, "/")); 
                   $count = 1;
                   foreach($path_elements as $path_element){ 
@@ -1432,27 +597,39 @@ if (!class_exists('advancediFrame')) {
                       $str_input = str_replace('{urlpath-'.$count.'}', urlencode($path_element), $str_input); 
                       $count++;   
                   }
-        
-          				if (strpos($str_input,'{query') !== false) {
-          				   $regex = '/{(query.*?)}/';
-          				   $result = preg_match_all( $regex, $str_input, $match);  
-          				   if ($result) {
-          					 foreach ($match[1] as $hits) {
-          					   $key = substr($hits, 6);
-          					   $value = $this->param($key);
-          					   $str_input = str_replace('{'.$hits.'}', $value , $str_input); 
-          					 } 
-          				   }   
-          				}
-         
-                  // evaluate shortcodes for the parameter 
-                  $str_input = str_replace('{{', "[", $str_input);
-                  $str_input = str_replace('}}', "]", $str_input);
-                  $str_input = do_shortcode($str_input);
+                } 
+                
+                // the full url
+                if (strpos($str_input,'{href}') !== false) {
+                   $location = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+                   if ($_SERVER["SERVER_PORT"] != "80" && $_SERVER["SERVER_PORT"] != "443" ) {
+                      $location .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+                   } else {
+                      $location .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+                   }
+                   $str_input = str_replace('{href}', urlencode($location), $str_input); 
                 }
-            }
-            return $str_input;
-        }
+      
+                if (strpos($str_input,'{query') !== false) {
+                   $regex = '/{(query.*?)}/';
+                   $result = preg_match_all( $regex, $str_input, $match);  
+                   if ($result) {
+                     foreach ($match[1] as $hits) {
+                       $key = substr($hits, 6);
+                       $value = $this->param($key);
+                       $str_input = str_replace('{'.$hits.'}', $value , $str_input); 
+                     } 
+                   }   
+                }
+
+                // evaluate shortcodes for the parameter 
+                $str_input = str_replace('{{', "[", $str_input);
+                $str_input = str_replace('}}', "]", $str_input);
+                $str_input = do_shortcode($str_input);
+              }
+          }
+          return $str_input;
+      }
           
     }
 }
@@ -1505,11 +682,12 @@ if (isset($cons_advancediFrame)) {
     
     add_filter( 'widget_text', 'shortcode_unautop');
     add_filter( 'widget_text', 'do_shortcode');     
-    add_filter('plugin_action_links', array($cons_advancediFrame, 'ai_plugin_action_links'),10,2);       
+    add_filter('plugin_action_links', array($cons_advancediFrame, 'ai_plugin_action_links'),10,2);
 }
 
-
-// remove update functionality
+// ==============================================
+//	Setup for widget + remove update functionality
+// ==============================================
 function ai_remove_update($value) {
     if(isset( $value ) && is_object( $value ) && isset($value->response[ plugin_basename(__FILE__) ])) {
        unset($value->response[ plugin_basename(__FILE__) ]);
@@ -1517,7 +695,6 @@ function ai_remove_update($value) {
     return $value;
 }
 
-// setup for widget
 function advanced_iframe_widget_init(){
 	  register_widget('AdvancedIframe_Widget');
 }
@@ -1526,6 +703,17 @@ if (!isset($aip_standalone) && file_exists(dirname(__FILE__) . "/includes/advanc
     require_once('includes/advanced-iframe-widget.php');
     add_action('widgets_init','advanced_iframe_widget_init');
     add_filter('site_transient_update_plugins', 'ai_remove_update');
+}
+
+// ==============================================
+//	Get Plugin Version
+// ==============================================
+function advanced_iframe_plugin_version() {
+	if ( ! function_exists( 'get_plugins' ) )
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	$plugin_folder = get_plugins( '/' . plugin_basename( dirname( __FILE__ ) ) );
+	$plugin_file = basename( ( __FILE__ ) );
+	return $plugin_folder[$plugin_file]['Version'];
 }
 
 // ==============================================
@@ -1541,5 +729,27 @@ function advanced_iframe_plugin_meta_free( $links, $file ) {
   }
   return $links;
 }
-  add_filter( 'plugin_row_meta', 'advanced_iframe_plugin_meta_free', 10, 2 );
+
+function advanced_iframe_plugin_meta_pro( $links, $file ) {
+	if ( strpos( $file, '/advanced-iframe.php' ) !== false ) {
+		$iconstyle = 'style="-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;"';
+    $links = array();
+    $links = array_merge( $links, 
+        array( 'Version ' . advanced_iframe_plugin_version(), 
+               'By <a href="http://www.tinywebgallery.com">Michael Dempfle</a>',
+               '<a href="http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle">Code canyon - Advanced iFrame Pro</a>',
+               '<a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo">Demos</a>'
+        ));
+  }
+  return $links;
+}
+
+if (!isset($aip_standalone)) {
+  if ( file_exists(dirname(__FILE__) . "/includes/advanced-iframe-widget.php")) {
+    add_filter( 'plugin_row_meta', 'advanced_iframe_plugin_meta_pro', 10, 2 );
+  } else {
+    add_filter( 'plugin_row_meta', 'advanced_iframe_plugin_meta_free', 10, 2 );
+  }
+}
+
 ?>

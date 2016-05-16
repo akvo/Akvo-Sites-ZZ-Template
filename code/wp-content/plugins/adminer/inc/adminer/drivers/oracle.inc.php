@@ -80,7 +80,7 @@ if (isset($_GET["oracle"])) {
 		class Min_Result {
 			var $_result, $_offset = 1, $num_rows;
 
-			function Min_Result($result) {
+			function __construct($result) {
 				$this->_result = $result;
 			}
 
@@ -150,7 +150,7 @@ if (isset($_GET["oracle"])) {
 		return '"' . str_replace('"', '""', $idf) . '"';
 	}
 
-	function adminer_table($idf) {
+	function table($idf) {
 		return idf_escape($idf);
 	}
 
@@ -299,7 +299,7 @@ ORDER BY uc.constraint_type, uic.column_position", $connection2) as $row) {
 		foreach ($fields as $field) {
 			$val = $field[1];
 			if ($val && $field[0] != "" && idf_escape($field[0]) != $val[0]) {
-				queries("ALTER TABLE " . adminer_table($table) . " RENAME COLUMN " . idf_escape($field[0]) . " TO $val[0]");
+				queries("ALTER TABLE " . table($table) . " RENAME COLUMN " . idf_escape($field[0]) . " TO $val[0]");
 			}
 			if ($val) {
 				$alter[] = ($table != "" ? ($field[0] != "" ? "MODIFY (" : "ADD (") : "  ") . implode($val) . ($table != "" ? ")" : ""); //! error with name change only
@@ -308,11 +308,11 @@ ORDER BY uc.constraint_type, uic.column_position", $connection2) as $row) {
 			}
 		}
 		if ($table == "") {
-			return queries("CREATE TABLE " . adminer_table($name) . " (\n" . implode(",\n", $alter) . "\n)");
+			return queries("CREATE TABLE " . table($name) . " (\n" . implode(",\n", $alter) . "\n)");
 		}
-		return (!$alter || queries("ALTER TABLE " . adminer_table($table) . "\n" . implode("\n", $alter)))
-			&& (!$drop || queries("ALTER TABLE " . adminer_table($table) . " DROP (" . implode(", ", $drop) . ")"))
-			&& ($table == $name || queries("ALTER TABLE " . adminer_table($table) . " RENAME TO " . adminer_table($name)))
+		return (!$alter || queries("ALTER TABLE " . table($table) . "\n" . implode("\n", $alter)))
+			&& (!$drop || queries("ALTER TABLE " . table($table) . " DROP (" . implode(", ", $drop) . ")"))
+			&& ($table == $name || queries("ALTER TABLE " . table($table) . " RENAME TO " . table($name)))
 		;
 	}
 

@@ -17,7 +17,7 @@ if ($_COOKIE["adminer_permanent"]) {
 
 function add_invalid_login() {
 	global $adminer;
-	$filename = get_temp_dir() . "/adminer.invalid";
+	$filename = adminer_get_temp_dir() . "/adminer.invalid";
 	$fp = @fopen($filename, "r+"); // @ - may not exist
 	if (!$fp) { // c+ is available since PHP 5.2.6
 		$fp = @fopen($filename, "w"); // @ - may not be writable
@@ -50,7 +50,7 @@ function add_invalid_login() {
 
 $auth = $_POST["auth"];
 if ($auth) {
-	$invalids = unserialize(@file_get_contents(get_temp_dir() . "/adminer.invalid")); // @ - may not exist
+	$invalids = unserialize(@file_get_contents(adminer_get_temp_dir() . "/adminer.invalid")); // @ - may not exist
 	$invalid = $invalids[$adminer->bruteForceKey()];
 	$next_attempt = ($invalid[1] > 30 ? $invalid[0] - time() : 0); // allow 30 invalid attempts
 	if ($next_attempt > 0) { //! do the same with permanent login
@@ -78,7 +78,7 @@ if ($auth) {
 	) {
 		adminer_redirect(auth_url($vendor, $server, $username, $db));
 	}
-
+	
 } elseif ($_POST["logout"]) {
 	if ($has_token && !verify_token()) {
 		page_header(lang('Logout'), lang('Invalid CSRF token. Send the form again.'));
@@ -91,7 +91,7 @@ if ($auth) {
 		unset_permanent();
 		adminer_redirect(substr(preg_replace('~\b(username|db|ns)=[^&]*&~', '', ME), 0, -1), lang('Logout successful.'));
 	}
-
+	
 } elseif ($permanent && !$_SESSION["pwds"]) {
 	session_regenerate_id();
 	$private = $adminer->permanentLogin();
@@ -131,7 +131,7 @@ function auth_error($error) {
 			$password = get_password();
 			if ($password !== null) {
 				if ($password === false) {
-					$error .= '<br>' . lang('Master password expired. <a href="http://www.adminer.org/en/extension/" target="_blank">Implement</a> %s method to make it permanent.', '<code>permanentLogin()</code>');
+					$error .= '<br>' . lang('Master password expired. <a href="https://www.adminer.org/en/extension/" target="_blank">Implement</a> %s method to make it permanent.', '<code>permanentLogin()</code>');
 				}
 				set_password(DRIVER, SERVER, $_GET["username"], null);
 			}
@@ -194,7 +194,7 @@ if ($_POST) {
 			: lang('Invalid CSRF token. Send the form again.') . ' ' . lang('If you did not send this request from Adminer then close this page.')
 		);
 	}
-
+	
 } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
 	// posted form with no data means that post_max_size exceeded because Adminer always sends token at least
 	$error = lang('Too big POST data. Reduce the data or increase the %s configuration directive.', "'post_max_size'");

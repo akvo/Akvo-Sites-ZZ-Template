@@ -10,7 +10,7 @@
       <p>
      Pro users can now specify browser specific iframes. This is imporant especially for the "Show only part of the iframe" feature where browser differences of a few pixels can matter. But you can use this for other things as well because mobile, iphone, ipad can also be detected.
       </p>
-     <?php if ($evanto) {  ?>
+     <?php if ($evanto || $isDemo) {  ?>
     <p>
     <a href="#" onclick="jQuery('#browser-help').show(); return false;" > <?php _e('Show me how to configure the browser detection in advanced iframe pro.') ?></a>
     </p>
@@ -54,7 +54,7 @@
            <li>ipod - Selects all versions of ipod.</li>
            <li>iphone - Selects all versions of iphone.</li>
            <li>mobile - Selects all mobile devices.</li>
-           <li>tablets - Selects all tablet devices.</li>
+           <li>tablet - Selects all tablet devices.</li>
            <li>android - Selects all android devices.</li> 
            <li>androidtablet - Selects all android tablet devices.</li> 
            <li>desktop - Selects all desktop browsers.</li> 
@@ -64,7 +64,7 @@
 
       <h3>Credit and update</h3>
       <p>
-        Advanced iFrame Pro uses an integrated browser detection which is based on the wordpress plugin php-browser-detection 2.2.3 and the browser detection file (6005, 7 Jul 2015) from browscap.org.
+        Advanced iFrame Pro uses an integrated browser detection which is based on the wordpress plugin php-browser-detection 2.2.3 and the browser detection file (6011, 24 December 2015) from browscap.org.
       </p>
       <p>
          You can get an updated version of the browsercap.ini lite file here: http://browscap.org/<br />Please use the light version as it conains all settings for the provided settings and the full version is really big! 

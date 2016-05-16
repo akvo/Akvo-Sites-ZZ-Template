@@ -22,7 +22,7 @@ if ($_POST && !$error && !isset($_GET["select"])) {
 	$query_where = "\nWHERE $where";
 
 	if (isset($_POST["delete"])) {
-		queries_adminer_redirect(
+		queries_redirect(
 			$location,
 			lang('Item has been deleted.'),
 			$driver->delete($TABLE, $query_where, !$unique_array)
@@ -41,12 +41,12 @@ if ($_POST && !$error && !isset($_GET["select"])) {
 			if (!$set) {
 				adminer_redirect($location);
 			}
-			queries_adminer_redirect(
+			queries_redirect(
 				$location,
 				lang('Item has been updated.'),
 				$driver->update($TABLE, $set, $query_where, !$unique_array)
 			);
-			if (is_adminer_ajax()) {
+			if (js_adminer_ajax()) {
 				page_headers();
 				page_messages($error);
 				exit;
@@ -54,7 +54,7 @@ if ($_POST && !$error && !isset($_GET["select"])) {
 		} else {
 			$result = $driver->insert($TABLE, $set);
 			$last_id = ($result ? last_id() : 0);
-			queries_adminer_redirect($location, lang('Item%s has been inserted.', ($last_id ? " $last_id" : "")), $result); //! link
+			queries_redirect($location, lang('Item%s has been inserted.', ($last_id ? " $last_id" : "")), $result); //! link
 		}
 	}
 }

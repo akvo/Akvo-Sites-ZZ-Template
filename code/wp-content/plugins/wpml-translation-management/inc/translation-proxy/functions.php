@@ -66,6 +66,7 @@ function icl_handle_error( $source ) {
 		}
 		ICL_AdminNotifier::displayInstantMessage( $message, 'error' );
 	}
+	return $error;
 }
 
 function translation_service_details( $service, $show_project = false ) {
@@ -103,14 +104,4 @@ if ( !function_exists( 'object_to_array' ) ) {
 
 		return $new;
 	}
-}
-
-function icl_handleError($errno, $errstr, $errfile, $errline, array $errcontext)
-{
-    // error was suppressed with the @-operator
-    if (0 === error_reporting()) {
-        return false;
-    }
-
-    throw new TranslationProxy_Api_Error($errstr, 0, $errno, $errfile, $errline);
 }

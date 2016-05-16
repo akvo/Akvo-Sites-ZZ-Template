@@ -11,150 +11,32 @@ class WPML_TM_Dashboard_Document_Row {
     private $note_icon;
     private $post_statuses;
 
-    public function __construct(
-        $doc_data,
-        $translation_filter,
-        $post_types,
-        $post_statuses,
-        $active_languages,
-        $selected
-    ) {
-        $this->data               = $doc_data;
-        $this->post_statuses      = $post_statuses;
-        $this->selected           = $selected;
-        $this->post_types         = $post_types;
-        $this->active_languages   = $active_languages;
-        $this->translation_filter = $translation_filter;
-    }
+	public function __construct( $doc_data, $translation_filter, $post_types, $post_statuses, $active_languages, $selected, &$sitepress, &$wpdb ) {
+		$this->data               = $doc_data;
+		$this->post_statuses      = $post_statuses;
+		$this->selected           = $selected;
+		$this->post_types         = $post_types;
+		$this->active_languages   = $active_languages;
+		$this->translation_filter = $translation_filter;
+		$this->sitepress          = &$sitepress;
+		$this->wpdb               = &$wpdb;
+	}
 
-    public function get_word_count() {
-        $current_document = $this->data;
-        $count            = $this->estimate_word_count();
+	public function get_word_count() {
+		$current_document = $this->data;
 
-        if ( !$this->is_external_type() ) {
-            $count += $this->estimate_custom_field_word_count();
-            $estimate_words_count_filter_tag = 'wpml_tm_post';
-        } else {
-            $estimate_words_count_filter_tag = 'wpml_tm_' . strtolower( get_class( $current_document ) );
-        }
-        $estimate_words_count_filter_tag .= '_estimate_word_count';
-        $count = apply_filters(
-            $estimate_words_count_filter_tag,
-            $count,
-            $current_document
-        );
+		$count     = 0;
+		if ( ! $this->is_external_type() ) {
+			$wpml_post = new WPML_TM_Post( $current_document->ID, $this->sitepress, $this->wpdb );
+			$count += $wpml_post->get_words_count();
+		}
+		$count = apply_filters( 'wpml_tm_estimated_words_count', $count, $current_document );
 
-        return $count;
-    }
+		return $count;
+	}
 
     public function get_title() {
-
-        return $this->data->title;
-    }
-
-    private function exclude_shortcodes_in_words_count() {
-        /**
-         * This is for future use.
-         * To not count shortcodes words, define a constant as such:
-         * define('EXCLUDE_SHORTCODES_IN_WORDS_COUNT', true); in wp-config.php
-         * @todo: Next step: GUI support, we can expand it to check if we have sitepress->get_setting with info about this
-         * @link https://onthegosystems.myjetbrains.com/youtrack/issue/wpmltm-239 YT ticket where it was introduced
-         */
-        if ( defined( 'EXCLUDE_SHORTCODES_IN_WORDS_COUNT' ) ) {
-            return EXCLUDE_SHORTCODES_IN_WORDS_COUNT;
-        }
-        return false;
-    }
-
-    private function estimate_word_count() {
-        global $asian_languages;
-        $data  = $this->data;
-        $words = 0;
-        if ( isset( $data->language_code ) ) {
-            $lang_code = $data->language_code;
-            if ( isset( $data->title ) ) {
-                if ( $asian_languages && in_array( $lang_code, $asian_languages ) ) {
-                    $words += strlen( strip_tags( $data->title ) ) / ICL_ASIAN_LANGUAGE_CHAR_SIZE;
-                } else {
-                    $words += count( preg_split( '/[\s\/]+/', $data->title, 0, PREG_SPLIT_NO_EMPTY ) );
-                }
-            }
-            $post_obj     = get_post( $data->ID );
-            $post_content = $post_obj ? $post_obj->post_content : "";
-            $post_content = strip_tags( $post_content );
-            if ( $this->exclude_shortcodes_in_words_count() ) {
-                $post_content = strip_shortcodes( $post_content );
-            }
-            if ( $asian_languages && in_array( $lang_code, $asian_languages ) ) {
-                $words += strlen( $post_content ) / ICL_ASIAN_LANGUAGE_CHAR_SIZE;
-            } else {
-                $words += count( preg_split( '/[\s\/]+/', $post_content, 0, PREG_SPLIT_NO_EMPTY ) );
-            }
-
-        }
-
-        return $words;
-    }
-
-    private function estimate_custom_field_word_count() {
-        global $asian_languages, $sitepress_settings;
-
-        if ( !isset( $this->data->language_code ) || !isset( $this->data->ID ) || $this->is_external_type() ) {
-            return 0;
-        }
-
-        $words     = 0;
-        $post_id   = $this->data->ID;
-        $lang_code = $this->data->language_code;
-
-        if ( !empty( $sitepress_settings[ 'translation-management' ][ 'custom_fields_translation' ] ) && is_array(
-                $sitepress_settings[ 'translation-management' ][ 'custom_fields_translation' ]
-            )
-        ) {
-            $custom_fields = array();
-            foreach ( $sitepress_settings[ 'translation-management' ][ 'custom_fields_translation' ] as $cf => $op ) {
-                if ( $op == 2 ) {
-                    $custom_fields[ ] = $cf;
-                }
-            }
-            foreach ( $custom_fields as $cf ) {
-                $custom_fields_value = get_post_meta( $post_id, $cf );
-                if ( $custom_fields_value && is_scalar(
-                        $custom_fields_value
-                    )
-                ) {  // only support scalar values fo rnow
-                    if ( in_array( $lang_code, $asian_languages ) ) {
-                        $words += strlen( strip_tags( $custom_fields_value ) ) / 6;
-                    } else {
-                        $words += count(
-                            preg_split( '/[\s\/]+/', strip_tags( $custom_fields_value ), 0, PREG_SPLIT_NO_EMPTY )
-                        );
-                    }
-                } else {
-                    foreach ( $custom_fields_value as $custom_fields_value_item ) {
-                        if ( $custom_fields_value_item && is_scalar(
-                                $custom_fields_value_item
-                            )
-                        ) { // only support scalar values fo rnow
-                            if ( in_array( $lang_code, $asian_languages ) ) {
-                                $words += strlen( strip_tags( $custom_fields_value_item ) ) / 6;
-                            } else {
-                                $words += count(
-                                    preg_split(
-                                        '/[\s\/]+/',
-                                        strip_tags( $custom_fields_value_item ),
-                                        0,
-                                        PREG_SPLIT_NO_EMPTY
-                                    )
-                                );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return (int) $words;
+        return $this->data->title ? $this->data->title : __('(missing title)', 'wpml-translation-management');
     }
 
     private function is_external_type() {
@@ -198,8 +80,9 @@ class WPML_TM_Dashboard_Document_Row {
 		$post_view_link = '';
 		$post_edit_link = '';
 		if ( ! $this->is_external_type() ) {
-			$post_view_link = TranslationManagement::tm_post_link( $current_document->ID, __( 'View', 'wpml-translation-management' ), true );
-			$post_edit_link = TranslationManagement::tm_post_link( $current_document->ID, __( 'Edit', 'wpml-translation-management' ), true, true, true, true );
+			$post_link_factory = new WPML_TM_Post_Link_Factory($this->sitepress);
+			$post_view_link = $post_link_factory->view_link_anchor( $current_document->ID, __( 'View', 'wpml-translation-management' ));
+			$post_edit_link = $post_link_factory->edit_link_anchor( $current_document->ID, __( 'Edit', 'wpml-translation-management' ));
 		}
 
 		$post_view_link = apply_filters( 'wpml_document_view_item_link', $post_view_link, __( 'View', 'wpml-translation-management' ), $current_document, $element_type, $this->get_type());

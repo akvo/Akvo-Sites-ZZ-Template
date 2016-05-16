@@ -81,7 +81,7 @@ if (isset($_GET["firebird"])) {
 		class Min_Result {
 			var $num_rows, $_result, $_offset = 0;
 
-			function Min_Result($result) {
+			function __construct($result) {
 				$this->_result = $result;
 				// $this->num_rows = ibase_num_rows($result);
 			}
@@ -122,7 +122,7 @@ if (isset($_GET["firebird"])) {
 		return '"' . str_replace('"', '""', $idf) . '"';
 	}
 
-	function adminer_table($idf) {
+	function table($idf) {
 		return idf_escape($idf);
 	}
 
