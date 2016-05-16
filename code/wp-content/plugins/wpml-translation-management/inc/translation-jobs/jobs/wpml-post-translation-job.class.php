@@ -10,9 +10,18 @@ class WPML_Post_Translation_Job extends WPML_Element_Translation_Job {
 	}
 
 	public function get_url( $original = false ) {
+		$url        = null;
+		$element_id = null;
 
-		return $original ? get_permalink( $this->get_original_element_id() )
-				:  get_edit_post_link( $this->get_resultant_element_id() );
+		if ( $original ) {
+			$element_id = $this->get_original_element_id();
+			$url        = get_permalink( $element_id );
+		} else {
+			$element_id = $this->get_resultant_element_id();
+			$url        = get_edit_post_link( $element_id );
+		}
+
+		return apply_filters( 'wpml_element_translation_job_url', $url, $original, $element_id, $this->get_original_document() );
 	}
 
 	function update_fields_from_post() {

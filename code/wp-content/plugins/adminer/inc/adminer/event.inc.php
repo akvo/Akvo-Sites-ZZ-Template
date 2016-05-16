@@ -6,7 +6,7 @@ $row = $_POST;
 
 if ($_POST && !$error) {
 	if ($_POST["drop"]) {
-		query_adminer_redirect("DROP EVENT " . idf_escape($EVENT), substr(ME, 0, -1), lang('Event has been dropped.'));
+		query_redirect("DROP EVENT " . idf_escape($EVENT), substr(ME, 0, -1), lang('Event has been dropped.'));
 	} elseif (in_array($row["INTERVAL_FIELD"], $intervals) && isset($statuses[$row["STATUS"]])) {
 		$schedule = "\nON SCHEDULE " . ($row["INTERVAL_VALUE"]
 			? "EVERY " . q($row["INTERVAL_VALUE"]) . " $row[INTERVAL_FIELD]"
@@ -15,8 +15,8 @@ if ($_POST && !$error) {
 			: "AT " . q($row["STARTS"])
 			) . " ON COMPLETION" . ($row["ON_COMPLETION"] ? "" : " NOT") . " PRESERVE"
 		;
-
-		queries_adminer_redirect(substr(ME, 0, -1), ($EVENT != "" ? lang('Event has been altered.') : lang('Event has been created.')), queries(($EVENT != ""
+		
+		queries_redirect(substr(ME, 0, -1), ($EVENT != "" ? lang('Event has been altered.') : lang('Event has been created.')), queries(($EVENT != ""
 			? "ALTER EVENT " . idf_escape($EVENT) . $schedule
 			. ($EVENT != $row["EVENT_NAME"] ? "\nRENAME TO " . idf_escape($row["EVENT_NAME"]) : "")
 			: "CREATE EVENT " . idf_escape($row["EVENT_NAME"]) . $schedule

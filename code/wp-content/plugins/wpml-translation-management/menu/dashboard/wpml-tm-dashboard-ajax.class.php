@@ -10,7 +10,7 @@ class WPML_Dashboard_Ajax {
 	public function enqueue_js() {
 		wp_register_script (
 			'wpml-tm-dashboard-scripts',
-			WPML_TM_URL . '/res/js/wpml-tm-dashboard.js',
+			WPML_TM_URL . '/res/js/tm-dashboard/wpml-tm-dashboard.js',
 			array( 'jquery', 'backbone' ),
 			WPML_TM_VERSION
 		);
@@ -44,28 +44,24 @@ class WPML_Dashboard_Ajax {
 	}
 
 	public function wpml_duplicate_dashboard() {
-		if ( !wpml_is_action_authenticated ( 'wpml_duplicate_dashboard' ) ) {
-			wp_send_json_error ( 'Wrong Nonce' );
+		if ( ! wpml_is_action_authenticated( 'wpml_duplicate_dashboard' ) ) {
+			wp_send_json_error( 'Wrong Nonce' );
 		}
 
 		global $sitepress;
 
-		$post_ids  = filter_input ( INPUT_POST, 'duplicate_post_ids' );
-		$languages = filter_input ( INPUT_POST, 'duplicate_target_languages' );
-
-		$post_ids  = $post_ids !== null ? explode ( ',', $post_ids ) : array();
-		$languages = $languages !== null ? explode ( ',', $languages ) : array();
+		$post_ids  = filter_var( $_POST['duplicate_post_ids'], FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		$languages = filter_var( $_POST['duplicate_target_languages'], FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		$res       = array();
-
 		foreach ( $post_ids as $pid ) {
 			foreach ( $languages as $lang_code ) {
-				if ( $sitepress->make_duplicate ( $pid, $lang_code ) !== false ) {
+				if ( $sitepress->make_duplicate( $pid, $lang_code ) !== false ) {
 					$res[ $lang_code ] = $pid;
 				}
 			}
 		}
 
-		wp_send_json_success ( $res );
+		wp_send_json_success( $res );
 	}
 
 	public function wpml_need_sync_message() {

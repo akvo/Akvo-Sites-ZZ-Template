@@ -1,6 +1,6 @@
 <script type="text/html" id="table-listing-filter">
 	<?php
-	global $iclTranslationManagement, $sitepress;
+	global $iclTranslationManagement, $sitepress, $wpdb;
 
 	$translation_services = array( 'local', TranslationProxy::get_current_service_id() );
 
@@ -11,7 +11,9 @@
 		'services'     => $translation_services,
 		'add_label'    => true,
 	);
-	TranslationManagement::translators_dropdown( $args );
+	$blog_translators     = wpml_tm_load_blog_translators();
+	$translators_dropdown = new WPML_TM_Translators_Dropdown( $blog_translators );
+	$translators_dropdown->render( $args );
 	?>
 	&nbsp;	<label for="filter-job-status">
 		<?php _e( 'Status', 'wpml-translation-management' ) ?></label>&nbsp;		<select id="filter-job-status" name="filter[status]">

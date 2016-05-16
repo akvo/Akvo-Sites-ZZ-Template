@@ -228,7 +228,7 @@ class WPML_TM_Dashboard_Display_Filter {
 
     private function display_advanced_filters() {
         ?>
-        <tr id="icl_dashboard_advanced_filters" valign="top">
+        <tr id="icl_dashboard_advanced_filters" class="wpml-tm-dashboard-filters" valign="top">
             <td>
                 <strong><?php echo __( 'Filters:', 'wpml-translation-management' ) ?></strong><br/>
                 <fieldset>
@@ -257,8 +257,8 @@ class WPML_TM_Dashboard_Display_Filter {
                 <?php // filters end */ ?>
 
             </td>
-            <td align="right">
-                <?php echo TranslationProxy::get_service_promo();; ?>
+            <td class="wpml-tm-dashboard-promo">
+							<?php do_action('wpml_tm_dashboard_promo'); ?>
             </td>
         </tr>
     <?php

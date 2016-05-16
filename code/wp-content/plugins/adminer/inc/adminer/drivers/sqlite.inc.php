@@ -11,7 +11,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			class Min_SQLite {
 				var $extension = "SQLite3", $server_info, $affected_rows, $errno, $error, $_link;
 
-				function Min_SQLite($filename) {
+				function __construct($filename) {
 					$this->_link = new SQLite3($filename);
 					$version = $this->_link->version();
 					$this->server_info = $version["versionString"];
@@ -55,7 +55,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			class Min_Result {
 				var $_result, $_offset = 0, $num_rows;
 
-				function Min_Result($result) {
+				function __construct($result) {
 					$this->_result = $result;
 				}
 
@@ -87,7 +87,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			class Min_SQLite {
 				var $extension = "SQLite", $server_info, $affected_rows, $error, $_link;
 
-				function Min_SQLite($filename) {
+				function __construct($filename) {
 					$this->server_info = sqlite_libversion();
 					$this->_link = new SQLiteDatabase($filename);
 				}
@@ -127,7 +127,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			class Min_Result {
 				var $_result, $_offset = 0, $num_rows;
 
-				function Min_Result($result) {
+				function __construct($result) {
 					$this->_result = $result;
 					if (method_exists($result, 'numRows')) { // not available in unbuffered query
 						$this->num_rows = $result->numRows();
@@ -172,7 +172,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 		class Min_SQLite extends Min_PDO {
 			var $extension = "PDO_SQLite";
 
-			function Min_SQLite($filename) {
+			function __construct($filename) {
 				$this->dsn(DRIVER . ":$filename", "", "");
 			}
 		}
@@ -182,13 +182,13 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 	if (class_exists("Min_SQLite")) {
 		class Min_DB extends Min_SQLite {
 
-			function Min_DB() {
-				$this->Min_SQLite(":memory:");
+			function __construct() {
+				parent::__construct(":memory:");
 			}
 
 			function select_db($filename) {
 				if (is_readable($filename) && $this->query("ATTACH " . $this->quote(preg_match("~(^[/\\\\]|:)~", $filename) ? $filename : dirname($_SERVER["SCRIPT_FILENAME"]) . "/$filename") . " AS a")) { // is_readable - SQLite 3
-					$this->Min_SQLite($filename);
+					parent::__construct($filename);
 					return true;
 				}
 				return false;
@@ -213,7 +213,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			foreach ($rows as $set) {
 				$values[] = "(" . implode(", ", $set) . ")";
 			}
-			return queries("REPLACE INTO " . adminer_table($table) . " (" . implode(", ", array_keys(reset($rows))) . ") VALUES\n" . implode(",\n", $values));
+			return queries("REPLACE INTO " . table($table) . " (" . implode(", ", array_keys(reset($rows))) . ") VALUES\n" . implode(",\n", $values));
 		}
 
 	}
@@ -224,7 +224,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 		return '"' . str_replace('"', '""', $idf) . '"';
 	}
 
-	function adminer_table($idf) {
+	function table($idf) {
 		return idf_escape($idf);
 	}
 
@@ -294,7 +294,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 		global $connection;
 		$return = array();
 		$primary = "";
-		foreach (get_rows("PRAGMA table_info(" . adminer_table($table) . ")") as $row) {
+		foreach (get_rows("PRAGMA table_info(" . table($table) . ")") as $row) {
 			$name = $row["name"];
 			$type = strtolower($row["type"]);
 			$default = $row["dflt_value"];
@@ -350,7 +350,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			}
 		}
 		$sqls = get_key_vals("SELECT name, sql FROM sqlite_master WHERE type = 'index' AND tbl_name = " . q($table), $connection2);
-		foreach (get_rows("PRAGMA index_list(" . adminer_table($table) . ")", $connection2) as $row) {
+		foreach (get_rows("PRAGMA index_list(" . table($table) . ")", $connection2) as $row) {
 			$name = $row["name"];
 			$index = array("type" => ($row["unique"] ? "UNIQUE" : "INDEX"));
 			$index["lengths"] = array();
@@ -376,7 +376,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 
 	function foreign_keys($table) {
 		$return = array();
-		foreach (get_rows("PRAGMA foreign_key_list(" . adminer_table($table) . ")") as $row) {
+		foreach (get_rows("PRAGMA foreign_key_list(" . table($table) . ")") as $row) {
 			$foreign_key = &$return[$row["id"]];
 			//! idf_unescape in SQLite2
 			if (!$foreign_key) {
@@ -440,7 +440,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 
 	function drop_databases($databases) {
 		global $connection;
-		$connection->Min_SQLite(":memory:"); // to unlock file, doesn't work in PDO on Windows
+		$connection->__construct(":memory:"); // to unlock file, doesn't work in PDO on Windows
 		foreach ($databases as $db) {
 			if (!@unlink($db)) {
 				$connection->error = lang('File exists.');
@@ -455,7 +455,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 		if (!check_sqlite_name($name)) {
 			return false;
 		}
-		$connection->Min_SQLite(":memory:");
+		$connection->__construct(":memory:");
 		$connection->error = lang('File exists.');
 		return @rename(DB, $name);
 	}
@@ -484,11 +484,11 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 		}
 		if (!$use_all_fields) {
 			foreach ($alter as $val) {
-				if (!queries("ALTER TABLE " . adminer_table($table) . " $val")) {
+				if (!queries("ALTER TABLE " . table($table) . " $val")) {
 					return false;
 				}
 			}
-			if ($table != $name && !queries("ALTER TABLE " . adminer_table($table) . " RENAME TO " . adminer_table($name))) {
+			if ($table != $name && !queries("ALTER TABLE " . table($table) . " RENAME TO " . table($name))) {
 				return false;
 			}
 		} elseif (!recreate_table($table, $name, $alter, $originals, $foreign)) {
@@ -558,23 +558,23 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			$fields[$key] = "  " . implode($field);
 		}
 		$fields = array_merge($fields, array_filter($foreign));
-		if (!queries("CREATE TABLE " . adminer_table($table != "" ? "adminer_$name" : $name) . " (\n" . implode(",\n", $fields) . "\n)")) {
+		if (!queries("CREATE TABLE " . table($table != "" ? "adminer_$name" : $name) . " (\n" . implode(",\n", $fields) . "\n)")) {
 			// implicit ROLLBACK to not overwrite $connection->error
 			return false;
 		}
 		if ($table != "") {
-			if ($originals && !queries("INSERT INTO " . adminer_table("adminer_$name") . " (" . implode(", ", $originals) . ") SELECT " . implode(", ", array_map('idf_escape', array_keys($originals))) . " FROM " . adminer_table($table))) {
+			if ($originals && !queries("INSERT INTO " . table("adminer_$name") . " (" . implode(", ", $originals) . ") SELECT " . implode(", ", array_map('idf_escape', array_keys($originals))) . " FROM " . table($table))) {
 				return false;
 			}
 			$triggers = array();
 			foreach (triggers($table) as $trigger_name => $timing_event) {
 				$trigger = trigger($trigger_name);
-				$triggers[] = "CREATE TRIGGER " . idf_escape($trigger_name) . " " . implode(" ", $timing_event) . " ON " . adminer_table($name) . "\n$trigger[Statement]";
+				$triggers[] = "CREATE TRIGGER " . idf_escape($trigger_name) . " " . implode(" ", $timing_event) . " ON " . table($name) . "\n$trigger[Statement]";
 			}
-			if (!queries("DROP TABLE " . adminer_table($table))) { // drop before creating indexes and triggers to allow using old names
+			if (!queries("DROP TABLE " . table($table))) { // drop before creating indexes and triggers to allow using old names
 				return false;
 			}
-			queries("ALTER TABLE " . adminer_table("adminer_$name") . " RENAME TO " . adminer_table($name));
+			queries("ALTER TABLE " . table("adminer_$name") . " RENAME TO " . table($name));
 			if (!alter_indexes($name, $indexes)) {
 				return false;
 			}
@@ -591,7 +591,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 	function index_sql($table, $type, $name, $columns) {
 		return "CREATE $type " . ($type != "INDEX" ? "INDEX " : "")
 			. idf_escape($name != "" ? $name : uniqid($table . "_"))
-			. " ON " . adminer_table($table)
+			. " ON " . table($table)
 			. " $columns"
 		;
 	}
@@ -726,7 +726,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 	}
 
 	function truncate_sql($table) {
-		return "DELETE FROM " . adminer_table($table);
+		return "DELETE FROM " . table($table);
 	}
 
 	function use_sql($database) {

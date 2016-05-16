@@ -19,15 +19,15 @@ if ($_POST && !$error) {
 	}
 
 	if (!$_POST["drop"] && $TABLE == $name && $jush != "sqlite" && $type != "MATERIALIZED VIEW") {
-		query_adminer_redirect(($jush == "mssql" ? "ALTER" : "CREATE OR REPLACE") . " VIEW " . adminer_table($name) . $as, $location, $message);
+		query_redirect(($jush == "mssql" ? "ALTER" : "CREATE OR REPLACE") . " VIEW " . table($name) . $as, $location, $message);
 	} else {
 		$temp_name = $name . "_adminer_" . uniqid();
 		drop_create(
-			"DROP $type " . adminer_table($TABLE),
-			"CREATE $type " . adminer_table($name) . $as,
-			"DROP $type " . adminer_table($name),
-			"CREATE $type " . adminer_table($temp_name) . $as,
-			"DROP $type " . adminer_table($temp_name),
+			"DROP $type " . table($TABLE),
+			"CREATE $type " . table($name) . $as,
+			"DROP $type " . table($name),
+			"CREATE $type " . table($temp_name) . $as,
+			"DROP $type " . table($temp_name),
 			($_POST["drop"] ? substr(ME, 0, -1) : $location),
 			lang('View has been dropped.'),
 			$message,

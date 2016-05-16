@@ -12,6 +12,11 @@ class WPML_TM_Update_Post_Translation_Data_Action extends WPML_TM_Update_Transla
 			                                                              $lang );
 			if ( (bool) $translated_post_id === true ) {
 				$package_trans       = $this->package_helper->create_translation_package( $translated_post_id );
+				
+				list( $prev_job_id ) = $this->get_prev_job_data( $rid );
+
+				$prev_job = $this->get_translation_job( $prev_job_id );
+				
 				$translated_contents = $package_trans['contents'];
 				foreach ( $package['contents'] as $field_name => $field ) {
 					if ( array_key_exists( 'translate', $field )
@@ -19,12 +24,35 @@ class WPML_TM_Update_Post_Translation_Data_Action extends WPML_TM_Update_Transla
 					     && array_key_exists( $field_name, $translated_contents )
 					     && array_key_exists( 'data', $translated_contents[ $field_name ] )
 					) {
-						$prev_translation[ $field_name ] = $translated_contents[ $field_name ]['data'];
+						$element = $this->get_previous_element( $prev_job, $field_name );
+						if ( $element ) {
+							$prev_translation[ $field_name ] = new WPML_TM_Translated_Field( $field_name,
+																							  $element->field_data,
+																							  $translated_contents[ $field_name ]['data'],
+																							  $element->field_finished );
+						} else {
+							$prev_translation[ $field_name ] = new WPML_TM_Translated_Field( $field_name,
+																							  '',
+																							  $translated_contents[ $field_name ]['data'],
+																							  0 );
+						}
 					}
 				}
 			}
 		}
 
 		return $prev_translation;
+	}
+	
+	private function get_previous_element( $prev_job, $field_name ) {
+		if ( $prev_job ) {
+			foreach ( $prev_job->elements as $element ) {
+				if ( $element->field_type == $field_name ) {
+					return $element;
+				}
+			}
+		}
+		
+		return null;
 	}
 }

@@ -95,25 +95,6 @@ input.icl_multiple {
   background-color: #FFC0CB;
 }
 
-#icl_dashboard_advanced_filters fieldset {
-  display: table;
-  border-spacing: 4px;
-  border-collapse: separate;
-}
-#icl_dashboard_advanced_filters fieldset .fieldset_row {
-  display: table-row;
-}
-#icl_dashboard_advanced_filters fieldset label {
-  display: table-cell;
-  padding-right: 2em;
-  height: 100%;
-  vertical-align: top;
-}
-#icl_dashboard_advanced_filters fieldset input, #icl_dashboard_advanced_filters fieldset select {
-  display: table-cell;
-  vertical-align: top;
-}
-
 #icl_tm_languages table {
   border: none;
 }

@@ -2,9 +2,9 @@
 Contributors: dfactory
 Donate link: http://www.dfactory.eu/
 Tags: widget, widgets, widget-only, cms, conditional tags, conditional, widget logic, widget context, restrict, manage, management, capability, capabilities, sidebar, sidebars, user, permission, permissions
-Requires at least: 3.8
-Tested up to: 4.1.2
-Stable tag: 1.2.9
+Requires at least: 3.0
+Tested up to: 4.5.2
+Stable tag: 1.3.0
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
 
@@ -58,6 +58,12 @@ No questions yet.
 2. screenshot-2.png
 
 == Changelog ==
+
+= 1.3.0 =
+* New: Customizer support
+* New: Dedicated options page
+* Tweak: Switched from Chosen.js to Select2 script
+* Tweak: General code cleanup
 
 = 1.2.9 =
 * New: Italian translation by [Davide Pante](http://sododesign.it/)
@@ -129,5 +135,6 @@ Initial release
 
 == Upgrade Notice ==
 
-= 1.2.9 =
-* New: Italian translation by [Davide Pante](http://sododesign.it/)
+= 1.3.0 =
+* New: Customizer support
+* New: Dedicated options page

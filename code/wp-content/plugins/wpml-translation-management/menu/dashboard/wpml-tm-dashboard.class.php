@@ -1,17 +1,29 @@
 <?php
 
-class WPML_TM_Dashboard {
+class WPML_TM_Dashboard extends WPML_WPDB_User {
 
-    /** @var wpdb $wpdb */
-    private $wpdb;
-    private $active_languages;
-    private $translatable_types;
+	/**
+	 * @var array
+	 */
+	private $active_languages;
+	/**
+	 * @var string[]
+	 */
+	private $translatable_types;
 
-    public function __construct( $active_languages, $translatable_types, $wpdb ) {
-        $this->active_languages   = array_keys( $active_languages );
-        $this->translatable_types = $translatable_types;
-        $this->wpdb               = $wpdb;
-    }
+	/**
+	 * WPML_TM_Dashboard constructor.
+	 *
+	 * @param wpdb     $wpdb
+	 * @param array[]  $active_languages
+	 * @param string[] $translatable_types
+	 */
+	public function __construct( &$wpdb, $active_languages, $translatable_types ) {
+		parent::__construct( $wpdb );
+		$this->active_languages   = array_keys( $active_languages );
+		$this->translatable_types = $translatable_types;
+		$this->wpdb               = $wpdb;
+	}
 
     /**
      * get documents
@@ -31,7 +43,7 @@ class WPML_TM_Dashboard {
         $sort_order  = false;
         $status      = false;
         $type        = array();
-        $limit_no = 0;
+        $limit_no    = 0;
 
         extract( $args );
 
@@ -75,7 +87,7 @@ class WPML_TM_Dashboard {
         }
 
         $sql = $this->add_status_where( $sql, $status );
-        $sql = $this->add_tstatus_where( $sql, $tstatus, $to_lang );
+        $sql = $this->add_tstatus_where( $sql, $tstatus );
         if ( count( $type ) === 1 ) {
             $sql = $this->add_element_type_where( $sql, array_pop( $type ) );
         }
@@ -137,17 +149,13 @@ class WPML_TM_Dashboard {
     }
 
     private function add_status_where( $sql, $status ) {
-        $wpdb = $this->wpdb;
 
-        $status_snippet = $status ? " = %s " : " <> %s ";
-        $status = $status ? $status : 'auto-draft';
-        $sql .= $this->wpdb->prepare(
-            " AND (i.element_type NOT LIKE 'post%%' OR (SELECT COUNT(ID)
-                                                        FROM {$wpdb->posts}
+        $status_snippet = $status ? $this->wpdb->prepare( " = %s ", $status ) : " NOT IN ('auto-draft', 'trash')";
+        $sql .=
+            " AND ( i.element_type NOT LIKE 'post%' OR (SELECT COUNT(ID)
+                                                        FROM {$this->wpdb->posts}
                                                         WHERE ID = i.element_id
-                                                            AND post_status {$status_snippet} ) = 1 ) ",
-            $status
-        );
+                                                            AND post_status {$status_snippet} ) = 1 ) ";
 
         return $sql;
     }
@@ -205,7 +213,7 @@ class WPML_TM_Dashboard {
         return $search ? " AND " . $column_name . " LIKE '%" . $wpdb->esc_like( $search ) . "%' " : "";
     }
 
-    private function add_tstatus_where( $sql, $tstatus, $to_lang ) {
+    private function add_tstatus_where( $sql, $tstatus ) {
         $wpdb = $this->wpdb;
 
         if ( $tstatus >= 0 ) {
@@ -252,15 +260,15 @@ class WPML_TM_Dashboard {
         if ( $sort_by ) {
             $order = "tr.{$sort_by} ";
         } else {
-            $order = " tr.date DESC";
+            $order = " tr.date ";
         }
         if ( $sort_order ) {
             $order .= $sort_order;
         } else {
-            $order .= 'DESC';
+            $order .= ' DESC ';
         }
 
-        $sql .= "ORDER BY {$order}";
+        $sql .= " ORDER BY {$order} ";
 
         return $sql;
     }

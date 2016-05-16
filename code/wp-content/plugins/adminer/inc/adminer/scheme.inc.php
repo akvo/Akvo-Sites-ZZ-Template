@@ -4,14 +4,14 @@ $row = $_POST;
 if ($_POST && !$error) {
 	$link = preg_replace('~ns=[^&]*&~', '', ME) . "ns=";
 	if ($_POST["drop"]) {
-		query_adminer_redirect("DROP SCHEMA " . idf_escape($_GET["ns"]), $link, lang('Schema has been dropped.'));
+		query_redirect("DROP SCHEMA " . idf_escape($_GET["ns"]), $link, lang('Schema has been dropped.'));
 	} else {
 		$name = trim($row["name"]);
 		$link .= urlencode($name);
 		if ($_GET["ns"] == "") {
-			query_adminer_redirect("CREATE SCHEMA " . idf_escape($name), $link, lang('Schema has been created.'));
+			query_redirect("CREATE SCHEMA " . idf_escape($name), $link, lang('Schema has been created.'));
 		} elseif ($_GET["ns"] != $name) {
-			query_adminer_redirect("ALTER SCHEMA " . idf_escape($_GET["ns"]) . " RENAME TO " . idf_escape($name), $link, lang('Schema has been altered.')); //! sp_rename in MS SQL
+			query_redirect("ALTER SCHEMA " . idf_escape($_GET["ns"]) . " RENAME TO " . idf_escape($name), $link, lang('Schema has been altered.')); //! sp_rename in MS SQL
 		} else {
 			adminer_redirect($link);
 		}

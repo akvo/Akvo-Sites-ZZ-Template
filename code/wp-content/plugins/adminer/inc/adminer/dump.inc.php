@@ -90,7 +90,7 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 							$views[] = $name;
 						} elseif ($data) {
 							$fields = fields($name);
-							$adminer->dumpData($name, $_POST["data_style"], "SELECT *" . convert_fields($fields, $fields) . " FROM " . adminer_table($name));
+							$adminer->dumpData($name, $_POST["data_style"], "SELECT *" . convert_fields($fields, $fields) . " FROM " . table($name));
 						}
 						if ($is_sql && $_POST["triggers"] && $table && ($triggers = trigger_sql($name, $_POST["table_style"]))) {
 							echo "\nDELIMITER ;;\n$triggers\nDELIMITER ;\n";
@@ -178,11 +178,11 @@ if (DB != "") {
 	foreach ($tables_list as $name => $type) {
 		$prefix = preg_replace('~_.*~', '', $name);
 		$checked = ($TABLE == "" || $TABLE == (substr($TABLE, -1) == "%" ? "$prefix%" : $name)); //! % may be part of table name
-		$print = "<tr><td>" . adminer_checkbox("tables[]", $name, $checked, $name, "adminer_checkboxClick(event, this); formUncheck('check-tables');", "block");
+		$print = "<tr><td>" . adminer_checkbox("tables[]", $name, $checked, $name, "checkboxClick(event, this); formUncheck('check-tables');", "block");
 		if ($type !== null && !preg_match('~table~i', $type)) {
 			$views .= "$print\n";
 		} else {
-			echo "$print<td align='right'><label class='block'><span id='Rows-" . h($name) . "'></span>" . adminer_checkbox("data[]", $name, $checked, "", "adminer_checkboxClick(event, this); formUncheck('check-data');") . "</label>\n";
+			echo "$print<td align='right'><label class='block'><span id='Rows-" . h($name) . "'></span>" . adminer_checkbox("data[]", $name, $checked, "", "checkboxClick(event, this); formUncheck('check-data');") . "</label>\n";
 		}
 		$prefixes[$prefix]++;
 	}

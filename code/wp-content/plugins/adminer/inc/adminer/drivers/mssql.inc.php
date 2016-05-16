@@ -93,7 +93,7 @@ if (isset($_GET["mssql"])) {
 		class Min_Result {
 			var $_result, $_offset = 0, $_fields, $num_rows;
 
-			function Min_Result($result) {
+			function __construct($result) {
 				$this->_result = $result;
 				// $this->num_rows = sqlsrv_num_rows($result); // available only in scrollable results
 			}
@@ -201,7 +201,7 @@ if (isset($_GET["mssql"])) {
 		class Min_Result {
 			var $_result, $_offset = 0, $_fields, $num_rows;
 
-			function Min_Result($result) {
+			function __construct($result) {
 				$this->_result = $result;
 				$this->num_rows = mssql_num_rows($result);
 			}
@@ -251,7 +251,7 @@ if (isset($_GET["mssql"])) {
 					}
 				}
 				//! can use only one query for all rows
-				if (!queries("MERGE " . adminer_table($table) . " USING (VALUES(" . implode(", ", $set) . ")) AS source (c" . implode(", c", range(1, count($set))) . ") ON " . implode(" AND ", $where) //! source, c1 - possible conflict
+				if (!queries("MERGE " . table($table) . " USING (VALUES(" . implode(", ", $set) . ")) AS source (c" . implode(", c", range(1, count($set))) . ") ON " . implode(" AND ", $where) //! source, c1 - possible conflict
 					. " WHEN MATCHED THEN UPDATE SET " . implode(", ", $update)
 					. " WHEN NOT MATCHED THEN INSERT (" . implode(", ", array_keys($set)) . ") VALUES (" . implode(", ", $set) . ");" // ; is mandatory
 				)) {
@@ -273,7 +273,7 @@ if (isset($_GET["mssql"])) {
 		return "[" . str_replace("]", "]]", $idf) . "]";
 	}
 
-	function adminer_table($idf) {
+	function table($idf) {
 		return ($_GET["ns"] != "" ? idf_escape($_GET["ns"]) . "." : "") . idf_escape($idf);
 	}
 
@@ -447,17 +447,17 @@ WHERE OBJECT_NAME(i.object_id) = " . q($table)
 				} else {
 					unset($val[6]); //! identity can't be removed
 					if ($column != $val[0]) {
-						queries("EXEC sp_rename " . q(adminer_table($table) . ".$column") . ", " . q(idf_unescape($val[0])) . ", 'COLUMN'");
+						queries("EXEC sp_rename " . q(table($table) . ".$column") . ", " . q(idf_unescape($val[0])) . ", 'COLUMN'");
 					}
 					$alter["ALTER COLUMN " . implode("", $val)][] = "";
 				}
 			}
 		}
 		if ($table == "") {
-			return queries("CREATE TABLE " . adminer_table($name) . " (" . implode(",", (array) $alter["ADD"]) . "\n)");
+			return queries("CREATE TABLE " . table($name) . " (" . implode(",", (array) $alter["ADD"]) . "\n)");
 		}
 		if ($table != $name) {
-			queries("EXEC sp_rename " . q(adminer_table($table)) . ", " . q($name));
+			queries("EXEC sp_rename " . q(table($table)) . ", " . q($name));
 		}
 		if ($foreign) {
 			$alter[""] = $foreign;
@@ -478,17 +478,17 @@ WHERE OBJECT_NAME(i.object_id) = " . q($table)
 				if ($val[0] == "PRIMARY") { //! sometimes used also for UNIQUE
 					$drop[] = idf_escape($val[1]);
 				} else {
-					$index[] = idf_escape($val[1]) . " ON " . adminer_table($table);
+					$index[] = idf_escape($val[1]) . " ON " . table($table);
 				}
 			} elseif (!queries(($val[0] != "PRIMARY"
-				? "CREATE $val[0] " . ($val[0] != "INDEX" ? "INDEX " : "") . idf_escape($val[1] != "" ? $val[1] : uniqid($table . "_")) . " ON " . adminer_table($table)
-				: "ALTER TABLE " . adminer_table($table) . " ADD PRIMARY KEY"
+				? "CREATE $val[0] " . ($val[0] != "INDEX" ? "INDEX " : "") . idf_escape($val[1] != "" ? $val[1] : uniqid($table . "_")) . " ON " . table($table)
+				: "ALTER TABLE " . table($table) . " ADD PRIMARY KEY"
 			) . " (" . implode(", ", $val[2]) . ")")) {
 				return false;
 			}
 		}
 		return (!$index || queries("DROP INDEX " . implode(", ", $index)))
-			&& (!$drop || queries("ALTER TABLE " . adminer_table($table) . " DROP " . implode(", ", $drop)))
+			&& (!$drop || queries("ALTER TABLE " . table($table) . " DROP " . implode(", ", $drop)))
 		;
 	}
 
