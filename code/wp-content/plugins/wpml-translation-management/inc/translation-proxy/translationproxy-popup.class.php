@@ -1,15 +1,12 @@
 <?php
 class TranslationProxy_Popup {
 
-	public static function display()
-	{
+	public static function display() {
 		include WPML_TM_PATH . '/inc/translation-proxy/translationproxy-popup.php';
 		exit;
 	}
 
-
-	public static function get_link( $link, $args = array(), $just_url = false )
-	{
+	public static function get_link( $link, $args = array(), $just_url = false ) {
 
 		// defaults
 		/** @var $id int */

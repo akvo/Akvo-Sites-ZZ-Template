@@ -28,11 +28,8 @@ abstract class WPML_TM_Update_Translation_Data_Action extends WPML_Translation_J
 	function add_translation_job( $rid, $translator_id, array $translation_package ) {
 		global $wpdb, $current_user;
 
-		$translation_status = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}icl_translation_status WHERE rid=%d",
-		                                                      $rid ) );
+		$translation_status = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}icl_translation_status WHERE rid=%d", $rid ) );
 		$prev_translation   = $this->get_translated_field_values( $rid, $translation_package );
-
-		get_currentuserinfo();
 		if ( ! $current_user->ID ) {
 			$manager_id = $wpdb->get_var( $wpdb->prepare( "SELECT manager_id FROM {$wpdb->prefix}icl_translate_job WHERE rid=%d ORDER BY job_id DESC LIMIT 1",
 			                                              $rid ) );
@@ -44,7 +41,7 @@ abstract class WPML_TM_Update_Translation_Data_Action extends WPML_Translation_J
 			'rid' => $rid,
 			'translator_id' => $translator_id,
 			'translated' => 0,
-			'manager_id' => $manager_id
+			'manager_id' => (int)$manager_id
 		);
 		$wpdb->insert( $wpdb->prefix . 'icl_translate_job', $translate_job_insert_data );
 		$job_id = $wpdb->insert_id;
@@ -71,6 +68,9 @@ abstract class WPML_TM_Update_Translation_Data_Action extends WPML_Translation_J
 	 */
 	protected function get_translated_field_values( $rid, array $package ) {
 		global $wpdb;
+		
+		$prev_translations = $this->populate_prev_translation( $rid, $package );
+		
 		// if we have a previous job_id for this rid mark it as the top (last) revision
 		list( $prev_job_id, $prev_job_translated ) = $this->get_prev_job_data( $rid );
 		if ( ! is_null( $prev_job_id ) ) {
@@ -93,7 +93,7 @@ abstract class WPML_TM_Update_Translation_Data_Action extends WPML_Translation_J
 
 		}
 
-		return $this->populate_prev_translation( $rid, $package );
+		return $prev_translations;
 	}
 
 	protected function fire_notification_actions( $job_id, $translation_status, $translator_id ) {

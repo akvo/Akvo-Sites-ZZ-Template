@@ -41,7 +41,7 @@ if ($tables_views && !$error && !$_POST["search"]) {
 		}
 	}
 
-	queries_adminer_redirect(substr(ME, 0, -1), $message, $result);
+	queries_redirect(substr(ME, 0, -1), $message, $result);
 }
 
 page_header(($_GET["ns"] == "" ? lang('Database') . ": " . h(DB) : lang('Schema') . ": " . h($_GET["ns"])), $error, true);

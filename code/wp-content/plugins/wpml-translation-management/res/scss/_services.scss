@@ -64,29 +64,9 @@
 		.img-wrap:hover {
 			border-color: #ccc;
 		}
-
 		img {
 			max-width:      100%;
 			vertical-align: middle;
-		}
-
-		button[type="submit"] {
-			margin:             0;
-			padding:            0;
-			border:             none;
-			background:         transparent;
-			color:              #21759b;
-			text-decoration:    underline;
-			cursor:             pointer;
-			-webkit-appearance: none;
-			&:hover {
-				color: #d54e21;
-			}
-		}
-
-		.active {
-			color:       green;
-			font-weight: bold;
 		}
 	}
 }
@@ -100,7 +80,6 @@
 				height:      180px;
 				line-height: 180px;
 			}
-
 		}
 	}
 	.icl-current-service {

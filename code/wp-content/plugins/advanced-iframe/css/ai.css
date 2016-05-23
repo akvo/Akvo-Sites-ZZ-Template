@@ -26,25 +26,34 @@
 	background-position: -0px -0px !important;
 }
 
-#ai h2 {
+#ai h2, #ai h1 {
   display: table-cell;
   vertical-align: middle;
   padding-top: 2px;
 }
 
-#ai h2 small {
+#ai h2 small, #ai h1 small {
   font-weight: 400;
 }
 
 #ai .shortcode span {
 	font-weight: bold;
+  white-space: nowrap;
 }
+
+#ai .shortcode span.additional-shortcode {
+	font-weight: normal;
+  margin-top: 10px;
+  display:block;
+}
+
 #ai .shortcode {
 	background: #E2FFE2;
 	border: 1px solid #00FF00;
 	padding: 10px;
 	padding-bottom: 10px;
 	margin: 10px;
+  max-width: 600px;
 }
 
 #ai .move-bottom {
@@ -55,7 +64,7 @@
 	margin: 0px;
   margin-top: 0px;
   display:block;
-  max-width:400px;
+  max-width:500px;
 }
 
 
@@ -334,7 +343,7 @@ display: none;
 font-size:1.1em
 }
 
-#ai input[type="text"]#ai_config_id, #ai input[type="text"]#ai_custom_id, #ai input[type="text"]#ai_custom_header_id {
+#ai input[type="text"]#ai_config_id, #ai input[type="text"]#ai_custom_id, #ai input[type="text"]#ai_custom_header_id, #ai input[type="text"]#ai_custom_hide_id {
   width: 150px;
 }
 
@@ -361,13 +370,19 @@ font-size:1.1em
 #ai div.ai-external-config:hover{
     overflow: visible; 
     white-space: normal; 
-    width: 600px;
+    width: 400px;
     text-overflow: clip;
 }
 
-#ai div.ai-external-config:after {
+#ai div.ai-external-config::after {
     clear: both;
 }
+
+#ai div.config-file-block {
+    display: block;
+    clear: both;
+}
+
 
 #ai .ai-anchor{
   display: block;
@@ -447,7 +462,7 @@ margin-bottom: 10px;
 }
 
 #ai .manage-menus {
-  margin-top: 0;
+  margin-top: 10px;
 }
 
 #ai .i-20- {
@@ -462,3 +477,40 @@ margin-bottom: 10px;
   color: #003399;
 }
 
+#ai a.mark-tab-header span {
+   background-color: yellow; 
+   display: inline;
+}
+
+#ai hr {
+   clear: both;
+}
+
+#ai .top-10 {
+   margin-top:10px;
+}
+
+#ai .header-help {
+  font-weight:normal;
+  font-size:13px;
+  margin-top:15px;
+  min-width:100px;
+  margin-left:-36px;
+  line-height: 1.4em;
+}
+
+#ai .pro-hint {
+  font-weight:normal;
+  font-size:13px;
+  border-radius:3px;
+  float:right;
+  border: 2px solid #80b8d9;
+  background-color:#ffffff;
+  padding:8px;
+  margin-left:5px;
+  line-height: 1.4em;
+}
+
+#ai h1.full-width {
+  width:100%;
+}

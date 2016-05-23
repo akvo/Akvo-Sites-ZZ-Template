@@ -77,7 +77,6 @@ class WPML_TM_Mail_Notification extends WPML_WPDB_And_SP_User {
 							);
 					}
 					$body_to_send .= $footer;
-					$body_to_send = apply_filters( 'WPML_new_job_notification_body', $body_to_send, $tj_url );
 					$attachments  = isset( $content['attachment'] ) ? $content['attachment'] : array();
 					$attachments  = apply_filters( 'WPML_new_job_notification_attachments', $attachments );
 					$this->sitepress->get_wp_api()->wp_mail( $to, $subject, $body_to_send, '', $attachments );
@@ -220,7 +219,7 @@ class WPML_TM_Mail_Notification extends WPML_WPDB_And_SP_User {
 	public function new_job_translator_mail( $job, $translator_id ) {
 		/** @var WPML_Translation_Job $job */
 		list( $manager_id, $job ) = $this->get_mail_elements( $job );
-		if ( $manager_id == $job->get_translator_id() ) {
+		if ( !$job || $manager_id == $job->get_translator_id() ) {
 			return false;
 		}
 		$user          = new WP_User( $translator_id );

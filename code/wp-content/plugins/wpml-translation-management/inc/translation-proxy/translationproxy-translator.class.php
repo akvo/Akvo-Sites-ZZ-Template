@@ -37,6 +37,10 @@ class TranslationProxy_Translator {
 		$iclsettings = array();
 		$website_details = self::get_website_details( new TranslationProxy_Project( TranslationProxy::get_current_service() ) );
 
+		if ( (bool) $website_details === false ) {
+			return false;
+		}
+
 		$language_pairs = array();
 		if ( isset( $website_details['translation_languages']['translation_language'] ) ) {
 
@@ -49,7 +53,7 @@ class TranslationProxy_Translator {
 			foreach ( $translation_languages as $lang ) {
 				$translators = $_tr = array();
 				$max_rate    = false;
-				if ( isset( $lang['translators'] ) && ! empty( $lang['translators'] ) ) {
+				if ( isset( $lang['translators'], $lang['translators']['translator'] ) && ! empty( $lang['translators'] ) ) {
 					if ( ! isset( $lang['translators']['translator'][0] ) ) {
 						$_tr[0] = $lang['translators']['translator'];
 					} else {
@@ -77,11 +81,9 @@ class TranslationProxy_Translator {
 					'max_rate'              => $max_rate
 				);
 			}
-
 		}
 
 		$iclsettings['icl_lang_status'] = $language_pairs;
-
 		if ( isset( $res['client']['attr'] ) ) {
 			$iclsettings['icl_balance']        = $res['client']['attr']['balance'];
 			$iclsettings['icl_anonymous_user'] = $res['client']['attr']['anon'];
@@ -111,7 +113,6 @@ class TranslationProxy_Translator {
 		return $iclsettings;
 	}
 
-
 	/**
 	 *
 	 * Get information about language pairs (including translators). Works only for ICL as a Translation Service
@@ -119,18 +120,36 @@ class TranslationProxy_Translator {
 	 * @return array
 	 */
 	public static function get_language_pairs() {
+		global $sitepress;
 
-		$icl_lang_status  = icl_get_setting( 'icl_lang_status', array() );
+		$icl_lang_status = $sitepress->get_setting( 'icl_lang_status', array() );
 		if ( ! empty( $icl_lang_status ) ) {
-			return $icl_lang_status;
+			$missing_translators = false;
+			foreach ( $icl_lang_status as $lang ) {
+				if ( empty( $lang['translators'] ) ) {
+					$missing_translators = true;
+					break;
+				}
+			}
+			if ( ! $missing_translators ) {
+				$icl_lang_sub_status = $icl_lang_status;
+			}
 		}
 
-		$translator_status = self::get_icl_translator_status();
-		$language_pairs    = $translator_status['icl_lang_status'];
+		if ( ! isset( $icl_lang_sub_status ) ) {
+			$translator_status   = self::get_icl_translator_status();
+			$icl_lang_sub_status = isset( $translator_status['icl_lang_status'] )
+				? $translator_status['icl_lang_status'] : array();
+		}
+		foreach ( $icl_lang_sub_status as $key => $status ) {
+			if ( ! isset( $status['from'] ) ) {
+				unset( $icl_lang_sub_status[ $key ] );
+			}
+		}
+		array_filter( $icl_lang_sub_status );
 
-		return $language_pairs;
+		return $icl_lang_sub_status;
 	}
-
 
 	/**
 	 * Sends request to ICL to get website details (including language pairs)
@@ -142,24 +161,20 @@ class TranslationProxy_Translator {
 	private static function get_website_details( $project ) {
 
 		require_once ICL_PLUGIN_PATH . '/lib/Snoopy.class.php';
-		require_once ICL_PLUGIN_PATH . '/lib/xml2array.php';
+		require_once ICL_PLUGIN_PATH . '/inc/utilities/xml2array.php';
 		require_once ICL_PLUGIN_PATH . '/lib/icl_api.php';
 
 		$site_id    = $project->ts_id;
 		$access_key = $project->ts_access_key;
 
-		$default    = array();
+		$default = array();
 
 		if ( empty( $site_id ) ) {
 			return $default;
 		}
 
-		try {
-			$icl_query = new ICanLocalizeQuery( $site_id, $access_key );
-			$result    = $icl_query->get_website_details();
-		} catch ( Exception $e ) {
-			return $default;
-		}
+		$icl_query = new ICanLocalizeQuery( $site_id, $access_key );
+		$result    = $icl_query->get_website_details();
 
 		return $result;
 	}
@@ -187,11 +202,6 @@ class TranslationProxy_Translator {
 
 		if ( empty ( $lang_status ) ) {
 			return $translators;
-		}
-
-		if ( 0 != key( $lang_status ) ) {
-			$buf[]       = $lang_status;
-			$lang_status = $buf;
 		}
 
 		$action_link_args = array(
@@ -232,27 +242,20 @@ class TranslationProxy_Translator {
 	}
 
 	public static function get_translator_name( $translator_id ) {
-		static $translators;
-
-		if ( TranslationProxy::translator_selection_available()) {
+		if ( TranslationProxy::translator_selection_available() ) {
 			$lang_status = self::get_language_pairs();
-			if ( is_null( $translators ) && $lang_status ) {
+			if ( $lang_status ) {
 				foreach ( $lang_status as $lp ) {
-					if ( ! empty( $lp[ 'translators' ] ) ) {
-						foreach ( $lp[ 'translators' ] as $tr ) {
-							$translators[ $tr[ 'id' ] ] = $tr[ 'nickname' ];
-						}
+					$lp_trans = ! empty( $lp['translators'] ) ? $lp['translators'] : array();
+					foreach ( $lp_trans as $tr ) {
+						$translators[ $tr['id'] ] = $tr['nickname'];
 					}
 				}
 			}
 		}
-		if ( isset( $translators[ $translator_id ] ) ) {
-			return $translators[ $translator_id ];
-		} else {
-			return false;
-		}
-	}
 
+		return isset( $translators[ $translator_id ] ) ? $translators[ $translator_id ] : false;
+	}
 
 	/**
 	 * Synchronizes language pairs with ICL
@@ -300,7 +303,7 @@ class TranslationProxy_Translator {
 		}
 
 		require_once ICL_PLUGIN_PATH . '/lib/Snoopy.class.php';
-		require_once ICL_PLUGIN_PATH . '/lib/xml2array.php';
+		require_once ICL_PLUGIN_PATH . '/inc/utilities/xml2array.php';
 		require_once ICL_PLUGIN_PATH . '/lib/icl_api.php';
 		$icl_query = new ICanLocalizeQuery();
 		$icl_query->updateAccount( $params );

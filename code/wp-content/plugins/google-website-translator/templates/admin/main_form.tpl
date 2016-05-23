@@ -4,6 +4,7 @@
 	<div class="prisna_gwt_header_icon">
 		<div class="prisna_gwt_header_title"><a href="http://www.prisna.net/?d=96bf1f652e7648e6a8163cdd0a8fba41" target="_blank">Prisna</a>: {{ title_message }}</div>
 	</div>
+	<div class="prisna_gwt_header_version"><a href="https://wordpress.org/plugins/google-website-translator/changelog/" target="_blank">v1.3</a></div>
 </div>
 
 {{ wp_version_check.false:begin }}

@@ -119,16 +119,6 @@ class wpml_zip {
     }
 
     /**
-     * Extra fields on the Zip directory records are Unix time codes needed for compatibility on the default Mac zip archive tool.
-     * These are enabled as default, as they do no harm elsewhere and only add 26 bytes per file added.
-     *
-     * @param bool $setExtraField TRUE (default) will enable adding of extra fields, anything else will disable it.
-     */
-    function setExtraField($setExtraField = TRUE) {
-        $this->addExtraField = ($setExtraField === TRUE);
-    }
-
-    /**
      * Set Zip archive comment.
      *
      * @param string $newComment New comment. NULL to clear.
@@ -252,67 +242,6 @@ class wpml_zip {
     }
 
     /**
-     * Add the content to a directory.
-     *
-     * @author Adam Schmalhofer <Adam.Schmalhofer@gmx.de>
-     * @author A. Grandt
-     *
-     * @param string $realPath       Path on the file system.
-     * @param string $zipPath        Filepath and name to be used in the archive.
-     * @param bool   $recursive      Add content recursively, default is TRUE.
-     * @param bool   $followSymlinks Follow and add symbolic links, if they are accessible, default is TRUE.
-     * @param array &$addedFiles     Reference to the added files, this is used to prevent duplicates, efault is an empty array.
-     *                               If you start the function by parsing an array, the array will be populated with the realPath
-     *                               and zipPath kay/value pairs added to the archive by the function.
-	 * @param bool   $overrideFilePermissions Force the use of the file/dir permissions set in the $extDirAttr
-	 *							     and $extFileAttr parameters.
-	 * @param int    $extDirAttr     Permissions for directories.
-	 * @param int    $extFileAttr    Permissions for files.
-     */
-    public function addDirectoryContent($realPath, $zipPath, $recursive = TRUE, $followSymlinks = TRUE, &$addedFiles = array(),
-					$overrideFilePermissions = FALSE, $extDirAttr = self::EXT_FILE_ATTR_DIR, $extFileAttr = self::EXT_FILE_ATTR_FILE) {
-        if (file_exists($realPath) && !isset($addedFiles[realpath($realPath)])) {
-            if (is_dir($realPath)) {
-				if ($overrideFilePermissions) {
-	                $this->addDirectory($zipPath, 0, null, $extDirAttr);
-				} else {
-					$this->addDirectory($zipPath, 0, null, self::getFileExtAttr($realPath));
-				}
-            }
-
-            $addedFiles[realpath($realPath)] = $zipPath;
-
-            $iter = new DirectoryIterator($realPath);
-            foreach ($iter as $file) {
-                if ($file->isDot()) {
-                    continue;
-                }
-                $newRealPath = $file->getPathname();
-                $newZipPath = self::pathJoin($zipPath, $file->getFilename());
-
-                if (file_exists($newRealPath) && ($followSymlinks === TRUE || !is_link($newRealPath))) {
-                    if ($file->isFile()) {
-                        $addedFiles[realpath($newRealPath)] = $newZipPath;
-						if ($overrideFilePermissions) {
-							$this->addLargeFile($newRealPath, $newZipPath, 0, null, $extFileAttr);
-						} else {
-							$this->addLargeFile($newRealPath, $newZipPath, 0, null, self::getFileExtAttr($newRealPath));
-						}
-                    } else if ($recursive === TRUE) {
-                        $this->addDirectoryContent($newRealPath, $newZipPath, $recursive, $followSymlinks, $addedFiles, $overrideFilePermissions, $extDirAttr, $extFileAttr);
-                    } else {
-						if ($overrideFilePermissions) {
-							$this->addDirectory($zipPath, 0, null, $extDirAttr);
-						} else {
-							$this->addDirectory($zipPath, 0, null, self::getFileExtAttr($newRealPath));
-						}
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Add a file to the archive at the specified location and file name.
      *
      * @param string $dataFile    File name/path.
@@ -336,7 +265,7 @@ class wpml_zip {
             while (!feof($fh)) {
                 $this->addStreamData(fread($fh, $this->streamChunkSize));
             }
-            $this->closeStream($this->addExtraField);
+            $this->closeStream();
         }
         return TRUE;
     }
@@ -508,24 +437,6 @@ class wpml_zip {
             return TRUE;
         }
         return FALSE;
-    }
-
-    /**
-     * Get the handle ressource for the archive zip file.
-     * If the zip haven't been finalized yet, this will cause it to become finalized
-     *
-     * @return zip file handle
-     */
-    public function getZipFile() {
-        if (!$this->isFinalized) {
-            $this->finalize();
-        }
-
-        $this->zipflush();
-
-        rewind($this->zipFile);
-
-        return $this->zipFile;
     }
 
     /**
@@ -750,99 +661,6 @@ class wpml_zip {
         }
     }
 
-    /**
-     * Join $file to $dir path, and clean up any excess slashes.
-     *
-     * @param string $dir
-     * @param string $file
-     */
-    public static function pathJoin($dir, $file) {
-        if (empty($dir) || empty($file)) {
-            return self::getRelativePath($dir . $file);
-        }
-        return self::getRelativePath($dir . '/' . $file);
-    }
-
-    /**
-     * Clean up a path, removing any unnecessary elements such as /./, // or redundant ../ segments.
-     * If the path starts with a "/", it is deemed an absolute path and any /../ in the beginning is stripped off.
-     * The returned path will not end in a "/".
-	 *
-	 * Sometimes, when a path is generated from multiple fragments, 
-	 *  you can get something like "../data/html/../images/image.jpeg"
-	 * This will normalize that example path to "../data/images/image.jpeg"
-     *
-     * @param string $path The path to clean up
-     * @return string the clean path
-     */
-    public static function getRelativePath($path) {
-        $path = preg_replace("#/+\.?/+#", "/", str_replace("\\", "/", $path));
-        $dirs = explode("/", rtrim(preg_replace('#^(?:\./)+#', '', $path), '/'));
-
-        $offset = 0;
-        $sub = 0;
-        $subOffset = 0;
-        $root = "";
-
-        if (empty($dirs[0])) {
-            $root = "/";
-            $dirs = array_splice($dirs, 1);
-        } else if (preg_match("#[A-Za-z]:#", $dirs[0])) {
-            $root = strtoupper($dirs[0]) . "/";
-            $dirs = array_splice($dirs, 1);
-        }
-
-        $newDirs = array();
-        foreach ($dirs as $dir) {
-            if ($dir !== "..") {
-                $subOffset--;
-                $newDirs[++$offset] = $dir;
-            } else {
-                $subOffset++;
-                if (--$offset < 0) {
-                    $offset = 0;
-                    if ($subOffset > $sub) {
-                        $sub++;
-                    }
-                }
-            }
-        }
-
-        if (empty($root)) {
-            $root = str_repeat("../", $sub);
-        }
-        return $root . implode("/", array_slice($newDirs, 0, $offset));
-    }
-
-	/**
-	 * Create the file permissions for a file or directory, for use in the extFileAttr parameters.
-	 *
-	 * @param int   $owner Unix permisions for owner (octal from 00 to 07)
-	 * @param int   $group Unix permisions for group (octal from 00 to 07)
-	 * @param int   $other Unix permisions for others (octal from 00 to 07)
-	 * @param bool  $isFile
-	 * @return EXTRERNAL_REF field.
-	 */
-	public static function generateExtAttr($owner = 07, $group = 05, $other = 05, $isFile = true) {
-		$fp = $isFile ? self::S_IFREG : self::S_IFDIR;
-		$fp |= (($owner & 07) << 6) | (($group & 07) << 3) | ($other & 07);
-
-		return ($fp << 16) | ($isFile ? self::S_DOS_A : self::S_DOS_D);
-	}
-
-	/**
-	 * Get the file permissions for a file or directory, for use in the extFileAttr parameters.
-	 *
-	 * @param string $filename
-	 * @return external ref field, or FALSE if the file is not found.
-	 */
-	public static function getFileExtAttr($filename) {
-		if (file_exists($filename)) {
-			$fp = fileperms($filename) << 16;
-			return $fp | (is_dir($filename) ? self::S_DOS_D : self::S_DOS_A);
-		}
-		return FALSE;
-	}
 	/**
 	 * Returns the path to a temporary file.
 	 * @return string

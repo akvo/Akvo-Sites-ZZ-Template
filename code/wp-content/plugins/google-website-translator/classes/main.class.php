@@ -216,6 +216,13 @@ class PrisnaGWTOutput extends PrisnaGWTItem {
 			'tag' => 'on_before_load.empty'
 		);
 
+		$exclude_selector = PrisnaGWTConfig::getSettingValue('exclude_selector');
+
+		$_options['meta_tag_rules'][] = array(
+			'expression' => empty($exclude_selector),
+			'tag' => 'exclude_selector.empty'
+		);
+
 		$on_after_load = PrisnaGWTConfig::getSettingValue('on_after_load');
 
 		$_options['meta_tag_rules'][] = array(

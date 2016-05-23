@@ -94,7 +94,7 @@ if (isset($_GET["pgsql"])) {
 		class Min_Result {
 			var $_result, $_offset = 0, $num_rows;
 
-			function Min_Result($result) {
+			function __construct($result) {
 				$this->_result = $result;
 				$this->num_rows = pg_num_rows($result);
 			}
@@ -164,8 +164,8 @@ if (isset($_GET["pgsql"])) {
 						$where[] = "$key = $val";
 					}
 				}
-				if (!(($where && queries("UPDATE " . adminer_table($table) . " SET " . implode(", ", $update) . " WHERE " . implode(" AND ", $where)) && $connection->affected_rows)
-					|| queries("INSERT INTO " . adminer_table($table) . " (" . implode(", ", array_keys($set)) . ") VALUES (" . implode(", ", $set) . ")")
+				if (!(($where && queries("UPDATE " . table($table) . " SET " . implode(", ", $update) . " WHERE " . implode(" AND ", $where)) && $connection->affected_rows)
+					|| queries("INSERT INTO " . table($table) . " (" . implode(", ", array_keys($set)) . ") VALUES (" . implode(", ", $set) . ")")
 				)) {
 					return false;
 				}
@@ -181,7 +181,7 @@ if (isset($_GET["pgsql"])) {
 		return '"' . str_replace('"', '""', $idf) . '"';
 	}
 
-	function adminer_table($idf) {
+	function table($idf) {
 		return idf_escape($idf);
 	}
 
@@ -410,7 +410,7 @@ ORDER BY conkey, conname") as $row) {
 					$alter[] = ($table != "" ? "ADD " : "  ") . implode($val);
 				} else {
 					if ($column != $val[0]) {
-						$queries[] = "ALTER TABLE " . adminer_table($table) . " RENAME $column TO $val[0]";
+						$queries[] = "ALTER TABLE " . table($table) . " RENAME $column TO $val[0]";
 					}
 					$alter[] = "ALTER $column TYPE$val[1]";
 					if (!$val[6]) {
@@ -419,21 +419,21 @@ ORDER BY conkey, conname") as $row) {
 					}
 				}
 				if ($field[0] != "" || $val5 != "") {
-					$queries[] = "COMMENT ON COLUMN " . adminer_table($table) . ".$val[0] IS " . ($val5 != "" ? substr($val5, 9) : "''");
+					$queries[] = "COMMENT ON COLUMN " . table($table) . ".$val[0] IS " . ($val5 != "" ? substr($val5, 9) : "''");
 				}
 			}
 		}
 		$alter = array_merge($alter, $foreign);
 		if ($table == "") {
-			array_unshift($queries, "CREATE TABLE " . adminer_table($name) . " (\n" . implode(",\n", $alter) . "\n)");
+			array_unshift($queries, "CREATE TABLE " . table($name) . " (\n" . implode(",\n", $alter) . "\n)");
 		} elseif ($alter) {
-			array_unshift($queries, "ALTER TABLE " . adminer_table($table) . "\n" . implode(",\n", $alter));
+			array_unshift($queries, "ALTER TABLE " . table($table) . "\n" . implode(",\n", $alter));
 		}
 		if ($table != "" && $table != $name) {
-			$queries[] = "ALTER TABLE " . adminer_table($table) . " RENAME TO " . adminer_table($name);
+			$queries[] = "ALTER TABLE " . table($table) . " RENAME TO " . table($name);
 		}
 		if ($table != "" || $comment != "") {
-			$queries[] = "COMMENT ON TABLE " . adminer_table($name) . " IS " . q($comment);
+			$queries[] = "COMMENT ON TABLE " . table($name) . " IS " . q($comment);
 		}
 		if ($auto_increment != "") {
 			//! $queries[] = "SELECT setval(pg_get_serial_sequence(" . q($name) . ", ), $auto_increment)";
@@ -460,11 +460,11 @@ ORDER BY conkey, conname") as $row) {
 			} elseif ($val[2] == "DROP") {
 				$drop[] = idf_escape($val[1]);
 			} else {
-				$queries[] = "CREATE INDEX " . idf_escape($val[1] != "" ? $val[1] : uniqid($table . "_")) . " ON " . adminer_table($table) . " (" . implode(", ", $val[2]) . ")";
+				$queries[] = "CREATE INDEX " . idf_escape($val[1] != "" ? $val[1] : uniqid($table . "_")) . " ON " . table($table) . " (" . implode(", ", $val[2]) . ")";
 			}
 		}
 		if ($create) {
-			array_unshift($queries, "ALTER TABLE " . adminer_table($table) . implode(",", $create));
+			array_unshift($queries, "ALTER TABLE " . table($table) . implode(",", $create));
 		}
 		if ($drop) {
 			array_unshift($queries, "DROP INDEX " . implode(", ", $drop));
@@ -489,7 +489,7 @@ ORDER BY conkey, conname") as $row) {
 	function drop_tables($tables) {
 		foreach ($tables as $table) {
 		    $status = table_status($table);
-				if (!queries("DROP " . strtoupper($status["Engine"]) . " " . adminer_table($table))) {
+				if (!queries("DROP " . strtoupper($status["Engine"]) . " " . table($table))) {
 					return false;
 				}
 		}
@@ -499,7 +499,7 @@ ORDER BY conkey, conname") as $row) {
 	function move_tables($tables, $views, $target) {
 		foreach (array_merge($tables, $views) as $table) {
 			$status = table_status($table);
-			if (!queries("ALTER " . strtoupper($status["Engine"]) . " " . adminer_table($table) . " SET SCHEMA " . idf_escape($target))) {
+			if (!queries("ALTER " . strtoupper($status["Engine"]) . " " . table($table) . " SET SCHEMA " . idf_escape($target))) {
 				return false;
 			}
 		}

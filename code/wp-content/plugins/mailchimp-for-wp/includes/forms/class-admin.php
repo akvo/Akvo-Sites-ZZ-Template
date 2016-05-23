@@ -33,12 +33,12 @@ class MC4WP_Forms_Admin {
 	 * Add hooks
 	 */
 	public function add_hooks() {
+		add_action( 'register_shortcode_ui', array( $this, 'register_shortcake_ui' ) );
 		add_action( 'mc4wp_save_form', array( $this, 'update_form_stylesheets' ) );
 		add_action( 'mc4wp_admin_preview_form', array( $this, 'prepare_form_preview' ) );
 		add_action( 'mc4wp_admin_edit_form', array( $this, 'process_save_form' ) );
 		add_action( 'mc4wp_admin_add_form', array( $this, 'process_add_form' ) );
 		add_filter( 'mc4wp_admin_menu_items', array( $this, 'add_menu_item' ), 5 );
-		add_filter( 'wp_insert_post_data', array( $this, 'filter_form_content' ), 10, 2 );
 
 		add_action( 'mc4wp_admin_show_forms_page-edit-form', array( $this, 'show_edit_page' ) );
 		add_action( 'mc4wp_admin_show_forms_page-add-form', array( $this, 'show_add_page' ) );
@@ -67,24 +67,27 @@ class MC4WP_Forms_Admin {
 			'chooseField'   => __( "Choose a MailChimp field to add to the form", 'mailchimp-for-wp' ),
 			'close'         => __( 'Close', 'mailchimp-for-wp' ),
 			'country'       => __( 'Country', 'mailchimp-for-wp' ),
-			'defaultValue'  => __( "Default Value", 'mailchimp-for-wp' ),
 			'dropdown'      => __( 'Dropdown', 'mailchimp-for-wp' ),
 			'fieldLabel'    => __( "Field Label", 'mailchimp-for-wp' ),
 			'formAction'    => __( 'Form Action', 'mailchimp-for-wp' ),
 			'formActionDescription' => __( 'This field will allow your visitors to choose whether they would like to subscribe or unsubscribe', 'mailchimp-for-wp' ),
+			'forceRequired' => __( 'This field is marked as required in MailChimp.', 'mailchimp-for-wp' ),
 			'isFieldRequired' => __( "Is this field required?", 'mailchimp-for-wp' ),
 			'listChoice'    => __( 'List Choice', 'mailchimp-for-wp' ),
 			'listChoiceDescription' => __( 'This field will allow your visitors to choose a list to subscribe to.', 'mailchimp-for-wp' ),
 			'min'           => __( 'Min', 'mailchimp-for-wp' ),
 			'max'           => __( 'Max', 'mailchimp-for-wp' ),
 			'noAvailableFields' => __( 'No available fields. Did you select a MailChimp list in the form settings?', 'mailchimp-for-wp' ),
-			'placeholderDescription' => __( 'Use %s as placeholder for the field.', 'mailchimp-for-wp' ),
+			'placeholder'   => __( 'Placeholder', 'mailchimp-for-wp' ),
+			'placeholderHelp' => __( "Text to show when field has no value.", 'mailchimp-for-wp' ),
 			'radioButtons'  => __( 'Radio Buttons', 'mailchimp-for-wp' ),
 			'streetAddress' => __( 'Street Address', 'mailchimp-for-wp' ),
 			'state'         => __( 'State', 'mailchimp-for-wp' ),
 			'subscribe'     => __( 'Subscribe', 'mailchimp-for-wp' ),
 			'submitButton'  => __( 'Submit Button', 'mailchimp-for-wp' ),
 			'wrapInParagraphTags' => __( "Wrap in paragraph tags?", 'mailchimp-for-wp' ),
+			'value'  => __( "Initial Value", 'mailchimp-for-wp' ),
+			'valueHelp' => __( "Text to prefill this field with.", 'mailchimp-for-wp' ),
 			'zip'           => __( 'ZIP', 'mailchimp-for-wp' ),
 		));
 	}
@@ -117,6 +120,10 @@ class MC4WP_Forms_Admin {
 
 		$form_data = stripslashes_deep( $_POST['mc4wp_form'] );
 		$form_content = include MC4WP_PLUGIN_DIR . 'config/default-form-content.php';
+
+		// Fix for MultiSite stripping KSES for roles other than administrator
+		remove_all_filters( 'content_save_pre' );
+
 		$form_id = wp_insert_post(
 			array(
 				'post_type' => 'mc4wp-form',
@@ -177,6 +184,9 @@ class MC4WP_Forms_Admin {
 			}
 		}
 
+		// Fix for MultiSite stripping KSES for roles other than administrator
+		remove_all_filters( 'content_save_pre' );
+
 		$form_id = wp_insert_post( $post_data );
 		update_post_meta( $form_id, '_mc4wp_settings', $data['settings'] );
 
@@ -184,6 +194,15 @@ class MC4WP_Forms_Admin {
 		foreach( $data['messages'] as $key => $message ) {
 			update_post_meta( $form_id, 'text_' . $key, $message );
 		}
+
+		/**
+		 * Runs right after a form is updated.
+		 *
+		 * @since 3.0
+		 *
+		 * @param int $form_id
+		 */
+		do_action( 'mc4wp_save_form', $form_id );
 
 		return $form_id;
 	}
@@ -196,6 +215,7 @@ class MC4WP_Forms_Admin {
 
 		$raw_data = $data;
 
+		// strip <form> tags from content
 		$data['content'] =  preg_replace( '/<\/?form(.|\s)*?>/i', '', $data['content'] );
 
 		// sanitize text fields
@@ -207,6 +227,10 @@ class MC4WP_Forms_Admin {
 		}
 
 		// make sure lists is an array
+		if( ! isset( $data['settings']['lists'] ) ) {
+			$data['settings']['lists'] = array();
+		}
+
 		$data['settings']['lists'] = array_filter( (array) $data['settings']['lists'] );
 
 		/**
@@ -240,15 +264,6 @@ class MC4WP_Forms_Admin {
 		if( empty( $default_form_id ) ) {
 			update_option( 'mc4wp_default_form_id', $form_id );
 		}
-
-		/**
-		 * Runs right after a form is updated.
-		 *
-		 * @since 3.0
-		 *
-		 * @param int $form_id
-		 */
-		do_action( 'mc4wp_save_form', $form_id );
 
 		$previewer = new MC4WP_Form_Previewer( $form_id );
 
@@ -392,28 +407,37 @@ class MC4WP_Forms_Admin {
 	}
 
 	/**
-	 * Fix for MultiSite, where only superadmins can save unfiltered HTML in post_content.
-	 *
-	 * @param array $data
-	 * @param array $post_array
-	 *
-	 * @return array
+	 * Registers UI for when shortcake is activated
 	 */
-	public function filter_form_content( $data, $post_array ) {
-		// only act on our own post type
-		if( $post_array['post_type'] !== 'mc4wp-form' ) {
-			return $data;
+	public function register_shortcake_ui() {
+
+		$assets = new MC4WP_Form_Asset_Manager();
+		$assets->load_stylesheets();
+
+		$forms = mc4wp_get_forms();
+		$options = array();
+		foreach( $forms as $form ) {
+			$options[ $form->ID ] = $form->name;
 		}
 
-		// if `content` index is set, use that one.
-		// this fixes an issue with `post_content` already being kses stripped at this point
-		if( isset( $post_array['content'] ) ) {
-			$data['post_content'] = $post_array['content'];
-		}
-
-		// make sure filtered post content is the same
-		$data['post_content_filtered'] = $data['post_content'];
-		return $data;
+		/**
+		 * Register UI for your shortcode
+		 *
+		 * @param string $shortcode_tag
+		 * @param array $ui_args
+		 */
+		shortcode_ui_register_for_shortcode( 'mc4wp_form', array(
+				'label' => esc_html__( 'MailChimp Sign-Up Form', 'mailchimp-for-wp' ),
+				'listItemImage' => 'dashicons-feedback',
+				'attrs' => array(
+					array(
+						'label'    => esc_html__( 'Select the form to show' ,'mailchimp-for-wp' ),
+						'attr'     => 'id',
+						'type'     => 'select',
+						'options'  => $options
+					)
+				),
+			)
+		);
 	}
-
 }

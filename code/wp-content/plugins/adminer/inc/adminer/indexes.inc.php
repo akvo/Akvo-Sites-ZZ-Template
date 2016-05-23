@@ -63,7 +63,7 @@ if ($_POST && !$error && !$_POST["add"] && !$_POST["drop_col"]) {
 	if (!$alter) {
 		adminer_redirect(ME . "table=" . urlencode($TABLE));
 	}
-	queries_adminer_redirect(ME . "table=" . urlencode($TABLE), lang('Indexes have been altered.'), alter_indexes($TABLE, $alter));
+	queries_redirect(ME . "table=" . urlencode($TABLE), lang('Indexes have been altered.'), alter_indexes($TABLE, $alter));
 }
 
 page_header(lang('Indexes'), $error, array("table" => $TABLE), h($TABLE));
@@ -117,7 +117,7 @@ foreach ($row["indexes"] as $index) {
 		$i = 1;
 		foreach ($index["columns"] as $key => $column) {
 			echo "<span>" . select_input(
-				" name='indexes[$j][columns][$i]' onchange=\"" . ($i == count($index["columns"]) ? "indexesAddColumn" : "indexesChangeColumn") . "(this, '" . js_adminer_escape($jush == "sql" ? "" : $_GET["indexes"] . "_") . "');\"",
+				" name='indexes[$j][columns][$i]' onchange=\"" . ($i == count($index["columns"]) ? "indexesAddColumn" : "indexesChangeColumn") . "(this, '" . h(js_adminer_escape($jush == "sql" ? "" : $_GET["indexes"] . "_")) . "');\"",
 				($fields ? array_combine($fields, $fields) : $fields),
 				$column
 			);

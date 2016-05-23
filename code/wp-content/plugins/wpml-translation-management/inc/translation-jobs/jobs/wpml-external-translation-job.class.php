@@ -16,7 +16,15 @@ class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 	 */
 	public function get_url( $original = false ) {
 
-		return $original ? apply_filters( 'wpml_external_item_url', '', $this->get_original_element_id() ) : '';
+		$url        = null;
+		$element_id = null;
+
+		if ( $original ) {
+			$element_id = $this->get_original_element_id();
+			$url        = apply_filters( 'wpml_external_item_url', '', $element_id );
+		}
+
+		return apply_filters( 'wpml_element_translation_job_url', $url, $original, $element_id, $this->get_original_document() );
 	}
 
 	/**

@@ -9,7 +9,7 @@
 function page_header($title, $error = "", $breadcrumb = array(), $title2 = "") {
 	global $LANG, $VERSION, $adminer, $drivers, $jush;
 	page_headers();
-	if (is_adminer_ajax() && $error) {
+	if (js_adminer_ajax() && $error) {
 		page_messages($error);
 		exit;
 	}

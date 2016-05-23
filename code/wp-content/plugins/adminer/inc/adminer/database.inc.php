@@ -5,12 +5,12 @@ if ($_POST && !$error && !isset($_POST["add_x"])) { // add is an image and PHP c
 	$name = trim($row["name"]);
 	if ($_POST["drop"]) {
 		$_GET["db"] = ""; // to save in global history
-		queries_adminer_redirect(remove_from_uri("db|database"), lang('Database has been dropped.'), drop_databases(array(DB)));
+		queries_redirect(remove_from_uri("db|database"), lang('Database has been dropped.'), drop_databases(array(DB)));
 	} elseif (DB !== $name) {
 		// create or rename database
 		if (DB != "") {
 			$_GET["db"] = $name;
-			queries_adminer_redirect(preg_replace('~\bdb=[^&]*&~', '', ME) . "db=" . urlencode($name), lang('Database has been renamed.'), rename_database($name, $row["collation"]));
+			queries_redirect(preg_replace('~\bdb=[^&]*&~', '', ME) . "db=" . urlencode($name), lang('Database has been renamed.'), rename_database($name, $row["collation"]));
 		} else {
 			$databases = explode("\n", str_replace("\r", "", $name));
 			$success = true;
@@ -25,14 +25,14 @@ if ($_POST && !$error && !isset($_POST["add_x"])) { // add is an image and PHP c
 			}
 			restart_session();
 			set_session("dbs", null);
-			queries_adminer_redirect(ME . "db=" . urlencode($last), lang('Database has been created.'), $success);
+			queries_redirect(ME . "db=" . urlencode($last), lang('Database has been created.'), $success);
 		}
 	} else {
 		// alter database
 		if (!$row["collation"]) {
 			adminer_redirect(substr(ME, 0, -1));
 		}
-		query_adminer_redirect("ALTER DATABASE " . idf_escape($name) . (preg_match('~^[a-z0-9_]+$~i', $row["collation"]) ? " COLLATE $row[collation]" : ""), substr(ME, 0, -1), lang('Database has been altered.'));
+		query_redirect("ALTER DATABASE " . idf_escape($name) . (preg_match('~^[a-z0-9_]+$~i', $row["collation"]) ? " COLLATE $row[collation]" : ""), substr(ME, 0, -1), lang('Database has been altered.'));
 	}
 }
 

@@ -57,6 +57,13 @@ body {
 {{ custom_css }}
 -->
 </style>
+{{ exclude_selector.empty.false:begin }}
+<script type="text/javascript">
+/*<![CDATA[*/
+jQuery("{{ exclude_selector }}").addClass("notranslate");
+/*]]>*/
+</script>
+{{ exclude_selector.empty.false:end }}
 {{ on_before_load.empty.false:begin }}
 <script type="text/javascript">
 /*<![CDATA[*/

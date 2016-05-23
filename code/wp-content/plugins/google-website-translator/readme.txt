@@ -3,7 +3,7 @@ Contributors: Prisna
 Tags: translation plugin, automatic translation, machine translation, automatic translate, google website translator, google translator, google language translator, language translate, language translator, multi language, translate, translation
 Stable tag: 1.2
 Requires at least: 3.3
-Tested up to: 4.4
+Tested up to: 4.5
 License: GPL2+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,7 +49,13 @@ There are a number of Google translation plugins in this great repository. Howev
 Afrikaans, Albanian, Arabic, Armenian, Azerbaijani, Basque, Belarusian, Bengali, Bosnian, Bulgarian, Catalan, Cebuano, Chichewa, Chinese Simplified, Chinese Traditional, Croatian, Czech, Danish, Dutch, English, Esperanto, Estonian, Filipino, Finnish, French, Galician, Georgian, German, Greek, Gujarati, Haitian Creole, Hausa, Hebrew, Hindi, Hmong, Hungarian, Icelandic, Igbo, Indonesian, Irish, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer, Korean, Lao, Latin, Latvian, Lithuanian, Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi, Mongolian, Burmese, Nepali, Norwegian, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Serbian, Sesotho, Sinhala, Slovak, Slovenian, Somali, Spanish, Sundanese, Swahili, Swedish, Tajik, Tamil, Telugu, Thai, Turkish, Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Yiddish, Yoruba and Zulu.
 
 = How can I exclude some parts from being translated? =
-You should add the *notranslate* style class to the container HTML element. Or if you want to exclude just a piece of text, you should wrap it within a HTML element with the *notranslate* style class, for instance:
+You should go to:
+
+Advanced &gt; General &gt; Exclude selector (jQuery)
+
+Enter a *jQuery* selector to specify the area(s) you'd like to exclude from translation.
+
+Alternatively, you can add the *notranslate* style class to the container HTML element. Or if you want to exclude just a piece of text, you should wrap it within a HTML element with the *notranslate* style class, for instance:
 
 &lt;span class=&quot;notranslate&quot;&gt;Company name&lt;/span&gt;
 
@@ -75,6 +81,11 @@ Support includes:
 5. Go premium panel.
 
 == Changelog ==
+
+= 1.3 =
+Release date: April 26th, 2016
+
+* Ability to define a jQuery selector to exclude elements from translation.
 
 = 1.2 =
 Release date: December 10th, 2015

@@ -350,6 +350,15 @@ class PrisnaGWTConfig {
 				'group' => 2
 			),
 
+			'exclude_selector' => array(
+				'title_message' => __('Exclude selector (jQuery)', 'prisna-gwt'),
+				'description_message' => __('Select those elements to NOT be translated. In jQuery format. For more info, check the <a href="http://api.jquery.com/category/selectors/" target="_blank">jQuery selector guide</a>.', 'prisna-gwt'),
+				'id' => 'prisna_exclude_selector',
+				'type' => 'text',
+				'value' => '',
+				'group' => 2
+			),
+
 			'custom_css' => array(
 				'title_message' => __('Custom CSS', 'prisna-gwt'),
 				'description_message' => __('Defines custom CSS rules.', 'prisna-gwt'),
