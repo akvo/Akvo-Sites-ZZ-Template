@@ -1,0 +1,46 @@
+.search-wrap {
+	background: $light-grijs;
+	position: relative;
+	border-radius: $border-radius-base;
+	input {
+		border: 0;
+		&.search-field.form-control {
+			width: 100%;
+			background: none;
+			border: 0;
+		}
+	}
+	.input-group-btn {
+		position: absolute;
+		right: 0;
+		top:0;
+		width: auto !important;
+		.btn {
+			color:darken($grijs,10%);
+			border: 0;
+			background: none;
+			font-size: 18px;
+			padding-top: 4px;
+		}
+	}
+}
+
+.form {
+	.bg {
+		padding:10px 15px;
+	}
+	p {
+		margin-bottom: 0;
+	}
+	.text-wrap, .textarea-wrap, .spam-wrap {
+		input, textarea {
+			border:1px solid $grijs;
+			background: lighten($light-grijs,20%);
+			padding:5px 7px;
+		}
+	}
+}
+.ninja-forms-required-items {
+	font-size: .8em;
+	margin-bottom: 15px;	
+}
