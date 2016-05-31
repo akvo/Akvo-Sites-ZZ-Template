@@ -77,38 +77,13 @@
 					</div>
 
 					<nav class="navbar-collapse collapse in" role="navigation" aria-expanded="true" style="">
-						<!--div class="menu-main-nav-container">
-							<ul id="menu-main-nav" class="nav navbar-nav">
-								<li id="menu-item-6" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-6">
-									<a title="Home" href="http://akvosites.test.akvo-ops.org/">Home</a>
-								</li>
-								<li id="menu-item-94" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-94">
-									<a title="Projects" href="http://#">Projects</a>
-								</li>
-								<li id="menu-item-58" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-58">
-									<a title="Contact" href="http://sites.akvotest.org/contact/">Contact</a>
-								</li>
-								<li id="menu-item-92" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-92 dropdown">
-									<a title="Page demo's" href="http://sites.akvotest.org/page-demos/" class="dropdown-toggle" aria-haspopup="true">Page demo’s<i class="fa fa-chevron-down"></i></a>
-									<ul role="menu" class=" dropdown-menu">
-										<li id="menu-item-102" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-102"><a title="Single col" href="http://sites.akvotest.org/page-demos/single-col/">Single col</a></li>
-										<li id="menu-item-101" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-101"><a title="Dual col" href="http://sites.akvotest.org/page-demos/dual-col/">Dual col</a></li>
-										<li id="menu-item-105" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-105"><a title="Flickr demo" href="http://sites.akvotest.org/page-demos/flickr-demo/">Flickr demo</a></li>
-										<li id="menu-item-65" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-65"><a title="Youtube channel demo" href="http://sites.akvotest.org/page-demos/youtube-channel-demo/">Youtube channel demo</a></li>
-									</ul>
-								</li>
-
-							</ul>
-						</div>
-						<div style="display:none;"></div-->
 						<?php
 							if (has_nav_menu('primary_navigation')){
 								wp_nav_menu(['theme_location' => 'primary_navigation', 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'nav navbar-nav']);
 							}
 							if ( is_plugin_active( 'google-website-translator/google-website-translator.php' ) && !is_user_logged_in() ) : ?>
 							<div style="display:none;"><?php echo do_shortcode('[prisna-google-website-translator]'); ?></div>
-							<?php endif;
-						?>
+						<?php endif;?>
 					</nav>
 				</div>
 			</div>
