@@ -6889,6 +6889,10 @@ a {
 
   .box-wrap .icon-wrap {
     padding: 38px 15px; } }
+#main-page-container {
+  margin-top: 30px;
+  margin-bottom: 30px; }
+
 article .bg, .article .bg {
   background: #f3f3f3;
   margin-bottom: 15px; }

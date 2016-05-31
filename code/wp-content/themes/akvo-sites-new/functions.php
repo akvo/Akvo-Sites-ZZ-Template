@@ -243,8 +243,8 @@
       nav ul.navbar-nav li:hover a,
       nav ul.navbar-nav li a:focus,
       nav ul.navbar-nav li.current-menu-item a{
-        <?php if($menu_bg_parent != "") echo 'background: '.$menu_bg_parent.';'?>
-        <?php if($menu_cl_parent != "") echo 'color: '.$menu_cl_parent.';'?>
+        <?php if($menu_bg_parent != "") echo 'background: '.$menu_bg_parent.' !important;'?>
+        <?php if($menu_cl_parent != "") echo 'color: '.$menu_cl_parent.' !important;'?>
       }
       <?php } ?>
     </style>
