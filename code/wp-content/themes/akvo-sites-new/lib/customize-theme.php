@@ -406,7 +406,11 @@ function mytheme_customize_css()
          	.clickable:hover .text {background: <?php echo $main;?>;}
          	.box-wrap:hover {background: <?php echo $hovergrijs;?>;}
          	.search-wrap .input-group-btn .btn {color:<?php echo $donkergrijs;?>;}
+         	
+         	/*
          	nav ul.navbar-nav .dropdown-menu li { background: <?php echo $licht;?>;}
+         	*/
+         	
          	.nav>li>a:focus, .nav>li>a:hover {background:<?php echo $licht;?>; }
          	blockquote {border-color: $donkergrijs;}
          	@media (min-width: 768px) {

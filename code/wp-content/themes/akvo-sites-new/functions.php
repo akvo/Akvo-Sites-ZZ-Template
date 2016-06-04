@@ -37,14 +37,13 @@
 	
 	function sage_customize_footer_register($wp_customize){
 
-    	//Footer
-    	$wp_customize->add_section('sage_footer_scheme', array(
+		/*
+		$wp_customize->add_section('sage_footer_scheme', array(
       		'title'    => __('Footer', 'sage'),
       		'description' => '',
       		'priority' => 35,
       	));
-		/*
-    	
+		
     	$wp_customize->add_setting('sage_footer_options[checkbox_twitter]', array(
       		'capability' => 'edit_theme_options',
       		'type'       => 'option',
@@ -177,38 +176,38 @@
     	      'settings' => 'sage_header_options[color_parent_menu]',
           ) ) );
 
-    // add color picker setting
-    $wp_customize->add_setting( 'sage_header_options[bg_child_menu]', array(
-      'default' => '',
-      'type'    => 'option',
-      ) );
+			// add color picker setting
+		$wp_customize->add_setting( 'sage_header_options[bg_child_menu]', array(
+			'default' => '',
+			'type'    => 'option',
+		) );
 
-    // add color picker control
-    $wp_customize->add_control( 
-      new WP_Customize_Color_Control( 
-        $wp_customize, 'menu_child_color_bg', array(
-          'label' => 'Background Active Item Menu Children',
-          'section' => 'sage_header_scheme',
-          'settings' => 'sage_header_options[bg_child_menu]',
-          ) ) );
+		// add color picker control
+		$wp_customize->add_control( 
+      		new WP_Customize_Color_Control( 
+        		$wp_customize, 'menu_child_color_bg', array(
+          			'label' => 'Background Active Item Menu Children',
+          			'section' => 'sage_header_scheme',
+          			'settings' => 'sage_header_options[bg_child_menu]',
+    	) ) );
 
-    // add color picker setting
-    $wp_customize->add_setting( 'sage_header_options[color_child_menu]', array(
-      'default' => '',
-      'type'    => 'option',
-      ) );
+		// add color picker setting
+		$wp_customize->add_setting( 'sage_header_options[color_child_menu]', array(
+    		'default' => '',
+    		'type'    => 'option',
+    	) );
 
-    // add color picker control
-    $wp_customize->add_control( 
-      new WP_Customize_Color_Control( 
-        $wp_customize, 'menu_child_color', array(
-          'label' => 'Color Active Item Menu Children',
-          'section' => 'sage_header_scheme',
-          'settings' => 'sage_header_options[color_child_menu]',
-          ) ) );
-  }
+		// add color picker control
+		$wp_customize->add_control( 
+			new WP_Customize_Color_Control( 
+				$wp_customize, 'menu_child_color', array(
+    				'label' => 'Color Active Item Menu Children',
+    				'section' => 'sage_header_scheme',
+    				'settings' => 'sage_header_options[color_child_menu]',
+    	) ) );
+	}
 
-  add_action('customize_register', 'sage_customize_footer_register',40);
+	add_action('customize_register', 'sage_customize_footer_register',40);
 
   function bwpy_customizer_head_styles() {
     $header_option = get_option('sage_header_options');

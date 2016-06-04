@@ -94,7 +94,16 @@ nav {
 					background: $grijs;
 					color:#333;
 				}
+				
+				li{
+					text-indent: 30px;
+				}
+				
 			}
+			
+			
+			
+			
 		}
 	}
 }
@@ -129,7 +138,8 @@ nav {
 				border-bottom-left-radius: $border-radius-base;
 			}
 			li {
-				height: 40px;
+				/*
+				height: 40px;*/
 				line-height: 40px;
 				float: left;
 				border-right: 1px solid $white;
@@ -148,6 +158,13 @@ nav {
 			.dropdown:hover {
 				.dropdown-menu {
 					display: block;
+					
+					.dropdown .dropdown-menu{
+						display: none;
+					}
+					.dropdown:hover .dropdown-menu{
+						display: block;
+					}
 				}
 			}
 			.dropdown-menu {
@@ -171,7 +188,21 @@ nav {
 							background: $brand-primary;
 						}
 					}
+					
+					
+					.dropdown-menu{
+						display: none;
+						position: absolute;
+						left: 100%;
+						top: -3px;
+						
+						li{
+							text-indent: 0px;
+						}
+					}
 				}
+				
+				
 			}
 		}
 		// .lang {
