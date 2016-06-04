@@ -6346,6 +6346,8 @@ nav ul.navbar-nav .dropdown-menu {
     nav ul.navbar-nav .dropdown-menu li a {
       background: #e6e6e6;
       color: #333; }
+    nav ul.navbar-nav .dropdown-menu li li {
+      text-indent: 30px; }
 
 @media (max-width: 767px) {
   .logo {
@@ -6372,7 +6374,8 @@ nav ul.navbar-nav .dropdown-menu {
         border-top-left-radius: 3px;
         border-bottom-left-radius: 3px; }
       nav ul.navbar-nav li {
-        height: 40px;
+        /*
+        height: 40px;*/
         line-height: 40px;
         float: left;
         border-right: 1px solid #ffffff;
@@ -6384,6 +6387,10 @@ nav ul.navbar-nav .dropdown-menu {
           color: #ffffff; }
       nav ul.navbar-nav .dropdown:hover .dropdown-menu {
         display: block; }
+        nav ul.navbar-nav .dropdown:hover .dropdown-menu .dropdown .dropdown-menu {
+          display: none; }
+        nav ul.navbar-nav .dropdown:hover .dropdown-menu .dropdown:hover .dropdown-menu {
+          display: block; }
       nav ul.navbar-nav .dropdown-menu {
         position: absolute;
         top: 100%;
@@ -6400,6 +6407,13 @@ nav ul.navbar-nav .dropdown-menu {
             color: #ffffff; }
             nav ul.navbar-nav .dropdown-menu li a:hover {
               background: #00a99d; }
+          nav ul.navbar-nav .dropdown-menu li .dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: -3px; }
+            nav ul.navbar-nav .dropdown-menu li .dropdown-menu li {
+              text-indent: 0px; }
     nav #lang_sel_click {
       position: absolute;
       right: 5px !important;
