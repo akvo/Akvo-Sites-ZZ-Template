@@ -3,33 +3,58 @@
 		Template Name: Sustainability portal Page
 	*/
 ?>
+
+<?php
+    $header_image = get_field('header_image');
+    $financial_page = get_field('financial_page');
+  	$institutional_page = get_field('institutional_page');
+    $environmental_page = get_field('environmental_page');
+    $social_page = get_field('social_page');
+    $technical_page = get_field('technical_page');
+	
+		
+	
+	
+?>
+
 <?php get_header();?>
 	<div class="container" id="main-page-container">
 		<div class="row">
 			<div class="col-md-12">
 				<?php if(have_posts()):?>
          			<?php while ( have_posts() ) : the_post();?>
-         				
-         				
-         				<?php
-                    		$header_image = get_field('header_image');
-                    		$financial_page = get_field('financial_page');
-  	                  		$institutional_page = get_field('institutional_page');
-                    		$environmental_page = get_field('environmental_page');
-                    		$social_page = get_field('social_page');
-                    		$technical_page = get_field('technical_page');
-                      
-                		?>
-         				<div id="rsr" class="" style="background-image:url('<?php _e($header_image);?>')"></div>
-                		<?php the_content();?>
+         				<?php the_content();?>
             		<?php endwhile;?>
           		<?php endif;?>
+          		
+          		
+          		
          	</div>
 		</div>
 	</div><!-- End of Main Body Content -->
 <?php get_footer();?>	
 
 <style>
+	
+	#menu{
+		list-style: none;
+		padding-left: 0;
+		text-align:center;
+		border: #ccc solid 2px;
+		padding: 20px 10px 10px 10px;
+	}
+	
+	@media(min-width : 768px){
+		#menu li{
+			display: inline-block;
+			padding-left: 5px;
+			padding-right: 5px;
+			min-width: 120px;
+			width: 19%;
+		}
+	}
+	
+	
 	#rsr{
 		background-size: cover;
 		width:100%;

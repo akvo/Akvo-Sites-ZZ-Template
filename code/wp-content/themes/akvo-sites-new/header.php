@@ -76,7 +76,7 @@
 						<?php get_search_form();?>	
 					</div>
 
-					<nav class="navbar-collapse collapse in" role="navigation" aria-expanded="true" style="">
+					<nav class="navbar-collapse collapse" role="navigation" aria-expanded="true" style="">
 						<?php
 							if (has_nav_menu('primary_navigation')){
 								wp_nav_menu(['theme_location' => 'primary_navigation', 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'nav navbar-nav']);
