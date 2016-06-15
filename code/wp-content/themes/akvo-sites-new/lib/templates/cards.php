@@ -1,12 +1,9 @@
-
-<div class="row">
+<div id="cards-list" data-target="#cards-list .col-md-4.eq" class="row">
 	<?php foreach($data as $item):?>
-	
 		<div class="col-md-4 eq">
 		<?php
 			
 			$att_str = '';
-			
 			
 			if($item['title']){
 				$att_str .= ' title="'.$item['title'].'"';
@@ -39,8 +36,10 @@
 		</div>
 	<?php endforeach;?>
 </div>	
-
-
-<style>
-	
-</style>
+<?php if($atts['pagination']):?>
+<div class="row">
+	<div class="col-sm-12 text-center">
+		<button data-behaviour='ajax-loading' data-list="#cards-list" class="btn btn-default">Load more&nbsp;<i class="fa fa-refresh"></i></button>
+	</div>
+</div>
+<?php endif;?>
