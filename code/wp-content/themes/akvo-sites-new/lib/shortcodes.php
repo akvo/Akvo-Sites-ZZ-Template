@@ -25,15 +25,33 @@
 			array(
 				'type' => 'post',
 				'posts_per_page' => 3,
+				'pagination' => false
 			), $atts, 'akvo_cards' 
 		);
+		
+		
+		$page = 1;
+			
+		if(isset($_GET['paged'])){
+			$page = $_GET['paged'];
+		}	
 		
 		if ($atts['type'] == 'rsr') {
 			$date_format = get_option( 'date_format' );
 			$jsondata = do_shortcode('[data_feed name="rsr"]');
+			
+			
+			
       		$jsondata = json_decode( str_replace('&quot;', '"', $jsondata) );
 			
-			for($i=0; $i<$atts['posts_per_page']; $i++){
+			//print_r($jsondata->meta->next);
+			
+			
+			
+			$offset = ($page - 1) * $atts['posts_per_page'];
+			
+			
+			for($i=$offset; $i<$offset+$atts['posts_per_page']; $i++){
 				$temp = array();
 				
 				$temp['title'] = $jsondata->objects[$i]->title;
@@ -58,7 +76,8 @@
 			
       		$qargs = array(
         		'post_type' => $atts['type'],
-        		'posts_per_page' => $atts['posts_per_page']
+        		'posts_per_page' => $atts['posts_per_page'],
+        		'paged' => $page
 			);
 			$query = new WP_Query( $qargs );
 			

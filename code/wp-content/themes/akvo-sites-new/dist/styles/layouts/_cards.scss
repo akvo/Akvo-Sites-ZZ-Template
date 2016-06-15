@@ -8,14 +8,19 @@
 		font-size: 14px;
 		border-radius: 5px;
 		background: #f2f2f2;
+		/*
 		height: 440px;
+		*/
 		overflow: hidden;
 	}
 	.card .card-title{
 		margin: 0;
 		font-size: 24px;
-		height: 56px;
+		padding: 2px 0;
 		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		font-weight: normal;
 	}
 	
 	
@@ -24,6 +29,7 @@
 		padding: 10px 20px;
 		background: #54bce8;
 		color: #FFF;
+		font-size: 12px;
 	}
 	
 	.card .card-image{
@@ -36,15 +42,22 @@
 	}
 	.card .card-content{
 		overflow: hidden;
-		max-height: 90px;
+		height: 90px;
 	}
 	
-	.card a[href]{
+	.card .card-more{
+		display: block;
+		text-align: right;
+		margin-top: 10px;
+	}
+	
+	.card h3 a[href]{
 		text-decoration: none;
 		color: inherit;
 	}
 	
 	@media(max-width: 767px){
+		
 		.card{
 			height: auto;
 			width: 100%;
@@ -52,7 +65,7 @@
 		
 		.card .card-title, .card .card-content{
 			height: auto;
-			overflow: visible;
+			
 		}
 		.card .card-image{
 			height: 250px;

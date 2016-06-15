@@ -6326,6 +6326,9 @@ nav ul.navbar-nav li {
     color: #00a99d; }
   nav ul.navbar-nav li .glyphicon {
     display: none; }
+nav ul.navbar-nav .dropdown-toggle::after {
+  content: "";
+  position: absolute; }
 nav ul.navbar-nav .dropdown-menu {
   display: block;
   position: relative;
@@ -6985,20 +6988,26 @@ article .intro, .article .intro {
   font-size: 14px;
   border-radius: 5px;
   background: #f2f2f2;
+  /*
   height: 440px;
+  */
   overflow: hidden; }
 
 .card .card-title {
   margin: 0;
   font-size: 24px;
-  height: 56px;
-  overflow: hidden; }
+  padding: 2px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: normal; }
 
 .card .card-info {
   margin: 15px -20px;
   padding: 10px 20px;
   background: #54bce8;
-  color: #FFF; }
+  color: #FFF;
+  font-size: 12px; }
 
 .card .card-image {
   width: 100%;
@@ -7009,9 +7018,14 @@ article .intro, .article .intro {
 
 .card .card-content {
   overflow: hidden;
-  max-height: 90px; }
+  height: 90px; }
 
-.card a[href] {
+.card .card-more {
+  display: block;
+  text-align: right;
+  margin-top: 10px; }
+
+.card h3 a[href] {
   text-decoration: none;
   color: inherit; }
 
@@ -7021,8 +7035,7 @@ article .intro, .article .intro {
     width: 100%; }
 
   .card .card-title, .card .card-content {
-    height: auto;
-    overflow: visible; }
+    height: auto; }
 
   .card .card-image {
     height: 250px; } }

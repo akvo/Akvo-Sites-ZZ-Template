@@ -321,7 +321,7 @@ use Mexitek\PHPColors\Color;
     	)));
     	
     	/* CARD FONT COLOR */
-		$wp_customize->add_setting('akvo_card[color]', array(
+		$wp_customize->add_setting('akvo_card[title_color]', array(
       		'default' => '#333333',
       		'transport'   => 'refresh',
       		'type' => 'option'
@@ -330,10 +330,25 @@ use Mexitek\PHPColors\Color;
     	
     	$wp_customize->add_control( 
       		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_card[color]', array(
-          			'label' => 'Font Color',
+        		$wp_customize, 'akvo_card[title_color]', array(
+          			'label' => 'Title Color',
           			'section' => 'akvo_card_section',
-          			'settings' => 'akvo_card[color]',
+          			'settings' => 'akvo_card[title_color]',
+    	)));
+    	
+    	$wp_customize->add_setting('akvo_card[content_color]', array(
+      		'default' => '#333333',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+
+    	
+    	$wp_customize->add_control( 
+      		new WP_Customize_Color_Control( 
+        		$wp_customize, 'akvo_card[content_color]', array(
+          			'label' => 'Content Color',
+          			'section' => 'akvo_card_section',
+          			'settings' => 'akvo_card[content_color]',
     	)));
     	
     	/* CARD INFOBAR */
@@ -408,7 +423,7 @@ use Mexitek\PHPColors\Color;
       		'type'     => 'checkbox',
       		'std' => 1
       	));
-		
+		/*
 		$wp_customize->add_setting('akvo_card[height]', array(
        		'default' => '440px',
        		'capability' => 'edit_theme_options',
@@ -417,16 +432,11 @@ use Mexitek\PHPColors\Color;
  		
 		$wp_customize->add_control('akvo_card[height]', array(
 			'settings' => 'akvo_card[height]',
-    		'type' => 'select',
+    		'type' => 'text',
         	'label' => 'Height of the card:',
         	'section' => 'akvo_card_section',
-        	'choices' => array(
-            	'440px' => 'Large',
-            	'390px' => 'Medium',
-            	'340px' => 'Small',
-			),
-   		));
-		
+        ));
+		*/
 		/* END OF CARD SECTION */
 		
 		
@@ -571,7 +581,6 @@ function mytheme_customize_css(){
          	<?php if($akvo_card):?>
          	.card{
          		background: <?php _e($akvo_card['bg']);?>;
-         		color: <?php _e($akvo_card['color']);?>;;
          	}
          	.card .card-info{
          		background: <?php _e($akvo_card['infobar_bg']);?>;
@@ -584,20 +593,15 @@ function mytheme_customize_css(){
          		<?php if($akvo_card['hide_content']):?>
          		display: none;
          		<?php endif;?>
+         		color: <?php _e($akvo_card['content_color']);?>;
          	}
          	.card .card-title{
-         		<?php if($akvo_card && $akvo_card['hide_card_title']):?>
+         		<?php if($akvo_card['hide_card_title']):?>
          		display: none;
          		<?php endif;?>
+         		color: <?php _e($akvo_card['title_color']);?>;
          	}
          	
-         	@media (min-width: 768px){
-         		.card{
-         			<?php if($akvo_card['height']):?>
-         			height: <?php _e($akvo_card['height']);?>
-         			<?php endif;?>
-         		}
-         	}
          	<?php endif;?>
          </style>
     <?php

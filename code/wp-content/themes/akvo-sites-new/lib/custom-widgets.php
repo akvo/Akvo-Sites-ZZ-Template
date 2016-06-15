@@ -88,8 +88,8 @@ class post_widget extends WP_Widget {
       $link = 'http://rsr.akvo.org'.$objects[$c]->absolute_url;
       $type = 'RSR update';
 
-      blokmaker_rsr($amount, $type, $title, $text, $date, $thumb, $link);
-
+      //blokmaker_rsr($amount, $type, $title, $text, $date, $thumb, $link);
+		echo do_shortcode('[akvo-card title="'.$title.'" type="RSR Update" link="'.$link.'" img="'.$thumb.'" content="'.$text.'" date="'.$date.'"]');	
     }
 
     else {
@@ -103,8 +103,21 @@ class post_widget extends WP_Widget {
         while ( $query->have_posts() ) {
 
           $query->the_post();
-
-          blokmaker($amount, $type2);
+          	
+          	/*
+          	$shortcode = '[akvo-card ';
+          	
+          	
+          	$img = wp_get_attachment_url( get_post_thumbnail_id($post_id) );
+          	if($img){
+          		$shortcode .= 'img="'.$img.'" ';
+          	}
+          	
+          	$shortcode .= 'title="'.get_the_title().'" date="'.get_the_date().'" content="'.get_the_excerpt().'" link="'.get_the_permalink().'"]';
+			echo do_shortcode($shortcode);	
+          	//blokmaker($amount, $type2);
+          	*/
+          	get_template_part( 'partials/post', 'card' );
         }
         wp_reset_postdata();
       }

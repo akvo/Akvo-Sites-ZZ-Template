@@ -102,6 +102,7 @@ namespace Roots\Sage\Assets;
 		//wp_enqueue_script( 'jquery' );
 		//wp_enqueue_script('modernizr', asset_path('scripts/modernizr.js'), [], null, true);
 		wp_enqueue_script('bootstrap_js', asset_path('scripts/bootstrap.min.js'), ['jquery'], '1.0.1', true);
+		
 		wp_enqueue_script('sage_js', asset_path('scripts/main.js'), ['jquery'], null, true);
 		
 		
