@@ -1,23 +1,7 @@
 <?php
-
-
-	function akvo_carousel(){
 	
-		$args = array(
-			'post_type' => 'carousel'
-		);		
-		
-		$query_carousel = new WP_Query( $args);
-		
-		ob_start();
-		if ( $query_carousel->have_posts() ) : 
-			include "templates/carousel.php";
-		endif;
-		return ob_get_clean();
-	}
+	include "customize-theme.php";
 
-	add_shortcode( 'akvo-carousel', 'akvo_carousel' );
-	
 	
 	function akvo_cards($atts){
 		$data = array();
@@ -25,6 +9,7 @@
 			array(
 				'type' => 'post',
 				'posts_per_page' => 3,
+				'rsr' => 'rsr',
 				'pagination' => false
 			), $atts, 'akvo_cards' 
 		);
@@ -32,20 +17,17 @@
 		
 		$page = 1;
 			
-		if(isset($_GET['paged'])){
-			$page = $_GET['paged'];
+		if(isset($_GET['akvo-paged'])){
+			$page = $_GET['akvo-paged'];
 		}	
 		
 		if ($atts['type'] == 'rsr') {
 			$date_format = get_option( 'date_format' );
-			$jsondata = do_shortcode('[data_feed name="rsr"]');
+			$jsondata = do_shortcode('[data_feed name="'.$atts['rsr'].'"]');
 			
 			
 			
       		$jsondata = json_decode( str_replace('&quot;', '"', $jsondata) );
-			
-			//print_r($jsondata->meta->next);
-			
 			
 			
 			$offset = ($page - 1) * $atts['posts_per_page'];
@@ -54,20 +36,25 @@
 			for($i=$offset; $i<$offset+$atts['posts_per_page']; $i++){
 				$temp = array();
 				
-				$temp['title'] = $jsondata->objects[$i]->title;
+				
+				$json_obj = $jsondata->results[$i];
 				
 				
-				$temp['content'] = $jsondata->objects[$i]->text;
-      			$temp['date'] = date($date_format, strtotime($jsondata->objects[$i]->time));
+				
+				$temp['title'] = $json_obj->title;
+				
+				
+				$temp['content'] = $json_obj->text;
+      			$temp['date'] = date($date_format, strtotime($json_obj->created_at));
 				
 				$temp['type'] = 'RSR Update';
 				
 				
-				if($jsondata->objects[$i]->photo){
-					$temp['img'] = 'http://rsr.akvo.org'.$jsondata->objects[$i]->photo;
+				if($json_obj->photo){
+					$temp['img'] = 'http://rsr.akvo.org'.$json_obj->photo;
 				}
 					
-      			$temp['link'] = 'http://rsr.akvo.org'.$jsondata->objects[$i]->absolute_url;
+      			$temp['link'] = 'http://rsr.akvo.org'.$json_obj->absolute_url;
 				
 				array_push($data, $temp);
 			}
@@ -124,7 +111,7 @@
 				'date' => '',
 				'type' => 'Blog',
 				'link' => '',
-				'img' => get_bloginfo('template_url').'/dist/images/placeholder800x400.jpg'
+				'img' => '', //get_bloginfo('template_url').'/dist/images/placeholder800x400.jpg'
 			), $atts, 'akvo_card' 
 		);
 		ob_start();

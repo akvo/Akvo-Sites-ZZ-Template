@@ -20,7 +20,8 @@
   		'plugins/related.php',        // Related posts
   		'lib/customize-theme.php',        // Theme customizer
   		'lib/taxonomies.php',        // Custom categories for eg media library
-  		'lib/shortcodes.php',        // Custom shortcodes
+  		'lib/akvo-cards/main.php',        // Cards
+  		'lib/akvo-carousel/main.php',        // Carousel
 		//'lib/color.php',        // PHP color function
 	];
 	
