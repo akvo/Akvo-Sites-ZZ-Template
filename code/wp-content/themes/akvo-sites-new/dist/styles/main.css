@@ -6528,7 +6528,7 @@ nav ul.navbar-nav .dropdown-menu {
 
 footer {
   text-align: center;
-  color: #ffffff; }
+  /*color:$white;*/ }
   footer h3 {
     font-size: 18px;
     margin-top: 10px; }
@@ -6997,6 +6997,8 @@ article .intro, .article .intro {
     background-position: top center;
     margin: 20px 0;
     background-image: url("../images/placeholder800x400.jpg"); }
+  .card .card-info span.pull-right {
+    text-transform: capitalize; }
 
 .card .card-title {
   margin: 0;

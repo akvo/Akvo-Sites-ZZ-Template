@@ -1,28 +1,51 @@
 <?php
 
-add_action( 'init', 'create_post_type' );
-function create_post_type() {
-  register_post_type( 'blog',
-    array(
-      'labels' => array(
-        'name' => __( 'Blog posts' ),
-        'singular_name' => __( 'Blog post' )
-      ),
-      'public' => true,
-      'has_archive' => true,
-      'menu_position' => 20,
-      'menu_icon' => 'dashicons-format-aside',
-      'taxonomies' => array('category'),
-      'supports' => array(
-        'title',
-        'editor',
-        'author', 
-        'thumbnail', 
-        'excerpt', 
-        'comments', 
-      ),
-    )
-  );
+	add_action( 'init', 'create_post_type' );
+	
+	function create_post_type() {
+  		register_post_type( 'blog',
+    		array(
+      			'labels' => array(
+        			'name' => __( 'Blog posts' ),
+        			'singular_name' => __( 'Blog post' )
+      			),
+      		'public' => true,
+      		'has_archive' => true,
+      		'menu_position' => 20,
+      		'menu_icon' => 'dashicons-format-aside',
+      		'taxonomies' => array('category'),
+      		'supports' => array(
+        		'title',
+        		'editor',
+        		'author', 
+        		'thumbnail', 
+        		'excerpt', 
+        		'comments', 
+      		),
+    		)
+  		);
+  		
+  		register_post_type( 'news',
+    		array(
+      			'labels' => array(
+        			'name' => __( 'News' ),
+        			'singular_name' => __( 'News' )
+      			),
+      		'public' => true,
+      		'has_archive' => true,
+      		'menu_position' => 20,
+      		'menu_icon' => 'dashicons-calendar-alt',
+      		'taxonomies' => array('category'),
+      		'supports' => array(
+        		'title',
+        		'editor',
+        		'author', 
+        		'thumbnail', 
+        		'excerpt', 
+        		'comments', 
+      		),
+    		)
+  		);
 
   register_post_type( 'video',
     array(

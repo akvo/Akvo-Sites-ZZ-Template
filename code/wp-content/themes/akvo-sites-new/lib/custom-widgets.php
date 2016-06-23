@@ -52,10 +52,13 @@
     		//$columns = $instance['columns'];
     		
     		$type = $instance['type'];
-			$type2 = $type;
+    		$type2 = $type;
+    		
+    		/*
     		if ($type == 'news') {
       			$type2 = 'post';
     		}
+    		*/
     		if (!isset($counters[$type2])) {
       			$counters[$type2] = 0;
     		}
