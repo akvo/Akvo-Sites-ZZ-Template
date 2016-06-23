@@ -22,7 +22,7 @@
 				url = encodeURI(url);
 				/* add page parameter to the request */
 				var page = ul.page_inc();
-				url += (url.split('?')[1] ? '&':'?') + 'paged=' + page;
+				url += (url.split('?')[1] ? '&':'?') + 'akvo-paged=' + page;
 				return url;
 			};
 			

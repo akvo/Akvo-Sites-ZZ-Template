@@ -6988,10 +6988,14 @@ article .intro, .article .intro {
   font-size: 14px;
   border-radius: 5px;
   background: #f2f2f2;
-  /*
-  height: 440px;
-  */
   overflow: hidden; }
+  .card .card-image {
+    width: 100%;
+    height: 150px;
+    background-size: cover;
+    background-position: top center;
+    margin: 20px 0;
+    background-image: url("../images/placeholder800x400.jpg"); }
 
 .card .card-title {
   margin: 0;
@@ -7009,20 +7013,11 @@ article .intro, .article .intro {
   color: #FFF;
   font-size: 12px; }
 
-.card .card-image {
-  width: 100%;
-  height: 150px;
-  background-size: cover;
-  background-position: top center;
-  margin: 20px 0; }
-
 .card .card-content {
   overflow: hidden;
   height: 90px; }
 
 .card .card-more {
-  display: block;
-  text-align: right;
   margin-top: 10px; }
 
 .card h3 a[href] {
