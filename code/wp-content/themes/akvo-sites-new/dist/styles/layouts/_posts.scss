@@ -60,6 +60,7 @@ article, .article {
 		.meta {
 			.type, .author {
 				display: inline;
+				text-transform: capitalize;
 			}
 		}
 	}

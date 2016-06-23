@@ -1,7 +1,10 @@
 <?php
 	
 	include "customize-theme.php";
-
+	
+	include "single-widget.php";
+	
+	include "pin-widget.php";
 	
 	function akvo_cards($atts){
 		$data = array();
