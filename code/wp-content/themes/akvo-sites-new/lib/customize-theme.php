@@ -296,7 +296,56 @@ use Mexitek\PHPColors\Color;
 		$wp_customize->remove_section( 'nav');
 		$wp_customize->remove_section( 'static_front_page');
 		
+		/* ARTICLE SECTION */
+		$wp_customize->add_section( 'article_section' , array(
+	    	'title'       => __( 'Article (Single Posts)', 'sage' ),
+		    'priority'    => 30,
+		    'description' => 'Select Article styles for single posts, akvopedia, etc',
+		) );
 		
+		/* font size of the title */
+		$wp_customize->add_setting( 'akvo_article[title_font_size]', array(
+      		'default' => '24px',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+
+    	$wp_customize->add_control('akvo_article[title_font_size]', array(
+			'settings' => 'akvo_article[title_font_size]',
+    		'type' => 'text',
+        	'label' => 'Font size of the article title:',
+        	'section' => 'article_section',
+        ));
+        
+        /* font-size of the meta */
+        $wp_customize->add_setting( 'akvo_article[meta_font_size]', array(
+      		'default' => '16px',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+
+    	$wp_customize->add_control('akvo_article[meta_font_size]', array(
+			'settings' => 'akvo_article[meta_font_size]',
+    		'type' => 'text',
+        	'label' => 'Font size of the article meta (date, etc):',
+        	'section' => 'article_section',
+        ));
+        
+        /* font-size of the content */
+        $wp_customize->add_setting( 'akvo_article[content_font_size]', array(
+      		'default' => '16px',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+
+    	$wp_customize->add_control('akvo_article[content_font_size]', array(
+			'settings' => 'akvo_article[content_font_size]',
+    		'type' => 'text',
+        	'label' => 'Font size of the article content:',
+        	'section' => 'article_section',
+        ));
+        
+        /* END OF ARTICLE SECTION */
 	}
 	add_action( 'customize_register', 'akvo_customize_register' );
 
@@ -389,9 +438,9 @@ function mytheme_customize_css(){
 	$info_bar_testimonial = get_theme_mod('info_bar_testimonial');
 	if (empty( $info_bar_testimonial )) $info_bar_testimonial = '#007ba8';
 	
+	$akvo_article = get_option('akvo_article');
 	
-	
-	
+	//print_r($akvo_article);
     ?>
          <style type="text/css">
          	html {background:<?php echo $donker;?>; }
@@ -436,6 +485,25 @@ function mytheme_customize_css(){
          	}
          	
          	
+         	<?php if($akvo_article):?>
+         	article header h3{
+         		<?php if($akvo_article['title_font_size']):?>
+         		font-size: <?php _e($akvo_article['title_font_size'])?>;
+         		<?php endif;?>
+         	}
+         	
+         	article .meta{
+         		<?php if($akvo_article['meta_font_size']):?>
+         		font-size: <?php _e($akvo_article['meta_font_size'])?>;
+         		<?php endif;?>
+         	}
+         	
+         	article .content{
+         		<?php if($akvo_article['content_font_size']):?>
+         		font-size: <?php _e($akvo_article['content_font_size'])?>;
+         		<?php endif;?>
+         	}
+         	<?php endif;?>
          </style>
     <?php
 }
