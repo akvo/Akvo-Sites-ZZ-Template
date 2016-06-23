@@ -185,6 +185,7 @@ nav {
 					&.current-menu-item {
 						a {
 							background: $brand-primary;
+							border-radius: 0;
 						}
 					}
 					a {

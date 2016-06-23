@@ -6405,7 +6405,8 @@ nav ul.navbar-nav .dropdown-menu {
           text-indent: 0;
           background: #99ddd8; }
           nav ul.navbar-nav .dropdown-menu li.current-menu-item a {
-            background: #00a99d; }
+            background: #00a99d;
+            border-radius: 0; }
           nav ul.navbar-nav .dropdown-menu li a {
             color: #ffffff; }
             nav ul.navbar-nav .dropdown-menu li a:hover {
