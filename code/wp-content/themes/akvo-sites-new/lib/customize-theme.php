@@ -431,6 +431,8 @@ function mytheme_customize_css(){
          		nav  {background: <?php echo $lichtgrijs;?>;}
          		nav ul.navbar-nav li a:hover, nav ul.navbar-nav li:hover a { background: <?php echo $licht;?>;}
          		nav ul.navbar-nav .dropdown-menu li a:hover {background: <?php echo $main;?>; }
+         		
+         		nav ul.navbar-nav .dropdown-menu li.current-menu-item a{background: <?php echo $main;?>;}
          	}
          	
          	
