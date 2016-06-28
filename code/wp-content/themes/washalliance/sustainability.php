@@ -59,7 +59,7 @@
 		background-size: cover;
 		width:100%;
 		position: relative;
-		height: 350px;
+		min-height: 350px;
 		width: 100%;
 		padding-top:20px;	
 		margin-bottom: 30px;
@@ -69,6 +69,36 @@
 		display: block;
 		margin: 0 auto;
 	}
+	
+	#rsr h1{
+		display: none;
+	}
+	
+	#rsr.sub-page h1{
+		display: block;
+		text-shadow: 2px 2px 2px rgba(50, 50, 50, 1);
+		text-transform: uppercase;
+		font-size: 37px;
+		color: #FFF;
+		margin-left: 270px;
+		margin-top: -40px;
+		padding-bottom: 20px;
+		font-weight: 400;
+	}
+	#rsr.sub-page svg{
+		margin-left: 20px;
+	}
+	@media(max-width : 767px){
+		#rsr.sub-page h1{
+			margin-left: 20px;
+			margin-top: 20px;
+			text-align:center;
+		}
+		#rsr.sub-page svg{
+			margin-left: auto;
+		}
+	}
+	
 </style>
 
 <link type="text/css" rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/js/wiel/qtip.min.css" />

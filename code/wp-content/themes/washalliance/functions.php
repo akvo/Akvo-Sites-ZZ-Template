@@ -2,8 +2,14 @@
 	function sustainability_header($atts){
 		$header_image = get_field('header_image');
 		
-		return '<div id="rsr" style="background-image:url(\''.$header_image.'\')"></div>';
-	
+		
+		ob_start();
+		?>
+		<div id="rsr" <?php if('wiel' != get_field('current_page')) _e('class="sub-page"');?> style="background-image:url('<?php _e($header_image);?>')">
+			<h1><?php the_title();?></h1>
+		</div>
+		<?php
+		return ob_get_clean();
 	}
 	add_shortcode('sustainability_header', 'sustainability_header');
 	
