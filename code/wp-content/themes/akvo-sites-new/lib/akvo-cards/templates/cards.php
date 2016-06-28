@@ -1,4 +1,4 @@
-<div id="cards-list" data-target="#cards-list .col-md-4.eq" class="row">
+<div id="cards-list" data-target=".col-md-4.eq" class="row" data-url="<?php _e($url);?>">
 	<?php foreach($data as $item):?>
 		<div class="col-md-4 eq">
 		<?php

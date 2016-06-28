@@ -28,49 +28,15 @@
     
 			static $counters = array();
 
-			/* Our variables from the widget settings. */
-    		//$columns = $instance['columns'];
-    		
-    		$type = $instance['type'];
-    		$type2 = $type;
-    		
-    		if (!isset($counters[$type2])) {
-      			$counters[$type2] = 0;
+			if (!isset($counters[$instance['type']])) {
+      			$counters[$instance['type']] = 0;
     		}
-
-    		
-			if ($type == 'project') {
-				$c = $counters[$type2];
-				$date_format = get_option( 'date_format' );
-				$data = do_shortcode('[data_feed name="'.$instance['rsr-id'].'"]');
-				$data = json_decode( str_replace('&quot;', '"', $data) );
-				$objects = $data->results;
-				$title = $objects[$c]->title;
-				$text = $objects[$c]->text;
-				$date = date($date_format,strtotime($objects[$c]->created_at));
-				$thumb = 'http://rsr.akvo.org'.$objects[$c]->photo;
-				$link = 'http://rsr.akvo.org'.$objects[$c]->absolute_url;
-				$type = 'RSR update';
-
-      			echo do_shortcode('[akvo-card title="'.$title.'" type="RSR Update" link="'.$link.'" img="'.$thumb.'" content="'.$text.'" date="'.$date.'"]');	
-    		}
-			else {
-      			$qargs = array(
-        			'post_type' => $type2,
-        			'posts_per_page' => 1,
-        			'offset' => $counters[$type2],
-      			);
-      			$query = new WP_Query( $qargs );
-      			
-      			if ( $query->have_posts() ) { 
-        			while ( $query->have_posts() ) {
-						$query->the_post();
-          				get_template_part( 'partials/post', 'card' );
-        			}
-        			wp_reset_postdata();
-      			}
-    		}
-
+			$url = admin_url('admin-ajax.php')."?action=akvo_card&type=".$instance['type']."&offset=".$counters[$instance['type']]."&rsr-id=".$instance['rsr-id'];
+			
+			
+			
+			echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
+			
     		$counters[$type2]++;
 		}
 

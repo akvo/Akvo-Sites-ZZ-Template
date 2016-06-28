@@ -1,9 +1,9 @@
 <?php
 
-/**
- * Register the Widget
- */
-add_action( 'widgets_init', create_function( '', 'register_widget("pin_post_widget");' ) );
+	/**
+ 	* Register the Widget
+ 	*/
+	add_action( 'widgets_init', create_function( '', 'register_widget("pin_post_widget");' ) );
 
 class pin_post_widget extends WP_Widget
 {
@@ -48,9 +48,8 @@ class pin_post_widget extends WP_Widget
 
     
     public function update( $new_instance, $old_instance ) {
-
-        // update logic goes here
-        $updated_instance = $new_instance;
+		
+		$updated_instance = $new_instance;
         return $updated_instance;
     }
 
@@ -61,15 +60,18 @@ class pin_post_widget extends WP_Widget
      * @return void
      **/
     public function form( $instance ){
-        $title = __('Untitled');
+    	
+    	$defaults = array( 'type' => 'news'); 
+		$instance = wp_parse_args( (array) $instance, $defaults );
+    	
+    	$title = __('Untitled');
         if(isset($instance['title']))
         {
             $title = $instance['title'];
         }
 
         $image = '';
-        if(isset($instance['image']))
-        {
+        if(isset($instance['image'])){
             $image = $instance['image'];
         }
         ?>
