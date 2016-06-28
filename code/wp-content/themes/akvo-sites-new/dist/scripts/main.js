@@ -34,6 +34,13 @@
 			};
 			
 			ul.append_children = function(result){
+				/*
+				console.log(ul.attr('data-target'));
+				console.log($(result).find(ul.attr('data-target')).length);
+				
+				console.log($(result).html());
+				*/
+				
 				if($(result).find(ul.attr('data-target')).length){
 					ul.attr('data-load-flag', '');
 					btn.find('i').removeClass('fa-spin');
@@ -60,6 +67,7 @@
 				jQuery.ajax({
     				url : url,
         			success : function(result){
+        				//console.log(result);
         				console.log('lazy loading from sjax');
 						ul.append_children(result);
             		},
@@ -85,6 +93,44 @@
     
     
     $('body').find("[data-behaviour~=ajax-loading]").ajax_loading();
+    
+    
+    
+   
+}(jQuery));
+
+
+/* RELOAD HTML THROUGH AJAX */
+(function($){
+
+	$.fn.reload_html = function(){
+        return this.each(function(){
+			var el = $(this);
+            
+            /* for loading icon */
+            el.html("<div style='text-align:center; padding: 20px;'><i class='fa fa-refresh fa-spin'></i></div>");
+            
+            jQuery.ajax({
+    			url : el.attr('data-url'),
+        		success : function(result){
+        			//console.log(result);
+        			console.log('reload html');
+					el.html(result);
+					el.find("[data-behaviour~=ajax-loading]").ajax_loading();
+            	},
+        		error : function(){
+        			el.hide();
+        		}
+        	});
+			
+			
+			
+			
+		});
+    };
+    
+    
+    $('body').find("[data-behaviour~=reload-html]").reload_html();
     
     
     
