@@ -453,17 +453,20 @@ function mytheme_customize_css(){
             nav ul.navbar-nav li .fa-circle, a { color: <?php echo $main;?>; }
             a:hover {color:<?php echo $donker;?>;}
             .btn-default:focus, .btn-default:hover, .filters #uwpqsf_id #uwpqsf_btn input:focus, .filters #uwpqsf_id #uwpqsf_btn input:hover, footer .fixed, .comment-form footer .custom input[type=submit], .filters #uwpqsf_id #uwpqsf_btn footer .custom input, footer .custom .btn, footer .custom .comment-form input[type=submit], footer .custom .filters #uwpqsf_id #uwpqsf_btn input { background: <?php echo $donker;?>; }
-         	.box-wrap, .article .bg, article .bg, .filters, .breadcrumbs, .search-wrap { background: <?php echo $lichtgrijs;?>;}
-         	.box-wrap .infobar.blog, .box-wrap .infobar.type-blog { background: <?php echo $info_bar_blog; ?>; }
-         	.box-wrap .infobar.post, .box-wrap .infobar.type-post { background: <?php echo $info_bar_news;?>; }
-         	.box-wrap .infobar.video, .box-wrap .infobar.type-video { background: <?php echo $info_bar_video;?>; }
-         	.box-wrap .infobar.update, .box-wrap .infobar.type-update { background: <?php echo $info_bar_update;?>; }
-         	.box-wrap .infobar.page, .box-wrap .infobar.type-page { background: <?php echo $info_bar_page;?>; }
-         	.box-wrap .infobar.media, .box-wrap .infobar.type-media { background: <?php echo $info_bar_media;?>; }
-         	.box-wrap .infobar.map, .box-wrap .infobar.type-map { background: <?php echo $info_bar_map;?>; }
-         	.box-wrap .infobar.project, .box-wrap .infobar.type-project { background: <?php echo $info_bar_project;?>; }
-         	.box-wrap .infobar.testimonial, .box-wrap .infobar.type-testimonial { background: <?php echo $info_bar_testimonial;?>; }
-         	.box-wrap .infobar.flow, .box-wrap .infobar.type-flow { background: <?php echo $info_bar_flow;?>; }
+         	.card, .article .bg, article .bg, .filters, .breadcrumbs, .search-wrap { background: <?php echo $lichtgrijs;?>;}
+         	
+         	
+         	.card .card-info.blog{ background: <?php echo $info_bar_blog; ?>; }
+         	.card .card-info.post{ background: <?php echo $info_bar_news;?>; }
+         	.card .card-info.video{ background: <?php echo $info_bar_video;?>; }
+         	.card .card-info.rsr-update{ background: <?php echo $info_bar_update;?>; }
+         	.card .card-info.page{ background: <?php echo $info_bar_page;?>; }
+         	.card .card-info.media{ background: <?php echo $info_bar_media;?>; }
+         	.card .card-info.map{ background: <?php echo $info_bar_map;?>; }
+         	.card .card-info.project{ background: <?php echo $info_bar_project;?>; }
+         	.card .card-info.testimonial{ background: <?php echo $info_bar_testimonial;?>; }
+         	.card .card-info.flow{ background: <?php echo $info_bar_flow;?>; }
+         	
          	nav ul.navbar-nav li {background: <?php echo $grijs;?>;}
          	nav ul.navbar-nav .dropdown-menu li a {background: <?php echo $grijs;?>; }
          	.clickable:hover .text {background: <?php echo $main;?>;}
