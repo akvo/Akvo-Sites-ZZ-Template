@@ -466,6 +466,7 @@ function mytheme_customize_css(){
          	.card .card-info.project{ background: <?php echo $info_bar_project;?>; }
          	.card .card-info.testimonial{ background: <?php echo $info_bar_testimonial;?>; }
          	.card .card-info.flow{ background: <?php echo $info_bar_flow;?>; }
+         	.card .card-info.news{ background: <?php echo $info_bar_news;?>; }
          	
          	nav ul.navbar-nav li {background: <?php echo $grijs;?>;}
          	nav ul.navbar-nav .dropdown-menu li a {background: <?php echo $grijs;?>; }

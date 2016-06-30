@@ -1,5 +1,6 @@
 <?php
-
+	
+	add_action( 'widgets_init', create_function( '', 'register_widget("post_widget");' ) );
 	/**
  	* Adds widget.
  	*/
@@ -8,15 +9,17 @@
 		/**
 		* Widget setup.
 		*/
-		function post_widget() {
-    		/* Widget settings. */
-    		$widget_ops = array( 'classname' => 'single_post', 'description' => __('Displays a single post widget', 'single_post') );
-			
-    		/* Widget control settings. */
-    		$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'single-post' );
+		function __construct() {
+    		
+    		$widget_ops = array(
+            	'classname' => 'single_post',
+            	'description' => 'Displays a single post widget'
+        	);
 
-    		/* Create the widget. */
-    		$this->WP_Widget( 'single-post', __('Single Update', 'post_widget'), $widget_ops, $control_ops );
+        	parent::__construct( 'post_widget', 'Single Post Widget', $widget_ops );
+
+    		
+    		
 		}
 
 		/**
@@ -37,7 +40,7 @@
 			
 			echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
 			
-    		$counters[$type2]++;
+    		$counters[$instance['type']]++;
 		}
 
   		/**
@@ -95,10 +98,10 @@
 	}
 	
 	
-	// register Foo_Widget widget
+	/* register Foo_Widget widget
 	function register_post_widget() {
     	register_widget( 'post_widget' );	
     }
 	add_action( 'widgets_init', 'register_post_widget' );
-
+	*/
 ?>
