@@ -6842,7 +6842,7 @@ a {
     .carousel .item div {
       height: 100%; }
   .carousel .carousel-indicators {
-    right: 25px;
+    right: 10px;
     top: 10px;
     left: auto;
     bottom: auto;
