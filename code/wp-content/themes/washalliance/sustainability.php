@@ -74,6 +74,19 @@
 		display: none;
 	}
 	
+	#rsr a[href].back{
+		display: none;
+	}
+	
+	#rsr.sub-page a[href].back{
+		display: block;
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		padding: 5px 10px;
+		background: #FFF;
+	}
+	
 	#rsr.sub-page h1{
 		display: block;
 		text-shadow: 2px 2px 2px rgba(50, 50, 50, 1);
@@ -97,6 +110,11 @@
 		#rsr.sub-page svg{
 			margin-left: auto;
 		}
+
+		#rsr.sub-page a[href].back{
+			display: none;
+		}
+		
 	}
 	
 </style>

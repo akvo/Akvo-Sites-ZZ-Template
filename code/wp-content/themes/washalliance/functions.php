@@ -7,6 +7,7 @@
 		?>
 		<div id="rsr" <?php if('wiel' != get_field('current_page')) _e('class="sub-page"');?> style="background-image:url('<?php _e($header_image);?>')">
 			<h1><?php the_title();?></h1>
+			<a href="<?php the_field('parent_page');?>" class='back'>Back to main portal</a>
 		</div>
 		<?php
 		return ob_get_clean();
