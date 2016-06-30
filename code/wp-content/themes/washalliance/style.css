@@ -7,4 +7,20 @@
 	Version: 1.0
 */
 
+@font-face {
+	font-family: 'MuseoSansNormal';
+	src: url('fonts/MuseoSans_100.otf'); /* IE9 Compat Modes */
+}  
 
+@font-face {
+	font-family: 'MuseoSansBold';
+	src: url('fonts/MuseoSans_500.otf'); /* IE9 Compat Modes */
+}
+
+h1, h2, h3, h4, h5, h6{
+	font-family: 'MuseoSansBold', arial, sans-serif !important;
+}
+
+body{
+	font-family: 'MuseoSansNormal', arial, sans-serif !important;
+}
