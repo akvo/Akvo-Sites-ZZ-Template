@@ -1,4 +1,4 @@
-<div id="main-carousel" class="carousel slide fp" data-ride="carousel">
+<div id="main-carousel" class="carousel slide fp" data-ride="carousel" data-interval="<?php _e($atts['interval']);?>">
 	<div class="carousel-inner" role="listbox">
 		<ol class="carousel-indicators">
 		<?php
