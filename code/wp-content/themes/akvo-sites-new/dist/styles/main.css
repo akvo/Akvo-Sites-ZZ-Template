@@ -6280,6 +6280,9 @@ blockquote {
   .banner .row:first-of-type {
     margin-bottom: 15px; }
 
+.brand:hover {
+  text-decoration: none; }
+
 .breadcrumbs {
   background: #f3f3f3;
   padding: 10px 15px;

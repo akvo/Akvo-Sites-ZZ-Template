@@ -447,9 +447,9 @@ function mytheme_customize_css(){
             body { font-family: '<?php echo $font; ?>'; background: <?php echo $background; ?>;}
             h1,h2,h3,h4,h5,h6 { font-family: '<?php echo $font_head; ?>';  }
             nav { font-family: '<?php echo $font_nav; ?>'; }
-            .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a { background: <?php echo $licht;?>; }
+            .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active { background: <?php echo $licht;?>; }
             nav .lang .fa-circle, nav ul.navbar-nav li i { color: <?php echo $main;?>; }
-            .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, .carousel .carousel-indicators li.active, footer .custom { background: <?php echo $main;?>; }
+            .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, footer .custom { background: <?php echo $main;?>; }
             nav ul.navbar-nav li .fa-circle, a { color: <?php echo $main;?>; }
             a:hover {color:<?php echo $donker;?>;}
             .btn-default:focus, .btn-default:hover, .filters #uwpqsf_id #uwpqsf_btn input:focus, .filters #uwpqsf_id #uwpqsf_btn input:hover, footer .fixed, .comment-form footer .custom input[type=submit], .filters #uwpqsf_id #uwpqsf_btn footer .custom input, footer .custom .btn, footer .custom .comment-form input[type=submit], footer .custom .filters #uwpqsf_id #uwpqsf_btn input { background: <?php echo $donker;?>; }
