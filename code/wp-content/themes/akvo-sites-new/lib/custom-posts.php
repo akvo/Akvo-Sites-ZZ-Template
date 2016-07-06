@@ -47,25 +47,25 @@
     		)
   		);
 
-  register_post_type( 'video',
-    array(
-      'labels' => array(
-        'name' => __( 'Videos' ),
-        'singular_name' => __( 'Video' )
-      ),
-      'public' => true,
-      'has_archive' => true,
-      'menu_position' => 20,
-      'menu_icon' => 'dashicons-media-video',
-      //'taxonomies' => array('category'),
-      'supports' => array(
-        'title',
-        'editor',
-        //'thumbnail', 
-        //'excerpt', 
-      ),
-    )
-  );
+  		register_post_type( 'video',
+    		array(
+      			'labels' => array(
+        			'name' => __( 'Videos' ),
+        			'singular_name' => __( 'Video' )
+      			),
+      			'public' => true,
+      			'has_archive' => true,
+      			'menu_position' => 20,
+      			'menu_icon' => 'dashicons-media-video',
+      			//'taxonomies' => array('category'),
+      			'supports' => array(
+        			'title',
+        			'editor',
+        			'thumbnail', 
+        			//'excerpt', 
+      			),
+    		)
+  		);
 
   register_post_type( 'carousel',
     array(
