@@ -23,7 +23,7 @@
         
         
         
-        $shortcode .= 'title="'.get_the_title().'" date="'.get_the_date().'" content="'.get_the_excerpt().'" link="'.get_the_permalink().'" type="'.$post_type.'"]';
+        $shortcode .= 'title="'.get_the_title().'" date="'.get_the_date().'" content="'.wp_trim_words(get_the_excerpt()).'" link="'.get_the_permalink().'" type="'.$post_type.'"]';
         			
         echo do_shortcode($shortcode);
     ?>
