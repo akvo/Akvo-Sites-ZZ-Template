@@ -448,7 +448,7 @@ function mytheme_customize_css(){
             h1,h2,h3,h4,h5,h6 { font-family: '<?php echo $font_head; ?>';  }
             nav { font-family: '<?php echo $font_nav; ?>'; }
             .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a { background: <?php echo $licht;?>; }
-            nav .lang .fa-circle, nav ul.navbar-nav li i { color: <?php echo $licht;?>; }
+            nav .lang .fa-circle, nav ul.navbar-nav li i { color: <?php echo $main;?>; }
             .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, .carousel .carousel-indicators li.active, footer .custom { background: <?php echo $main;?>; }
             nav ul.navbar-nav li .fa-circle, a { color: <?php echo $main;?>; }
             a:hover {color:<?php echo $donker;?>;}
