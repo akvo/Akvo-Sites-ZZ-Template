@@ -58,57 +58,7 @@
       	));
 		*/
 		
-    	//Carousel
-    	$wp_customize->add_section('sage_carousel_scheme', array(
-      		'title'    => __('Carousel', 'sage'),
-      		'description' => '',
-      		'priority' => 40,
-     	));
-
-    	// add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[bg_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-    	// add color picker control
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'bg_carousel', array(
-          			'label' => 'Background Carousel',
-          			'section' => 'sage_carousel_scheme',
-          			'settings' => 'sage_carousel_options[bg_carousel]',
-    	)));
-
-    	// add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[color_title_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-    	// add color picker control
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'color_title_carousel', array(
-          			'label' => 'Color Title Carousel',
-          			'section' => 'sage_carousel_scheme',
-          			'settings' => 'sage_carousel_options[color_title_carousel]',
-    	) ) );
-
-	    // add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[color_content_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-	    // add color picker control
-    	$wp_customize->add_control( 
-			new WP_Customize_Color_Control( 
-		        $wp_customize, 'color_content_carousel', array(
-        		  'label' => 'Color Content Carousel',
-		          'section' => 'sage_carousel_scheme',
-		          'settings' => 'sage_carousel_options[color_content_carousel]',
-        	) ) );
+    	
 
    		//Header
 	    $wp_customize->add_section('sage_header_scheme', array(
@@ -219,11 +169,7 @@
     $menu_bg_parent = $header_option['bg_parent_menu'];
     $menu_cl_parent = $header_option['color_parent_menu'];
 
-    $carousel_option = get_option('sage_carousel_options');
-    $bg_carousel = $carousel_option['bg_carousel'];
-    $title_carousel = $carousel_option['color_title_carousel'];
-    $content_carousel = $carousel_option['color_content_carousel'];
-
+    
     if($header_option != NULL){ ?>
     <style type="text/css">
       <?php if($menu_bg_child != "" || $menu_cl_child != ""){?>
@@ -250,21 +196,7 @@
     </style>
     <?php }
 
-    if($carousel_option != NULL){ ?>
-    <style type="text/css">
-      <?php if($bg_carousel != "" || $content_carousel != ""){?>
-      .carousel .text{
-        <?php if($bg_carousel != "") echo 'background: '.$bg_carousel.';'?>
-        <?php if($content_carousel != "") echo 'color: '.$content_carousel.';'?>
-      }
-      <?php } ?>
-      <?php if($title_carousel != ""){?>
-      .carousel .text h1{
-        color: <?php echo $title_carousel?>;
-      }
-      <?php } ?>
-    </style>
-    <?php }
+    
   }
   add_action( 'wp_head', 'bwpy_customizer_head_styles' );
 
