@@ -98,7 +98,8 @@ class pin_post_widget extends WP_Widget
 				'testimonial' => 'Testimonials',
 				'project' => 'RSR Updates',
 				'map' => 'Maps',
-				'flow' => 'Flow'
+				'flow' => 'Flow',
+				'media' => 'Media Library'
 			);
         ?>
         <p>

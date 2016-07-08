@@ -40,6 +40,7 @@
 						<?php else : ?>
 							<img src="<?php bloginfo('template_url'); ?>/dist/images/logo-sample.svg">
 						<?php endif; ?>
+						<p><?php bloginfo('description');?></p>
 					</a>
 				</div>
 				<div class="col-sm-6 wrap-search-menu">

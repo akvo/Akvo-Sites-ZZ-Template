@@ -220,7 +220,22 @@ use Mexitek\PHPColors\Color;
 		));
 
 		//fonts
-
+		
+		$fonts_arr = array(
+			'Open Sans' => 'Open Sans',
+	        'Roboto' => 'Roboto',
+	        'Lora' => 'Lora',
+	        'Raleway' => 'Raleway',
+	        'Merriweather' => 'Merriweather',
+	        'Arvo' => 'Arvo',
+	        'Muli' => 'Muli',
+	        'Alegreya' => 'Alegreya',
+	        'Exo 2' => 'Exo 2',
+	        'Crimson Text' => 'Crimson Text',
+	        'Lobster Two' => 'Lobster Two',
+	        'Maven Pro' => 'Maven Pro',
+		);
+		
 		$wp_customize->add_section( 'akvo_font_section' , array(
 	    	'title'       => __( 'Font', 'sage' ),
 		    'priority'    => 30,
@@ -235,19 +250,8 @@ use Mexitek\PHPColors\Color;
 		    'label'    => __( 'Header font', 'sage' ),
 		    'section'  => 'akvo_font_section',
 		    'settings' => 'akvo_font_head',
-		    'choices' => array(
-	            'Open Sans' => 'Open Sans',
-	            'Roboto' => 'Roboto',
-	            'Lora' => 'Lora',
-	            'Raleway' => 'Raleway',
-	            'Merriweather' => 'Merriweather',
-	            'Arvo' => 'Arvo',
-	            'Muli' => 'Muli',
-	            'Alegreya' => 'Alegreya',
-	            'Exo 2' => 'Exo 2',
-	            'Crimson Text' => 'Crimson Text',
-	            'Lobster Two' => 'Lobster Two',
-		)));
+		    'choices' => $fonts_arr
+		));
 		$wp_customize->add_setting( 'akvo_font_nav', array(
 	    	 'default' => 'Open Sans',
 	     	'transport'   => 'refresh',
@@ -257,19 +261,8 @@ use Mexitek\PHPColors\Color;
 		    'label'    => __( 'Navigation font', 'sage' ),
 		    'section'  => 'akvo_font_section',
 		    'settings' => 'akvo_font_nav',
-		    'choices' => array(
-	            'Open Sans' => 'Open Sans',
-	            'Roboto' => 'Roboto',
-	            'Lora' => 'Lora',
-	            'Raleway' => 'Raleway',
-	            'Merriweather' => 'Merriweather',
-	            'Arvo' => 'Arvo',
-	            'Muli' => 'Muli',
-	            'Alegreya' => 'Alegreya',
-	            'Exo 2' => 'Exo 2',
-	            'Crimson Text' => 'Crimson Text',
-	            'Lobster Two' => 'Lobster Two',
-		)));
+		    'choices' => $fonts_arr
+		));
 		$wp_customize->add_setting( 'akvo_font', array(
 	    	 'default' => 'Open Sans',
 	     	'transport'   => 'refresh',
@@ -279,19 +272,8 @@ use Mexitek\PHPColors\Color;
 		    'label'    => __( 'Body font', 'sage' ),
 		    'section'  => 'akvo_font_section',
 		    'settings' => 'akvo_font',
-		    'choices' => array(
-	            'Open Sans' => 'Open Sans',
-	            'Roboto' => 'Roboto',
-	            'Lora' => 'Lora',
-	            'Raleway' => 'Raleway',
-	            'Merriweather' => 'Merriweather',
-	            'Arvo' => 'Arvo',
-	            'Muli' => 'Muli',
-	            'Alegreya' => 'Alegreya',
-	            'Exo 2' => 'Exo 2',
-	            'Crimson Text' => 'Crimson Text',
-	            'Lobster Two' => 'Lobster Two',
-		)));
+		    'choices' => $fonts_arr
+		));
 
 		$wp_customize->remove_section( 'nav');
 		$wp_customize->remove_section( 'static_front_page');
@@ -447,9 +429,9 @@ function mytheme_customize_css(){
             body { font-family: '<?php echo $font; ?>'; background: <?php echo $background; ?>;}
             h1,h2,h3,h4,h5,h6 { font-family: '<?php echo $font_head; ?>';  }
             nav { font-family: '<?php echo $font_nav; ?>'; }
-            .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a { background: <?php echo $licht;?>; }
+            .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active { background: <?php echo $licht;?>; }
             nav .lang .fa-circle, nav ul.navbar-nav li i { color: <?php echo $main;?>; }
-            .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, .carousel .carousel-indicators li.active, footer .custom { background: <?php echo $main;?>; }
+            .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, footer .custom { background: <?php echo $main;?>; }
             nav ul.navbar-nav li .fa-circle, a { color: <?php echo $main;?>; }
             a:hover {color:<?php echo $donker;?>;}
             .btn-default:focus, .btn-default:hover, .filters #uwpqsf_id #uwpqsf_btn input:focus, .filters #uwpqsf_id #uwpqsf_btn input:hover, footer .fixed, .comment-form footer .custom input[type=submit], .filters #uwpqsf_id #uwpqsf_btn footer .custom input, footer .custom .btn, footer .custom .comment-form input[type=submit], footer .custom .filters #uwpqsf_id #uwpqsf_btn input { background: <?php echo $donker;?>; }

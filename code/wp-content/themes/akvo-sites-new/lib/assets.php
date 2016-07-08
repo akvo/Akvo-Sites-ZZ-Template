@@ -92,7 +92,8 @@ namespace Roots\Sage\Assets;
 		if (in_array('Exo 2', $font_face )) wp_enqueue_style( 'Exo2', '//fonts.googleapis.com/css?family=Exo+2:400,400italic,700,700italic', false, null);
 		if (in_array('Crimson Text', $font_face )) wp_enqueue_style( 'Crimson', '//fonts.googleapis.com/css?family=Crimson+Text:400,400italic,700,700italic', false, null);
 		if (in_array('Lobster Two', $font_face )) wp_enqueue_style( 'Lobster', '//fonts.googleapis.com/css?family=Lobster+Two:400,400italic,700,700italic', false, null);
-
+		if (in_array('Maven Pro', $font_face )) wp_enqueue_style( 'Maven', '//fonts.googleapis.com/css?family=Maven+Pro:400,500,700,900', false, null);
+		
 		if (is_single() && comments_open() && get_option('thread_comments')) {
 			wp_enqueue_script('comment-reply');
 		}
