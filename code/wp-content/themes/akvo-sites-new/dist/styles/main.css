@@ -6253,7 +6253,8 @@ blockquote {
 .alignnone {
   margin-left: 0;
   margin-right: 0;
-  max-width: 100%; }
+  max-width: 100%;
+  height: auto; }
 
 .aligncenter {
   display: block;
@@ -7040,7 +7041,10 @@ article .intro, .article .intro {
   .card .card-title, .card .card-content {
     height: auto; }
 
-  .card .card-image {
-    height: 250px; } }
+  /*
+  .card .card-image{
+  	height: 250px;
+  }
+  */ }
 
 /*# sourceMappingURL=main.css.map */

@@ -220,7 +220,22 @@ use Mexitek\PHPColors\Color;
 		));
 
 		//fonts
-
+		
+		$fonts_arr = array(
+			'Open Sans' => 'Open Sans',
+	        'Roboto' => 'Roboto',
+	        'Lora' => 'Lora',
+	        'Raleway' => 'Raleway',
+	        'Merriweather' => 'Merriweather',
+	        'Arvo' => 'Arvo',
+	        'Muli' => 'Muli',
+	        'Alegreya' => 'Alegreya',
+	        'Exo 2' => 'Exo 2',
+	        'Crimson Text' => 'Crimson Text',
+	        'Lobster Two' => 'Lobster Two',
+	        'Maven Pro' => 'Maven Pro',
+		);
+		
 		$wp_customize->add_section( 'akvo_font_section' , array(
 	    	'title'       => __( 'Font', 'sage' ),
 		    'priority'    => 30,
@@ -235,19 +250,8 @@ use Mexitek\PHPColors\Color;
 		    'label'    => __( 'Header font', 'sage' ),
 		    'section'  => 'akvo_font_section',
 		    'settings' => 'akvo_font_head',
-		    'choices' => array(
-	            'Open Sans' => 'Open Sans',
-	            'Roboto' => 'Roboto',
-	            'Lora' => 'Lora',
-	            'Raleway' => 'Raleway',
-	            'Merriweather' => 'Merriweather',
-	            'Arvo' => 'Arvo',
-	            'Muli' => 'Muli',
-	            'Alegreya' => 'Alegreya',
-	            'Exo 2' => 'Exo 2',
-	            'Crimson Text' => 'Crimson Text',
-	            'Lobster Two' => 'Lobster Two',
-		)));
+		    'choices' => $fonts_arr
+		));
 		$wp_customize->add_setting( 'akvo_font_nav', array(
 	    	 'default' => 'Open Sans',
 	     	'transport'   => 'refresh',
@@ -257,19 +261,8 @@ use Mexitek\PHPColors\Color;
 		    'label'    => __( 'Navigation font', 'sage' ),
 		    'section'  => 'akvo_font_section',
 		    'settings' => 'akvo_font_nav',
-		    'choices' => array(
-	            'Open Sans' => 'Open Sans',
-	            'Roboto' => 'Roboto',
-	            'Lora' => 'Lora',
-	            'Raleway' => 'Raleway',
-	            'Merriweather' => 'Merriweather',
-	            'Arvo' => 'Arvo',
-	            'Muli' => 'Muli',
-	            'Alegreya' => 'Alegreya',
-	            'Exo 2' => 'Exo 2',
-	            'Crimson Text' => 'Crimson Text',
-	            'Lobster Two' => 'Lobster Two',
-		)));
+		    'choices' => $fonts_arr
+		));
 		$wp_customize->add_setting( 'akvo_font', array(
 	    	 'default' => 'Open Sans',
 	     	'transport'   => 'refresh',
@@ -279,19 +272,8 @@ use Mexitek\PHPColors\Color;
 		    'label'    => __( 'Body font', 'sage' ),
 		    'section'  => 'akvo_font_section',
 		    'settings' => 'akvo_font',
-		    'choices' => array(
-	            'Open Sans' => 'Open Sans',
-	            'Roboto' => 'Roboto',
-	            'Lora' => 'Lora',
-	            'Raleway' => 'Raleway',
-	            'Merriweather' => 'Merriweather',
-	            'Arvo' => 'Arvo',
-	            'Muli' => 'Muli',
-	            'Alegreya' => 'Alegreya',
-	            'Exo 2' => 'Exo 2',
-	            'Crimson Text' => 'Crimson Text',
-	            'Lobster Two' => 'Lobster Two',
-		)));
+		    'choices' => $fonts_arr
+		));
 
 		$wp_customize->remove_section( 'nav');
 		$wp_customize->remove_section( 'static_front_page');
