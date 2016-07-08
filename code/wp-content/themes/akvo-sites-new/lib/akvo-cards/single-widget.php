@@ -74,7 +74,8 @@
 				'testimonial' => 'Testimonials',
 				'project' => 'RSR Updates',
 				'map' => 'Maps',
-				'flow' => 'Flow'
+				'flow' => 'Flow',
+				'media' => 'Media Library'
 			);
 		
 		?>
