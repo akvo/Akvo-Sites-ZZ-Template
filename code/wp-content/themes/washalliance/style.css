@@ -32,6 +32,10 @@ header nav.navbar-collapse{
 	font-family: 'MuseoSansBold', arial, sans-serif !important;	
 }
 
+header nav.navbar-collapse i.fa.fa-chevron-down{
+	display: none;
+}
+
 nav ul.navbar-nav li:last-child, nav ul.navbar-nav li:last-child a{
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
