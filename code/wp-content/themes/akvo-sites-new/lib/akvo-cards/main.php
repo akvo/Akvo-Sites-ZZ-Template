@@ -121,6 +121,7 @@
 				'type' => 'post',
 				'posts_per_page' => 3,
 				'rsr-id' => 'rsr',
+				'type-text' => '',
 				'pagination' => 0,
 				'page' => 1
 			), $atts, 'akvo_cards' 
@@ -221,9 +222,10 @@
 	
 	function akvo_card_main(){
 		
-		$defaults = array( 'type' => 'post', 'rsr-id' => 'rsr', 'offset' => 0); 
+		$defaults = array( 'type' => 'post', 'rsr-id' => 'rsr', 'type-text' => '', 'offset' => 0); 
 		$instance = wp_parse_args( (array) $_GET, $defaults ); 
 		
+		$akvo_card = array();
 		
 		if ($instance['type'] == 'project') {
 			$c = $instance['offset'];
@@ -231,14 +233,15 @@
 			$data = do_shortcode('[data_feed name="'.$instance['rsr-id'].'"]');
 			$data = json_decode( str_replace('&quot;', '"', $data) );
 			$objects = $data->results;
-			$title = $objects[$c]->title;
-			$text = $objects[$c]->text;
-			$date = date($date_format,strtotime($objects[$c]->created_at));
-			$thumb = 'http://rsr.akvo.org'.$objects[$c]->photo;
-			$link = 'http://rsr.akvo.org'.$objects[$c]->absolute_url;
-			$type = 'RSR update';
+			
+			$akvo_card['title'] = $objects[$c]->title;
+			$akvo_card['content'] = $objects[$c]->text;
+			$akvo_card['date'] = date($date_format,strtotime($objects[$c]->created_at));
+			$akvo_card['img'] = 'http://rsr.akvo.org'.$objects[$c]->photo;
+			$akvo_card['link'] = 'http://rsr.akvo.org'.$objects[$c]->absolute_url;
+			//$type = 'RSR update';
 
-      		echo do_shortcode('[akvo-card title="'.$title.'" type="RSR Update" link="'.$link.'" img="'.$thumb.'" content="'.$text.'" date="'.$date.'"]');	
+      		//echo do_shortcode('[akvo-card title="'.$title.'" type="RSR Update" link="'.$link.'" img="'.$thumb.'" content="'.$text.'" date="'.$date.'"]');	
     	}
 		else {
       		$qargs = array(
@@ -251,11 +254,59 @@
       		if ( $query->have_posts() ) { 
         		while ( $query->have_posts() ) {
 					$query->the_post();
-          			get_template_part( 'partials/post', 'card' );
+					
+					
+					global $post_id;
+        			$post_type = $instance['type'];
+        			
+      				$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
+        			
+					if(!$img && $post_type == 'video'){
+        				/* featured image is not selected and the type is video */
+        				$img = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
+        			}			
+					$akvo_card['img'] = $img;
+					
+					$akvo_card['title'] = get_the_title();
+					
+					$akvo_card['date'] = get_the_date();
+					
+					$akvo_card['link'] = get_the_permalink();
+					
+					$akvo_card['content'] = wp_trim_words(get_the_excerpt());
         		}
         		wp_reset_postdata();
       		}
     	}
+		
+		
+		/* FORM THE SHORTCODE */
+		
+		$shortcode = '[akvo-card ';
+        
+        if($akvo_card['img']){
+        	$shortcode .= 'img="'.$akvo_card['img'].'" ';
+        }
+        			
+        if($instance['type-text']){
+        	$shortcode .= 'type-text="'.$instance['type-text'].'" ';
+        }
+        
+        if($akvo_card['title']){
+        	$shortcode .= 'title="'.$akvo_card['title'].'" ';
+        }
+        
+        if($akvo_card['date']){
+        	$shortcode .= 'date="'.$akvo_card['date'].'" ';
+        }	
+        
+        if($akvo_card['content']){
+        	$shortcode .= 'content="'.$akvo_card['content'].'" ';
+        }
+        
+        $shortcode .= 'type="'.$instance['type'].'"]';
+        			
+        echo do_shortcode($shortcode);
 		
 		/* kill the function after the processing is done */
 		wp_die();
@@ -273,7 +324,8 @@
 				'date' => '',
 				'type' => 'Blog',
 				'link' => '',
-				'img' => '', //get_bloginfo('template_url').'/dist/images/placeholder800x400.jpg'
+				'img' => '', 
+				'type-text' => ''
 			), $atts, 'akvo_card' 
 		);
 		ob_start();

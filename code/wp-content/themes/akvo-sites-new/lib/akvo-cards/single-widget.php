@@ -34,7 +34,12 @@
 			if (!isset($counters[$instance['type']])) {
       			$counters[$instance['type']] = 0;
     		}
-			$url = admin_url('admin-ajax.php')."?action=akvo_card&type=".$instance['type']."&offset=".$counters[$instance['type']]."&rsr-id=".$instance['rsr-id'];
+    		
+    		if(!isset($instance['type-text'])){
+    			$instance['type-text'] = '';
+    		}
+    		
+			$url = admin_url('admin-ajax.php')."?action=akvo_card&type=".$instance['type']."&offset=".$counters[$instance['type']]."&rsr-id=".$instance['rsr-id']."&type-text=".$instance['type-text'];
 			
 			
 			
@@ -52,6 +57,7 @@
 			/* Strip tags for title and name to remove HTML (important for text inputs). */
     		$instance['type'] = $new_instance['type'];
     		$instance['rsr-id'] = $new_instance['rsr-id'];
+    		$instance['type-text'] = $new_instance['type-text'];
     		
 			return $instance;
   		}
@@ -64,7 +70,7 @@
 		function form( $instance ) {
 
     		/* Set up some default widget settings. */
-    		$defaults = array( 'type' => 'news', 'rsr-id' => 'rsr'); // , 'columns' => '1');
+    		$defaults = array( 'type' => 'news', 'rsr-id' => 'rsr', 'type-text' => ''); // , 'columns' => '1');
 			$instance = wp_parse_args( (array) $instance, $defaults ); 
 		
 			$post_type_arr = array(
@@ -93,7 +99,11 @@
       			<input id="<?php echo $this->get_field_id('rsr-id'); ?>" type='text' name="<?php echo $this->get_field_name('rsr-id'); ?>" value="<?php _e($instance['rsr-id']);?>" />
       		</p>
       		
-    		
+    		<p>
+      			<label for="<?php echo $this->get_field_id('type-text'); ?>"><?php _e('Custom Tag (such as news, blog, etc):', 'single_post'); ?></label> 
+      			<input id="<?php echo $this->get_field_id('type-text'); ?>" type='text' name="<?php echo $this->get_field_name('type-text'); ?>" value="<?php _e($instance['type-text']);?>" />
+      		</p>
+      		
 			<?php
 		}
 	}
