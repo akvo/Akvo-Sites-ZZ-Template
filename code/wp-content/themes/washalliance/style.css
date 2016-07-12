@@ -18,7 +18,7 @@
 }
 
 h1, h2, h3, h4, h5, h6{
-	font-family: 'MuseoSansNormal', arial, sans-serif !important;
+	font-family: 'MuseoSansBold', arial, sans-serif !important;
 }
 
 body{
@@ -30,6 +30,10 @@ body{
 header nav.navbar-collapse{
 	background: none;
 	font-family: 'MuseoSansBold', arial, sans-serif !important;	
+}
+
+header nav.navbar-collapse i.fa.fa-chevron-down{
+	display: none;
 }
 
 nav ul.navbar-nav li:last-child, nav ul.navbar-nav li:last-child a{
