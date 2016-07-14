@@ -185,6 +185,19 @@
         	'label' => 'Font size of the card infobar:',
         	'section' => 'akvo_card_section',
         ));
+        
+        $wp_customize->add_setting('akvo_card[akvoapp]', array(
+       		'default' => 'http://rsr.akvo.org',
+       		'capability' => 'edit_theme_options',
+       		'type'       => 'option',
+    	));
+ 		
+		$wp_customize->add_control('akvo_card[akvoapp]', array(
+			'settings' => 'akvo_card[akvoapp]',
+    		'type' => 'text',
+        	'label' => 'Akvoapp URL:',
+        	'section' => 'akvo_card_section',
+        ));
 		/* END OF CARD SECTION */
 		
 		
