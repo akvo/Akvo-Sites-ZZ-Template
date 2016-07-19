@@ -9,6 +9,7 @@
 		<div class='card-image' <?php if($atts['img']):?>style="background-image:url('<?php _e($atts['img']);?>');"<?php endif;?>></div>
 	</div>
 	<div class='card-content'>
+		<?php //print_r($atts);?>
 		<?php echo truncate($atts['content'], 130);?>
 	</div>
 	<a class="btn btn-default card-more pull-right" href="<?php _e($atts['link']);?>">Read More</a>

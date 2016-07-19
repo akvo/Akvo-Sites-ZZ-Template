@@ -160,7 +160,7 @@
 			$objects = $data->results;
 			
 			$akvo_card['title'] = $objects[$c]->title;
-			$akvo_card['content'] = $objects[$c]->text;
+			$akvo_card['content'] = truncate($objects[$c]->text, 130);
 			$akvo_card['date'] = date($date_format,strtotime($objects[$c]->created_at));
 			
 			
@@ -171,8 +171,10 @@
 				$base_url = $akvo_card_options['akvoapp'];
 			}
 			
-			
-			$akvo_card['img'] = $base_url.$objects[$c]->photo;
+			$akvo_card['img'] = '';
+			if($objects[$c]->photo){
+				$akvo_card['img'] = $base_url.$objects[$c]->photo;
+			}
 			$akvo_card['link'] = $base_url.$objects[$c]->absolute_url;
 			//$type = 'RSR update';
 
@@ -245,6 +247,7 @@
         
         $shortcode .= 'type="'.$instance['type'].'"]';
         
+        //echo $shortcode;
         			
         echo do_shortcode($shortcode);
 		
