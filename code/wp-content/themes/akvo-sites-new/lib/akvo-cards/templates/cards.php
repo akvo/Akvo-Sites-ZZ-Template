@@ -3,6 +3,9 @@
 		<div class="col-md-4 eq">
 		<?php
 			
+			
+			//print_r($item);
+			
 			$att_str = '';
 			
 			if($item['title']){
@@ -29,8 +32,14 @@
 				$att_str .= ' type="'.$item['type'].'"';
 			}
 			
+			if($item['type-text']){
+				$att_str .= ' type-text="'.$item['type-text'].'"';
+			}
+			
 			$shortcode = '[akvo-card '.$att_str.']';
 			 
+			//echo $shortcode;
+			
 			echo do_shortcode($shortcode);
 		?>
 		</div>
