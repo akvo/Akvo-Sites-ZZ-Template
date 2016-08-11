@@ -6481,6 +6481,10 @@ nav ul.navbar-nav .dropdown-menu {
     top: 7px; }
     .langbar .lang_sel_click {
       margin-top: 0; } }
+/* remove dropdown arrows */
+header nav.navbar-collapse i.fa.fa-chevron-down {
+  display: none; }
+
 #siderbar .widgettitle {
   font-family: Roboto;
   font-size: 18px;
