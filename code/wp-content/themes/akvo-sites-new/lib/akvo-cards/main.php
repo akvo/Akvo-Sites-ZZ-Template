@@ -14,6 +14,7 @@
 			'type' => 'post', 
 			'posts_per_page' => 3,
 			'rsr-id' => 'rsr', 
+			'type-text' => '',
 			'page' => 1,
 			'pagination' => 0
 		); 
@@ -22,7 +23,10 @@
 		
 		if(isset($_GET['akvo-paged'])){
 			$atts['page'] = $_GET['akvo-paged'];
-		}	
+		}
+		
+		
+			
 		
 		if ($atts['type'] == 'rsr') {
 			/* get date format from settings */
@@ -50,8 +54,12 @@
 				$temp['content'] = $json_obj->text;
       			$temp['date'] = date($date_format, strtotime($json_obj->created_at));
 				
-				$temp['type'] = 'RSR Update';
+				$temp['type'] = $atts['type'];
 				
+				$temp['type-text'] = $atts['type-text'];
+				if(!$temp['type-text']){
+					$temp['type-text'] = 'RSR Updates';
+				}
 				
 				if($json_obj->photo){
 					$temp['img'] = 'http://rsr.akvo.org'.$json_obj->photo;
@@ -109,7 +117,9 @@
 		}
 		
 		
-		$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id'];
+		//$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id'];
+		
+		$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page']."&type-text=".$atts['type-text'];
 		
 		include "templates/cards.php";
 		
@@ -137,7 +147,8 @@
 		
 		ob_start();
 		
-		$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page'];
+		$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page']."&type-text=".$atts['type-text'];
+		
 		echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
 		
 		return ob_get_clean();
