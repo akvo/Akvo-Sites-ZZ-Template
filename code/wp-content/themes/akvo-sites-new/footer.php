@@ -1,6 +1,6 @@
 	<footer class="content-info" role="contentinfo">
 		
-		<div class="custom">
+		<div class="twitter">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-4">
@@ -11,6 +11,15 @@
 					</div>
 					<div class="col-md-4">
 						<?php dynamic_sidebar('sidebar-footer-3'); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="custom">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 col-md-offset-3">
+						<?php dynamic_sidebar('sidebar-footer-4'); ?>
 					</div>
 				</div>
 			</div>

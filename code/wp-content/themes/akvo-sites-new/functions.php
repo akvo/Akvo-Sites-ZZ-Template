@@ -202,6 +202,7 @@
 
   add_action( 'widgets_init', 'sage_widgets_init' );
   function sage_widgets_init() {
+  		/*	
       register_sidebar( array(
           'name' => __( 'Sidebar', 'theme-slug' ),
           'id' => 'sidebar',
@@ -222,4 +223,5 @@
           'after_title'   => '</h2>',
             ) 
       );
+      */
   }
