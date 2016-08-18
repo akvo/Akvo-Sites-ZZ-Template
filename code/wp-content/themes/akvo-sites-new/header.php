@@ -59,16 +59,11 @@
 						</button>
 
 					</div>
-      				<!--div id="sub-header" class="clearfix">
-						<div id="text-6" class="widget widget_text">
-							<div class="textwidget">
-								<div style="text-align: right;margin-top: 10px;">
-									<div style="display: inline-block;">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div-->
+					<?php if ( is_active_sidebar( 'sub-header' ) ) : ?>
+					<div id="sub-header" class="clearfix">
+						<?php dynamic_sidebar( 'sub-header' ); ?>
+					</div>
+      				<?php endif; ?>
       			</div>
 			</div>
 			<div class="row">

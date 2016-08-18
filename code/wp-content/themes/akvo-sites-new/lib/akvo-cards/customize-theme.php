@@ -186,6 +186,19 @@
         	'section' => 'akvo_card_section',
         ));
         
+        $wp_customize->add_setting('akvo_card[border_radius]', array(
+       		'default' => '5px',
+       		'capability' => 'edit_theme_options',
+       		'type'       => 'option',
+    	));
+ 		
+		$wp_customize->add_control('akvo_card[border_radius]', array(
+			'settings' => 'akvo_card[border_radius]',
+    		'type' => 'text',
+        	'label' => 'Border radius of the card:',
+        	'section' => 'akvo_card_section',
+        ));
+        
         $wp_customize->add_setting('akvo_card[akvoapp]', array(
        		'default' => 'http://rsr.akvo.org',
        		'capability' => 'edit_theme_options',
@@ -214,7 +227,12 @@
          	
          	<?php if($akvo_card):?>
          	.card{
+         		<?php if($akvo_card['bg']):?>
          		background: <?php _e($akvo_card['bg']);?>;
+         		<?php endif;?>
+         		<?php if($akvo_card['border_radius']):?>
+         		border-radius: <?php _e($akvo_card['border_radius']);?>
+         		<?php endif;?>
          	}
          	
          	
