@@ -31,7 +31,7 @@
           					<div class='content'>
 	        					<?php the_content();?>
 	        					<?php if($type == 'media'){	
-	        						//get_template_part('partials/content', 'media');
+	        						get_template_part('partials/content', 'media');
 	        					}?>
 	        				</div>	
          				</article>
