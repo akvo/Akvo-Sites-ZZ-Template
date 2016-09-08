@@ -34,6 +34,9 @@
 	        						get_template_part('partials/content', 'media');
 	        					}?>
 	        				</div>	
+	        				<?php if ($type == 'post' || $type == 'blog' || $type == 'news'){
+								comments_template(); 
+				    		 } ?>
          				</article>
             		<?php endwhile;?>
           		<?php endif;?>
