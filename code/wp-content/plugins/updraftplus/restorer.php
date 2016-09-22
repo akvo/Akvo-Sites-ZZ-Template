@@ -1418,6 +1418,8 @@ ENDHERE;
 		// The only purpose in funnelling queries directly here is to be able to get the error number
 		if ($this->use_wpdb) {
 			$req = $wpdb->query("CREATE TABLE $random_table_name (test INT)");
+			// WPDB, for several query types, returns the number of rows changed; in distinction from an error, indicated by (bool)false
+			if (0 === $req) { $req = true; }
 			if (!$req) $this->last_error = $wpdb->last_error;
 			$this->last_error_no = false;
 		} else {
@@ -1448,6 +1450,8 @@ ENDHERE;
 		
 			if ($this->use_wpdb) {
 				$req = $wpdb->query("DROP TABLE $random_table_name");
+				// WPDB, for several query types, returns the number of rows changed; in distinction from an error, indicated by (bool)false
+				if (0 === $req) { $req = true; }
 				if (!$req) $this->last_error = $wpdb->last_error;
 				$this->last_error_no = false;
 			} else {
@@ -1836,7 +1840,7 @@ ENDHERE;
 		return;
 		// Not yet working
 		if ($this->use_wpdb) {
-			$$wpdb->query("UNLOCK TABLES;");
+			$wpdb->query("UNLOCK TABLES;");
 		} elseif ($this->use_mysqli) {
 			$req = mysqli_query($this->mysql_dbh, "UNLOCK TABLES;");
 		} else {
@@ -1851,7 +1855,7 @@ ENDHERE;
 		// Remember, if modifying this, that a restoration can include restoring a destroyed site from a backup onto a fresh WP install on the same URL. So, it is not necessarily desirable to retain the current settings and drop the ones in the backup.
 		$keys_to_save = array('updraft_remotesites', 'updraft_migrator_localkeys', 'updraft_central_localkeys');
 
-		if ($this->old_siteurl != $this->our_siteurl) {
+		if ($this->old_siteurl != $this->our_siteurl || @constant('UPDRAFTPLUS_RESTORE_ALL_SETTINGS')) {
 			global $updraftplus;
 			$keys_to_save = array_merge($keys_to_save, $updraftplus->get_settings_keys());
 			$keys_to_save[] = 'updraft_backup_history';
@@ -1864,11 +1868,12 @@ ENDHERE;
 
 	// The table here is just for logging/info. The actual restoration itself is done via the standard options class.
 	private function restore_configuration_bundle($table) {
+
 		if (!is_array($this->configuration_bundle)) return;
 		global $updraftplus;
 		$updraftplus->log("Restoring prior UD configuration (table: $table; keys: ".count($this->configuration_bundle).")");
 		foreach ($this->configuration_bundle as $key => $value) {
-			UpdraftPlus_Options::delete_updraft_option($key, $value);
+			UpdraftPlus_Options::delete_updraft_option($key);
 			UpdraftPlus_Options::update_updraft_option($key, $value);
 		}
 	}
@@ -2042,7 +2047,11 @@ ENDHERE;
 
 		global $wpdb, $updraftplus;
 		
-		if ($table == $import_table_prefix.UpdraftPlus_Options::options_table()) $this->restore_configuration_bundle($table);
+		if ($table == $import_table_prefix.UpdraftPlus_Options::options_table()) {
+			// This became necessary somewhere around WP 4.5 - otherwise deleting and re-saving options stopped working
+			wp_cache_flush();
+			$this->restore_configuration_bundle($table);
+		}
 
 		if (preg_match('/^([\d+]_)?options$/', substr($table, strlen($import_table_prefix)), $matches)) {
 			// The second prefix here used to have a '!$this->is_multisite' on it (i.e. 'options' table on non-multisite). However, the user_roles entry exists in the main options table on multisite too.

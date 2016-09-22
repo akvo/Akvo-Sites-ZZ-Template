@@ -513,7 +513,7 @@ class wfCache {
 		$excludedURLs = "";
 		if(wfConfig::get('bannedURLs', false)){
 			foreach(explode(',', wfConfig::get('bannedURLs', false)) as $URL){
-				$excludedURLs .= "RewriteCond  %{REQUEST_URI} !^" .  self::regexSpaceFix(preg_quote(trim($URL))) . "$\n\t";
+				$excludedURLs .= "RewriteCond %{REQUEST_URI} !" .  wfUtils::patternToRegex($URL, '', '') . "\n\t";
 			}
 		}
 
@@ -667,14 +667,14 @@ EOT;
 						$browserLines[] = "\t#Blocking code for browser pattern: $browser\n";
 						$browser = preg_replace('/([\-\_\.\+\!\@\#\$\%\^\&\(\)\[\]\{\}\/])/', "\\\\$1", $browser);
 						$browser = preg_replace('/\*/', '.*', $browser);
-						$browserLines[] = "\tSetEnvIf User-Agent " . $browser . " WordfenceBadBrowser=1\n";
+						$browserLines[] = "\tSetEnvIf User-Agent \"" . $browser . "\" WordfenceBadBrowser=1\n";
 						$browserAdded = true;
 					} else if($referer){
 						if($browser || $range){ continue; }
 						$browserLines[] = "\t#Blocking code for referer pattern: $referer\n";
 						$referer = preg_replace('/([\-\_\.\+\!\@\#\$\%\^\&\(\)\[\]\{\}\/])/', "\\\\$1", $referer);
 						$referer = preg_replace('/\*/', '.*', $referer);
-						$browserLines[] = "\tSetEnvIf Referer " . $referer . " WordfenceBadBrowser=1\n";
+						$browserLines[] = "\tSetEnvIf Referer \"" . $referer . "\" WordfenceBadBrowser=1\n";
 						$browserAdded = true;
 					}
 				}

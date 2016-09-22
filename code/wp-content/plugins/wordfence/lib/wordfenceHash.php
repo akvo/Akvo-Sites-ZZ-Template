@@ -17,6 +17,7 @@ class wordfenceHash {
 	private $pluginsEnabled = false;
 	private $themesEnabled = false;
 	private $malwareEnabled = false;
+	private $coreUnknownEnabled = false;
 	private $knownFiles = false;
 	private $malwareData = "";
 	private $haveIssues = array();
@@ -25,6 +26,7 @@ class wordfenceHash {
 	private $path = false;
 	private $only = false;
 	private $totalForks = 0;
+	private $alertedOnUnknownWordPressVersion = false;
 
 	/**
 	 * @param string $striplen
@@ -39,7 +41,8 @@ class wordfenceHash {
 		$this->striplen = $striplen;
 		$this->path = $path;
 		$this->only = $only;
-		
+		$this->engine = $engine;
+
 		$this->startTime = microtime(true);
 
 		if(wfConfig::get('scansEnabled_core')){
@@ -54,24 +57,22 @@ class wordfenceHash {
 		if(wfConfig::get('scansEnabled_malware')){
 			$this->malwareEnabled = true;
 		}
+		if(wfConfig::get('scansEnabled_coreUnknown')){
+			$this->coreUnknownEnabled = true;
+		}
+
 		$this->db = new wfDB();
 
 		//Doing a delete for now. Later we can optimize this to only scan modified files.
 		//$this->db->queryWrite("update " . $this->db->prefix() . "wfFileMods set oldMD5 = newMD5");			
-		$this->db->queryWrite("delete from " . $this->db->prefix() . "wfFileMods");
-		$fetchCoreHashesStatus = wordfence::statusStart("Fetching core, theme and plugin file signatures from Wordfence");	
-		$dataArr = $engine->api->binCall('get_known_files', json_encode(array(
-				'plugins' => $plugins,
-				'themes' => $themes
-				)) );
-		if($dataArr['code'] != 200){
+		$this->db->truncate($this->db->prefix() . "wfFileMods");
+		$fetchCoreHashesStatus = wordfence::statusStart("Fetching core, theme and plugin file signatures from Wordfence");
+		try {
+			$this->knownFiles = $this->engine->getKnownFilesLoader()
+				->getKnownFiles();
+		} catch (wfScanKnownFilesException $e) {
 			wordfence::statusEndErr();
-			throw new Exception("Got error response from Wordfence servers: " . $dataArr['code']);
-		}
-		$this->knownFiles = @json_decode($dataArr['data'], true);
-		if(! is_array($this->knownFiles)){
-			wordfence::statusEndErr();
-			throw new Exception("Invalid response from Wordfence servers.");
+			throw $e;
 		}
 		wordfence::statusEnd($fetchCoreHashesStatus, false, true);
 		if($this->malwareEnabled){
@@ -100,6 +101,7 @@ class wordfenceHash {
 		}
 		$this->haveIssues = array(
 			'core' => false,
+			'coreUnknown' => false,
 			'themes' => false,
 			'plugins' => false,
 			'malware' => false
@@ -108,9 +110,10 @@ class wordfenceHash {
 		if($this->themesEnabled){ $this->status['themes'] = wordfence::statusStart("Comparing open source themes against WordPress.org originals"); } else { wordfence::statusDisabled("Skipping theme scan"); }
 		if($this->pluginsEnabled){ $this->status['plugins'] = wordfence::statusStart("Comparing plugins against WordPress.org originals"); } else { wordfence::statusDisabled("Skipping plugin scan"); }
 		if($this->malwareEnabled){ $this->status['malware'] = wordfence::statusStart("Scanning for known malware files"); } else { wordfence::statusDisabled("Skipping malware scan"); }
+		if($this->coreUnknownEnabled){ $this->status['coreUnknown'] = wordfence::statusStart("Scanning for unknown files in wp-admin and wp-includes"); } else { wordfence::statusDisabled("Skipping unknown core file scan"); }
 	}
 	public function __sleep(){
-		return array('striplen', 'totalFiles', 'totalDirs', 'totalData', 'linesOfPHP', 'linesOfJCH', 'stoppedOnFile', 'coreEnabled', 'pluginsEnabled', 'themesEnabled', 'malwareEnabled', 'knownFiles', 'malwareData', 'haveIssues', 'status', 'possibleMalware', 'path', 'only', 'totalForks');
+		return array('striplen', 'totalFiles', 'totalDirs', 'totalData', 'linesOfPHP', 'linesOfJCH', 'stoppedOnFile', 'coreEnabled', 'pluginsEnabled', 'themesEnabled', 'malwareEnabled', 'coreUnknownEnabled', 'knownFiles', 'malwareData', 'haveIssues', 'status', 'possibleMalware', 'path', 'only', 'totalForks', 'alertedOnUnknownWordPressVersion');
 	}
 	public function __wakeup(){
 		$this->db = new wfDB();
@@ -136,6 +139,7 @@ class wordfenceHash {
 		if($this->coreEnabled){ wordfence::statusEnd($this->status['core'], $this->haveIssues['core']); }
 		if($this->themesEnabled){ wordfence::statusEnd($this->status['themes'], $this->haveIssues['themes']); }
 		if($this->pluginsEnabled){ wordfence::statusEnd($this->status['plugins'], $this->haveIssues['plugins']); }
+		if($this->coreUnknownEnabled){ wordfence::statusEnd($this->status['coreUnknown'], $this->haveIssues['coreUnknown']); }
 		if(sizeof($this->possibleMalware) > 0){
 			$malwareResp = $engine->api->binCall('check_possible_malware', json_encode($this->possibleMalware));
 			if($malwareResp['code'] != 200){
@@ -204,11 +208,10 @@ class wordfenceHash {
 			//exits
 		}
 
-		$exclude = WordfenceScanner::getExcludeFilePattern();
+		$exclude = wordfenceScanner::getExcludeFilePattern(wordfenceScanner::EXCLUSION_PATTERNS_USER);
 		if ($exclude && preg_match($exclude, $realFile)) {
 			return;
 		}
-
 
 		//Put this after the fork, that way we will at least scan one more file after we fork if it takes us more than 10 seconds to search for the stoppedOnFile
 		if($this->stoppedOnFile && $file != $this->stoppedOnFile){
@@ -235,99 +238,163 @@ class wordfenceHash {
 			if($this->malwareEnabled && $this->isMalwarePrefix($md5)){
 				$this->possibleMalware[] = array($file, $md5);
 			}
-			if(isset($this->knownFiles['core'][$file])){
-				if(strtoupper($this->knownFiles['core'][$file]) == $shac){
-					$knownFile = 1;
-				} else {
-					if($this->coreEnabled){
-						$localFile = ABSPATH . '/' . preg_replace('/^[\.\/]+/', '', $file);
-						$fileContents = @file_get_contents($localFile);
-						if($fileContents && (! preg_match('/<\?' . 'php[\r\n\s\t]*\/\/[\r\n\s\t]*Silence is golden\.[\r\n\s\t]*(?:\?>)?[\r\n\s\t]*$/s', $fileContents))){ //<?php
-							if(! $this->isSafeFile($shac)){
+
+			$knownFileExclude = wordfenceScanner::getExcludeFilePattern(wordfenceScanner::EXCLUSION_PATTERNS_KNOWN_FILES);
+			$allowKnownFileScan = true;
+			if ($knownFileExclude) {
+				$allowKnownFileScan = !preg_match($knownFileExclude, $realFile);
+			}
+
+			if ($allowKnownFileScan)
+			{
+				if ($this->coreUnknownEnabled && !$this->alertedOnUnknownWordPressVersion && empty($this->knownFiles['core'])) {
+					require(ABSPATH . 'wp-includes/version.php'); //defines $wp_version
+					$this->alertedOnUnknownWordPressVersion = true;
+					$this->haveIssues['coreUnknown'] = true;
+					$this->engine->addIssue(
+						'coreUnknown',
+						2,
+						'coreUnknown' . $wp_version,
+						'coreUnknown' . $wp_version,
+						'Unknown WordPress core version: ' . $wp_version,
+						"The core files scan will not be run because this version of WordPress is not currently indexed by Wordfence. This may be due to using a prerelease version or because the servers are still indexing a new release. If you are using an official WordPress release, this issue will automatically dismiss once the version is indexed and another scan is run.",
+						array()
+					);
+				}
+				
+				if (isset($this->knownFiles['core'][$file]))
+				{
+					if (strtoupper($this->knownFiles['core'][$file]) == $shac)
+					{
+						$knownFile = 1;
+					} else
+					{
+						if ($this->coreEnabled)
+						{
+							$localFile = ABSPATH . '/' . preg_replace('/^[\.\/]+/', '', $file);
+							$fileContents = @file_get_contents($localFile);
+							if ($fileContents && (!preg_match('/<\?' . 'php[\r\n\s\t]*\/\/[\r\n\s\t]*Silence is golden\.[\r\n\s\t]*(?:\?>)?[\r\n\s\t]*$/s', $fileContents)))
+							{ //<?php
+								if (!$this->isSafeFile($shac))
+								{
 									
-								$this->haveIssues['core'] = true;
-								$this->engine->addIssue(
-									'file', 
-									1, 
-									'coreModified' . $file . $md5, 
-									'coreModified' . $file,
-									'WordPress core file modified: ' . $file,
-									"This WordPress core file has been modified and differs from the original file distributed with this version of WordPress.",
-									array(
-										'file' => $file,
-										'cType' => 'core',
-										'canDiff' => true,
-										'canFix' => true,
-										'canDelete' => false
+									$this->haveIssues['core'] = true;
+									$this->engine->addIssue(
+										'file',
+										1,
+										'coreModified' . $file . $md5,
+										'coreModified' . $file,
+										'WordPress core file modified: ' . $file,
+										"This WordPress core file has been modified and differs from the original file distributed with this version of WordPress.",
+										array(
+											'file' => $file,
+											'cType' => 'core',
+											'canDiff' => true,
+											'canFix' => true,
+											'canDelete' => false
 										)
 									);
+								}
 							}
 						}
 					}
-				}
-			} else if(isset($this->knownFiles['plugins'][$file])){
-				if(in_array($shac, $this->knownFiles['plugins'][$file])){
-					$knownFile = 1;
-				} else {
-					if($this->pluginsEnabled){
-						if(! $this->isSafeFile($shac)){
-							$itemName = $this->knownFiles['plugins'][$file][0];
-							$itemVersion = $this->knownFiles['plugins'][$file][1];
-							$cKey = $this->knownFiles['plugins'][$file][2];
-							$this->haveIssues['plugins'] = true;
-							$this->engine->addIssue(
-								'file', 
-								2, 
-								'modifiedplugin' . $file . $md5, 
-								'modifiedplugin' . $file,
-								'Modified plugin file: ' . $file,
-								"This file belongs to plugin \"$itemName\" version \"$itemVersion\" and has been modified from the file that is distributed by WordPress.org for this version. Please use the link to see how the file has changed. If you have modified this file yourself, you can safely ignore this warning. If you see a lot of changed files in a plugin that have been made by the author, then try uninstalling and reinstalling the plugin to force an upgrade. Doing this is a workaround for plugin authors who don't manage their code correctly. [See our FAQ on www.wordfence.com for more info]",
-								array(
-									'file' => $file,
-									'cType' => 'plugin',
-									'canDiff' => true,
-									'canFix' => true,
-									'canDelete' => false,
-									'cName' => $itemName,
-									'cVersion' => $itemVersion,
-									'cKey' => $cKey 
+				} else if (isset($this->knownFiles['plugins'][$file]))
+				{
+					if (in_array($shac, $this->knownFiles['plugins'][$file]))
+					{
+						$knownFile = 1;
+					} else
+					{
+						if ($this->pluginsEnabled)
+						{
+							if (!$this->isSafeFile($shac))
+							{
+								$itemName = $this->knownFiles['plugins'][$file][0];
+								$itemVersion = $this->knownFiles['plugins'][$file][1];
+								$cKey = $this->knownFiles['plugins'][$file][2];
+								$this->haveIssues['plugins'] = true;
+								$this->engine->addIssue(
+									'file',
+									2,
+									'modifiedplugin' . $file . $md5,
+									'modifiedplugin' . $file,
+									'Modified plugin file: ' . $file,
+									"This file belongs to plugin \"$itemName\" version \"$itemVersion\" and has been modified from the file that is distributed by WordPress.org for this version. Please use the link to see how the file has changed. If you have modified this file yourself, you can safely ignore this warning. If you see a lot of changed files in a plugin that have been made by the author, then try uninstalling and reinstalling the plugin to force an upgrade. Doing this is a workaround for plugin authors who don't manage their code correctly. [See our FAQ on www.wordfence.com for more info]",
+									array(
+										'file' => $file,
+										'cType' => 'plugin',
+										'canDiff' => true,
+										'canFix' => true,
+										'canDelete' => false,
+										'cName' => $itemName,
+										'cVersion' => $itemVersion,
+										'cKey' => $cKey
 									)
 								);
+							}
 						}
-					}
 
-				}
-			} else if(isset($this->knownFiles['themes'][$file])){
-				if(in_array($shac, $this->knownFiles['themes'][$file])){
-					$knownFile = 1;
-				} else {
-					if($this->themesEnabled){
-						if(! $this->isSafeFile($shac)){
-							$itemName = $this->knownFiles['themes'][$file][0];
-							$itemVersion = $this->knownFiles['themes'][$file][1];
-							$cKey = $this->knownFiles['themes'][$file][2];
-							$this->haveIssues['themes'] = true;
-							$this->engine->addIssue(
-								'file', 
-								2, 
-								'modifiedtheme' . $file . $md5, 
-								'modifiedtheme' . $file,
-								'Modified theme file: ' . $file,
-								"This file belongs to theme \"$itemName\" version \"$itemVersion\" and has been modified from the original distribution. It is common for site owners to modify their theme files, so if you have modified this file yourself you can safely ignore this warning.",
-								array(
-									'file' => $file,
-									'cType' => 'theme',
-									'canDiff' => true,
-									'canFix' => true,
-									'canDelete' => false,
-									'cName' => $itemName,
-									'cVersion' => $itemVersion,
-									'cKey' => $cKey 
+					}
+				} else if (isset($this->knownFiles['themes'][$file]))
+				{
+					if (in_array($shac, $this->knownFiles['themes'][$file]))
+					{
+						$knownFile = 1;
+					} else
+					{
+						if ($this->themesEnabled)
+						{
+							if (!$this->isSafeFile($shac))
+							{
+								$itemName = $this->knownFiles['themes'][$file][0];
+								$itemVersion = $this->knownFiles['themes'][$file][1];
+								$cKey = $this->knownFiles['themes'][$file][2];
+								$this->haveIssues['themes'] = true;
+								$this->engine->addIssue(
+									'file',
+									2,
+									'modifiedtheme' . $file . $md5,
+									'modifiedtheme' . $file,
+									'Modified theme file: ' . $file,
+									"This file belongs to theme \"$itemName\" version \"$itemVersion\" and has been modified from the original distribution. It is common for site owners to modify their theme files, so if you have modified this file yourself you can safely ignore this warning.",
+									array(
+										'file' => $file,
+										'cType' => 'theme',
+										'canDiff' => true,
+										'canFix' => true,
+										'canDelete' => false,
+										'cName' => $itemName,
+										'cVersion' => $itemVersion,
+										'cKey' => $cKey
 									)
 								);
+							}
+						}
+
+					}
+				}
+				else if ($this->coreUnknownEnabled && !$this->alertedOnUnknownWordPressVersion) { //Check for unknown files in system directories
+					$restrictedWordPressFolders = array(ABSPATH . 'wp-admin/', ABSPATH . WPINC . '/');
+					foreach ($restrictedWordPressFolders as $path) {
+						if (strpos($realFile, $path) === 0) {
+							$this->haveIssues['coreUnknown'] = true;
+							$this->engine->addIssue(
+								'file',
+								2, 
+								'coreUnknown' . $file . $md5,
+								'coreUnknown' . $file,
+								'Unknown file in WordPress core: ' . $file,
+								"This file is in a WordPress core location but is not distributed with this version of WordPress. This is usually due to it being left over from a previous WordPress update, but it may also have been added by another plugin or a malicious file added by an attacker.",
+								array(
+									'file' => $file,
+									'cType' => 'core',
+									'canDiff' => false,
+									'canFix' => false,
+									'canDelete' => true
+								)
+							);
 						}
 					}
-
 				}
 			}
 			// knownFile means that the file is both part of core or a known plugin or theme AND that we recognize the file's hash. 

@@ -215,6 +215,7 @@ class UpdraftPlus_BackupModule_s3 {
 			case 'eu-central-1':
 				$endpoint = 's3-'.$region.'.amazonaws.com';
 				break;
+			case 'ap-south-1':
 			case 'cn-north-1':
 				$endpoint = 's3.'.$region.'.amazonaws.com.cn';
 				break;
@@ -744,9 +745,9 @@ class UpdraftPlus_BackupModule_s3 {
 			<p>
 				<?php if ($console_url) echo sprintf(__('Get your access key and secret key <a href="%s">from your %s console</a>, then pick a (globally unique - all %s users) bucket name (letters and numbers) (and optionally a path) to use for storage. This bucket will be created for you if it does not already exist.','updraftplus'), $console_url, $console_descrip, $whoweare_long);?>
 
-				<a href="https://updraftplus.com/faqs/i-get-ssl-certificate-errors-when-backing-up-andor-restoring/"><?php _e('If you see errors about SSL certificates, then please go here for help.','updraftplus');?></a>
+				<a href="<?php echo apply_filters("updraftplus_com_link","https://updraftplus.com/faqs/i-get-ssl-certificate-errors-when-backing-up-andor-restoring/");?>"><?php _e('If you see errors about SSL certificates, then please go here for help.','updraftplus');?></a>
 
-				<a href="https://updraftplus.com/faq-category/amazon-s3/"><?php if ('s3' == $key) echo sprintf(__('Other %s FAQs.', 'updraftplus'), 'S3');?></a>
+				<a href="<?php echo apply_filters("updraftplus_com_link","https://updraftplus.com/faq-category/amazon-s3/");?>"><?php if ('s3' == $key) echo sprintf(__('Other %s FAQs.', 'updraftplus'), 'S3');?></a>
 			</p>
 		</td></tr>
 		<?php if (!empty($include_endpoint_chooser)) { ?>
@@ -774,7 +775,7 @@ class UpdraftPlus_BackupModule_s3 {
 		<?php if ('s3' == $key && version_compare(PHP_VERSION, '5.3.3', '>=') && class_exists('UpdraftPlus_Addon_S3_Enhanced')) { ?>
 			<tr class="updraftplusmethod <?php echo $key; ?>">
 				<th></th>
-				<td><?php echo apply_filters('updraft_s3_apikeysetting', '<a href="https://updraftplus.com/shop/s3-enhanced/"><em>'.__('To create a new IAM sub-user and access key that has access only to this bucket, use this add-on.', 'updraftplus').'</em></a>'); ?></td>
+				<td><?php echo apply_filters('updraft_s3_apikeysetting', '<a href="'.apply_filters("updraftplus_com_link","https://updraftplus.com/shop/s3-enhanced/").'"><em>'.__('To create a new IAM sub-user and access key that has access only to this bucket, use this add-on.', 'updraftplus').'</em></a>'); ?></td>
 			</tr>
 		<?php } ?>
 
@@ -945,7 +946,8 @@ class UpdraftPlus_BackupModule_s3 {
 			printf(__("Failure: We could not successfully access or create such a bucket. Please check your access credentials, and if those are correct then try another bucket name (as another %s user may already have taken your name).",'updraftplus'), $whoweare);
 			
 			if (!empty($this->s3_error)) echo "\n\n".sprintf(__('The error reported by %s was:', 'updraftplus'), $whoweare).' '.$this->s3_error;
-
+			if ('s3' == $config['key'] && 'AK' != substr($key, 0, 2)) echo "\n\n".sprintf(__('The AWS access key looks to be wrong (valid %s access keys begin with "AK")', 'updraftplus'), $whoweare);
+		
 		} else {
 		
 			$try_file = md5(rand());
