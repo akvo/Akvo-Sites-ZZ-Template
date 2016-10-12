@@ -536,11 +536,13 @@ class UpdraftPlus_UpdraftCentral_Main {
 	
 	public function debugtools_dashboard() {
 	?>
-		<h3><?php _e('UpdraftCentral (Remote Control)', 'updraftplus'); ?></h3>
-		<div id="updraftcentral_keys">
-			<?php echo $this->get_keys_table() ?>
-			<?php echo $this->create_key_markup() ?>
-			<?php echo $this->create_log_markup() ?>
+		<div class="advanced_tools updraft_central">
+			<h3><?php _e('UpdraftCentral (Remote Control)', 'updraftplus'); ?></h3>
+			<div id="updraftcentral_keys">
+				<?php echo $this->get_keys_table() ?>
+				<?php echo $this->create_key_markup() ?>
+				<?php echo $this->create_log_markup() ?>
+			</div>
 		</div>
 	<?php
 	}

@@ -33,7 +33,7 @@ class WPML_TM_Element_Translations extends WPML_TM_Record_User {
 		if ( isset( $this->update_status_cache[ $trid ][ $language_code ] ) ) {
 			$needs_update = $this->update_status_cache[ $trid ][ $language_code ];
 		} else {
-			$this->get_job_id( $trid, $language_code );
+			$this->init_job_id( $trid, $language_code );
 			$needs_update = isset( $this->update_status_cache[ $trid ][ $language_code ] )
 				? $this->update_status_cache[ $trid ][ $language_code ] : 0;
 		}
@@ -49,11 +49,10 @@ class WPML_TM_Element_Translations extends WPML_TM_Record_User {
 	 */
 	public function get_element_type_prefix( $trid, $language_code ) {
 		if ( $trid && $language_code && ! isset( $this->element_type_prefix_cache[ $trid ] ) ) {
-			$this->get_job_id( $trid, $language_code );
+			$this->init_job_id( $trid, $language_code );
 		}
 
-		return $trid && isset( $this->element_type_prefix_cache[ $trid ] )
-			? $this->element_type_prefix_cache[ $trid ] : "";
+		return $trid && array_key_exists( $trid, $this->element_type_prefix_cache ) ? $this->element_type_prefix_cache[ $trid ] : '';
 	}
 
 	public function get_translation_status_filter( $empty, $args ) {
@@ -72,7 +71,7 @@ class WPML_TM_Element_Translations extends WPML_TM_Record_User {
 		if ( isset( $this->translation_status_cache[ $trid ][ $language_code ] ) ) {
 			$status = $this->translation_status_cache[ $trid ][ $language_code ];
 		} else {
-			$this->get_job_id( $trid, $language_code );
+			$this->init_job_id( $trid, $language_code );
 			$status = isset( $this->translation_status_cache[ $trid ][ $language_code ] )
 				? $this->translation_status_cache[ $trid ][ $language_code ] : 0;
 		}
@@ -80,7 +79,7 @@ class WPML_TM_Element_Translations extends WPML_TM_Record_User {
 		return (int) $status;
 	}
 
-	public function get_job_id( $trid, $target_lang_code ) {
+	public function init_job_id( $trid, $target_lang_code ) {
 		global $wpdb, $wpml_language_resolution;
 
 		if ( ! isset( $this->job_id_cache[ $trid ][ $target_lang_code ] ) ) {
@@ -106,8 +105,6 @@ class WPML_TM_Element_Translations extends WPML_TM_Record_User {
 				$this->cache_job_in_lang( $jobs, $lang_code, $trid );
 			}
 		}
-
-		return $job_id = $this->job_id_cache[ $trid ][ $target_lang_code ];
 	}
 
 	/**
@@ -146,13 +143,22 @@ class WPML_TM_Element_Translations extends WPML_TM_Record_User {
 	private function fallback_type_prefix( $trid ) {
 		global $wpdb;
 
-		return isset( $this->element_type_prefix_cache[ $trid ] ) && (bool) $this->element_type_prefix_cache[ $trid ] === true
-			? $this->element_type_prefix_cache[ $trid ]
-			: $wpdb->get_var( $wpdb->prepare( "SELECT SUBSTRING_INDEX(element_type, '_', 1)
-                                                FROM {$wpdb->prefix}icl_translations
-                                                WHERE trid = %d
-                                                LIMIT 1",
-											  $trid ) );
+		if ( isset( $this->element_type_prefix_cache[ $trid ] ) && (bool) $this->element_type_prefix_cache[ $trid ] === true ) {
+			$prefix = $this->element_type_prefix_cache[ $trid ];
+		} else if ( (bool) $this->tm_records->get_post_translations()->get_element_translations( null, $trid ) ) {
+			$prefix = 'post';
+		} else {
+			$prefix = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT SUBSTRING_INDEX(element_type, '_', 1)
+					FROM {$wpdb->prefix}icl_translations
+					WHERE trid = %d
+					LIMIT 1",
+					$trid )
+			);
+		}
+
+		return $prefix;
 	}
 
 	/**

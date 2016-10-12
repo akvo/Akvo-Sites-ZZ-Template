@@ -1,14 +1,14 @@
-=== Social Media Feather - lightweight social media sharing and follow buttons ===
+=== Social Media Feather | light social media sharing buttons ===
 Contributors: Synved
 Donate link: http://synved.com/wordpress-social-media-feather/
 Tags: social media, social sharing, Facebook, Share, Like, twitter, google, Reddit, youtube, instagram, pinterest, social media buttons, button, shortcode, sidebar
 Requires at least: 3.1
-Tested up to: 4.6
+Tested up to: 4.7
 Stable tag: trunk
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Lightweight, nice, modern looking and effective social media sharing and following buttons and icons - all your social media needs in 1 easy package!
+Lightweight, modern looking and effective social media sharing and profile buttons and icons. All your social media needs in 1 easy package!
 
 == Description ==
 
@@ -203,6 +203,10 @@ margin-left: 10px;
 7. This shows the available social sharing and following widgets and their settings 
 
 == Changelog ==
+
+= 1.7.12 =
+* Performance improvements for Dashboard loading
+* Added "message" parameter to share shortcode
 
 = 1.7.11 =
 * Adjusted some text and README descriptions

@@ -127,6 +127,14 @@ The <a href="https://updraftplus.com/news/">UpdraftPlus backup blog</a> is the b
 
 N.B. Paid versions of UpdraftPlus Backup / Restore have a version number which is 1 higher in the first digit, and has an extra component on the end, but the changelog below still applies. i.e. changes listed for 1.12.20 of the free version correspond to changes made in 2.12.20.x of the paid version.
 
+= 1.12.21 - 08/Sep/2016 =
+
+* FIX: Fix a bug in the updater code that caused updates checks to be run more often than intended
+* TWEAK: Improve/tidy layout of the "Advanced Tools" tab
+* TWEAK: Make it more obvious in the file uploading widget when an upload is 100% complete
+* TWEAK: Prevent spurious OneDrive message being shown when re-scanning remote storage and not using OneDrive
+* TWEAK: OneDrive storage now uses the refresh token yes frequently (less HTTP calls)
+
 = 1.12.20 - 29/Aug/2016 =
 
 * FEATURE: OpenStack uploads (including Rackspace Cloudfiles) can now adapt their upload rate to network conditions, leading to much faster uploads on many networks
