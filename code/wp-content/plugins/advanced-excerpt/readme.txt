@@ -1,7 +1,7 @@
 === Advanced Excerpt ===
-Contributors: bradt, aprea
+Contributors: fancythemes
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5VPMGLLK94XJC
-Tags: excerpt, post, content, formatting
+Tags: post excerpt, excerpt, post, content, formatting
 Requires at least: 3.2
 Tested up to: 4.0
 Stable tag: 4.2.3
@@ -31,6 +31,11 @@ See [our wiki](https://github.com/deliciousbrains/wp-advanced-excerpt/wiki) for 
 Banner image credit - [chillihead](https://www.flickr.com/photos/chillihead/)
 
 Original plugin author - [basvd](http://profiles.wordpress.org/basvd)
+
+**Useful Resources**
+
+- <a href="https://fancythemes.com/what-is-wordpress/" rel="friend">What is WordPress</a>
+- <a href="https://fancythemes.com/wordpress-themes" rel="friend">Fee Themes</a> and <a href="https://fancythemes.com/wordpress-plugins/" rel="friend">plugins</a>
 
 == Installation ==
 

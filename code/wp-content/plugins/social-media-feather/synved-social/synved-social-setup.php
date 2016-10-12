@@ -962,6 +962,7 @@ function synved_social_init()
   	$share_params = array(
 			'url' => __('URL to use for the sharing buttons, default is the current post URL', 'social-media-feather'),
 			'title' => __('Title to use for the sharing buttons, default is the current post title', 'social-media-feather'),
+			'message' => __('Message to use when sharing content, replaced into the %%message%% variable', 'social-media-feather'),
 		);
 		
 		$follow_params = array(
