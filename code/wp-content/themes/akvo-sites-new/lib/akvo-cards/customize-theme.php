@@ -211,6 +211,19 @@
         	'label' => 'Akvoapp URL:',
         	'section' => 'akvo_card_section',
         ));
+        
+        $wp_customize->add_setting('akvo_card[read_more_text]', array(
+       		'default' => 'Read more',
+       		'capability' => 'edit_theme_options',
+       		'type'       => 'option',
+    	));
+ 		
+		$wp_customize->add_control('akvo_card[read_more_text]', array(
+			'settings' => 'akvo_card[read_more_text]',
+    		'type' => 'text',
+        	'label' => 'Read More Text:',
+        	'section' => 'akvo_card_section',
+        ));
 		/* END OF CARD SECTION */
 		
 		

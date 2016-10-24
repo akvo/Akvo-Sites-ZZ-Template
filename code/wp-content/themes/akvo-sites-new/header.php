@@ -83,6 +83,23 @@
 					</nav>
 				</div>
 			</div>
+			
+			
+			<?php if ( !is_front_page() ): ?> 
+			<div class="row">
+				<div class="col-md-12">
+					<div class="breadcrumbs" xmlns:v="http://rdf.data-vocabulary.org/#">
+						<?php if(function_exists('bcn_display')){
+							bcn_display();
+						}?>
+					</div>
+				</div>
+			</div>
+			<?php endif ?>
+			
+			
+			
 		</div>
+		
 	</header>
 	
