@@ -31,9 +31,12 @@
     
 			static $counters = array();
 
-			if (!isset($counters[$instance['type']])) {
+			/* reset offset counter if rsr-id or type has changed */
+			if (!isset($counters[$instance['type']]) || !(isset($counters[$instance['rsr-id']]))) {
       			$counters[$instance['type']] = 0;
-    		}
+      		}
+      		
+      		
     		
     		if(!isset($instance['type-text'])){
     			$instance['type-text'] = '';

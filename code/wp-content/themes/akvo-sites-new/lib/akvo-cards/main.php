@@ -167,12 +167,8 @@
 			$c = $instance['offset'];
 			$date_format = get_option( 'date_format' );
 			$data = do_shortcode('[data_feed name="'.$instance['rsr-id'].'"]');
-			$data = json_decode( str_replace('&quot;', '"', $data) );
-			$objects = $data->results;
 			
-			$akvo_card['title'] = $objects[$c]->title;
-			$akvo_card['content'] = truncate($objects[$c]->text, 130);
-			$akvo_card['date'] = date($date_format,strtotime($objects[$c]->created_at));
+			$data = json_decode( str_replace('&quot;', '"', $data) );
 			
 			
 			/* from customize theme */
@@ -182,11 +178,38 @@
 				$base_url = $akvo_card_options['akvoapp'];
 			}
 			
+			$akvo_card['title'] = '';
+			$akvo_card['content'] = '';
+			$akvo_card['date'] = '';
 			$akvo_card['img'] = '';
-			if($objects[$c]->photo){
-				$akvo_card['img'] = $base_url.$objects[$c]->photo;
+			$akvo_card['link'] = '';
+			
+			if(isset($data->results)){
+				$objects = $data->results;
+				
+				if($objects[$c]->title){
+					$akvo_card['title'] = $objects[$c]->title;
+				}
+				
+				if($objects[$c]->text){
+					$akvo_card['content'] = truncate($objects[$c]->text, 130);
+				}
+				
+				if($objects[$c]->created_at){
+					$akvo_card['date'] = date($date_format,strtotime($objects[$c]->created_at));	
+				}
+				
+				
+				if($objects[$c]->photo){
+					$akvo_card['img'] = $base_url.$objects[$c]->photo;
+				}
+				
+				if($objects[$c]->absolute_url){
+					$akvo_card['link'] = $base_url.$objects[$c]->absolute_url;
+				}
 			}
-			$akvo_card['link'] = $base_url.$objects[$c]->absolute_url;
+			
+			
 			//$type = 'RSR update';
 
       		//echo do_shortcode('[akvo-card title="'.$title.'" type="RSR Update" link="'.$link.'" img="'.$thumb.'" content="'.$text.'" date="'.$date.'"]');	
@@ -232,27 +255,27 @@
 		
 		$shortcode = '[akvo-card ';
         
-        if($akvo_card['img']){
+        if(isset($akvo_card['img'])){
         	$shortcode .= 'img="'.$akvo_card['img'].'" ';
         }
         			
-        if($instance['type-text']){
+        if(isset($instance['type-text'])){
         	$shortcode .= 'type-text="'.$instance['type-text'].'" ';
         }
         
-        if($akvo_card['title']){
+        if(isset($akvo_card['title'])){
         	$shortcode .= 'title="'.$akvo_card['title'].'" ';
         }
         
-        if($akvo_card['date']){
+        if(isset($akvo_card['date'])){
         	$shortcode .= 'date="'.$akvo_card['date'].'" ';
         }	
         
-        if($akvo_card['content']){
+        if(isset($akvo_card['content'])){
         	$shortcode .= 'content="'.$akvo_card['content'].'" ';
         }
         
-        if($akvo_card['link']){
+        if(isset($akvo_card['link'])){
         	$shortcode .= 'link="'.$akvo_card['link'].'" ';
         }
         
