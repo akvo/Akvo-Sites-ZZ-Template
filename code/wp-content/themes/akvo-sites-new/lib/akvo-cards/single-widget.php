@@ -30,11 +30,15 @@
 			extract( $args );
     
 			static $counters = array();
-
+			
+			$label = $instance['type'].'-'.$instance['rsr-id'];
+			
 			/* reset offset counter if rsr-id or type has changed */
-			if (!isset($counters[$instance['type']]) || !(isset($counters[$instance['rsr-id']]))) {
-      			$counters[$instance['type']] = 0;
+			if (!isset($counters[$label])) {
+      			$counters[$label] = 0;
       		}
+      		
+      		//print_r($counters);
       		
       		
     		
@@ -42,13 +46,13 @@
     			$instance['type-text'] = '';
     		}
     		
-			$url = admin_url('admin-ajax.php')."?action=akvo_card&type=".$instance['type']."&offset=".$counters[$instance['type']]."&rsr-id=".$instance['rsr-id']."&type-text=".$instance['type-text'];
+			$url = admin_url('admin-ajax.php')."?action=akvo_card&type=".$instance['type']."&offset=".$counters[$label]."&rsr-id=".$instance['rsr-id']."&type-text=".$instance['type-text'];
 			
 			
 			
 			echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
 			
-    		$counters[$instance['type']]++;
+    		$counters[$label]++;
 		}
 
   		/**
