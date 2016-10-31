@@ -163,20 +163,23 @@
 		
 		$akvo_card = array();
 		
+		$date_format = get_option( 'date_format' );
+		
+		/* from customize theme */
+		$base_url = 'http://rsr.akvo.org';
+		$akvo_card_options = get_option('akvo_card');
+		if($akvo_card_options && array_key_exists('akvoapp', $akvo_card_options)){
+			$base_url = $akvo_card_options['akvoapp'];
+		}
+		
 		if ($instance['type'] == 'project') {
 			$c = $instance['offset'];
-			$date_format = get_option( 'date_format' );
+			
 			$data = do_shortcode('[data_feed name="'.$instance['rsr-id'].'"]');
 			
 			$data = json_decode( str_replace('&quot;', '"', $data) );
 			
 			
-			/* from customize theme */
-			$base_url = 'http://rsr.akvo.org';
-			$akvo_card_options = get_option('akvo_card');
-			if($akvo_card_options && array_key_exists('akvoapp', $akvo_card_options)){
-				$base_url = $akvo_card_options['akvoapp'];
-			}
 			
 			$akvo_card['title'] = '';
 			$akvo_card['content'] = '';
@@ -213,6 +216,35 @@
 			//$type = 'RSR update';
 
       		//echo do_shortcode('[akvo-card title="'.$title.'" type="RSR Update" link="'.$link.'" img="'.$thumb.'" content="'.$text.'" date="'.$date.'"]');	
+    	}
+    	else if ($instance['type'] == 'rsr-project') {
+			$data = do_shortcode('[data_feed name="'.$instance['rsr-id'].'"]');
+			$data = json_decode( str_replace('&quot;', '"', $data) );
+			
+			if(isset($data->title)){
+				$akvo_card['title'] = $data->title;
+			}
+			
+			if(isset($data->subtitle)){
+				$akvo_card['content'] = truncate($data->subtitle, 130);
+			}
+			
+			if(isset($data->created_at)){
+				$akvo_card['date'] = date($date_format,strtotime($data->created_at));
+			}
+			
+			if(isset($data->absolute_url)){
+				$akvo_card['link'] = $base_url.$data->absolute_url;	
+			}
+			
+			if(isset($data->current_image)){
+				$akvo_card['img'] = $base_url.$data->current_image;
+			}
+			
+			if(!$instance['type-text']){
+				$instance['type-text'] = 'RSR Project';
+			}
+			
     	}
 		else {
       		$qargs = array(

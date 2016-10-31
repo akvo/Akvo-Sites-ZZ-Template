@@ -77,14 +77,15 @@
 			$instance = wp_parse_args( (array) $instance, $defaults ); 
 		
 			$post_type_arr = array(
-				'news' => 'News',
-				'blog' => 'Blog',
-				'video' => 'Videos',
-				'testimonial' => 'Testimonials',
-				'project' => 'RSR Updates',
-				'map' => 'Maps',
-				'flow' => 'Flow',
-				'media' => 'Media Library'
+				'news' 			=> 'News',
+				'blog' 			=> 'Blog',
+				'video' 		=> 'Videos',
+				'testimonial' 	=> 'Testimonials',
+				'project' 		=> 'RSR Updates',
+				'rsr-project'	=> 'RSR Project',
+				'map' 			=> 'Maps',
+				'flow' 			=> 'Flow',
+				'media' 		=> 'Media Library'
 			);
 		
 		?>
