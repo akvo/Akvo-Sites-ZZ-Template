@@ -84,21 +84,15 @@
 				</div>
 			</div>
 			
-			
-			<?php if ( !is_front_page() ): ?> 
+			<?php if ( !is_front_page() && function_exists('bcn_display')): ?> 
 			<div class="row">
 				<div class="col-md-12">
 					<div class="breadcrumbs" xmlns:v="http://rdf.data-vocabulary.org/#">
-						<?php if(function_exists('bcn_display')){
-							bcn_display();
-						}?>
+						<?php bcn_display();?>
 					</div>
 				</div>
 			</div>
-			<?php endif ?>
-			
-			
-			
+			<?php endif;?>
 		</div>
 		
 	</header>
