@@ -343,9 +343,9 @@
 		$akvo_card_options = get_option('akvo_card');
 		if($akvo_card_options && array_key_exists('read_more_text', $akvo_card_options)){
 			$atts['read_more_text'] = $akvo_card_options['read_more_text'];
-			if(!$atts['read_more_text']){
-				$atts['read_more_text'] = 'Read more';
-			}
+		}
+		if(!$atts['read_more_text']){
+			$atts['read_more_text'] = 'Read more';
 		}
 		
 		ob_start();
