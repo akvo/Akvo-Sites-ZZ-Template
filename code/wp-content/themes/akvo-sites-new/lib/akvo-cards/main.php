@@ -221,12 +221,14 @@
 			$data = do_shortcode('[data_feed name="'.$instance['rsr-id'].'"]');
 			$data = json_decode( str_replace('&quot;', '"', $data) );
 			
+			
+			
 			if(isset($data->title)){
 				$akvo_card['title'] = $data->title;
 			}
 			
-			if(isset($data->subtitle)){
-				$akvo_card['content'] = truncate($data->subtitle, 130);
+			if(isset($data->project_plan_summary)){
+				$akvo_card['content'] = truncate($data->project_plan_summary, 130);
 			}
 			
 			if(isset($data->created_at)){
@@ -343,9 +345,9 @@
 		$akvo_card_options = get_option('akvo_card');
 		if($akvo_card_options && array_key_exists('read_more_text', $akvo_card_options)){
 			$atts['read_more_text'] = $akvo_card_options['read_more_text'];
-			if(!$atts['read_more_text']){
-				$atts['read_more_text'] = 'Read more';
-			}
+		}
+		if(!$atts['read_more_text']){
+			$atts['read_more_text'] = 'Read more';
 		}
 		
 		ob_start();
