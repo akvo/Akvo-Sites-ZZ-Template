@@ -45,7 +45,7 @@ if ( $posts ) : ?>
 		foreach ( $posts as $post ) :
 			setup_postdata( $post );
 			?>
-			<li class="small" style="margin-bottom: 10px;">
+			<li class="small" style="margin-bottom: 20px;">
 				<?php echo tribe_event_featured_image( $post->ID, 'full', false ); ?>
 				<div style="margin-bottom:0;">
 					<a style='font-weight: bold;' href="<?php echo esc_url( tribe_get_event_link() ); ?>" rel="bookmark">
