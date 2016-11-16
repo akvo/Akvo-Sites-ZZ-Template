@@ -25,25 +25,55 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
+
+
 $events_label_plural = tribe_get_event_label_plural();
 $events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
 
 $posts = tribe_get_list_widget_events();
 
+
+
+
+
 // Check if any event posts are found.
 if ( $posts ) : ?>
 
-	<ul class="tribe-list-widget">
+	<ul class="tribe-list-widget list-unstyled">
 		<?php
 		// Setup the post data for each event.
 		foreach ( $posts as $post ) :
 			setup_postdata( $post );
 			?>
-			<li class="">
-				<h4 style="margin-bottom:0;">
-					<a href="<?php echo esc_url( tribe_get_event_link() ); ?>" rel="bookmark"><?php the_title(); ?></a>
-				</h4>
-				<div class="small">
+			<li class="small" style="margin-bottom: 10px;">
+				<?php echo tribe_event_featured_image( $post->ID, 'full', false ); ?>
+				<div style="margin-bottom:0;">
+					<a style='font-weight: bold;' href="<?php echo esc_url( tribe_get_event_link() ); ?>" rel="bookmark">
+						<?php the_title(); ?>
+					</a>
+					<?php 
+						$address = '';
+						$city = tribe_get_city();
+						if($city){
+							$address .= $city.", ";
+						}
+
+						$region = tribe_get_region();
+						if($region){
+							$address .= $region.", ";
+						}
+
+						$country = tribe_get_country();
+						if($country){
+							$address .= $country;
+						}
+					?>
+					<?php if($address):?><span style="font-style:italic;">at <?php _e($address);?></span><?php endif;?>
+				</div>
+				<div class="text-muted">
+					<?php _e(truncate(get_the_excerpt(), 250)); ?>
+				</div>
+				<div class="" style="font-weight: bold;">
 					<?php echo tribe_events_event_schedule_details(); ?>
 				</div>
 			</li>
@@ -53,8 +83,14 @@ if ( $posts ) : ?>
 	</ul><!-- .tribe-list-widget -->
 
 	<p class="tribe-events-widget-link">
-		<a href="<?php echo esc_url( tribe_get_events_link() ); ?>" rel="bookmark"><?php printf( esc_html__( 'View All %s', 'the-events-calendar' ), $events_label_plural ); ?></a>
+		<a class='btn btn-default' href="<?php echo esc_url( tribe_get_events_link() ); ?>" rel="bookmark"><?php printf( esc_html__( 'View All %s', 'the-events-calendar' ), $events_label_plural ); ?></a>
 	</p>
+
+	<style>
+		.tribe-list-widget .tribe-events-event-image{
+			margin-bottom: 5px;
+		}
+	</style>
 
 <?php
 // No events were found.
