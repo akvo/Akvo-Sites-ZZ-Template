@@ -1,4 +1,6 @@
 <?php
+
+/*
 add_filter('uwpqsf_result_tempt', 'customize_output', '', 4);
 function customize_output($results , $arg, $id, $getdata ){
 	 // The Query
@@ -17,7 +19,6 @@ function customize_output($results , $arg, $id, $getdata ){
 		 } else {
 					 echo  '<div class="col-md-12"><h2 style="margin-top:0;">Nothing found</h2></div>';
 				}
-				/* Restore original Post Data */
 				wp_reset_postdata();
 
 		$results = ob_get_clean();		
@@ -62,5 +63,8 @@ function form_reset($formid) {
 	echo $html;
 
 }
+*/
 
+
+/* used with the ultimate wp query search filtering */
 ?>

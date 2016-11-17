@@ -73,6 +73,21 @@ if ( $posts ) : ?>
 				<div class="text-muted">
 					<?php _e(truncate(get_the_excerpt(), 250)); ?>
 				</div>
+				<?php if(have_rows('partners')):?>
+				<div>
+					<span>Meet:</span>
+					<?php 
+						$i = 0; 
+						while(have_rows('partners')): the_row();
+							if($i > 0){
+								_e(', ');
+							}
+							the_sub_field('name');
+							$i++;
+					 endwhile;?>
+					
+				</div>
+				<?php endif;?>
 				<div class="" style="font-weight: bold;">
 					<?php echo tribe_events_event_schedule_details(); ?>
 				</div>
