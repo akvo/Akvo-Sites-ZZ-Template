@@ -48,7 +48,7 @@ $event_id = get_the_ID();
     	
 		<hr>
 		<div class='row'>
-			<div class='col-sm-6'>
+			<div class='col-sm-4'>
 				<h4><i class='fa fa-calendar'></i>&nbsp;<?php echo tribe_events_event_schedule_details( $event_id ); ?></h4>
 				<?php if ( tribe_get_cost() ) : ?>
 				<h4><i class='fa fa-money'></i>&nbsp;Cost &nbsp; <span class='label label-default'><?php echo tribe_get_cost( null, true ) ?></span></h4><?php endif; ?>
@@ -57,10 +57,20 @@ $event_id = get_the_ID();
 				<a target='_blank' href="<?php echo tribe_get_gcal_link();?>" class='btn btn-default'>+ GOOGLE CALENDAR</a>
 				
 			</div>
-			<div class='col-sm-6'>	
+			<div class='col-sm-4'>	
 				<?php tribe_get_template_part( 'modules/meta/venue' ); ?>
 			</div>
-		</div>		
+			<div class='col-sm-4'>
+			<?php if(have_rows('partners')):?>
+				<span>Meet:</span>
+				<ul>
+				<?php while(have_rows('partners')): the_row();?>
+					<li><?php the_sub_field('name');?></li>
+						
+				<?php endwhile;?>
+				</ul>	 
+			<?php endif;?>
+			</div>		
 		<hr>
 		
 		
