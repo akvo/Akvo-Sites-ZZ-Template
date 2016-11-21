@@ -6175,6 +6175,12 @@ blockquote {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; } }
+.bold {
+  font-weight: bold; }
+
+.italic {
+  font-style: italic; }
+
 .comment-list {
   padding-left: 0;
   list-style: none; }
@@ -7087,5 +7093,14 @@ article .intro, .article .intro {
   	height: 250px;
   }
   */ }
+#tribe-events-pg-template {
+  max-width: 1140px; }
+
+.tribe-list-widget .tribe-list {
+  margin-bottom: 20px; }
+  .tribe-list-widget .tribe-list .tribe-list-title {
+    margin-bottom: 0; }
+  .tribe-list-widget .tribe-list .tribe-events-event-image {
+    margin-bottom: 5px; }
 
 /*# sourceMappingURL=main.css.map */

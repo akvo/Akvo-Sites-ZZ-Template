@@ -45,10 +45,10 @@ if ( $posts ) : ?>
 		foreach ( $posts as $post ) :
 			setup_postdata( $post );
 			?>
-			<li class="small" style="margin-bottom: 20px;">
+			<li class="small tribe-list">
 				<?php echo tribe_event_featured_image( $post->ID, 'full', false ); ?>
-				<div style="margin-bottom:0;">
-					<a style='font-weight: bold;' href="<?php echo esc_url( tribe_get_event_link() ); ?>" rel="bookmark">
+				<div class='tribe-list-title'>
+					<a class="bold" href="<?php echo esc_url( tribe_get_event_link() ); ?>" rel="bookmark">
 						<?php the_title(); ?>
 					</a>
 					<?php 
@@ -68,27 +68,29 @@ if ( $posts ) : ?>
 							$address .= $country;
 						}
 					?>
-					<?php if($address):?><span style="font-style:italic;">at <?php _e($address);?></span><?php endif;?>
+					<?php if($address):?>
+					<span class='italic'>at <?php _e($address);?></span>
+					<?php endif;?>
 				</div>
 				<div class="text-muted">
-					<?php _e(truncate(get_the_excerpt(), 250)); ?>
+					<?php _e(truncate(get_the_excerpt(), 100)); ?>
 				</div>
 				<?php if(have_rows('partners')):?>
 				<div>
 					<span>Meet:</span>
 					<?php 
-						$i = 0; 
-						while(have_rows('partners')): the_row();
+						$i = 0; while(have_rows('partners')): the_row();
 							if($i > 0){
 								_e(', ');
 							}
 							the_sub_field('name');
 							$i++;
-					 endwhile;?>
+						endwhile;
+					?>
 					
 				</div>
 				<?php endif;?>
-				<div class="" style="font-weight: bold;">
+				<div class="bold">
 					<?php echo tribe_events_event_schedule_details(); ?>
 				</div>
 			</li>
@@ -100,13 +102,6 @@ if ( $posts ) : ?>
 	<p class="tribe-events-widget-link">
 		<a class='btn btn-default' href="<?php echo esc_url( tribe_get_events_link() ); ?>" rel="bookmark"><?php printf( esc_html__( 'View All %s', 'the-events-calendar' ), $events_label_plural ); ?></a>
 	</p>
-
-	<style>
-		.tribe-list-widget .tribe-events-event-image{
-			margin-bottom: 5px;
-		}
-	</style>
-
 <?php
 // No events were found.
 else : ?>
