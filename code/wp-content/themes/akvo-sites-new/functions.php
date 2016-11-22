@@ -225,3 +225,11 @@
       );
       */
   }
+  
+  // Hide revert to editor on pages
+  function custom_admin_css() {
+  echo '<style>
+	.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
+  </style>';
+}
+add_action( 'admin_head', 'custom_admin_css' );
