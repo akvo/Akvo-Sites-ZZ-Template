@@ -240,61 +240,61 @@
          	
          	<?php if($akvo_card):?>
          	.card{
-         		<?php if($akvo_card['bg']):?>
+         		<?php if(isset($akvo_card['bg'])):?>
          		background: <?php _e($akvo_card['bg']);?>;
          		<?php endif;?>
-         		<?php if($akvo_card['border_radius']):?>
+         		<?php if(isset($akvo_card['border_radius'])):?>
          		border-radius: <?php _e($akvo_card['border_radius']);?>
          		<?php endif;?>
          	}
          	
          	
          	.card .card-image{
-         		<?php if($akvo_card['bg_img']):?>
+         		<?php if(isset($akvo_card['bg_img'])):?>
          		background-image: url("<?php _e($akvo_card['bg_img']);?>");
          		<?php endif;?>
          	}
          	
          	.card .card-info{
-         		<?php if($akvo_card['infobar_bg']):?>
+         		<?php if(isset($akvo_card['infobar_bg'])):?>
          		background: <?php _e($akvo_card['infobar_bg']);?>;
          		<?php endif;?>
          		
-         		<?php if($akvo_card['infobar_color']):?>
+         		<?php if(isset($akvo_card['infobar_color'])):?>
          		color: <?php _e($akvo_card['infobar_color']);?>;
          		<?php endif;?>
          		
-         		<?php if($akvo_card['hide_infobar']):?>
+         		<?php if(isset($akvo_card['hide_infobar'])):?>
          		display: none;
          		<?php endif;?>
          		
-         		<?php if($akvo_card['infobar_font_size']):?>
+         		<?php if(isset($akvo_card['infobar_font_size'])):?>
          		font-size: <?php _e($akvo_card['infobar_font_size']);?>;
          		<?php endif;?>
          	}
          	.card .card-content{
-         		<?php if($akvo_card['hide_content']):?>
+         		<?php if(isset($akvo_card['hide_content'])):?>
          		display: none;
          		<?php endif;?>
          		
-         		<?php if($akvo_card['content_color']):?>
+         		<?php if(isset($akvo_card['content_color'])):?>
          		color: <?php _e($akvo_card['content_color']);?>;
          		<?php endif;?>
          		
-         		<?php if($akvo_card['content_font_size']):?>
+         		<?php if(isset($akvo_card['content_font_size'])):?>
          		font-size: <?php _e($akvo_card['content_font_size']);?>;
          		<?php endif;?>
          	}
          	.card .card-title{
-         		<?php if($akvo_card['hide_card_title']):?>
+         		<?php if(isset($akvo_card['hide_card_title'])):?>
          		display: none;
          		<?php endif;?>
          		
-         		<?php if($akvo_card['title_font_size']):?>
+         		<?php if(isset($akvo_card['title_font_size'])):?>
          		font-size: <?php _e($akvo_card['title_font_size']);?>;
          		<?php endif;?>
          		
-         		<?php if($akvo_card['title_color']):?>
+         		<?php if(isset($akvo_card['title_color'])):?>
          		color: <?php _e($akvo_card['title_color']);?>;
          		<?php endif;?>
          	}
