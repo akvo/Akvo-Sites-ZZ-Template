@@ -96,10 +96,10 @@
     	<?php if($carousel_option):?>
     	<style type="text/css">
       		.carousel .text{
-        		<?php if($carousel_option['bg_carousel']) echo 'background: '.$carousel_option['bg_carousel'].';'?>
-        		<?php if($carousel_option['color_content_carousel']) echo 'color: '.$carousel_option['color_content_carousel'].';'?>
+        		<?php if(isset($carousel_option['bg_carousel'])) echo 'background: '.$carousel_option['bg_carousel'].';'?>
+        		<?php if(isset($carousel_option['color_content_carousel'])) echo 'color: '.$carousel_option['color_content_carousel'].';'?>
       		}
-      		<?php if($carousel_option['color_title_carousel']):?>
+      		<?php if(isset($carousel_option['color_title_carousel'])):?>
       		.carousel .text h1{
         		color: <?php echo $carousel_option['color_title_carousel']?>;
       		}
