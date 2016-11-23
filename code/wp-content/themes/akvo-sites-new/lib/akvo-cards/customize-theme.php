@@ -234,6 +234,8 @@
 
 	function akvo_card_css(){
 		$akvo_card = get_option('akvo_card');
+		
+		//print_r($akvo_card);
 	?>
          <style type="text/css">
          	
@@ -264,7 +266,7 @@
          		color: <?php _e($akvo_card['infobar_color']);?>;
          		<?php endif;?>
          		
-         		<?php if(isset($akvo_card['hide_infobar'])):?>
+         		<?php if($akvo_card['hide_infobar']):?>
          		display: none;
          		<?php endif;?>
          		
@@ -272,8 +274,9 @@
          		font-size: <?php _e($akvo_card['infobar_font_size']);?>;
          		<?php endif;?>
          	}
+         	
          	.card .card-content{
-         		<?php if(isset($akvo_card['hide_content'])):?>
+         		<?php if($akvo_card['hide_content']):?>
          		display: none;
          		<?php endif;?>
          		
@@ -286,7 +289,7 @@
          		<?php endif;?>
          	}
          	.card .card-title{
-         		<?php if(isset($akvo_card['hide_card_title'])):?>
+         		<?php if($akvo_card['hide_card_title']):?>
          		display: none;
          		<?php endif;?>
          		
