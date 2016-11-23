@@ -194,7 +194,8 @@ use Mexitek\PHPColors\Color;
 	   		'settings' => 'akvo_logo',
 		) ) );
 
-		//filter ID
+		/*
+		not needed
 		$wp_customize->add_section( 'filter_section' , array(
 	    	'title'       => __( 'Result filters', 'sage' ),
 		    'priority'    => 30,
@@ -218,6 +219,7 @@ use Mexitek\PHPColors\Color;
 	    	'section'  => 'filter_section',
 		    'settings' => 'filter_media',
 		));
+		*/
 
 		//fonts
 		
@@ -473,19 +475,19 @@ function mytheme_customize_css(){
          	
          	<?php if($akvo_article):?>
          	article header h3{
-         		<?php if($akvo_article['title_font_size']):?>
+         		<?php if(isset($akvo_article['title_font_size'])):?>
          		font-size: <?php _e($akvo_article['title_font_size'])?>;
          		<?php endif;?>
          	}
          	
          	article .meta{
-         		<?php if($akvo_article['meta_font_size']):?>
+         		<?php if(isset($akvo_article['meta_font_size'])):?>
          		font-size: <?php _e($akvo_article['meta_font_size'])?>;
          		<?php endif;?>
          	}
          	
          	article .content{
-         		<?php if($akvo_article['content_font_size']):?>
+         		<?php if(isset($akvo_article['content_font_size'])):?>
          		font-size: <?php _e($akvo_article['content_font_size'])?>;
          		<?php endif;?>
          	}
@@ -495,61 +497,5 @@ function mytheme_customize_css(){
 }
 add_action( 'wp_head', 'mytheme_customize_css');
 
-// function create_scss() {
-// 	//global $wpdb;
-// 	$file = WP_CONTENT_DIR."/themes/akvo-sites/assets/styles/common/_overrides.scss";
-// 	$main_color = get_theme_mod('main_color');
-// 	if (empty( $main_color )) $main_color = '#00a99d';
-
-// 	$grijs = get_theme_mod('grijs');
-// 	if (empty( $grijs )) $grijs = '#e6e6e6';
-
-// 	$info_bar_blog = get_theme_mod('info_bar_blog');
-// 	if (empty( $info_bar_blog )) $info_bar_blog = '#a3d165';
-
-// 	$info_bar_news = get_theme_mod('info_bar_news');
-// 	if (empty( $info_bar_news ))  $info_bar_news = '#f9ba41';
-
-// 	$info_bar_video = get_theme_mod('info_bar_video');
-// 	if (empty( $info_bar_video )) $info_bar_video = '#f47b50';
-
-// 	$info_bar_update = get_theme_mod('info_bar_update');
-// 	if (empty( $info_bar_update )) $info_bar_update = '#54bce8';
-
-// 	$info_bar_page = get_theme_mod('info_bar_page');
-// 	if (empty( $info_bar_page )) $info_bar_page = '#6d3a7d';
-
-// 	$info_bar_media = get_theme_mod('info_bar_media');
-// 	if (empty( $info_bar_media )) $info_bar_media = '#9d897b';
-
-// 	$info_bar_project = get_theme_mod('info_bar_project');
-// 	if (empty( $info_bar_project )) $info_bar_project = '#7381fa';
-
-// 	$info_bar_map = get_theme_mod('info_bar_map');
-// 	if (empty( $info_bar_map )) $info_bar_map = '#ad1c3c';
-
-// 	$info_bar_testimonial = get_theme_mod('info_bar_testimonial');
-// 	if (empty( $info_bar_testimonial )) $info_bar_testimonial = '#007ba8';
-
-// 	$current = "\$brand-primary: $main_color;\n"
-// 	."\$grijs: $grijs;\n"
-// 	."\$infobar-map: $info_bar_map;\n"
-// 	."\$infobar-blog: $info_bar_blog;\n"
-// 	."\$infobar-news: $info_bar_news;\n"
-// 	."\$infobar-video: $info_bar_video;\n"
-// 	."\$infobar-update: $info_bar_update;\n"
-// 	."\$infobar-page: $info_bar_page;\n"
-// 	."\$infobar-media: $info_bar_media;\n"
-// 	."\$infobar-project: $info_bar_project;\n"
-// 	."\$infobar-map: $info_bar_map;\n"
-// 	."\$infobar-testimonial: $info_bar_testimonial;\n";
-// 	// Write the contents back to the file
-// 	file_put_contents($file, $current);
-// 	return false;
-// }
-
-// // add_action( 'customize_save', 'create_scss' ); 
-
-// add_action( 'customize_save_after', 'create_scss' ); 
 
 ?>
