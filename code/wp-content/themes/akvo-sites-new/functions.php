@@ -15,14 +15,13 @@
   		'lib/custom-posts.php',          // Custom posts
   		'lib/custom-widgets.php',        // Custom widgets G!
   		'lib/bootstrap-nav-walker.php',        // BS Nav walker
-  		//'lib/search-filter.php',        // Ajax filter search customize
+  		'lib/search-filter.php',        // Ajax filter search customize
   		'plugins/boxes.php',        // Custom input fields
   		'plugins/related.php',        // Related posts
   		'lib/customize-theme.php',        // Theme customizer
-  		'lib/taxonomies.php',             // Custom categories for eg media library
+  		'lib/taxonomies.php',        // Custom categories for eg media library
   		'lib/akvo-cards/main.php',        // Cards
-  		'lib/akvo-carousel/main.php',     // Carousel
-  		'lib/akvo-filters/main.php',      // Filters for post types
+  		'lib/akvo-carousel/main.php',        // Carousel
 		//'lib/color.php',        // PHP color function
 	];
 	
@@ -201,20 +200,36 @@
   }
   add_action( 'wp_head', 'bwpy_customizer_head_styles' );
 
-  function akvo_featured_img($post_id){
-  	$post_type = get_post_type($post_id);
-  	$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
-        			
-	if(!$img && $post_type == 'video'){
-    	/* featured image is not selected and the type is video */
-        $img = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
-	}	
-	return $img;
+  add_action( 'widgets_init', 'sage_widgets_init' );
+  function sage_widgets_init() {
+  		/*	
+      register_sidebar( array(
+          'name' => __( 'Sidebar', 'theme-slug' ),
+          'id' => 'sidebar',
+          'description' => __( 'Widgets Sidebar.', 'sage' ),
+          'before_widget' => '<div id="%1$s" class="widget %2$s">',
+          'after_widget'  => '</div>',
+          'before_title'  => '<h2 class="widgettitle">',
+          'after_title'   => '</h2>',
+            ) 
+      );
+      register_sidebar( array(
+          'name' => __( 'Sub header', 'theme-slug' ),
+          'id' => 'sub-header',
+          'description' => __( 'Widgets Sidebar.', 'sage' ),
+          'before_widget' => '<div id="%1$s" class="widget %2$s">',
+          'after_widget'  => '</div>',
+          'before_title'  => '<h2 class="widgettitle">',
+          'after_title'   => '</h2>',
+            ) 
+      );
+      */
   }
   
-	function custom_admin_css() {
- 		echo '<style>
- 			.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
- 		</style>';
-	}
-	add_action( 'admin_head', 'custom_admin_css' ); 
+  // Hide revert to editor on pages
+  function custom_admin_css() {
+  echo '<style>
+	.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
+  </style>';
+}
+add_action( 'admin_head', 'custom_admin_css' );
