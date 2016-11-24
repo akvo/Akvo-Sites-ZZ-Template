@@ -1,12 +1,7 @@
 <?php
-	
-	
-	
-	
 	$sage_includes = [
   		'lib/utils.php',                 // Utility functions
   		'lib/init.php',                  // Initial theme setup and constants
-  		//'lib/wrapper.php',               // Theme wrapper class
   		'lib/conditional-tag-check.php', // ConditionalTagCheck class
   		'lib/config.php',                // Configuration
   		'lib/assets.php',                // Scripts and stylesheets
@@ -15,7 +10,6 @@
   		'lib/custom-posts.php',          // Custom posts
   		'lib/custom-widgets.php',        // Custom widgets G!
   		'lib/bootstrap-nav-walker.php',        // BS Nav walker
-  		//'lib/search-filter.php',        // Ajax filter search customize
   		'plugins/boxes.php',        // Custom input fields
   		'plugins/related.php',        // Related posts
   		'lib/customize-theme.php',        // Theme customizer
@@ -23,7 +17,6 @@
   		'lib/akvo-cards/main.php',        // Cards
   		'lib/akvo-carousel/main.php',     // Carousel
   		'lib/akvo-filters/main.php',      // Filters for post types
-		//'lib/color.php',        // PHP color function
 	];
 	
 	foreach ($sage_includes as $file) {
@@ -35,33 +28,9 @@
 	unset($file, $filepath);
 	
 	
-	
-	
 	function sage_customize_footer_register($wp_customize){
 
-		/*
-		$wp_customize->add_section('sage_footer_scheme', array(
-      		'title'    => __('Footer', 'sage'),
-      		'description' => '',
-      		'priority' => 35,
-      	));
-		
-    	$wp_customize->add_setting('sage_footer_options[checkbox_twitter]', array(
-      		'capability' => 'edit_theme_options',
-      		'type'       => 'option',
-      	));
-		
-		$wp_customize->add_control('display_twitter_feed', array(
-      		'settings' => 'sage_footer_options[checkbox_twitter]',
-      		'label'    => __('Display Twitter Feed'),
-      		'section'  => 'sage_footer_scheme',
-      		'type'     => 'checkbox',
-      	));
-		*/
-		
-    	
-
-   		//Header
+		//Header
 	    $wp_customize->add_section('sage_header_scheme', array(
     	  'title'    => __('Header', 'sage'),
 	      'description' => '',
