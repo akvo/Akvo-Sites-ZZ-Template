@@ -63,6 +63,26 @@ use Roots\Sage\Assets;
 			'before_title'  => '<h3>',
 			'after_title'   => '</h3>'
 		]);
+		
+		register_sidebar([
+    		'name'          => __('Footer Last Col', 'sage'),
+    		'id'            => 'sidebar-footer-4',
+			'before_widget' => '<section class="widget %1$s %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h3>',
+			'after_title'   => '</h3>'
+		]);
+		
+		register_sidebar([
+        	'name' => __( 'Sub header', 'theme-slug' ),
+          	'id' => 'sub-header',
+          	'description' => __( 'Widgets Sidebar.', 'sage' ),
+          	'before_widget' => '<div id="%1$s" class="widget %2$s">',
+          	'after_widget'  => '</div>',
+          	'before_title'  => '<h2 class="widgettitle">',
+          	'after_title'   => '</h2>',
+    	]);
+		
 		/*
 		register_sidebar([
 			'name'          => __('Homepage row 1', 'sage'),

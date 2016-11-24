@@ -30,7 +30,7 @@ function languages() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'languages', array( 'media' ), $args );
+	register_taxonomy( 'languages', array( 'media', 'map' ), $args );
 }
 // Hook into the 'init' action
 add_action( 'init', 'languages', 0 );
@@ -65,7 +65,7 @@ function types() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'types', array( 'media' ), $args );
+	register_taxonomy( 'types', array( 'media', 'map' ), $args );
 }
 // Hook into the 'init' action
 add_action( 'init', 'types', 0 );
@@ -100,7 +100,7 @@ function countries() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'countries', array( 'media' ), $args );
+	register_taxonomy( 'countries', array( 'media', 'map' ), $args );
 }
 // Hook into the 'init' action
 add_action( 'init', 'countries', 0 );

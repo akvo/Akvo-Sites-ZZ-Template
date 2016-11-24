@@ -15,12 +15,14 @@
   		'lib/custom-posts.php',          // Custom posts
   		'lib/custom-widgets.php',        // Custom widgets G!
   		'lib/bootstrap-nav-walker.php',        // BS Nav walker
-  		'lib/search-filter.php',        // Ajax filter search customize
+  		//'lib/search-filter.php',        // Ajax filter search customize
   		'plugins/boxes.php',        // Custom input fields
   		'plugins/related.php',        // Related posts
   		'lib/customize-theme.php',        // Theme customizer
-  		'lib/taxonomies.php',        // Custom categories for eg media library
-  		'lib/shortcodes.php',        // Custom shortcodes
+  		'lib/taxonomies.php',             // Custom categories for eg media library
+  		'lib/akvo-cards/main.php',        // Cards
+  		'lib/akvo-carousel/main.php',     // Carousel
+  		'lib/akvo-filters/main.php',      // Filters for post types
 		//'lib/color.php',        // PHP color function
 	];
 	
@@ -37,14 +39,13 @@
 	
 	function sage_customize_footer_register($wp_customize){
 
-    	//Footer
-    	$wp_customize->add_section('sage_footer_scheme', array(
+		/*
+		$wp_customize->add_section('sage_footer_scheme', array(
       		'title'    => __('Footer', 'sage'),
       		'description' => '',
       		'priority' => 35,
       	));
-		/*
-    	
+		
     	$wp_customize->add_setting('sage_footer_options[checkbox_twitter]', array(
       		'capability' => 'edit_theme_options',
       		'type'       => 'option',
@@ -58,57 +59,7 @@
       	));
 		*/
 		
-    	//Carousel
-    	$wp_customize->add_section('sage_carousel_scheme', array(
-      		'title'    => __('Carousel', 'sage'),
-      		'description' => '',
-      		'priority' => 40,
-     	));
-
-    	// add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[bg_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-    	// add color picker control
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'bg_carousel', array(
-          			'label' => 'Background Carousel',
-          			'section' => 'sage_carousel_scheme',
-          			'settings' => 'sage_carousel_options[bg_carousel]',
-    	)));
-
-    	// add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[color_title_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-    	// add color picker control
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'color_title_carousel', array(
-          			'label' => 'Color Title Carousel',
-          			'section' => 'sage_carousel_scheme',
-          			'settings' => 'sage_carousel_options[color_title_carousel]',
-    	) ) );
-
-	    // add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[color_content_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-	    // add color picker control
-    	$wp_customize->add_control( 
-			new WP_Customize_Color_Control( 
-		        $wp_customize, 'color_content_carousel', array(
-        		  'label' => 'Color Content Carousel',
-		          'section' => 'sage_carousel_scheme',
-		          'settings' => 'sage_carousel_options[color_content_carousel]',
-        	) ) );
+    	
 
    		//Header
 	    $wp_customize->add_section('sage_header_scheme', array(
@@ -177,38 +128,38 @@
     	      'settings' => 'sage_header_options[color_parent_menu]',
           ) ) );
 
-    // add color picker setting
-    $wp_customize->add_setting( 'sage_header_options[bg_child_menu]', array(
-      'default' => '',
-      'type'    => 'option',
-      ) );
+			// add color picker setting
+		$wp_customize->add_setting( 'sage_header_options[bg_child_menu]', array(
+			'default' => '',
+			'type'    => 'option',
+		) );
 
-    // add color picker control
-    $wp_customize->add_control( 
-      new WP_Customize_Color_Control( 
-        $wp_customize, 'menu_child_color_bg', array(
-          'label' => 'Background Active Item Menu Children',
-          'section' => 'sage_header_scheme',
-          'settings' => 'sage_header_options[bg_child_menu]',
-          ) ) );
+		// add color picker control
+		$wp_customize->add_control( 
+      		new WP_Customize_Color_Control( 
+        		$wp_customize, 'menu_child_color_bg', array(
+          			'label' => 'Background Active Item Menu Children',
+          			'section' => 'sage_header_scheme',
+          			'settings' => 'sage_header_options[bg_child_menu]',
+    	) ) );
 
-    // add color picker setting
-    $wp_customize->add_setting( 'sage_header_options[color_child_menu]', array(
-      'default' => '',
-      'type'    => 'option',
-      ) );
+		// add color picker setting
+		$wp_customize->add_setting( 'sage_header_options[color_child_menu]', array(
+    		'default' => '',
+    		'type'    => 'option',
+    	) );
 
-    // add color picker control
-    $wp_customize->add_control( 
-      new WP_Customize_Color_Control( 
-        $wp_customize, 'menu_child_color', array(
-          'label' => 'Color Active Item Menu Children',
-          'section' => 'sage_header_scheme',
-          'settings' => 'sage_header_options[color_child_menu]',
-          ) ) );
-  }
+		// add color picker control
+		$wp_customize->add_control( 
+			new WP_Customize_Color_Control( 
+				$wp_customize, 'menu_child_color', array(
+    				'label' => 'Color Active Item Menu Children',
+    				'section' => 'sage_header_scheme',
+    				'settings' => 'sage_header_options[color_child_menu]',
+    	) ) );
+	}
 
-  add_action('customize_register', 'sage_customize_footer_register',40);
+	add_action('customize_register', 'sage_customize_footer_register',40);
 
   function bwpy_customizer_head_styles() {
     $header_option = get_option('sage_header_options');
@@ -219,11 +170,7 @@
     $menu_bg_parent = $header_option['bg_parent_menu'];
     $menu_cl_parent = $header_option['color_parent_menu'];
 
-    $carousel_option = get_option('sage_carousel_options');
-    $bg_carousel = $carousel_option['bg_carousel'];
-    $title_carousel = $carousel_option['color_title_carousel'];
-    $content_carousel = $carousel_option['color_content_carousel'];
-
+    
     if($header_option != NULL){ ?>
     <style type="text/css">
       <?php if($menu_bg_child != "" || $menu_cl_child != ""){?>
@@ -243,51 +190,31 @@
       nav ul.navbar-nav li:hover a,
       nav ul.navbar-nav li a:focus,
       nav ul.navbar-nav li.current-menu-item a{
-        <?php if($menu_bg_parent != "") echo 'background: '.$menu_bg_parent.';'?>
-        <?php if($menu_cl_parent != "") echo 'color: '.$menu_cl_parent.';'?>
+        <?php if($menu_bg_parent != "") echo 'background: '.$menu_bg_parent.' !important;'?>
+        <?php if($menu_cl_parent != "") echo 'color: '.$menu_cl_parent.' !important;'?>
       }
       <?php } ?>
     </style>
     <?php }
 
-    if($carousel_option != NULL){ ?>
-    <style type="text/css">
-      <?php if($bg_carousel != "" || $content_carousel != ""){?>
-      .carousel .text{
-        <?php if($bg_carousel != "") echo 'background: '.$bg_carousel.';'?>
-        <?php if($content_carousel != "") echo 'color: '.$content_carousel.';'?>
-      }
-      <?php } ?>
-      <?php if($title_carousel != ""){?>
-      .carousel .text h1{
-        color: <?php echo $title_carousel?>;
-      }
-      <?php } ?>
-    </style>
-    <?php }
+    
   }
   add_action( 'wp_head', 'bwpy_customizer_head_styles' );
 
-  add_action( 'widgets_init', 'sage_widgets_init' );
-  function sage_widgets_init() {
-      register_sidebar( array(
-          'name' => __( 'Sidebar', 'theme-slug' ),
-          'id' => 'sidebar',
-          'description' => __( 'Widgets Sidebar.', 'sage' ),
-          'before_widget' => '<div id="%1$s" class="widget %2$s">',
-          'after_widget'  => '</div>',
-          'before_title'  => '<h2 class="widgettitle">',
-          'after_title'   => '</h2>',
-            ) 
-      );
-      register_sidebar( array(
-          'name' => __( 'Sub header', 'theme-slug' ),
-          'id' => 'sub-header',
-          'description' => __( 'Widgets Sidebar.', 'sage' ),
-          'before_widget' => '<div id="%1$s" class="widget %2$s">',
-          'after_widget'  => '</div>',
-          'before_title'  => '<h2 class="widgettitle">',
-          'after_title'   => '</h2>',
-            ) 
-      );
+  function akvo_featured_img($post_id){
+  	$post_type = get_post_type($post_id);
+  	$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
+        			
+	if(!$img && $post_type == 'video'){
+    	/* featured image is not selected and the type is video */
+        $img = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
+	}	
+	return $img;
   }
+  
+	function custom_admin_css() {
+ 		echo '<style>
+ 			.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
+ 		</style>';
+	}
+	add_action( 'admin_head', 'custom_admin_css' ); 
