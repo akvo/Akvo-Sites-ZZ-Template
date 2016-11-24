@@ -1,0 +1,252 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>WASH alliance Logframe</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>        
+    </head>
+    <body>
+        <div class="test2">
+            <div class="column-titles straight">
+                <span>Activities</span>
+                <span>Outputs</span>
+            </div>
+            <div class="column-titles sloped">
+                <span>Intermediary outcomes</span>
+                <span>Outcomes</span>
+                <span>Objectives</span>
+                <span>Main objective</span>
+            </div>
+            <div class="test-container">
+                <div class="container">
+                    <div class="logframe-container">
+                        <div class="slope slope-top"></div>
+                        <div class="controls">
+                            <h3>Select organisation</h3>
+                            <select class="menu">
+                            </select>
+                        </div>
+                        <div class="logframe-content">
+                                                                                                           
+                        </div>
+                        <div class="slope slope-bottom"></div>
+                        <div class="fiets-menu">
+                            <div data-icon="money">
+                                <span class="fiets-icon fiets-money"></span><span class="fiets-text">Financial sustainability</span>
+                            </div>
+                            <div data-icon="hands">
+                                <span class="fiets-icon fiets-hands"></span><span class="fiets-text">Institutional sustainability</span>
+                            </div>
+                            <div data-icon="tree">
+                                <span class="fiets-icon fiets-tree"></span><span class="fiets-text">Environmental sustainability</span>
+                            </div>
+                            <div data-icon="spanner">
+                                <span class="fiets-icon fiets-spanner"></span><span class="fiets-text">Technical sustainability</span>
+                            </div>
+                            <div data-icon="parent">
+                                <span class="fiets-icon fiets-parent"></span><span class="fiets-text">Social sustainability</span>
+                            </div>                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="data.js"></script>
+        <script src="orgs.js"></script>
+        <script>
+            $(document).ready( function () {
+                // Load the cell data
+
+                $.each(logFrameData, function(key, colData) {
+                    var column = document.createElement('div');
+                    
+                    $(column).addClass('column');
+                    $(column).addClass(colData.className);
+                    for (var i = 1; i <= colData.cellNum; i++) {
+                        var cellData = colData.cellData[i];
+                        var cell = document.createElement('div');
+                        var cellTable = document.createElement('div');
+                        var cellContents = document.createElement('div');
+
+                        $(cell).addClass('cell');
+                        $(cellTable).addClass('cell-table');
+                        $(cellContents).addClass('cell-contents');
+
+                        if (cellData.cellGlyph) {
+                            var glyphSpan = document.createElement('span');
+                            $(glyphSpan).addClass('cell-glyph');
+                            $(glyphSpan).addClass(cellData.cellGlyph);
+                            $(cellContents).append(glyphSpan);
+                        } else {
+                            $(cellContents).addClass('no-glyph');
+                        }                          
+
+                        if (cellData.cellNumber) {
+                            var numSpan = document.createElement('span');
+                            $(numSpan).addClass('cell-number');
+                            $(numSpan).addClass('numSpan' + cellData.cellNumber);
+                            $(numSpan).text(cellData.cellNumber);
+                            $(cellContents).append(numSpan);
+                        }   
+
+                        if (cellData.icon) {
+                            var iconSpan = document.createElement('span');
+                            $(iconSpan).addClass('cell-icon');
+                            $(iconSpan).addClass(cellData.icon);
+
+                            if (cellData.iconLeft) {
+                                $(iconSpan).addClass('icon-left');
+                            }
+
+                            $(cellContents).append(iconSpan);
+                        }
+
+                        if (cellData.name) {
+                            if (cellData.name != 'BLANK' && cellData.name != 'ARROW') {
+                                $(cellContents).html($(cellContents).html() + cellData.name);
+                            }
+                        }
+
+                        if (cellData.next) {
+                            $(cell).attr('data-next', cellData.next);
+                        }
+
+                        if (cellData.height) {
+                            var heightClass = 's' + cellData.height;
+                            $(cell).addClass(heightClass);
+                        }
+
+                        $(cellTable).append(cellContents);
+                        $(cell).append(cellTable);
+                        $(column).append(cell);                   
+                    }
+
+                    $('.logframe-content').append(column);
+                });
+
+                /* For every highlighted cell in the "Outputs" column, highlight the 
+                ** appropriate cells in the other four columns.
+                */
+                function highlight() {
+                    
+			$('.test-container').addClass('active');			
+	
+			$('.outputs .cell.active, .intermediary-outcomes .cell.active').each(function() {
+                        var next = $(this).data('next');
+
+                        /* Assume the next column is always "Intermediary outcomes", unless
+                        ** there are 0 active cells in the "Outputs" column
+                        */
+
+                        if ($('.outputs .cell.active').length > 0) {
+                            $('.intermediary-outcomes .cell:nth-child(' + next + ')').addClass('active');
+                        } else {
+                            $('.outcomes .cell:nth-child(' + next + ')').addClass('active');
+                        }
+                        
+                        if (next <= 8) {
+                            var selector = '.outcomes .cell:nth-child(1)'
+                                            + ','
+                                            + '.outcomes .cell:nth-child(2)'
+                                            + ','
+                                            + '.outcomes .cell:nth-child(3)'
+                                            + ','
+                                            + '.outcomes .cell:nth-child(4)'
+                                            + ','
+                                            + '.objectives .cell:nth-child(1)'
+                                            + ','
+                                            + '.objectives .cell:nth-child(2)'
+                                            + ','
+                                            + '.main-objective .cell';
+
+                            $(selector).addClass('active');
+                        } else {
+                            var selector = '.outcomes .cell:nth-child(5)'
+                                            + ','
+                                            + '.outcomes .cell:nth-child(6)'
+                                            + ','
+                                            + '.outcomes .cell:nth-child(7)'
+                                            + ','
+                                            + '.outcomes .cell:nth-child(8)'
+                                            + ','
+                                            + '.objectives .cell:nth-child(3)'
+                                            + ','
+                                            + '.objectives .cell:nth-child(4)'
+                                            + ','
+                                            + '.main-objective .cell';                                            
+                            $(selector).addClass('active');                                            
+                        }
+                    });                                     
+                }
+
+                $('.fiets-menu div').on('click', function() {
+                    $('.cell').addClass('no-transition');
+                    $('.logframe-content .cell').removeClass('active');
+
+                    var selector = $(this).data('icon');
+                    selector = '.outputs .' + selector + ', .intermediary-outcomes .' + selector;
+
+                    $(selector).parent().parent().parent().addClass('no-transition');
+                    $(selector).parent().parent().parent().addClass('active');
+
+                    /* Some cells are always highlighed with the FIETS filter */
+
+                    var alwaysHighlighted = '.outputs .cell:nth-child(3), .outputs .cell:nth-child(4),'
+                    + '.outcomes .cell:nth-child(2), .outcomes .cell:nth-child(3), .outcomes .cell:nth-child(4),'
+                    + '.objectives .cell,'
+                    + '.main-objective .cell';
+
+                    $(alwaysHighlighted).addClass('active');
+                    highlight();
+                });
+
+                /* Populate the "Select organisation" menu */
+
+                var menu = $('.controls .menu');
+
+                for (var country in orgs) {
+                    if (orgs.hasOwnProperty(country)) {
+                        for (var org in orgs[country]) {
+                            if (orgs[country].hasOwnProperty(org)) {
+                                var option = document.createElement('option');
+                                var localPartner;
+                                var dutchPartner;
+
+                                localPartner = org.split(' > ')[1];
+                                dutchPartner = org.split(' > ')[0];
+                                $(option).text(country + ': ' + localPartner + ' (' + dutchPartner + ')');
+                                $(option).attr('value', country + '|' + org);
+                                menu.append(option);
+                            }
+                        }
+                    }
+                }
+
+                menu.on('change', function() {
+                    var orgName = menu.val().split('|');
+                    var orgValue = orgs[orgName[0]][orgName[1]];
+
+                    $('.no-transition').removeClass('no-transition');
+                    $('.active').removeClass('active');
+
+
+                    setTimeout(function() {
+                        orgValue.forEach(function(value) {
+                            var selector = '.numSpan' + value;
+
+                            $(selector).parent().parent().parent().addClass('active');
+                        });
+                        highlight();
+                    }, 250);
+                });
+
+            });
+        </script>
+    </body>
+</html>

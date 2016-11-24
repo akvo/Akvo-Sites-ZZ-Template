@@ -102,12 +102,8 @@ class AIOWPSecurity_Process_Renamed_Login_Page
         
         //case where someone attempting to reach wp-admin 
         if (is_admin() && !is_user_logged_in() && !defined('DOING_AJAX')){
-            //Check if the maintenance (lockout) mode is active - if so prevent access to site by not displaying 404 page!
-            if($aio_wp_security->configs->get_value('aiowps_site_lockout') == '1'){
-                AIOWPSecurity_WP_Loaded_Tasks::site_lockout_tasks();
-            }else{
-                AIOWPSecurity_Process_Renamed_Login_Page::aiowps_set_404();
-            }
+            //Fix to prevent fatal error caused by some themes and Yoast SEO
+            wp_die( __( 'Not available.', 'all-in-one-wp-security-and-firewall' ), 403 );
         }
 
         //case where someone attempting to reach wp-login
@@ -149,9 +145,14 @@ class AIOWPSecurity_Process_Renamed_Login_Page
 
         if(untrailingslashit($parsed_url['path']) === $home_url_with_slug
                 || (!get_option('permalink_structure') && isset($_GET[$login_slug]))){
-            status_header( 200 );
-            require_once(AIO_WP_SECURITY_PATH . '/other-includes/wp-security-rename-login-feature.php' );
-            die;
+            if(empty($action) && is_user_logged_in()){
+                //if user is already logged in but tries to access the renamed login page, send them to the dashboard
+                AIOWPSecurity_Utility::redirect_to_url(AIOWPSEC_WP_URL."/wp-admin");
+            }else{
+                status_header( 200 );
+                require_once(AIO_WP_SECURITY_PATH . '/other-includes/wp-security-rename-login-feature.php' );
+                die;
+            }
         }        
     }
     

@@ -3,8 +3,8 @@ Contributors: Tips and Tricks HQ, wpsolutions, Peter Petreski, Ruhul Amin, mbrso
 Donate link: https://www.tipsandtricks-hq.com
 Tags: security, secure, Anti Virus, antivirus, ban, ban hacker, virus, firewall, firewall security, login, lockdown, htaccess, hack, malware, vulnerability, protect, protection, phishing, database, backup, plugin, sql injection, ssl, restrict, login captcha, bot, hotlink, 404 detection, admin, rename, all in one, scan, scanner, iframe,
 Requires at least: 3.5
-Tested up to: 4.5
-Stable tag: 4.0.9
+Tested up to: 4.6
+Stable tag: 4.1.9
 License: GPLv3
 
 A comprehensive, user-friendly, all in one WordPress security and firewall plugin for your site.
@@ -182,6 +182,73 @@ https://www.tipsandtricks-hq.com/wordpress-security-and-firewall-plugin
 None
 
 == Changelog ==
+
+= 4.1.9 =
+- Small improvement to the new "immediate blocking of specific usernames" feature.
+
+= 4.1.8 =
+- New feature to allow immediate blocking of specific usernames.
+- Only activate copy (right-click) protection for non-admin users.
+- Fixed bug where logout link in admin bar does not get updated on after the $_POST submit to reflect the new rename login setting.
+- Fixed small bug in return_regularized_url function.
+- Improvement/bug fix: When currently logged in user attempts to access renamed login page, redirect them to dashboard.
+- Removed Spanish language files so they can be automatically pulled from WordPress.org.
+- Drop unnecessary WHERE clause in some backend listings.
+- Improvement: do not schedule a cronjob, if it is already scheduled.
+
+= 4.1.7 =
+- Added sanitisation for log file data in textarea.
+- Disabled autocomplete for Captcha field.
+
+= 4.1.6 =
+- Added cleanup code for captcha string info transients.
+- Minor change to the username label in the renamed login page to keep it inline with the standard WordPress login page.
+- Fixed a potential vulnerability when viewing AIOWPS log files in the Dashboard menu. Thanks to Manuel LLOP for pointing this out.
+
+= 4.1.5 =
+- Fixed bug where username is an email and captcha was being ignored.
+- Reduce memory footprint of database backup.
+- Improvements: Make hard-coded strings localizable.
+- Partial Apache 2.3 compatibility.
+- Improved: Hide WP version number by replacing it with a hash. This way, WordPress version number is not exposed, but browser caching is not obscured by missing version numbers.
+
+= 4.1.4 =
+- Improved and tweaked the login captcha feature to avoid some issues people had with the last modification.
+- Deleted reference to ini_get('safe_mode') to avoid fatal errors for newer versions of PHP where that setting has been totally removed.
+
+= 4.1.3 =
+- Added new checkbox for XMLRPC to disable only pingback methods but leave other XMLRPC functionality accessible. This will be useful for people who use Jetpack or Wordpress iOS or other apps.
+- Updated the French language file.
+- Fix: decbin doesn't add leading zero. Comparing empty strings return bad results.
+- Fix: bugfix in the login captcha. Thanks to Sipke Mellema for pointing it out.
+
+= 4.1.2 =
+- Fixed bug introduced by last file change scanner code changes.
+- Fixed bug in SPAM comment blocking functionality.
+- Fixed fatal error case when Divi theme and front end lockout is enabled.
+
+= 4.1.1 =
+- Fixed Fatal error conflict between Rename Login feature and Yoast SEO and some themes when attempting to access wp-admin page directly.
+- Added "Pending Approval" message when manual registration approval feature is enabled and a user registers.
+- Fix (minor): No need to use strcmp to compare integer values.
+- Updated and simplified wp-security-stop-users-enumeration.php for bug (thanks to @davidegiunchidiennea)
+- Minor code cleanup (Thanks to @chesio for the following changes).
+- File scanner codebase cleanup.
+- Fix: properly report invalid email addresses in file scanner configuration.
+- Code clean-up in AIOWPSecurity_Scan::do_file_change_scan() method.
+- Tweak: Compare file scan data faster.
+
+= 4.1.0 =
+- Fixed bug in Maintenance menu page when trying to attach a media file to the message text box.
+- Added a new filter (called "aiowps_ip_blocked_error_msg") which allows the modification of the error message displayed on the login page when an IP address has been blocked by the login lockdown feature.
+- Updated French language translation. Thanks to Claude Ribaux for providing the translation files.
+- Thanks to @chesio for making the following two changes.
+- Replaced deprecated call to get_currentuserinfo() function.
+- Minor code fixes in the backup class file.
+- Fix: display correct (error) message when write_to_htaccess() fails.
+- Tweak: database backup filename is more human-readable. 
+  Before: 24x7eg8l6i-database-backup-1463042767.zip
+  After: database-backup-20160512-104607-24x7eg8l6i.zip
 
 = 4.0.9 =
 - Made file change scanner code more robust for cases when open_basedir restriction is in effect. (Thanks to Manuel Jeanne for pointing this out).

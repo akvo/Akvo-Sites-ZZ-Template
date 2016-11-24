@@ -201,6 +201,7 @@
   }
   add_action( 'wp_head', 'bwpy_customizer_head_styles' );
 
+
   function akvo_featured_img($post_id){
   	$post_type = get_post_type($post_id);
   	$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
@@ -212,9 +213,14 @@
 	return $img;
   }
   
-	function custom_admin_css() {
- 		echo '<style>
- 			.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
- 		</style>';
-	}
-	add_action( 'admin_head', 'custom_admin_css' ); 
+	
+  
+  
+  // Hide revert to editor on pages
+  function custom_admin_css() {
+  echo '<style>
+	.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
+  </style>';
+}
+add_action( 'admin_head', 'custom_admin_css' );
+

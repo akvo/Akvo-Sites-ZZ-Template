@@ -41,7 +41,7 @@ class FlxMapPlugin {
 		if (is_admin()) {
 			// kick off the admin handling
 			require FLXMAP_PLUGIN_ROOT . 'includes/class.FlxMapAdmin.php';
-			new FlxMapAdmin($this);
+			new FlxMapAdmin();
 		}
 		else {
 			// non-admin actions and filters for this plugin
@@ -83,8 +83,14 @@ class FlxMapPlugin {
 	* register and enqueue any scripts and styles we require
 	*/
 	public function enqueueScripts() {
-		// allow others to override the Google Maps API URL
-		$args = apply_filters('flexmap_google_maps_api_args', array('v' => '3.22'));
+		$options = get_option(FLXMAP_PLUGIN_OPTIONS, array());
+
+		$args   = array('v' => '3.24');
+		if (!empty($options['apiKey'])) {
+			$args['key'] = $options['apiKey'];
+		}
+		$args   = apply_filters('flexmap_google_maps_api_args', $args);
+
 		$apiURL = apply_filters('flexmap_google_maps_api_url', add_query_arg($args, 'https://maps.google.com/maps/api/js'));
 		if (!empty($apiURL)) {
 			wp_register_script('google-maps', $apiURL, false, null, true);
@@ -111,70 +117,25 @@ class FlxMapPlugin {
 	* load any enqueued locales and map types as localisations on the main script
 	*/
 	public function justInTimeLocalisation() {
+		$localise = array();
+
 		if (!empty($this->locales)) {
-			$domain = 'wp-flexible-map';
-			$i18n = array();
-
-			// map old two-character language-only locales that now need to target language_country translations
-			$upgradeMap = array(
-				'bg' => 'bg_BG',	'cs' => 'cs_CZ',	'da' => 'da_DK',	'de' => 'de_DE',
-				'es' => 'es_ES',	'fa' => 'fa_IR',	'fr' => 'fr_FR',	'gl' => 'gl_ES',
-				'he' => 'he_IL',	'hi' => 'hi_IN',	'hu' => 'hu_HU',	'id' => 'id_ID',
-				'is' => 'is_IS',	'it' => 'it_IT',	'ko' => 'ko_KR',	'lt' => 'lt_LT',
-				'mk' => 'mk_MK',	'ms' => 'ms_MY',	'mt' => 'mt_MT',	'nb' => 'nb_NO',
-				'nl' => 'nl_NL',	'pl' => 'pl_PL',	'pt' => 'pt_PT',	'ro' => 'ro_RO',
-				'ru' => 'ru_RU',	'sk' => 'sk_SK',	'sl' => 'sl_SL',	'sr' => 'sr_RS',
-				'sv' => 'sv_SE',	'ta' => 'ta_IN',	'tr' => 'tr_TR',	'zh' => 'zh_CN',
-			);
-
-			foreach (array_keys($this->locales) as $locale) {
-				// check for specific locale first, e.g. 'zh-CN', then for generic locale, e.g. 'zh'
-				foreach (array($locale, substr($locale, 0, 2)) as $locale) {
-					if (isset($upgradeMap[$locale])) {
-						// upgrade old two-character language-only locales
-						$moLocale = $upgradeMap[$locale];
-					}
-					else {
-						// revert locale name to WordPress locale name as used in .mo files
-						$moLocale  = strtr($locale, '-', '_');
-					}
-
-					// compose full path to .mo file
-					$mofile = sprintf('%slanguages/%s-%s.mo', FLXMAP_PLUGIN_ROOT, $domain, $moLocale);
-
-					if (is_readable($mofile)) {
-						$mo = new MO();
-						if ($mo->import_from_file($mofile)) {
-							// pull all translation strings into a simplified format for our script
-							// TODO: handle plurals (not yet needed, don't have any)
-							$strings = array();
-							foreach ($mo->entries as $original => $translation) {
-								// skip admin-side strings, identified by context
-								if ($translation->context == 'plugin details links') {
-									continue;
-								}
-
-								$strings[$original] = $translation->translations[0];
-							}
-							$i18n[$locale] = $strings;
-							break;
-						}
-					}
-				}
+			if (!class_exists('FlxMapLocalisation', false)) {
+				require FLXMAP_PLUGIN_ROOT . 'includes/class.FlxMapLocalisation.php';
 			}
-
-			// build and enqueue localisations for map script
-			$localise = array();
+			$localisation = new FlxMapLocalisation();
+			$i18n = $localisation->getLocalisations($this->locales);
 			if (!empty($i18n)) {
 				$localise['i18n'] = $i18n;
 			}
-			if (!empty($this->mapTypes)) {
-				$localise['mapTypes'] = $this->mapTypes;
-			}
+		}
 
-			if (!empty($localise)) {
-				wp_localize_script('flxmap', 'flxmap', $localise);
-			}
+		if (!empty($this->mapTypes)) {
+			$localise['mapTypes'] = $this->mapTypes;
+		}
+
+		if (!empty($localise)) {
+			wp_localize_script('flxmap', 'flxmap', $localise);
 		}
 	}
 
@@ -476,9 +437,14 @@ HTML;
 			$script = apply_filters('flexmap_shortcode_script', $script, $attrs);
 
 			if ((defined('DOING_AJAX') && DOING_AJAX) || (isset($attrs['isajax']) && self::isYes($attrs['isajax']))) {
+				// ensure that the required scripts are on the page already
+				if (!wp_script_is('flxmap', 'done')) {
+					wp_print_scripts('flxmap');
+				}
+
 				// wrap it up for AJAX load, no event trigger
 				$html .= <<<HTML
-<script>
+<script data-noptimize="1">
 /* <![CDATA[ */
 var $varID = (function() {
 $script return f;
@@ -491,7 +457,7 @@ HTML;
 			else {
 				// wrap it up for standard page load, with "content ready" trigger
 				$html .= <<<HTML
-<script>
+<script data-noptimize="1">
 /* <![CDATA[ */
 (function(w, fn) {
  if (w.addEventListener) w.addEventListener("DOMContentLoaded", fn, false);
