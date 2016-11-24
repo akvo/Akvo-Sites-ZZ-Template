@@ -46,9 +46,8 @@
     			$instance['type-text'] = '';
     		}
     		
-			$url = admin_url('admin-ajax.php')."?action=akvo_card&type=".$instance['type']."&offset=".$counters[$label]."&rsr-id=".$instance['rsr-id']."&type-text=".$instance['type-text'];
-			
-			
+    		$url = admin_url('admin-ajax.php');
+			$url .= "?action=akvo_card&type=".$instance['type']."&offset=".$counters[$label]."&rsr-id=".$instance['rsr-id']."&type-text=".$instance['type-text'];
 			
 			echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
 			

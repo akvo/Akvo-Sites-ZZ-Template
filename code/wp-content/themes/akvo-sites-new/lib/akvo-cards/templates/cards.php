@@ -1,4 +1,4 @@
-<div id="cards-list" data-target=".col-md-4.eq" class="row" data-url="<?php _e($url);?>">
+<div id="cards-list" data-target=".col-md-4.eq" class="row" data-url="<?php _e($url);?>" data-paged="akvo-paged">
 	<?php foreach($data as $item):?>
 		<div class="col-md-4 eq">
 		<?php
@@ -32,7 +32,7 @@
 				$att_str .= ' type="'.$item['type'].'"';
 			}
 			
-			if($item['type-text']){
+			if(isset($item['type-text'])){
 				$att_str .= ' type-text="'.$item['type-text'].'"';
 			}
 			

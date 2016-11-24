@@ -12,8 +12,7 @@
             
             var ul = $(btn.data('list'));
 			
-			    
-            
+			
 			ul.sanitize_url = function(){
 				var url = ul.attr('data-url') ? ul.attr('data-url') : location.href;
 				var hash_index = url.indexOf('#');
@@ -22,7 +21,10 @@
 				url = encodeURI(url);
 				/* add page parameter to the request */
 				var page = ul.page_inc();
-				url += (url.split('?')[1] ? '&':'?') + 'akvo-paged=' + page;
+				
+				var paged = ul.attr('data-paged') ? ul.attr('data-paged') : 'paged';
+				
+				url += (url.split('?')[1] ? '&':'?') + paged + '=' + page;
 				return url;
 			};
 			
@@ -40,6 +42,8 @@
 				
 				console.log($(result).html());
 				*/
+				
+				
 				
 				if($(result).find(ul.attr('data-target')).length){
 					ul.attr('data-load-flag', '');
@@ -128,11 +132,69 @@
 			
 		});
     };
-    
-    
     $('body').find("[data-behaviour~=reload-html]").reload_html();
-    
-    
-    
-   
+}(jQuery));
+
+
+/* ajax form submission */
+(function($){
+    $.fn.ajax_form_submit = function(options){
+        var options = $.extend({
+            success : function(data){},
+        }, options);
+        return this.each(function(){
+            var form = $(this);
+            var url = form.attr('action') ? form.attr('action') : '';
+            var method = form.attr('method') ? form.attr('method') : 'GET';
+            $.ajax({'type':method,'url':url,'data':form.serialize(),'success':function(data){
+            
+            	if(method == 'GET'){
+            		var target_url = url + "?" + form.serialize();
+            		history.pushState({}, '', target_url);
+	            	
+            	}
+            	
+            	form.trigger('ajax_form:after', [form]);
+                options.success(data);
+            }});
+        });
+    };
+}(jQuery));
+
+
+
+
+/* init form to direct ajax */
+(function($){
+    $.fn.ajax_form = function(options){
+        var options = $.extend({
+            success : function(data){},
+        }, options);
+        return this.each(function(){
+            var form = $(this);
+            
+            var target = $(form.data('target'));
+            
+            form.submit(function(event){
+                event.preventDefault();
+                form.find('i.fa.fa-refresh').addClass('fa-spin');
+                target.css({opacity:0.5});
+                form.ajax_form_submit({
+                    'success':function(data){
+                        target.css({opacity:1});
+                        form.find('i.fa.fa-refresh').removeClass('fa-spin');
+                        
+                        
+                        var new_data = $(data).find(form.data('target')).html();
+                        
+                        target.html(new_data);
+                        
+                        target.find("[data-behaviour~=ajax-loading]").ajax_loading();
+                        
+                    }
+                });
+            });
+        });
+    };
+    $('body').find("[data-behaviour~=ajax-form]").ajax_form();
 }(jQuery));

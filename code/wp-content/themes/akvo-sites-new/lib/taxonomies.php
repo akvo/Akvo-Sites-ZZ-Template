@@ -21,16 +21,7 @@ function languages() {
 		'search_items'               => __( 'Search Items', 'text_domain' ),
 		'not_found'                  => __( 'Not Found', 'text_domain' ),
 	);
-	$args = array(
-		'labels'                     => $labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'languages', array( 'media', 'map' ), $args );
+	akvo_register_taxonomy($labels, 'languages');
 }
 // Hook into the 'init' action
 add_action( 'init', 'languages', 0 );
@@ -56,16 +47,7 @@ function types() {
 		'search_items'               => __( 'Search Items', 'text_domain' ),
 		'not_found'                  => __( 'Not Found', 'text_domain' ),
 	);
-	$args = array(
-		'labels'                     => $labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'types', array( 'media', 'map' ), $args );
+	akvo_register_taxonomy($labels, 'types');
 }
 // Hook into the 'init' action
 add_action( 'init', 'types', 0 );
@@ -91,6 +73,12 @@ function countries() {
 		'search_items'               => __( 'Search Items', 'text_domain' ),
 		'not_found'                  => __( 'Not Found', 'text_domain' ),
 	);
+	akvo_register_taxonomy($labels, 'countries');
+}
+add_action( 'init', 'countries', 0 );
+
+function akvo_register_taxonomy($labels, $slug){
+	
 	$args = array(
 		'labels'                     => $labels,
 		'hierarchical'               => true,
@@ -100,10 +88,5 @@ function countries() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'countries', array( 'media', 'map' ), $args );
+	register_taxonomy($slug, array( 'media', 'map', 'video', 'blog', 'testimonial', 'news' ), $args );
 }
-// Hook into the 'init' action
-add_action( 'init', 'countries', 0 );
-
-
-?>

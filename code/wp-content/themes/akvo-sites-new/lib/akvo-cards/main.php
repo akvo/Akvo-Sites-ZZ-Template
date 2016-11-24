@@ -117,9 +117,9 @@
 		}
 		
 		
-		//$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id'];
+		$url = admin_url('admin-ajax.php');
 		
-		$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page']."&type-text=".$atts['type-text'];
+		$url .= "?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page']."&type-text=".$atts['type-text'];
 		
 		include "templates/cards.php";
 		
@@ -147,7 +147,9 @@
 		
 		ob_start();
 		
-		$url = admin_url('admin-ajax.php')."?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page']."&type-text=".$atts['type-text'];
+		
+		$url = admin_url('admin-ajax.php');
+		$url .= "?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page']."&type-text=".$atts['type-text'];
 		
 		echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
 		
@@ -264,13 +266,7 @@
 					global $post_id;
         			$post_type = $instance['type'];
         			
-      				$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
-        			
-					if(!$img && $post_type == 'video'){
-        				/* featured image is not selected and the type is video */
-        				$img = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
-        			}			
-					$akvo_card['img'] = $img;
+      				$akvo_card['img'] = akvo_featured_img($post_id);
 					
 					$akvo_card['title'] = get_the_title();
 					

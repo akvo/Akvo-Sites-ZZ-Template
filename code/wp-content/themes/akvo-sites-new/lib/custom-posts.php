@@ -57,7 +57,7 @@
       			'has_archive' => true,
       			'menu_position' => 20,
       			'menu_icon' => 'dashicons-media-video',
-      			//'taxonomies' => array('category'),
+      			'taxonomies' => array('category'),
       			'supports' => array(
         			'title',
         			'editor',
@@ -114,6 +114,7 @@
       'public' => true,
       'has_archive' => true,
       'menu_position' => 20,
+      'taxonomies' => array('category'),
       'menu_icon' => 'dashicons-megaphone',
       'supports' => array(
         'title',
@@ -155,6 +156,7 @@
       'has_archive' => true,
       'menu_position' => 20,
       'menu_icon' => 'dashicons-location-alt',
+      'taxonomies' => array('category'),
       'supports' => array(
         'title',
         'editor',
