@@ -2,190 +2,126 @@
 
 	add_action( 'init', 'create_post_type' );
 	
-	function create_post_type() {
-  		register_post_type( 'blog',
+	add_action( 'init', 'create_taxonomies' );
+	function create_taxonomies(){
+		akvo_register_taxonomy('languages', 'Languages', 'Language', array('map', 'media', 'blog', 'news', 'video', 'testimonial'));
+		akvo_register_taxonomy('countries', 'Locations', 'Location', array('map', 'media', 'blog', 'news', 'video', 'testimonial'));
+		
+		/* TYPES */
+		akvo_register_taxonomy('types', 'Types', 'Type', array('media'));
+		akvo_register_taxonomy('map-types', 'Types', 'Type', array('map'));
+		akvo_register_taxonomy('video-types', 'Types', 'Type', array('video'));
+		
+		/* CATEGORY */
+		akvo_register_taxonomy('media-category', 'Categories', 'Category', array('media'));
+		akvo_register_taxonomy('map-category', 'Categories', 'Category', array('map'));
+		akvo_register_taxonomy('blog-category', 'Categories', 'Category', array('blog'));
+		akvo_register_taxonomy('news-category', 'Categories', 'Category', array('news'));
+		akvo_register_taxonomy('video-category', 'Categories', 'Category', array('video'));
+		akvo_register_taxonomy('testimonial-category', 'Categories', 'Category', array('testimonial'));
+	}
+	
+	function akvo_register_taxonomy($slug, $plural_label, $singular_label, $post_types){
+	
+		$args = array(
+			'labels'                     => array(
+				'name'                       => _x( $plural_label, 'Taxonomy General Name', 'text_domain' ),
+				'singular_name'              => _x( $singular_label, 'Taxonomy Singular Name', 'text_domain' ),
+				'menu_name'                  => __( $plural_label, 'text_domain' ),
+				'all_items'                  => __( 'All Items', 'text_domain' ),
+				'parent_item'                => __( 'Parent Item', 'text_domain' ),
+				'parent_item_colon'          => __( 'Parent Item:', 'text_domain' ),
+				'new_item_name'              => __( 'New Item Name', 'text_domain' ),
+				'add_new_item'               => __( 'Add New Item', 'text_domain' ),
+				'edit_item'                  => __( 'Edit Item', 'text_domain' ),
+				'update_item'                => __( 'Update Item', 'text_domain' ),
+				'view_item'                  => __( 'View Item', 'text_domain' ),
+				'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+				'add_or_remove_items'        => __( 'Add or remove items', 'text_domain' ),
+				'choose_from_most_used'      => __( 'Choose from the most used', 'text_domain' ),
+				'popular_items'              => __( 'Popular Items', 'text_domain' ),
+				'search_items'               => __( 'Search Items', 'text_domain' ),
+				'not_found'                  => __( 'Not Found', 'text_domain' ),
+			),
+			'hierarchical'               => true,
+			'public'                     => true,
+			'show_ui'                    => true,
+			'show_admin_column'          => true,
+			'show_in_nav_menus'          => true,
+			'show_tagcloud'              => true,
+		);
+		register_taxonomy($slug, $post_types, $args );
+	}
+	
+	function akvo_register_post_type($slug, $plural_label, $singular_label, $menu_icon){
+		register_post_type($slug,
     		array(
       			'labels' => array(
-        			'name' => __( 'Blog posts' ),
-        			'singular_name' => __( 'Blog post' )
-      			),
-      		'public' => true,
-      		'has_archive' => true,
-      		'menu_position' => 20,
-      		'menu_icon' => 'dashicons-format-aside',
-      		'taxonomies' => array('category'),
-      		'supports' => array(
-        		'title',
-        		'editor',
-        		'author', 
-        		'thumbnail', 
-        		'excerpt', 
-        		'comments', 
-      		),
-    		)
-  		);
-  		
-  		register_post_type( 'news',
-    		array(
-      			'labels' => array(
-        			'name' => __( 'News' ),
-        			'singular_name' => __( 'News' )
-      			),
-      		'public' => true,
-      		'has_archive' => true,
-      		'menu_position' => 20,
-      		'menu_icon' => 'dashicons-calendar-alt',
-      		'taxonomies' => array('category'),
-      		'supports' => array(
-        		'title',
-        		'editor',
-        		'author', 
-        		'thumbnail', 
-        		'excerpt', 
-        		'comments', 
-      		),
-    		)
-  		);
-
-  		register_post_type( 'video',
-    		array(
-      			'labels' => array(
-        			'name' => __( 'Videos' ),
-        			'singular_name' => __( 'Video' )
-      			),
+      							'name' 			=> __( $plural_label ),
+      							'singular_name' => __( $singular_label )
+      						),
       			'public' => true,
       			'has_archive' => true,
       			'menu_position' => 20,
-      			'menu_icon' => 'dashicons-media-video',
-      			'taxonomies' => array('category'),
+      			'menu_icon' => $menu_icon,
       			'supports' => array(
         			'title',
-        			'editor',
+	        		'editor',
+    	    		'author', 
         			'thumbnail', 
-        			//'excerpt', 
+        			'excerpt', 
+        			'comments', 
       			),
     		)
   		);
+	}
+	
+	function create_post_type() {
+		
+		akvo_register_post_type('blog', 'Blog posts', 'Blog post', 'dashicons-calendar-alt');
+		akvo_register_post_type('news', 'News', 'News', 'dashicons-format-aside');
+		akvo_register_post_type('video', 'Videos', 'Video', 'dashicons-media-video');
+		akvo_register_post_type('media', 'Media Library', 'Media Item', 'dashicons-book');
+		akvo_register_post_type('testimonial', 'Testimonials', 'Testimonial', 'dashicons-megaphone');
+		akvo_register_post_type('map', 'Maps', 'Map', 'dashicons-location-alt');
+		
+  		register_post_type( 'carousel',
+		    array(
+		      	'labels' => array(
+				'name' => __( 'Carousel' ),
+		        'singular_name' => __( 'Carousel slide' )
+      		),
+		    'public' => true,
+		    'has_archive' => false,      
+		    'menu_position' => 20,
+      		'menu_icon' => 'dashicons-images-alt',
+      		'exclude_from_search' => true,
+      		'supports' => array(
+        		'title',
+        		'editor',
+        		'thumbnail', 
+      		),
+    	));
 
-  register_post_type( 'carousel',
-    array(
-      'labels' => array(
-        'name' => __( 'Carousel' ),
-        'singular_name' => __( 'Carousel slide' )
-      ),
-      'public' => true,
-      'has_archive' => false,
-      'menu_position' => 20,
-      'menu_icon' => 'dashicons-images-alt',
-      'exclude_from_search' => true,
-      'supports' => array(
-        'title',
-        'editor',
-        'thumbnail', 
-      ),
-    )
-  );
-
-  register_post_type( 'media',
-    array(
-      'labels' => array(
-        'name' => __( 'Media library' ),
-        'singular_name' => __( 'Media item' )
-      ),
-      'public' => true,
-      'has_archive' => true,
-      'menu_position' => 20,
-      'menu_icon' => 'dashicons-book',
-      'taxonomies' => array('category'),
-      'supports' => array(
-        'title',
-        'editor',
-        'thumbnail', 
-      ),
-    )
-  );
-
-  register_post_type( 'testimonial',
-    array(
-      'labels' => array(
-        'name' => __( 'Testimonials' ),
-        'singular_name' => __( 'Testimonial' )
-      ),
-      'public' => true,
-      'has_archive' => true,
-      'menu_position' => 20,
-      'taxonomies' => array('category'),
-      'menu_icon' => 'dashicons-megaphone',
-      'supports' => array(
-        'title',
-        'editor',
-        'author', 
-        'thumbnail', 
-        'excerpt', 
-      ),
-    )
-  );
-
-  register_post_type( 'flow',
-    array(
-      'labels' => array(
-        'name' => __( 'AKVO Flow' ),
-        'singular_name' => __( 'Flow item' )
-      ),
-      'public' => true,
-      'has_archive' => true,
-      'menu_position' => 20,
-      'menu_icon' => 'dashicons-welcome-widgets-menus',
-      'supports' => array(
-        'title',
-        'editor',
-        'author', 
-        'thumbnail', 
-        'excerpt', 
-      ),
-    )
-  );
-
-  register_post_type( 'map',
-    array(
-      'labels' => array(
-        'name' => __( 'Maps' ),
-        'singular_name' => __( 'Map' )
-      ),
-      'public' => true,
-      'has_archive' => true,
-      'menu_position' => 20,
-      'menu_icon' => 'dashicons-location-alt',
-      'taxonomies' => array('category'),
-      'supports' => array(
-        'title',
-        'editor',
-        'author', 
-        'thumbnail', 
-        'excerpt', 
-      ),
-    )
-  );
-
-  /*
-  register_post_type( 'akvopedia',
-    array(
-      'labels' => array(
-        'name' => __( 'Akvopedia' ),
-        'singular_name' => __( 'Akvopedia' )
-      ),
-      'public' => true,
-      'has_archive' => true,
-      'menu_position' => 20,
-      'menu_icon' => 'dashicons-book-alt',
-      'supports' => array(
-        'title',
-      ),
-    )
-  );
-  */
-
-}
+  		register_post_type( 'flow',
+    		array(
+		    	'labels' => array(
+    			'name' => __( 'AKVO Flow' ),
+    			'singular_name' => __( 'Flow item' )
+    		),
+    		'public' => true,
+    		'has_archive' => true,
+    		'menu_position' => 20,
+    		'menu_icon' => 'dashicons-welcome-widgets-menus',
+    		'supports' => array(
+    			'title',
+				'editor',
+				'author', 
+				'thumbnail', 
+				'excerpt', 
+      		),
+    	));
+	}
 
 function convertYoutubeImg($string) {
   return preg_replace(
@@ -218,7 +154,7 @@ function truncate($string, $length, $stopanywhere=false) {
     }
     return $string;
 }
-
+/*
 function blokmaker($cols, $types) {
   $titleAttrs = '';
   if ($types == 'video') {
@@ -342,7 +278,7 @@ function blokmaker_rsr($cols, $type, $title, $text, $date, $thumb, $link) {
   <?php
 
 }
-
+*/
 add_action( 'after_setup_theme', 'akvo_custom_thumbnail_size' );
 function akvo_custom_thumbnail_size(){
     add_image_size( 'thumb-small', 224, 126, true ); // Hard crop to exact dimensions (crops sides or top and bottom)

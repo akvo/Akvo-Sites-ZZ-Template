@@ -11,11 +11,16 @@
 		) );
 		
 		
-		$post_types = array('map', 'media', 'blog', 'news', 'testimonial', 'video');
+		$post_types = array(
+			'map' 			=> array('languages', 'countries', 'map-types', 'map-category'), 
+			'media'			=> array('languages', 'countries', 'types', 'media-category'), 
+			'blog'			=> array('languages', 'countries', 'blog-category'), 
+			'news'  		=> array('languages', 'countries', 'news-category'), 
+			'testimonial'	=> array('languages', 'countries', 'testimonial-category'), 
+			'video'			=> array('languages', 'countries', 'video-types', 'video-category')
+		);
 		
-		$slugs = array('languages', 'types', 'countries', 'category');
-		
-		foreach($post_types as $post_type){
+		foreach($post_types as $post_type => $slugs){
 			foreach($slugs as $slug){
 				
 				$wp_customize->add_setting('akvo_filter['.$post_type.']['.$slug.']', array(
@@ -37,14 +42,6 @@
 				
 			}
 		}
-		
-		
-		
-		
-		
-      	
-      	
-		
 		
 	}
 	add_action( 'customize_register', 'akvo_filter_customize_register' );
