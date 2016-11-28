@@ -44,13 +44,15 @@
 					$requests[$slug]['slug'] = $slug;
 					
 					$taxonomy = get_taxonomy($slug);
-					$requests[$slug]['label'] = $taxonomy->labels->name;
+					if($taxonomy){
+						$requests[$slug]['label'] = $taxonomy->labels->name;
 					
-					if(isset($_REQUEST['akvo_'.$slug])){
-						$val = $_REQUEST['akvo_'.$slug];
+						if(isset($_REQUEST['akvo_'.$slug])){
+							$val = $_REQUEST['akvo_'.$slug];
 					
-						if($val){
-							$requests[$slug]['id'] = $val;
+							if($val){
+								$requests[$slug]['id'] = $val;
+							}
 						}
 					}
 				}
