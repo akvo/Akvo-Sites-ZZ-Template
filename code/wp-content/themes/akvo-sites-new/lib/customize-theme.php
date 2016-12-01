@@ -194,32 +194,7 @@ use Mexitek\PHPColors\Color;
 	   		'settings' => 'akvo_logo',
 		) ) );
 
-		/*
-		not needed
-		$wp_customize->add_section( 'filter_section' , array(
-	    	'title'       => __( 'Result filters', 'sage' ),
-		    'priority'    => 30,
-		    'description' => 'Enter and enable result filters by entering the appropriate WPQSF form IDs',
-		) );
-		$wp_customize->add_setting( 'filter_news' );
-		$wp_customize->add_control( 'filter_news', array(
-		    'label'    => __( 'News', 'sage' ),
-	    	'section'  => 'filter_section',
-		    'settings' => 'filter_news',
-		));
-		$wp_customize->add_setting( 'filter_blog' );
-		$wp_customize->add_control( 'filter_blog', array(
-	    	'label'    => __( 'Blog', 'sage' ),
-	    	'section'  => 'filter_section',
-	    	'settings' => 'filter_blog',
-		));
-		$wp_customize->add_setting( 'filter_media' );
-		$wp_customize->add_control( 'filter_media', array(
-	    	'label'    => __( 'Media', 'sage' ),
-	    	'section'  => 'filter_section',
-		    'settings' => 'filter_media',
-		));
-		*/
+		
 
 		//fonts
 		
@@ -330,6 +305,90 @@ use Mexitek\PHPColors\Color;
         ));
         
         /* END OF ARTICLE SECTION */
+        
+        
+        /* EVENTS SECTION */
+		
+		$wp_customize->add_section( 'events_section' , array(
+	    	'title'       => __( 'Events', 'sage' ),
+		    'priority'    => 30,
+		    'description' => 'Customize templates for events',
+		) );
+		
+		$wp_customize->add_setting('akvo_events[title_font_size]', array(
+      		'default' => '16px',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+		$wp_customize->add_control('akvo_events[title_font_size]', array(
+		    'label'    => __( 'Title: Font size', 'akvo' ),
+	    	'section'  => 'events_section',
+		    'settings' => 'akvo_events[title_font_size]',
+		));
+		
+		$wp_customize->add_setting('akvo_events[title_color]', array(
+      		'default' => '#000000',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+
+    	$wp_customize->add_control( 
+      		new WP_Customize_Color_Control( 
+        		$wp_customize, 'akvo_events[title_color]', array(
+          			'label' => 'Title: Color',
+          			'section' => 'events_section',
+          			'settings' => 'akvo_events[title_color]',
+    	)));
+		
+		
+		
+		$wp_customize->add_setting('akvo_events[btn_text]', array(
+      		'default' => 'View All Events',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+		$wp_customize->add_control('akvo_events[btn_text]', array(
+		    'label'    => __( 'Button Text', 'akvo' ),
+	    	'section'  => 'events_section',
+		    'settings' => 'akvo_events[btn_text]',
+		));
+		
+		$wp_customize->add_setting('akvo_events[btn_bg_color]', array(
+      		'default' => '#000000',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+		$wp_customize->add_control( 
+      		new WP_Customize_Color_Control( 
+        		$wp_customize, 'akvo_events[btn_bg_color]', array(
+          			'label' => 'Button: BG Color',
+          			'section' => 'events_section',
+          			'settings' => 'akvo_events[btn_bg_color]',
+    	)));
+		$wp_customize->add_setting('akvo_events[btn_color]', array(
+      		'default' => '#000000',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+		$wp_customize->add_control( 
+      		new WP_Customize_Color_Control( 
+        		$wp_customize, 'akvo_events[btn_color]', array(
+          			'label' => 'Button: Color',
+          			'section' => 'events_section',
+          			'settings' => 'akvo_events[btn_color]',
+    	)));
+		
+		$wp_customize->add_setting('akvo_events[btn_font_size]', array(
+      		'default' => '14px',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+		$wp_customize->add_control('akvo_events[btn_font_size]', array(
+		    'label'    => __( 'Button: Font size', 'akvo' ),
+	    	'section'  => 'events_section',
+		    'settings' => 'akvo_events[btn_font_size]',
+		));
+		
 	}
 	add_action( 'customize_register', 'akvo_customize_register' );
 
@@ -424,7 +483,8 @@ function mytheme_customize_css(){
 	
 	$akvo_article = get_option('akvo_article');
 	
-	//print_r($akvo_article);
+	$akvo_events = get_option('akvo_events');
+	
     ?>
          <style type="text/css">
          	html {background:<?php echo $donker;?>; }
@@ -490,6 +550,18 @@ function mytheme_customize_css(){
          		<?php if(isset($akvo_article['content_font_size'])):?>
          		font-size: <?php _e($akvo_article['content_font_size'])?>;
          		<?php endif;?>
+         	}
+         	<?php endif;?>
+         	
+         	<?php if(isset($akvo_events)):?>
+         	.tribe-events-list-widget h3.widget-title{
+         		<?php if(isset($akvo_events['title_font_size'])){ _e("font-size:".$akvo_events['title_font_size'].";");}?>
+         		<?php if(isset($akvo_events['title_color'])){ _e("color:".$akvo_events['title_color'].";");}?>
+         	}
+         	.tribe-events-list-widget .btn.btn-default{
+         		<?php if(isset($akvo_events['btn_font_size'])){ _e("font-size:".$akvo_events['btn_font_size'].";");}?>
+         		<?php if(isset($akvo_events['btn_bg_color'])){ _e("background-color:".$akvo_events['btn_bg_color'].";");}?>
+         		<?php if(isset($akvo_events['btn_color'])){ _e("color:".$akvo_events['btn_color'].";");}?>
          	}
          	<?php endif;?>
          </style>

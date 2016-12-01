@@ -98,9 +98,16 @@ if ( $posts ) : ?>
 		endforeach;
 		?>
 	</ul><!-- .tribe-list-widget -->
-
+	<?php
+		$akvo_events = get_option('akvo_events');
+		$btn_text = 'View All Events';
+		
+		if(isset($akvo_events['btn_text'])){
+			$btn_text = $akvo_events['btn_text'];
+		}
+	?>
 	<p class="tribe-events-widget-link">
-		<a class='btn btn-default' href="<?php echo esc_url( tribe_get_events_link() ); ?>" rel="bookmark"><?php printf( esc_html__( 'View All %s', 'the-events-calendar' ), $events_label_plural ); ?></a>
+		<a class='btn btn-default pull-right' href="<?php echo esc_url( tribe_get_events_link() ); ?>" rel="bookmark"><?php _e($btn_text); ?></a>
 	</p>
 <?php
 // No events were found.
