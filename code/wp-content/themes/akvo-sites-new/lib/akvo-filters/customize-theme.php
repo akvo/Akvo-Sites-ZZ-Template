@@ -10,6 +10,39 @@
 		    'description' => 'Select filter options',
 		) );
 		
+		$wp_customize->add_setting('akvo_filter_btn_text', array(
+			'default'	 => 'Apply Filters',
+       		'capability' => 'edit_theme_options',
+    	   	'type'       => 'option',
+    	));
+ 		
+		$wp_customize->add_control('akvo_filter_btn_text', array(
+			'settings' => 'akvo_filter_btn_text',
+    		'type' => 'text',
+        	'label' => 'Text for apply filters button:',
+	        'section' => 'akvo_filter_section',
+    	));
+    	    
+    	    
+    	    
+		/* LABEL FOR SLUGS */
+		$slugs = array('languages', 'countries', 'map-types', 'map-category', 'types', 'media-category', 'blog-category', 'news-category', 'testimonial-category', 'video-types', 'video-category');
+		
+		foreach($slugs as $slug){
+			$wp_customize->add_setting('akvo_filter_label['.$slug.']', array(
+       			'capability' => 'edit_theme_options',
+    	   		'type'       => 'option',
+    		));
+ 		
+			$wp_customize->add_control('akvo_filter_label['.$slug.']', array(
+				'settings' => 'akvo_filter_label['.$slug.']',
+    			'type' => 'text',
+        		'label' => 'Label for '.$slug,
+	        	'section' => 'akvo_filter_section',
+    	    ));
+		}
+		
+		
 		
 		$post_types = array(
 			'map' 			=> array('languages', 'countries', 'map-types', 'map-category'), 
