@@ -36,6 +36,7 @@
 	}
 	
 	function akvo_search_init($requests){
+		$akvo_filter_label = get_option('akvo_filter_label');
 		if($requests){
 			foreach($requests as $slug => $arr){
 				if(!is_array($arr) && $arr){
@@ -43,18 +44,24 @@
 					
 					$requests[$slug]['slug'] = $slug;
 					
-					$taxonomy = get_taxonomy($slug);
-					if($taxonomy){
-						$requests[$slug]['label'] = $taxonomy->labels->name;
-					
-						if(isset($_REQUEST['akvo_'.$slug])){
-							$val = $_REQUEST['akvo_'.$slug];
-					
-							if($val){
-								$requests[$slug]['id'] = $val;
-							}
+					/* setting the label of the filter */
+					if(isset($akvo_filter_label[$slug])){
+						$requests[$slug]['label'] = $akvo_filter_label[$slug];
+					}
+					else{
+						$taxonomy = get_taxonomy($slug);
+						if($taxonomy){
+							$requests[$slug]['label'] = $taxonomy->labels->name;
 						}
 					}
+					
+					if(isset($_REQUEST['akvo_'.$slug])){
+						$val = $_REQUEST['akvo_'.$slug];
+						if($val){
+							$requests[$slug]['id'] = $val;
+						}
+					}
+					
 				}
 				elseif(!$arr){
 					unset($requests[$slug]);
