@@ -155,7 +155,8 @@ extract(array('securitykey' => 'not set',
   'show_iframe_as_layer_full'  => $options['show_iframe_as_layer_full'],
   'show_part_of_iframe_zoom'  => $options['show_part_of_iframe_zoom'],
   'add_document_domain'  => $options['add_document_domain'],
-  'document_domain'  => $options['document_domain'],
+  'document_domain'  => $options['document_domain'], 
+  'sandbox'  => $options['sandbox'],
    $atts));
 }
 
@@ -304,6 +305,9 @@ if ($options['shortcode_attributes'] == 'true') {
       'show_part_of_iframe_zoom'  => $options['show_part_of_iframe_zoom'],
       'add_document_domain'  => $options['add_document_domain'],
       'document_domain'  => $options['document_domain'],
+      'sandbox'  => $options['sandbox'],
+      'use_post_message'  => $use_post_message,
+      'multi_domain_enabled' => $multi_domain_enabled
        )
       , $atts));
 
@@ -361,7 +365,6 @@ if ($enable_external_height_workaround == "true") {
   $iframe_content_styles = '';
   $iframe_content_id = '';
   $onload_show_element_only = '';
-  $change_parent_links_target = '';
   $change_iframe_links = '';
   $change_iframe_links_target = ''; 
   $iframe_content_css = '';
@@ -475,7 +478,13 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
      $layer_div_base = 'top:0;left:0;width:100%;height:100%;border: none';
    } else {
      $layer_div_base = 'top:2%;left:1.9%;width:96%;height:96%;border:solid 2px #eee';
+     if ($show_iframe_as_layer_full == 'original') {
+       $esc_width = esc_html($this->addPx($width));
+       $esc_height = esc_html($this->addPx($height));     
+       $layer_div_base .= ';left:50%;top:50%;transform: translate(-50%,-50%);max-width:' . $esc_width . ';max-height:' . $esc_height;
+     }
    }
+   
    
    
    if ($ios_scroll) {
@@ -514,7 +523,7 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
    // auto height. Zoom is not supported in the first iteration as it is more complicated!
    $use_ios_fix =  $enable_ios_mobile_scolling == 'true' && $scrolling != 'no' && empty($iframe_zoom) && 
      $show_part_of_iframe == 'false' && $onload_resize == 'false' && 
-     $enable_external_height_workaround == 'false' && empty($hide_part_of_iframe);
+     ($enable_external_height_workaround == 'false' || $enable_external_height_workaround == 'external') && empty($hide_part_of_iframe);
 
    if ($use_ios_fix && ai_is_ios() && ai_is_mobile()) {
      $show_iframe_as_layer_div = true;

@@ -41,13 +41,13 @@ window['wordfenceExt'] = {
 			function(){ jQuery('#wordfenceSuPHPUpdateWarning').fadeOut(); }
 		);
 	},
-	removeFromCache: function(postID){
-		this.ajax('wordfence_removeFromCache', {
-			id: postID
-			}, 
-			function(res){ if(res.ok){ alert("Item removed from the Wordfence cache."); } },
-			function(){}
-			);
+	misconfiguredHowGetIPsChoice : function(choice) {
+		this.ajax('wordfence_misconfiguredHowGetIPsChoice', {
+				choice: choice
+			},
+			function(res){ jQuery('#wordfenceMisconfiguredHowGetIPsNotice').fadeOut(); },
+			function(){ jQuery('#wordfenceMisconfiguredHowGetIPsNotice').fadeOut(); }
+		);
 	},
 	ajax: function(action, data, cb, cbErr, noLoading){
 		if(typeof(data) == 'string'){

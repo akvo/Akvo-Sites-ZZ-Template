@@ -25,7 +25,12 @@ class wordfenceHash {
 	private $only = false;
 	private $totalForks = 0;
 	private $alertedOnUnknownWordPressVersion = false;
+	private $foldersEntered = array();
 	private $foldersProcessed = array();
+	private $suspectedFiles = array();
+	private $indexed = false;
+	private $indexSize = 0;
+	private $currentIndex = 0;
 
 	/**
 	 * @param string $striplen
@@ -65,6 +70,7 @@ class wordfenceHash {
 		//Doing a delete for now. Later we can optimize this to only scan modified files.
 		//$this->db->queryWrite("update " . $this->db->prefix() . "wfFileMods set oldMD5 = newMD5");			
 		$this->db->truncate($this->db->prefix() . "wfFileMods");
+		$this->db->truncate($this->db->prefix() . "wfKnownFileList");
 		$fetchCoreHashesStatus = wordfence::statusStart("Fetching core, theme and plugin file signatures from Wordfence");
 		try {
 			$this->knownFiles = $this->engine->getKnownFilesLoader()
@@ -112,28 +118,52 @@ class wordfenceHash {
 		if($this->coreUnknownEnabled){ $this->status['coreUnknown'] = wordfence::statusStart("Scanning for unknown files in wp-admin and wp-includes"); } else { wordfence::statusDisabled("Skipping unknown core file scan"); }
 	}
 	public function __sleep(){
-		return array('striplen', 'totalFiles', 'totalDirs', 'totalData', 'stoppedOnFile', 'coreEnabled', 'pluginsEnabled', 'themesEnabled', 'malwareEnabled', 'coreUnknownEnabled', 'knownFiles', 'malwareData', 'haveIssues', 'status', 'possibleMalware', 'path', 'only', 'totalForks', 'alertedOnUnknownWordPressVersion', 'foldersProcessed');
+		return array('striplen', 'totalFiles', 'totalDirs', 'totalData', 'stoppedOnFile', 'coreEnabled', 'pluginsEnabled', 'themesEnabled', 'malwareEnabled', 'coreUnknownEnabled', 'knownFiles', 'malwareData', 'haveIssues', 'status', 'possibleMalware', 'path', 'only', 'totalForks', 'alertedOnUnknownWordPressVersion', 'foldersProcessed', 'suspectedFiles', 'indexed', 'indexSize', 'currentIndex', 'foldersEntered');
 	}
 	public function __wakeup(){
 		$this->db = new wfDB();
 		$this->startTime = microtime(true);
 		$this->totalForks++;
 	}
+	public function getSuspectedFiles() {
+		return array_keys($this->suspectedFiles);
+	}
 	public function run($engine){ //base path and 'only' is a list of files and dirs in the bast that are the only ones that should be processed. Everything else in base is ignored. If only is empty then everything is processed.
 		if($this->totalForks > 1000){
 			throw new Exception("Wordfence file scanner detected a possible infinite loop. Exiting on file: " . $this->stoppedOnFile);
 		}
 		$this->engine = $engine;
-		$files = scandir($this->path);
-		foreach($files as $file){
-			if($file == '.' || $file == '..'){ continue; }
-			if(sizeof($this->only) > 0 && (! in_array($file, $this->only))){
-				continue;
+		wordfence::status(4, 'info', "Indexing files for scanning");
+		if (!$this->indexed) {
+			$start = microtime(true);
+			$indexedFiles = array();
+			
+			if (count($this->only) > 0) {
+				$files = $this->only;
 			}
-			$file = $this->path . $file;
-			wordfence::status(4, 'info', "Hashing item in base dir: $file");
-			$this->_dirHash($file);
+			else {
+				$files = scandir($this->path);
+			}
+			
+			foreach ($files as $file) {
+				if ($file == '.' || $file == '..') { continue; }
+				$file = $this->path . $file;
+				$this->_dirIndex($file, $indexedFiles);
+			}
+			$this->_serviceIndexQueue($indexedFiles, true);
+			$this->indexed = true;
+			$end = microtime(true);
+			wordfence::status(4, 'info', "Index time: " . ($end - $start));
 		}
+		
+		$this->_checkForTimeout('');
+		
+		wordfence::status(4, 'info', "Beginning file hashing");
+		while ($file = $this->_nextFile()) {
+			$this->processFile($file);
+			$this->_checkForTimeout($file);
+		}
+		
 		wordfence::status(2, 'info', "Analyzed " . $this->totalFiles . " files containing " . wfUtils::formatBytes($this->totalData) . " of data.");
 		if($this->coreEnabled){ wordfence::statusEnd($this->status['core'], $this->haveIssues['core']); }
 		if($this->themesEnabled){ wordfence::statusEnd($this->status['themes'], $this->haveIssues['themes']); }
@@ -172,53 +202,139 @@ class wordfenceHash {
 		}
 		if($this->malwareEnabled){ wordfence::statusEnd($this->status['malware'], $this->haveIssues['malware']); }
 	}
-	private function _dirHash($path){
-		if(substr($path, -3, 3) == '/..' || substr($path, -2, 2) == '/.'){
+	private function _dirIndex($path, &$indexedFiles) {
+		if (substr($path, -3, 3) == '/..' || substr($path, -2, 2) == '/.') {
 			return;
 		}
-		if(! is_readable($path)){ return; } //Applies to files and dirs
+		if (!is_readable($path)) { return; } //Applies to files and dirs
 		if (!$this->_shouldProcessPath($path)) { return; }
-		$this->_checkForTimeout($path);
-		if(is_dir($path)){
+		if (is_dir($path)) {
+			$realPath = realpath($path);
+			if (!$this->stoppedOnFile && isset($this->foldersEntered[$realPath])) { //Not resuming and already entered this path
+				return;
+			}
+			
+			$this->foldersEntered[$realPath] = 1;
+			
 			$this->totalDirs++;
-			if($path[strlen($path) - 1] != '/'){
+			if ($path[strlen($path) - 1] != '/') {
 				$path .= '/';
 			}
 			$cont = scandir($path);
-			for($i = 0; $i < sizeof($cont); $i++){
-				if($cont[$i] == '.' || $cont[$i] == '..'){ continue; }
+			for ($i = 0; $i < sizeof($cont); $i++) {
+				if ($cont[$i] == '.' || $cont[$i] == '..') { continue; }
 				$file = $path . $cont[$i];
-				if(is_file($file)){
-					$this->_checkForTimeout($file);
-					$this->processFile($file);
-				} else if(is_dir($file)) {
-					$this->_dirHash($file);
+				if (is_file($file)) {
+					$relativeFile = substr($file, $this->striplen);
+					if ($this->stoppedOnFile && $relativeFile != $this->stoppedOnFile) {
+						continue;
+					}
+					
+					if (preg_match('/\.suspected$/i', $relativeFile)) { //Already iterating over all files in the search areas so generate this list here
+						wordfence::status(4, 'info', "Found .suspected file: {$relativeFile}");
+						$this->suspectedFiles[$relativeFile] = 1;
+					}
+					
+					$this->_checkForTimeout($file, $indexedFiles);
+					if ($this->_shouldHashFile($file)) {
+						$indexedFiles[] = $relativeFile;
+					}
+					else {
+						wordfence::status(4, 'info', "Skipping unneeded hash: {$file}");
+					}
+					$this->_serviceIndexQueue($indexedFiles);
+				} else if (is_dir($file)) {
+					$this->_dirIndex($file, $indexedFiles);
 				}
 			}
 			
-			$realPath = realpath($path);
-			$this->foldersProcessed[$realPath] = 1; 
-		} else {
-			if(is_file($path)){
-				$this->processFile($path);
+			$this->foldersProcessed[$realPath] = 1;
+			unset($this->foldersEntered[$realPath]);
+		}
+		else {
+			if (is_file($path)) {
+				$relativeFile = substr($path, $this->striplen);
+				if ($this->stoppedOnFile && $relativeFile != $this->stoppedOnFile) {
+					return;
+				}
+				
+				if (preg_match('/\.suspected$/i', $relativeFile)) { //Already iterating over all files in the search areas so generate this list here
+					wordfence::status(4, 'info', "Found .suspected file: {$relativeFile}");
+					$this->suspectedFiles[$relativeFile] = 1;
+				}
+				
+				$this->_checkForTimeout($path, $indexedFiles);
+				if ($this->_shouldHashFile($path)) {
+					$indexedFiles[] = substr($path, $this->striplen);
+				}
+				else {
+					wordfence::status(4, 'info', "Skipping unneeded hash: {$path}");
+				}
+				$this->_serviceIndexQueue($indexedFiles);
 			}
 		}
 	}
-	private function _checkForTimeout($path) {
+	private function _serviceIndexQueue(&$indexedFiles, $final = false) {
+		$payload = array();
+		if (count($indexedFiles) > 500) {
+			$payload = array_splice($indexedFiles, 0, 500);
+		}
+		else if ($final) {
+			$payload = $indexedFiles;
+			$indexedFiles = array();
+		}
+		
+		if (count($payload) > 0) {
+			global $wpdb;
+			$query = substr("INSERT INTO {$wpdb->base_prefix}wfKnownFileList (path) VALUES " . str_repeat("('%s'), ", count($payload)), 0, -2);
+			$wpdb->query($wpdb->prepare($query, $payload));
+			$this->indexSize += count($payload);
+			wordfence::status(2, 'info', "{$this->indexSize} files indexed");
+		}
+	}
+	private function _nextFile($advanceCursor = true) {
+		static $files = array();
+		if (count($files) == 0) {
+			global $wpdb;
+			$files = $wpdb->get_col($wpdb->prepare("SELECT path FROM {$wpdb->base_prefix}wfKnownFileList WHERE id > %d ORDER BY id ASC LIMIT 500", $this->currentIndex));
+		}
+		
+		$file = null;
+		if ($advanceCursor) {
+			$file = array_shift($files);
+			$this->currentIndex++;
+		}
+		else if (count($files) > 0) {
+			$file = $files[0];
+		}
+		
+		if ($file === null) {
+			return null;
+		}
+		return ABSPATH . $file;
+	}
+	private function _checkForTimeout($path, $indexQueue = false) {
+		$this->engine->checkForKill();
+		$this->engine->checkForDurationLimit();
 		$file = substr($path, $this->striplen);
 		if ((!$this->stoppedOnFile) && microtime(true) - $this->startTime > $this->engine->maxExecTime) { //max X seconds but don't allow fork if we're looking for the file we stopped on. Search mode is VERY fast.
-			$this->stoppedOnFile = $file;
-			wordfence::status(4, 'info', "Calling fork() from wordfenceHash::processFile with maxExecTime: " . $this->engine->maxExecTime);
+			if ($indexQueue !== false) {
+				$this->_serviceIndexQueue($indexQueue, true);
+				$this->stoppedOnFile = $file;
+				wordfence::status(4, 'info', "Forking during indexing: " . $path); 
+			}
+			else {
+				wordfence::status(4, 'info', "Calling fork() from wordfenceHash with maxExecTime: " . $this->engine->maxExecTime);
+			}
 			$this->engine->fork();
 			//exits
 		}
 		
-		//Put this after the fork, that way we will at least scan one more file after we fork if it takes us more than 10 seconds to search for the stoppedOnFile
-		if ($this->stoppedOnFile && $file != $this->stoppedOnFile) {
+		if ($this->stoppedOnFile && $file != $this->stoppedOnFile && $indexQueue !== false) {
 			return;
 		}
 		else if ($this->stoppedOnFile && $file == $this->stoppedOnFile) {
-			$this->stoppedOnFile = false; //Continue scanning
+			$this->stoppedOnFile = false; //Continue indexing
 		}
 	}
 	private function _shouldProcessPath($path) {
@@ -237,15 +353,12 @@ class wordfenceHash {
 	}
 	private function processFile($realFile){
 		$file = substr($realFile, $this->striplen);
-		if (!$this->_shouldHashFile($realFile)) {
-			wordfence::status(4, 'info', "Skipping unneeded hash: {$realFile}");
-			return;
-		}
 		
 		if(wfUtils::fileTooBig($realFile)){
 			wordfence::status(4, 'info', "Skipping file larger than max size: $realFile");
 			return;
 		}
+		
 		if (function_exists('memory_get_usage')) {
 			wordfence::status(4, 'info', "Scanning: $realFile (Mem:" . sprintf('%.1f', memory_get_usage(true) / (1024 * 1024)) . "M)");
 		} else {
@@ -303,7 +416,7 @@ class wordfenceHash {
 									
 									$this->haveIssues['core'] = true;
 									$this->engine->addIssue(
-										'file',
+										'knownfile',
 										1,
 										'coreModified' . $file . $md5,
 										'coreModified' . $file,
@@ -337,7 +450,7 @@ class wordfenceHash {
 								$cKey = $this->knownFiles['plugins'][$file][2];
 								$this->haveIssues['plugins'] = true;
 								$this->engine->addIssue(
-									'file',
+									'knownfile',
 									2,
 									'modifiedplugin' . $file . $md5,
 									'modifiedplugin' . $file,
@@ -374,7 +487,7 @@ class wordfenceHash {
 								$cKey = $this->knownFiles['themes'][$file][2];
 								$this->haveIssues['themes'] = true;
 								$this->engine->addIssue(
-									'file',
+									'knownfile',
 									2,
 									'modifiedtheme' . $file . $md5,
 									'modifiedtheme' . $file,
@@ -402,7 +515,7 @@ class wordfenceHash {
 						if (strpos($realFile, $path) === 0) {
 							$this->haveIssues['coreUnknown'] = true;
 							$this->engine->addIssue(
-								'file',
+								'knownfile',
 								2, 
 								'coreUnknown' . $file . $md5,
 								'coreUnknown' . $file,
@@ -426,7 +539,7 @@ class wordfenceHash {
 			$this->db->queryWrite("insert into " . $this->db->prefix() . "wfFileMods (filename, filenameMD5, knownFile, oldMD5, newMD5) values ('%s', unhex(md5('%s')), %d, '', unhex('%s')) ON DUPLICATE KEY UPDATE newMD5=unhex('%s'), knownFile=%d", $file, $file, $knownFile, $md5, $md5, $knownFile);
 
 			$this->totalFiles++;
-			$this->totalData += filesize($realFile); //We already checked if file overflows int in the fileTooBig routine above
+			$this->totalData += @filesize($realFile); //We already checked if file overflows int in the fileTooBig routine above
 			if($this->totalFiles % 100 === 0){
 				wordfence::status(2, 'info', "Analyzed " . $this->totalFiles . " files containing " . wfUtils::formatBytes($this->totalData) . " of data so far");
 			}
@@ -455,8 +568,8 @@ class wordfenceHash {
 		return array($md5, $shac);
 	}
 	private function _shouldHashFile($fullPath) {
-		$file = substr($fullPath, $this->striplen); 
-		
+		$file = substr($fullPath, $this->striplen);
+
 		//Core File, return true
 		if ((isset($this->knownFiles['core']) && isset($this->knownFiles['core'][$file])) ||
 			(isset($this->knownFiles['plugins']) && isset($this->knownFiles['plugins'][$file])) ||
@@ -465,7 +578,7 @@ class wordfenceHash {
 		}
 		
 		//Excluded file, return false
-		$excludePattern = wordfenceScanner::getExcludeFilePattern(wordfenceScanner::EXCLUSION_PATTERNS_USER & wordfenceScanner::EXCLUSION_PATTERNS_MALWARE);
+		$excludePattern = wordfenceScanner::getExcludeFilePattern(wordfenceScanner::EXCLUSION_PATTERNS_USER | wordfenceScanner::EXCLUSION_PATTERNS_MALWARE); 
 		if ($excludePattern && preg_match($excludePattern, $file)) {
 			return false;
 		}
@@ -509,7 +622,7 @@ class wordfenceHash {
 		}
 		
 		//Will be malware scanned, return true
-		if (strpos($file, 'lib/wordfenceScanner.php') === false && ($fileExt == 'js')) {
+		if ($fileExt == 'js') {
 			return true;
 		}
 		

@@ -1,9 +1,10 @@
 /**
- *  Advanced iframe free/pro functions v7.1.x 
+ *  Advanced iframe free/pro functions v7.3.x 
 */ 
 var aiEnableCookie=false; 
 var aiId='';
 var aiExtraSpace = 0;
+var accTime = 0;
 
 var aiReadyCallbacks = ( typeof aiReadyCallbacks !== 'undefined' && aiReadyCallbacks instanceof Array ) ? aiReadyCallbacks : [];
                     
@@ -324,7 +325,7 @@ function initAdminConfiguration(isPro, acc_type) {
     }     
     jQuery('input[type=radio][name=onload_resize]').click( function(){
     if (jQuery(this).val() == 'true') {
-           jQuery('input:radio[name=enable_external_height_workaround]')[1].checked = true; // set to false!
+           jQuery('input:radio[name=enable_external_height_workaround]')[1].checked = true; // set to external!
            aiDisableAiResizeOptions(false);
         } else {
            jQuery('#onload_resize_delay').val('');
@@ -398,19 +399,18 @@ function initAdminConfiguration(isPro, acc_type) {
     });
 
    
-   if (isPro && (acc_type !== "false")) {
-       jQuery('#accordion').find('h1').click(function(){
-           jQuery(this).next().slideToggle();
-       }).next().hide(); 
-       
-       jQuery('#accordion').find('a').click(function(){
-           var hash = jQuery(this).prop("hash");
-           var hash_only = "#h1-" + hash.substring(1);
-           jQuery(hash_only).next().show(); 
-           location.hash = hash_only;
-       });
-       var hash = jQuery("#" + acc_type).next().show(); 
-   } 
+     jQuery('#accordion').find('h1').click(function(){
+         jQuery(this).next().slideToggle(accTime);
+     }).next().hide(); 
+     
+     jQuery('#accordion').find('a').click(function(){
+         var hash = jQuery(this).prop("hash");
+         var hash_only = "#h1-" + hash.substring(1);
+         jQuery(hash_only).next().show(); 
+         location.hash = hash_only;
+     });
+     var hash = jQuery("#" + acc_type).next().show(); 
+    
    
     // lazy load
     if (jQuery('input[type=radio][name=enable_lazy_load_manual]:checked').val() == 'false') {
@@ -468,12 +468,12 @@ function initAdminConfiguration(isPro, acc_type) {
            
       jQuery(".ai-input-search").keyup(function(e) {
            var searchTerm = jQuery("input.ai-input-search").val().toLowerCase();
-           aiSettingsSearch(searchTerm);
+           aiSettingsSearch(searchTerm, acc_type);
       });
        jQuery(".ai-input-search").on('click', function(e) {
            setTimeout(function() {
            var searchTerm = jQuery("input.ai-input-search").val().toLowerCase();
-           aiSettingsSearch(searchTerm);
+           aiSettingsSearch(searchTerm, acc_type);
            }, 100);
       }); 
       
@@ -489,7 +489,6 @@ function initAdminConfiguration(isPro, acc_type) {
       }) 
       
       // set the links between tabs and open the right one at the right section.
-      if (acc_type === "false") {
         jQuery(document).on( 'click', 'a#external-workaround-link', function() {
           jQuery('.external-workaround').click();
           jQuery(document).scrollTop(0);
@@ -500,24 +499,33 @@ function initAdminConfiguration(isPro, acc_type) {
           location.hash = 'rt';
           return false;
         })
-        jQuery(document).on( 'click', 'a#modify-content-link', function() {
-          jQuery('.advanced-settings-tab').click();
-          location.hash = 'modifycontent';
-          return false;
-        })
          jQuery(document).on( 'click', 'a.jquery-help-link', function() {
           jQuery('.help-tab').click();
           jQuery('#jquery-help').show();
           location.hash = 'jqh';
+          showHeader();
           return false;
         })
         jQuery(document).on( 'click', 'a#browser-detection-link', function() {
           jQuery('.help-tab').click();
           jQuery('#browser-help').show();
-          location.hash = 'browser-detection';
+          location.hash = 'browser-detection-id';
+          showHeader();
           return false;
         })
-      }
+        jQuery(document).on( 'click', 'a.howto-id-link', function() {
+          jQuery('.help-tab').click();
+          location.hash = 'how-id';
+          showHeader();
+          return false;
+        })
+        jQuery(document).on( 'click', '.modifycontent-link', function() {
+          jQuery('.advanced-settings-tab').click();
+          jQuery('#h1-mi').next().show();
+          location.hash = '#mi-id';
+          showHeader();
+          return false;
+        })
       
       jQuery(document).on( 'click', 'a#user-help-link', function() {
           jQuery('#user-help').css('display', 'block');
@@ -526,30 +534,84 @@ function initAdminConfiguration(isPro, acc_type) {
       jQuery(document).on( 'click', 'a#user-meta-link', function() {
           jQuery('#meta-help').css('display', 'block');
           return false;
-      })                      
+      })
+      
+      jQuery(document).on( 'click', '#ai-selector-help-link', function() {
+          jQuery('#ai-selector-help').slideDown(1000); 
+          return false;
+        })
+      
+      jQuery(document).on( 'click', '.ai-selector-help-link-move', function() {
+          location.hash = '#ai-selector-help-link';
+          showHeader();
+          jQuery('#ai-selector-help').show("slow");  
+          return false;
+        })
+      
+      
+      
+      // check the open accordeon elements and write it to the hidden field
+      jQuery('#ai_form').submit(function() {
+        // go over all divs which are not hidden and get the h1 before and get the id of this
+        var openSections = "";
+        jQuery("#accordion").find("div:visible").each(function() {
+          var $this = jQuery(this);
+          var open = $this.prev('h1').attr('id');
+          if (open !== undefined) {
+            if (openSections != '') {
+              openSections += ',';
+            }
+            openSections += '#' + open;
+          } 
+        });
+        // set the hidden variable
+        jQuery('#current_open_sections').val(openSections);
+        setAiScrollposition();
+      });                  
 }
 
-function aiSettingsSearch(searchTerm) {
+function aiSettingsSearch(searchTerm, acc_type) {
  var found = 0;
  
  if (searchTerm !== '') { 
    jQuery("#ai p").not(".form-table p").hide();
    jQuery("#ai ul").not(".form-table ul").hide();
    jQuery("#ai ol").not(".form-table ol").hide();
+   if (acc_type != 'false') {
+     jQuery("#ai h1").not(".show-always").hide(); 
+     jQuery("#ai #accordion").attr('id','acc');
+     jQuery("#ai #acc > div").show();
+     jQuery("#ai #spacer-div").show();
+   }
    jQuery("#ai h2,#ai .icon_ai,#ai h3,#ai h4").not(".show-always").hide();  
    jQuery("#ai .form-table").addClass("ai-remove-margin");
-   jQuery("#ai hr, .signup_account_container, .config-file-block").hide(); 
+   jQuery("#ai hr, .signup_account_container, .config-file-block").hide();
+   jQuery("#ai .hide-always").hide(); 
+   jQuery("#ai .hide-search").hide(); 
+   
  } else {
    jQuery("#ai p").not(".form-table p").show();
    jQuery("#ai section .ai-anchor").show();
    jQuery("#ai ul").not(".form-table ul").show();
    jQuery("#ai ol").not(".form-table ol").show();
+   if (acc_type != 'false') {
+     jQuery("#ai h1").not(".show-always").show(); 
+     jQuery("#ai #acc").attr('id','accordion');
+     jQuery("#ai #accordion > div").hide();
+     jQuery("#ai #spacer-div").hide();
+   }
    jQuery("#ai h2,#ai .icon_ai,#ai h3,#ai h4").not(".show-always").show();  
    jQuery("#ai .form-table").removeClass("ai-remove-margin");
    jQuery("#ai hr, .signup_account_container, .config-file-block").show();
+   jQuery("#ai .sub-domain-container").show();
+    jQuery("#ai .hide-search").show(); 
+   
+   jQuery("#ai .hide-always").hide(); 
  }
 
  jQuery("#ai .mark-tab-header").removeClass("mark-tab-header");
+
+ var firstHit = '';
 
  // check the search.
   jQuery("#ai tr").each(function() {
@@ -567,11 +629,15 @@ function aiSettingsSearch(searchTerm) {
       $this.closest("table").prevAll("#ai .icon_ai:first").show(); 
       $this.closest("table").nextAll("p.button-submit:first").show(); 
       $this.removeClass("hide-setting"); 
+      $this.closest(".hide-search").show(); 
       
       if (searchTerm.length > 2) {
         var header_id = $this.closest("section").attr('class');
         if (header_id != undefined) {
             jQuery("#" + header_id).addClass("mark-tab-header");
+            if (firstHit=='') {
+              firstHit = header_id;   
+            }
         }
       } 
       found++;     
@@ -583,14 +649,16 @@ function aiSettingsSearch(searchTerm) {
   } else {
     jQuery("#ai-input-search-result").hide();
     // https://github.com/padolsey/findAndReplaceDOMText
-    instance && instance.revert();
+    instance && instance.revert();     
       if (searchTerm !== '' && searchTerm.length > 2) { 
       var regex = RegExp(searchTerm, 'gi');
-      instance = findAndReplaceDOMText(document.getElementById('acc'), {
+      instance = findAndReplaceDOMText(document.getElementById('tab_wrapper'), {
         find: regex,
         wrap: 'em'  
-      });
+      }); 
     }
+    jQuery("#" + firstHit).click();
+    
   }
 }
 
@@ -738,10 +806,12 @@ function aiGenerateShortcode() {
        // 
        if (document_domain_add == 'true') {
            output += aiGenerateTextShortcode("document_domain"); 
-       }
-       output += aiGenerateRadioShortcode("enable_external_height_workaround","false");  
+       }  
+       output += aiGenerateRadioShortcode("enable_external_height_workaround","external");  
        output += aiGenerateRadioShortcode("hide_page_until_loaded_external","false");  
-       output += aiGenerateTextShortcode("pass_id_by_url");
+       output += aiGenerateTextShortcode("pass_id_by_url");  
+       output += aiGenerateRadioShortcode("multi_domain_enabled","false");  
+       output += aiGenerateRadioShortcode("use_post_message","false");  
        // additional files
        output += aiGenerateTextShortcode("additional_css");
        output += aiGenerateTextShortcode("additional_js");
@@ -966,6 +1036,26 @@ function aiCheckInputNumber(inputField) {
     }
 }
 
+function aiCheckInputNumberOnly(inputField) {
+    inputField.value = inputField.value.split(' ').join('');
+    var f = inputField.value;
+    if (inputField.value == '') { 
+      inputField.value = '0';
+      return;
+    }
+    var match = f.match(/^(\-){0,1}([\d\.])+$/);
+    
+    if (!match) {
+        alert("Please check the value you have entered. Only numbers without a dot or optional px, %, em or pt are allowed.");
+        setTimeout(function(){inputField.focus();}, 10);
+    }
+}
+
+function showHeader() {
+  var y = jQuery(window).scrollTop();  
+  jQuery(window).scrollTop(y-40);
+}
+
 function setAiScrollposition() {
   var scrollposition = jQuery(document).scrollTop();   
   jQuery("#scrollposition").val(scrollposition); // +32
@@ -983,8 +1073,11 @@ function ai_showLayerIframe(id, path) {
   
   jQuery('body').css("overflow","hidden");
   jQuery('html').css("overflow-y","visible");
-  jQuery('body').append('<img id="ai_backlink" src="'+path+'close.png" onclick="javascript:ai_hideLayerIframe(\''+id+'\');" style="z-index:100001;position:fixed;top:0;right:0;cursor:pointer" />'); 
-  jQuery('body').append('<div id="ai_backlayer" href="" style="z-index:999;position:fixed;top:0;left:0;width:100%;height:100%;background-color: rgba(50,50,50,0.5);overflow:hidden;"><!-- --></div>');   
+  jQuery('body').append('<img id="ai_backlink" src="'+path+'close.png" style="z-index:100001;position:fixed;top:0;right:0;cursor:pointer" />'); 
+  jQuery('body').append('<div id="ai_backlayer" style="z-index:999;position:fixed;top:0;left:0;width:100%;height:100%;background-color: rgba(50,50,50,0.5);overflow:hidden;"><!-- --></div>'); 
+  jQuery( "#ai_backlink, #ai_backlayer" ).click(function() {
+    ai_hideLayerIframe(id);
+  });  
 }
 
 function ai_hideLayerIframe(id) {
@@ -1178,26 +1271,31 @@ function gup( name, url ) {
 }
 
 function aiProcessMessage(event) {
-   var data = "&" + event.data;
-   var type=gup('type',data);
-
+   var jsObject = JSON.parse(event.data);
+   var type = jsObject['type']; 
+ 
   // check if the data is of the expected
   if (type == 'height') {
-    aiProcessHeight(data);
+    aiProcessHeight(jsObject);
   } else if (type == 'show') {
-    aiProcessShow(data);
+    aiProcessShow(jsObject);
   }
-  // everthing else is ignored
+  
+  for (var key in jsObject.data) {
+  if (jsObject.data.hasOwnProperty(key)) {
+    jQuery(key).html(jsObject.data[key]);
+  }
+}
 }
 
-function aiProcessHeight(data) {
-    var nHeight = gup("height",data);
-    var nWidth = gup("width",data);
-    var id = gup("id",data);
+function aiProcessHeight(jsObject) {     
+    var nHeight = jsObject['height']; // gup("height",data);
+    var nWidth = jsObject['width']; // gup("width",data);
+    var id = jsObject['id']; // gup("id",data);
    
     if (nHeight != null) {
       try {
-        var loc = gup("loc",data); 
+        var loc = jsObject['loc']; // gup("loc",data); 
         if (loc != null) {
           aiChangeUrl(loc);
         }     
@@ -1217,9 +1315,9 @@ function aiProcessHeight(data) {
     } 
 }
 
-function aiProcessShow(data) {
-  var id = gup("id",data);
-  
+function aiProcessShow(jsObject) {
+  var id = jsObject['id'];
+
   try {
      aiShowIframeId(id);
   } catch(e) {

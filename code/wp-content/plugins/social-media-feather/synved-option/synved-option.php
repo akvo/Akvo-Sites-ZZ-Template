@@ -3,7 +3,7 @@
 Module Name: Synved Option
 Description: Easily add options to your themes or plugins with as little or as much coding as you want. Just create an array of your options, the rest is automated. If you need extra flexibility you can then use the powerful API provided to achieve any level of customization.
 Author: Synved
-Version: 1.4.7
+Version: 1.4.8
 Author URI: http://synved.com/
 License: GPLv2
 
@@ -25,8 +25,8 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'synved-option-setting.ph
 
 
 define('SYNVED_OPTION_LOADED', true);
-define('SYNVED_OPTION_VERSION', 100040007);
-define('SYNVED_OPTION_VERSION_STRING', '1.4.7');
+define('SYNVED_OPTION_VERSION', 100040008);
+define('SYNVED_OPTION_VERSION_STRING', '1.4.8');
 
 
 $synved_option = array();
@@ -573,15 +573,9 @@ function synved_option_group_default($id)
 function synved_option_wp_handle_setting($id, $page, $section, $name, $item)
 {
 	$type = synved_option_item_type($item);
-	$hidden = synved_option_item_hidden($item);
 	$label = synved_option_item_label($item);
 	$sections = isset($item['sections']) ? $item['sections'] : null;
 	$settings = isset($item['settings']) ? $item['settings'] : null;
-	
-	if ($hidden)
-	{
-		return;
-	}
 	
 	if ($type == 'options-page')
 	{
@@ -753,6 +747,29 @@ function synved_option_print_head_outputs()
 				echo '</' . $tag . '>' . "\r\n";
 			}
 		}
+	}
+
+	$fb_app_id = synved_option_get( 'synved_social', 'fb_app_id' );
+	if ( $fb_app_id ) {
+		printf( '<meta property="fb:app_id" content="%s" />', esc_attr( $fb_app_id ) );
+		echo '<script>
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId      : ' . esc_attr( $fb_app_id ) . ',
+					xfbml      : true,
+					version    : \'v2.8\'
+				});
+				FB.AppEvents.logPageView();
+			};
+
+			(function(d, s, id){
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) {return;}
+				js = d.createElement(s); js.id = id;
+				js.src = "https://connect.facebook.net/en_US/sdk.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, \'script\', \'facebook-jssdk\'));
+		</script>';
 	}
 }
 
