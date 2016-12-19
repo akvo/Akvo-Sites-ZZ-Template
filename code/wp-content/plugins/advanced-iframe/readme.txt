@@ -3,8 +3,8 @@ Contributors: mdempfle, Michael Dempfle
 Donate link: http://www.tinywebgallery.com
 Tags: iframe, embed, resize, zoom, content, advanced, shortcode, modify css, widget 
 Requires at least: 2.8.6
-Tested up to: 4.6.1
-Stable tag: 7.1.3
+Tested up to: 4.7
+Stable tag: 7.3.1 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,22 +158,56 @@ If you have some radio elements empty after the update simply
 select the one you like and save again.
 
 == Changelog ==
-= 7.1.3 =
+= 7.3.1 =
+- New: Support for Wordpress 4.7
+
+= 7.3 = 
+- New: The external workaround post message solution is now using a json structure to transfer the data. This is needed to enable the next feature
+- New: You can define elements in the external workaround post message solution that are read from the remote iframe and added a element in the page. This enables you to include content directly if you simply hide the iframe! This is like include content directly with even more power then the one for the same domain! See the examples how cool this works: http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e52 (Pro)
+- New: Support of the external workaround when you include https pages into http pages! See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e53 (Pro)
+- New: postMessages from non advanced iframe sources can now be used and converted. See ai_post_message_converter_template.js how this works. Enable use_post_message="debug" to check if a remote page does send messages you can use! (Pro)
+- New: show_iframe_as_layer_full has a new option: "original". Than the max size of the layer is the given size of the iframe. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/show-the-iframe-as-layer#e54 (Pro)
+- New: The layer is now closed also if you click anywhere outside the iframe. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/show-the-iframe-as-layer#e54
+- New: Documentation was improved for many settings.
+- New: The accordeon menu is now only on the advanced tab.
+- New: Help topics where all moved to the help tab.
+- New: jQuery help is available for everyone. 
+- New: php 7 compatible
+- New: Placeholders are removed if not resolved. (Pro)
+- New: At many placeholders your can now define default values if the value can not be resolved. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/url-features#h49 (Pro)
+- New: Load a config file depending on a given parameter in the url. see js/ai_config_switcher_template.js and the documentation inside - makes it possible to use one page with different configurations! (Pro)
+- New: enable_external_height_workaround has a new state: External. This is now the default as in the ai_external.js auto height is now set to true as most people who use the external workaround use this as default. true does still enable this setting in the ai_external.js but also disables all settings which do not work on the same domain. So if you use several iframes with the external workaround and the same domain you should set this setting to External and set enable_external_height_workaround="true" in the short code for full flexibility. 
+- New: A warning is now shown if you use the external workaround without post communication and an https iframe is used in a http page. (Pro)
+- New: hide part of the iframe element has now an id. This makes it possible to add e.g. an additional stylesheet with media queries to change the size depending on the browser solution. See: http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e50 (Pro)
+- New: postMessage is now in a small extra box to make this setting more visual. (Pro)
+- New: Browscap version 6017 lite September 22, 2016 is now included. (Pro)
 - New: Support for Wordpress 4.6.1
+- Fix: Search was always hiding elements on the external tab in the sub domain section.  
 
-= 7.1.2 =
-- Fix: Removed empty constructor to be php 7 compatible.
+= 7.2.2 =
+- New: Support for Wordpress 4.5.3
+- Fix: show_iframe_loader, hide_part_of_iframe and hide_page_until_loaded are now working properly. hide_part_of_iframe elements are now hidden until the iframe is loaded. (Pro)    
+- Fix: Accordeon menu does now work again. In the next version this will change anyway. I only use this than for the advanced tab as default as this page is simply too big.
 
-= 7.1.1 = 
-- New: Improved documentation: New feature overview page http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-features-availability-overview
+= 7.2.1 =
+- Fix: sandbox attribute was not use as one file was not commited to the latest build. Now it works fine agian.
+- Fix: Zoom and php < 5.3 does not define a needed variable. Now this is defined for older php versions. (Pro)
+= 7.2 =
+- New: {timestamp} can be used in the src. It adds a timestamp which can be used to avoid caching of iframes. (Pro)
+- New: element_to_measure is now available on the external workaround tab directly-> Additional height (Pro)
+- New: With post message you can now mix https and http in the external workaround. (Pro)
+- Fix: Resize later on the external workaround is now working again. (Pro)
+- Fix: Some themes have iframe hidden with opacity:0 and visibility:hidden. I now set this for the given iframe that the iframe is visible. 
+- Fix: Additional height fields are only allowing numbers without a unit.
+- Fix: Improved documentation
 
 = 7.1 =
 - New: "Show only a part of an iframe" does now also support zoom and scrollbars. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/show-only-a-part-of-the-iframe/show-only-a-part-of-an-iframe-zoom#e43  for a working example. (Pro)
 - New: "Show only a part of an iframe" does now also support zoom and the loading indicator. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/show-only-a-part-of-the-iframe/show-only-a-part-of-an-iframe-zoom#e43  for a working example. (Pro)
-- New: "Hide part of an iframe" supports now a bottom/right option e.g. hide_part_of_iframe="b34,r9,100%,85,#ffffff". See www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e44 for a working example
-- New: "Hide part of an iframe" supports now the include of html and in there also the support of shortcodes. See www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e44 for a working example
+- New: "Hide part of an iframe" supports now a bottom/right option e.g. hide_part_of_iframe="b34,r9,100%,85,#ffffff". See www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e44 for a working example (Pro)
+- New: "Hide part of an iframe" supports now the include of html and in there also the support of shortcodes. See www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e44 for a working example (Pro)
 - New: Support for vw and vh for width and height. 
-- New: window.postMessage is now also supported as communication channel to send the needed data from the iframe to the parent for the external workaround.
+- New: window.postMessage is now also supported as communication channel to send the needed data from the iframe to the parent for the external workaround. (Pro)
 - New: Support for WP multi sites if only the domain does differ between the sites. Check the "Support WP multisite" parameter on the "External workaround" tab. (Pro)
 - New: Check the shortcode! You can now enable on the introduction tab that the shortcode is showing an error message if unknown attributes are used.
 - New: Layer files have now the placeholder {src}. This can be used to e.g. create a "Go to the page" link. (Pro)

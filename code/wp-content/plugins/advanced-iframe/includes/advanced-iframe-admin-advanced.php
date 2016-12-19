@@ -1,3 +1,4 @@
+ <div id="spacer-div"></div>
 <?php if ($devOptions['accordeon_menu'] == 'false') { ?>
     <div class="ai-anchor" id="ad"></div>
 <?php } ?>
@@ -6,49 +7,51 @@
   <div id="icon-options-general" class="icon_ai">
       <br>
     </div>
-
      <h2>
-<?php  _e('Advanced features', 'advanced-iframe'); ?></h2>
+<?php  _e('Advanced features', 'advanced-iframe'); ?></h2>  
    <p>
    <?php _e('<p>The following options are already features which are not html standard anymore. All the options do already require additional Javascript, css or dynamic processing.</p>', 'advanced-iframe'); ?>
   </p>
 <?php _e(' 
-<div class="manage-menus nounderline">
+<div class="manage-menus nounderline hide-always">
 <div class="small-menu">
 <strong>Quicklinks:</strong>
 </div> 
-
-
-<div class="small-menu">
-<a href="#rt">Auto height/width</a><br />
 ', 'advanced-iframe');
 
 if ($evanto || $isDemo) {
-  _e('
+_e(' 
+<div class="small-menu">
+  <a href="#rt">Auto height/width</a><br />
+  <a href="#so">Show only a part of the iframe</a>
+</div>
+<div class="small-menu">
+  <a href="#mi">Modify the iframe</a><br />
+  <a href="#mp">Modify the parent page</a>
+</div>
+<div class="small-menu">
+  <a href="#ol">Open iframe in layer</a><br />
   <a href="#zo">Zoom</a>
-  </div>
-  <div class="small-menu">
-  <a href="#la">Lazy load</a><br />
-  ', 'advanced-iframe');
-}
-_e('
-<a href="#pa">Url parameter handling</a>
 </div>
 <div class="small-menu">
-<a href="#mp">Modify the parent page</a><br />
-', 'advanced-iframe');
-if ($evanto || $isDemo) {
-  _e('
-  <a href="#ol">Open iframe in layer</a>
-  </div>
-  <div class="small-menu">
-  <a href="#so">Show only a part of the iframe</a><br />
-  ', 'advanced-iframe');
-}
-_e('
-<a href="#mi">Modify the iframe</a>
+  <a href="#la">Lazy load</a><br />
+  <a href="#pa">Url parameter handling</a>
 </div>
-<div style="clear:left;"></div>
+', 'advanced-iframe');
+} else {
+_e(' 
+<div class="small-menu">
+  <a href="#rt">Auto height/width</a><br />
+  <a href="#mi">Modify the iframe</a>
+</div>
+<div class="small-menu">
+  <a href="#mp">Modify the parent page</a><br />
+  <a href="#pa">Url parameter handling</a>
+</div>
+', 'advanced-iframe');	
+}
+
+_e('<div style="clear:left;"></div>
 </div>
 ', 'advanced-iframe');    
 ?>       
@@ -74,7 +77,7 @@ _e('
         
         <th scope="row"><strong><?php _e('Browser detection', 'advanced-iframe'); ?></strong>
         </th><td>
-          <?php _e('You can specify browser specific iframes. This is imporant especially for the "Show only part of the iframe" feature where browser differences of a few pixels can matter. But you can use this for other things as well because mobile, iphone, ipad can also be detected. Please read the <a id="browser-detection-link" href="#browser-detection">browser detection</a> section for details. Shortcode: browser=""', 'advanced-iframe'); ?></td>
+          <?php _e('You can specify browser specific iframes. This is imporant especially for the "Show only part of the iframe" feature where browser differences of a few pixels can matter. But you can use this for other things as well because mobile, iphone, ipad can also be detected. Please read the <a id="browser-detection-link" href="#">browser detection</a> section for details. Shortcode: browser=""', 'advanced-iframe'); ?></td>
     </tr> 
     <?php } ?>   
     </table>

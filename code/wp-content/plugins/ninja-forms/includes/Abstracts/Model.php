@@ -227,8 +227,8 @@ class NF_Abstracts_Model
 
                 if (isset($form_cache[ 'fields' ])) {
 
-                    foreach ($form_cache[ 'fields' ] as $object_id => $object) {
-                        if ($this->_id != $object_id) continue;
+                    foreach ($form_cache[ 'fields' ] as $object) {
+                        if ($this->_id != $object[ 'id' ]) continue;
 
                         $this->update_settings($object['settings']);
                         break;
@@ -331,8 +331,10 @@ class NF_Abstracts_Model
      */
     public function update_settings( $data )
     {
-        foreach( $data as $key => $value ){
-            $this->update_setting( $key, $value );
+        if( is_array( $data ) ) {
+            foreach ($data as $key => $value) {
+                $this->update_setting($key, $value);
+            }
         }
 
         return $this;

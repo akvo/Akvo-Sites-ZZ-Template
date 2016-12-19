@@ -1,18 +1,12 @@
-<?php
-if ($devOptions['accordeon_menu'] == 'false') { ?>
-        <div class="ai-anchor" id="jqh"></div>
-<?php } ?>    
-   
-<h1 id="h1-jqh"><?php _e('Small jQuery help', 'advanced-iframe') ?></h1>
     <div>
     <div id="icon-options-general" class="icon_ai">
       <br>
-    </div><h2>
+    </div><h2 id="jqh">
       <?php _e('Small jQuery help', 'advanced-iframe'); ?></h2>
       <p>
      <?php _e('You can use jquery selector patterns directly to identify the elements you want to modify at some of the settings. This plugin does use this selectors than at the right place. This is already an advanced topic if you are not familiar with jQuery.', 'advanced-iframe') ?>
       </p>
-<?php if ($evanto) {  ?>
+<?php if (true) {  ?>
     <p>
     <a href="#" onclick="jQuery('#jquery-help').show(); return false;" > <?php _e('Show me a small jQuery selector help.', 'advanced-iframe') ?></a>
     </p>

@@ -1,5 +1,10 @@
+<?php if (wfConfig::liveTrafficEnabled()): ?>
+	<div id="wfLiveTrafficOverlayAnchor"></div>
+	<div id="wfLiveTrafficDisabledMessage">
+		<h2>Live Updates Paused<br /><small>Click inside window to resume</small></h2>
+	</div>
+<?php endif ?>
 <div class="wrap wordfence">
-	<?php require('menuHeader.php'); ?>
 
 	<h2 id="wfHeading">
 		<div style="float: left;">
@@ -23,10 +28,15 @@
 
 	<div class="wordfenceModeElem" id="wordfenceMode_activity"></div>
 	<div class="wordfenceLive">
-		<table border="0" cellpadding="0" cellspacing="0">
+		<table border="0" cellpadding="0" cellspacing="0" class="wordfenceLiveActivity">
 			<tr>
 				<td><h2>Wordfence Live Activity:</h2></td>
 				<td id="wfLiveStatus"></td>
+			</tr>
+		</table>
+		<table border="0" cellpadding="0" cellspacing="0" class="wordfenceLiveStateMessage">
+			<tr>
+				<td>Live Updates Paused &mdash; Click inside window to resume</td>
 			</tr>
 		</table>
 	</div>
@@ -36,7 +46,7 @@
 		echo $rightRail;
 		?>
 		<?php if (!wfConfig::liveTrafficEnabled()): ?>
-			<div id="wordfenceLiveActivityDisabled"><p><strong>Live activity is disabled.</strong> <?php if (wfConfig::get('cacheType') == 'falcon') { ?>This is done to improve performance because you have Wordfence Falcon Engine enabled.<?php } ?> Login and firewall activity will still appear below.</p></div>
+			<div id="wordfenceLiveActivityDisabled"><p><strong>Live activity is disabled.</strong> Login and firewall activity will still appear below.</p></div>
 		<?php endif ?>
 		
 		<div id="wf-live-traffic" class="wfTabsContainer">

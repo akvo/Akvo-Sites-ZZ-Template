@@ -3,7 +3,7 @@
 Module Name: Synved Connect
 Description: Connect and sync components in a WordPress installation with a remote server
 Author: Synved
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://synved.com/
 License: GPLv2
 
@@ -24,8 +24,8 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'synved-connect-sponsor.p
 
 
 define('SYNVED_CONNECT_LOADED', true);
-define('SYNVED_CONNECT_VERSION', 100000003);
-define('SYNVED_CONNECT_VERSION_STRING', '1.0.3');
+define('SYNVED_CONNECT_VERSION', 100000004);
+define('SYNVED_CONNECT_VERSION_STRING', '1.0.4');
 
 
 $synved_connect = array();
@@ -65,57 +65,6 @@ function synved_connect_server_set($server)
 	global $synved_connect;
 	
 	$synved_connect['server'] = $server;
-}
-
-function synved_connect_dashboard_setup()
-{
-	wp_add_dashboard_widget('synved_connect_dashboard_widget', __('News and Updates <span class="author">by Synved</span>'), 'synved_connect_dashboard_widget');
-
-	global $wp_meta_boxes;
-	
-	if (isset($wp_meta_boxes['dashboard']['normal']['core']))
-	{
-		$normal_dashboard = $wp_meta_boxes['dashboard']['normal']['core'];
-		$widget_backup = array('dashboard_right_now' => $normal_dashboard['dashboard_right_now'], 'synved_connect_dashboard_widget' => $normal_dashboard['synved_connect_dashboard_widget']);
-		unset($normal_dashboard['dashboard_right_now']);
-		unset($normal_dashboard['synved_connect_dashboard_widget']);
-		
-		$sorted_dashboard = array_merge($widget_backup, $normal_dashboard);
-		$wp_meta_boxes['dashboard']['normal']['core'] = $sorted_dashboard;
-	}
-}
-
-//add_filter( 'wp_feed_cache_transient_lifetime', create_function('$a', 'return 1;') );
-function synved_connect_dashboard_widget()
-{
-	$out = null;
-	
-	$install_date = get_option('synved_connect_install_date', null);
-	
-	if ($install_date == null)
-	{
-		update_option('synved_connect_install_date', time());
-	}
-	
-	if ($install_date != null && (time() - $install_date) >= (60 * 60 * 6))
-	{
-		$sponsor_item = synved_connect_sponsor_item_pick(array('type' => 'intern|extern'));
-	
-		if ($sponsor_item != null)
-		{
-			$out .= synved_connect_sponsor_content($sponsor_item);
-	
-			$out .= '<div>&nbsp;</div>';
-		}
-	}
-	
-	$out .= '<div class="rss-widget">';
-	ob_start();
-	wp_widget_rss_output('http://feeds.feedburner.com/SynvedNews?format=xml', array('items' => 3, 'show_author' => 0, 'show_date' => 0, 'show_summary' => 1));
-	$out .= ob_get_clean();
-	$out .= '</div>';
-	
-	echo $out;
 }
 
 function synved_connect_path_uri($path = null)
@@ -159,22 +108,7 @@ function synved_connect_id_get($component = null, $part = null)
 	}
 	
 	$id = get_option('synved_connect_id_' . $option_key);
-	
-#	if (is_array($id))
-#	{
-#		if ($part != null)
-#		{
-#			if (isset($id[$part]))
-#			{
-#				return $id[$part];
-#			}
-#			
-#			return null;
-#		}
-#		
-#		return array_shift($id);
-#	}
-	
+
 	return $id;
 }
 
@@ -204,18 +138,31 @@ function synved_connect_enqueue_scripts()
 	wp_enqueue_style('synved-connect-admin');
 }
 
-function synved_connect_init()
-{
-	
+function synved_connect_init() {
+	$install_date = get_option( 'synved_connect_install_date' );
+
+	if ( ! $install_date ) {
+		update_option( 'synved_connect_install_date', time() );
+	}
+
+	$version = get_option( 'synved_version' );
+	if ( $version !== SYNVED_VERSION ) {
+		synved_connect_upgrade( $version );
+	}
 }
 
-if (is_admin())
-{
-	add_action('admin_init', 'synved_connect_init');
-	//add_action('admin_menu', 'synved_connect_page_add_cb');
-	add_action('wp_dashboard_setup', 'synved_connect_dashboard_setup');
-	add_action('admin_enqueue_scripts', 'synved_connect_enqueue_scripts');
-	//add_action('wp_ajax_synved_connect', 'synved_connect_ajax');
+/**
+ * Upgrades the plugin.
+ * @param string $version The current version.
+ * @return void
+ */
+function synved_connect_upgrade( $version ) {
+	// Show the ShareThis notice on version upgrade.
+	synved_option_set( 'synved_social', 'hide_sharethis_terms', false );
+
+	// Saves the new option in the DB.
+	update_option( 'synved_version', SYNVED_VERSION );
 }
 
-?>
+add_action( 'init', 'synved_connect_init' );
+add_action( 'admin_enqueue_scripts', 'synved_connect_enqueue_scripts' );

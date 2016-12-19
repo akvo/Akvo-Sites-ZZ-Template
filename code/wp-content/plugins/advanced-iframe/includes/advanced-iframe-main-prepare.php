@@ -10,7 +10,7 @@ if ($add_document_domain == 'true') {
    $html .= 'document.domain="'.esc_html($document_domain).'";'; 
 }
 
-if ($use_post_message == 'true') {
+if ($use_post_message != 'false') {
 
     $iframe_origin_full = $src;
     if ($this->ai_startsWith($src, '//')) {
@@ -22,10 +22,29 @@ if ($use_post_message == 'true') {
     $iframe_origin = $iframe_origin_parts['scheme'] . '://' . $iframe_origin_parts['host'];
     
     $html .= 'function receiveMessage'.$id.'(event) {';
+    
+    if ($use_post_message == 'debug') {
+      $html .= '    if (console && console.log) {';
+      $html .= '        console.log("postMessage received: " + event.data + " - origin: " + event.origin);';
+      $html .= '    }';  
+    }
+    
     if ($multi_domain_enabled == 'false') {
       $html .= "if (event.origin !== '". $iframe_origin ."') {return;}"; 
     }
-    $html .= 'aiProcessMessage(event);';
+    
+    // this is a special file that can be included to convert postMessage events 
+    // from non ai pages. 
+    $filenamedir  = dirname(__FILE__) . '/../../advanced-iframe-custom';
+    $post_js_filename = $filenamedir . '/ai_post_message_converter.js';
+    if (file_exists($post_js_filename)) {
+      $html .=  trim(file_get_contents($post_js_filename));
+      $html .= 'aiConvertPostMessage(event);';
+    }
+    // we only execute this if the id matches
+    $html .= '  if(event.data["id"] = "'.$id.'") {'; 
+    $html .= '    aiProcessMessage(event);';
+    $html .= '  }';
     $html .= '}';
     $html .= 'if (window.addEventListener) {';
     $html .= '  window.addEventListener("message", receiveMessage'.$id.');'; 
@@ -38,6 +57,8 @@ if ($use_post_message == 'true') {
 
 if (version_compare(PHP_VERSION, '5.3.0') >= 0 && (!empty($iframe_zoom) || !empty($show_part_of_iframe_zoom) )) { 
   $html .= ($enable_ie_8_support) ? 'var aiIsIe8=true;' : 'var aiIsIe8=false;';
+} else {
+  $html .= 'var aiIsIe8=false;';
 }
 if ($store_height_in_cookie == 'true') {
     $html .=  'var aiEnableCookie=true; aiId="' . $id . '";';
@@ -128,7 +149,7 @@ if (!empty($pass_id_by_url)) {
   
 // Evaluate shortcodes and replace placeholders for the src - they are not encoded! 
 // This has to be done by the shortcode that is used
-$src = $this->ai_replace_placeholders($src , $enable_replace);
+$src = AdvancedIframeHelper::ai_replace_placeholders($src , $enable_replace, $aip_standalone);
 
 $src_orig = $src;
 if (!empty($map_parameter_to_url)) {
@@ -169,10 +190,12 @@ if ($this->ai_endsWith($src, '.pdf')) {
     }     
 }
 
-  if ((!empty($content_id) && !empty($content_styles)) ||
+   if ((!empty($content_id) && !empty($content_styles)) ||
        !empty($hide_elements) || !empty($change_parent_links_target)
        || $enable_lazy_load == 'true' || $add_css_class_parent == 'true'
        || $show_iframe_as_layer == 'external' || $show_part_of_iframe_zoom !== 'false' ) {
+
+   
 
     // hide elements is called directy in the page to hide elements as fast as quickly
     $hidehtml = '';
@@ -226,7 +249,7 @@ if ($this->ai_endsWith($src, '.pdf')) {
       for ($x = 0; $x < count($elementArray); ++$x) {
           $aiReady .= 'jQuery("'. trim($elementArray[$x]) .'").attr("target", "'.$id.'");';
       }
-       
+     
       if ($show_iframe_as_layer == 'true') {
         $aiReady .=  'jQuery("'.$change_parent_links_target.'").on( "click", function() { ai_showLayerIframe("' . $id . '","'.plugins_url() . $aiPath.'/img/"); });'; 
       }      

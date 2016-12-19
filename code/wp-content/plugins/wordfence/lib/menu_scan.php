@@ -2,6 +2,10 @@
 $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 ?>
 <div class="wordfenceModeElem" id="wordfenceMode_scan"></div>
+<div id="wfLiveTrafficOverlayAnchor"></div>
+<div id="wfLiveTrafficDisabledMessage">
+	<h2>Live Updates Paused<br /><small>Click inside window to resume</small></h2>
+</div>
 <div class="wrap wordfence">
 
 	<?php
@@ -26,7 +30,6 @@ $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 
 	<?php else: ?>
 
-	<?php require('menuHeader.php'); ?>
 	<?php $pageTitle = "Wordfence Scan"; $helpLink="http://docs.wordfence.com/en/Wordfence_scanning"; $helpLabel="Learn more about scanning"; include('pageTitle.php'); ?>
 	<div class="wordfenceWrap">
 		<?php
@@ -159,7 +162,7 @@ $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 
 
 		</div>
-		<div style="margin-top: 20px;">
+		<div id="wfScanIssuesWrapper" style="margin-top: 20px;">
 			<div id="wfTabs">
 				<a href="#" id="wfNewIssuesTab" class="wfTab2 wfTabSwitch selected" onclick="wordfenceAdmin.switchIssuesTab(this, 'new'); return false;">New Issues</a>
 				<a href="#" class="wfTab2 wfTabSwitch"          onclick="wordfenceAdmin.switchIssuesTab(this, 'ignored'); return false;">Ignored Issues</a>
@@ -255,6 +258,55 @@ $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 	</div>
 </div>
 </div>
+</script>
+<script type="text/x-jquery-template" id="issueTmpl_publiclyAccessible">
+	<div>
+		<div class="wfIssue">
+			<h2>${shortMsg}</h2>
+			<table border="0" class="wfIssue" cellspacing="0" cellpadding="0">
+				<tr>
+					<th>URL:</th>
+					<td><a href="${data.url}" target="_blank">${data.url}</a></td>
+				<tr>
+					<th>Severity:</th>
+					<td>{{if severity == '1'}}Critical{{else}}Warning{{/if}}</td>
+				</tr>
+				<tr>
+					<th>Status</th>
+					<td>
+						{{if status == 'new' }}New{{/if}}
+						{{if status == 'ignoreP' || status == 'ignoreC' }}Ignored{{/if}}
+					</td>
+				</tr>
+			</table>
+			<p>
+				{{html longMsg}}
+			</p>
+			<div class="wfIssueOptions">
+				<strong>Tools:</strong>
+				{{if data.fileExists}}
+				<a target="_blank" href="${WFAD.makeViewFileLink(data.file)}">View the file</a>
+				{{/if}}
+				<a href="#" onclick="WFAD.hideFile('${id}', 'delete'); return false;">Hide this file in <em>.htaccess</em></a>
+				{{if data.canDelete}}
+				<a href="#" onclick="WFAD.deleteFile('${id}'); return false;">Delete this file (can't be undone).</a>
+				<p>
+					<label><input type="checkbox" class="wfdelCheckbox" value="${id}" />&nbsp;Select for bulk delete</label>
+				</p>
+				{{/if}}
+			</div>
+			<div class="wfIssueOptions">
+				{{if status == 'new'}}
+				<strong>Resolve:</strong>
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'delete'); return false;">I have fixed this issue</a>
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'ignoreC'); return false;">Ignore this issue</a>
+				{{/if}}
+				{{if status == 'ignoreC' || status == 'ignoreP'}}
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'delete'); return false;">Stop ignoring this issue</a>
+				{{/if}}
+			</div>
+		</div>
+	</div>
 </script>
 <script type="text/x-jquery-template" id="issueTmpl_wpscan_fullPathDiscl">
 <div>
@@ -358,6 +410,7 @@ $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 		</td></tr>
 		</table>
 	</p>
+	{{if data.vulnerabilityPatched}}<p><strong>Update includes security-related fixes.</strong></p>{{/if}}
 	<p>
 		{{html longMsg}}
 		<a href="<?php echo get_admin_url() . 'update-core.php'; ?>">Click here to update now</a>.
@@ -1016,6 +1069,40 @@ $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 		</div>
 	</div>
 </script>
+<script type="text/x-jquery-template" id="issueTmpl_checkHowGetIPs">
+	<div>
+		<div class="wfIssue">
+			<h2>${shortMsg}</h2>
+			<p>
+			<table border="0" class="wfIssue" cellspacing="0" cellpadding="0">
+				<tr><th>Issue first detected:</th><td>${timeAgo} ago.</td></tr>
+				<tr><th>Severity:</th><td>{{if severity == '1'}}Critical{{else}}Warning{{/if}}</td></tr>
+				<tr><th>Status</th><td>
+						{{if status == 'new' }}New{{/if}}
+						{{if status == 'ignoreC' }}This issue will be ignored until it changes.{{/if}}
+						{{if status == 'ignoreP' }}This issue is permanently ignored.{{/if}}
+					</td></tr>
+			</table>
+			</p>
+			<p>
+				{{html longMsg}}
+			</p>
+			<div class="wfIssueOptions">
+				{{if status == 'new'}}
+				<strong>Resolve:</strong>
+				{{if ((typeof data.recommendation !== 'undefined') && data.recommendation)}}
+				<a href="#" onclick="WFAD.useRecommendedHowGetIPs('${id}'); return false;">Use recommended value</a>
+				{{/if}}
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'delete'); return false;">I have fixed this issue</a>
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'ignoreP'); return false;">Ignore this problem</a>
+				{{/if}}
+				{{if status == 'ignoreP' || status == 'ignoreC'}}
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'delete'); return false;">Stop ignoring this issue</a>
+				{{/if}}
+			</div>
+		</div>
+	</div>
+</script>
 
 <script type="text/x-jquery-template" id="issueTmpl_spamvertizeCheck">
 <div>
@@ -1081,6 +1168,37 @@ $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 </div>
 </script>
 
+<script type="text/x-jquery-template" id="issueTmpl_timelimit">
+	<div>
+		<div class="wfIssue">
+			<h2>${shortMsg}</h2>
+			<p>
+			<table border="0" class="wfIssue" cellspacing="0" cellpadding="0">
+				<tr><th>Severity:</th><td>{{if severity == '1'}}Critical{{else}}Warning{{/if}}</td></tr>
+				<tr><th>Status</th><td>
+						{{if status == 'new' }}New{{/if}}
+						{{if status == 'ignoreC' }}This issue will be ignored until it changes.{{/if}}
+						{{if status == 'ignoreP' }}This issue is permanently ignored.{{/if}}
+					</td></tr>
+			</table>
+			</p>
+			<p>
+				{{html longMsg}}
+			</p>
+			<div class="wfIssueOptions">
+				{{if status == 'new'}}
+				<strong>Resolve:</strong>
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'delete'); return false;">I have fixed this issue</a>
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'ignoreP'); return false;">Ignore this problem</a>
+				{{/if}}
+				{{if status == 'ignoreP' || status == 'ignoreC'}}
+				<a href="#" onclick="WFAD.updateIssueStatus('${id}', 'delete'); return false;">Stop ignoring this issue</a>
+				{{/if}}
+			</div>
+		</div>
+	</div>
+</script>
+
 
 
 
@@ -1108,7 +1226,7 @@ $sigUpdateTime = wfConfig::get('signatureUpdateTime');
 <div>
 <h3>Welcome to Wordfence</h3>
 <p>
-	Wordfence is a robust and complete security system and performance enhancer for WordPress. It protects your WordPress site
+	Wordfence is a robust and complete security system for WordPress. It protects your WordPress site
 	from security threats and keeps you off Google's SEO black-list by providing a firewall, brute force protection, continuous scanning and many other security enhancements. 
 </p>
 <p>

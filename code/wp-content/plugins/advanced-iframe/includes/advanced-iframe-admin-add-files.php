@@ -1,7 +1,4 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
-<div class="ai-anchor" id="ad"></div>
-<?php } ?>
-<h1><?php _e('Add additional files', 'advanced-iframe') ?></h1>
+<br />
 <div>
     <div id="icon-options-general" class="icon_ai">
       <br>

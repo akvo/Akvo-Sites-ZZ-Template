@@ -1,6 +1,5 @@
 <div class="wordfenceModeElem" id="wordfenceMode_scanScheduling"></div>
-<div class="wrap" id="paidWrap">
-	<?php require('menuHeader.php'); ?>
+<div class="wrap wordfence" id="paidWrap">
 	<?php $pageTitle = "Schedule when Wordfence Scans Occur"; $helpLink="http://docs.wordfence.com/en/Wordfence_scan_scheduling"; $helpLabel="Learn more about Scheduling Wordfence Scans"; include('pageTitle.php'); ?>
 	<?php
 	$rightRail = new wfView('marketing/rightrail', array('additionalClasses' => 'wordfenceRightRailScanSchedule'));

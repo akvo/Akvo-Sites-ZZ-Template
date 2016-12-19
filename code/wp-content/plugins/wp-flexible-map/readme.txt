@@ -1,15 +1,15 @@
 === Flexible Map ===
 Contributors: webaware
 Plugin Name: Flexible Map
-Plugin URI: http://flexible-map.webaware.net.au/
-Author URI: http://webaware.com.au/
-Donate link: http://shop.webaware.com.au/donations/?donation_for=Flexible+Map
+Plugin URI: https://flexible-map.webaware.net.au/
+Author URI: https://shop.webaware.com.au/
+Donate link: https://shop.webaware.com.au/donations/?donation_for=Flexible+Map
 Tags: google, map, maps, google maps, shortcode, google maps shortcode, kml
 Requires at least: 4.0
-Tested up to: 4.6
-Stable tag: 1.12.0
+Tested up to: 4.7
+Stable tag: 1.12.1
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Embed Google Maps shortcodes in pages and posts, either by centre coordinates or street address, or by URL to a Google Earth KML file.
 
@@ -33,8 +33,8 @@ Flexible Map allows you to add Google Maps to your WordPress website with simple
 * directions can be dropped into any div element with an ID
 * minimal dependencies -- just WordPress and the Google Maps API
 
-[Get started with Flexible Map](http://flexible-map.webaware.net.au/manual/getting-started/).
-[Read the manual online](http://flexible-map.webaware.net.au/manual/).
+[Get started with Flexible Map](https://flexible-map.webaware.net.au/manual/getting-started/).
+[Read the manual online](https://flexible-map.webaware.net.au/manual/).
 
 = Sponsorships =
 
@@ -88,9 +88,9 @@ Either the center or the address paramater is required. If you provide both, the
 * **link**: URL to link from the marker title, e.g. *link="http://example.com/"*
 * **linktarget**: where marker link opens, e.g. *linktarget="_blank"*
 * **linktext**: marker link text, overriding the default text
-* **icon**: URL to icon for the marker, e.g. *icon="http://maps.google.com/mapfiles/kml/pal3/icon29.png"*
+* **icon**: URL to icon for the marker, e.g. *icon="https://maps.google.com/mapfiles/kml/pal3/icon29.png"*
 * **description**: a description of the marker location (can have HTML links), e.g. *description="Lorem ipsum dolor sit amet"*
-* **html**: some simple HTML to add to the info window, e.g. *`<img src='http://example.com/logo.img' />`*
+* **html**: some simple HTML to add to the info window, e.g. *`<img src='https://example.com/logo.img' />`*
 * **showinfo**: show the marker's info window when the map loads, from [true, false], e.g. *showinfo="false"*; default=true
 
 *Samples*:
@@ -165,13 +165,13 @@ There are also some filter hooks that allow you to change the behaviour of the p
 * `flexmap_shortcode_script`: filter the generated JavaScript
 * `flexmap_custom_map_types`: register custom Google Maps map types
 
-For more information and examples, see [the reference website](http://flexible-map.webaware.net.au/).
+For more information and examples, see [the reference website](https://flexible-map.webaware.net.au/).
 
 == Frequently Asked Questions ==
 
 = Do I need an API key? =
 
-All websites using Google Maps for the first time need an API key. Websites that were using Google Maps before 2016-06-22 are permitted to keep using Google Maps without a key -- for now, at least. Read [this Google blog post](http://googlegeodevelopers.blogspot.com.au/2016/06/building-for-scale-updates-to-google.html) for more information.
+All websites using Google Maps for the first time need an API key. Websites that were using Google Maps before 2016-06-22 are permitted to keep using Google Maps without a key -- for now, at least. Read [this Google blog post](https://googlegeodevelopers.blogspot.com.au/2016/06/building-for-scale-updates-to-google.html) for more information.
 
 = Where are the settings? =
 
@@ -210,7 +210,7 @@ When you use just centre coordinates for your map, the directions may send peopl
 
 = How do I get the maps to use my language? =
 
-The plugin uses localised messages for things like the Directions link and the default message on links in info windows. If you have your [WordPress installation set to use your language](http://codex.wordpress.org/WordPress_in_Your_Language), the plugin should automatically pick it up. If you need to force it to pick up your language (or want to offer a different language), use the `locale` attribute, e.g. `locale="ru"` or `locale="zh-TW"`.
+The plugin uses localised messages for things like the Directions link and the default message on links in info windows. If you have your [WordPress installation set to use your language](https://codex.wordpress.org/WordPress_in_Your_Language), the plugin should automatically pick it up. If you need to force it to pick up your language (or want to offer a different language), use the `locale` attribute, e.g. `locale="ru"` or `locale="zh-TW"`.
 
 Google Maps will use the locale information from your web browser to help display maps and directions in your language (see your browser's language settings). If you want to force the Google Maps language for every map on a page, you can use a filter hook. For example, here's how to force the Google Maps language to match the language of the page / post its on (e.g. when using WPML translated content):
 
@@ -298,7 +298,7 @@ To make it load locale scripts as well, e.g. for French and Chinese language tex
 
 `flexmap_load_scripts(array('fr', 'zh'));`
 
-The plugin will detect when AJAX is being used via the [WordPress standard method](http://codex.wordpress.org/AJAX_in_Plugins), and adjust accordingly (but you still need to load the scripts as above). If another method is used, add `isajax='true'` to the shortcode attributes.
+The plugin will detect when AJAX is being used via the [WordPress standard method](https://codex.wordpress.org/AJAX_in_Plugins), and adjust accordingly (but you still need to load the scripts as above). If another method is used, add `isajax='true'` to the shortcode attributes.
 
 NB: currently, only AJAX methods that parse script tags will work correctly; this includes some [jQuery methods](http://stackoverflow.com/q/2203762/911083) (but [not all](http://stackoverflow.com/a/2699905/911083)). A future version of the plugin will be more AJAX friendly.
 
@@ -316,23 +316,18 @@ Either turn off CloudFlare Rocketscript :) or install the [Flxmap No Rocketscrip
 
 == Upgrade Notice ==
 
-= 1.12.0 =
+= 1.12.1 =
 
-added support for Google Maps API key, required since 2016-06-22 for new websites
+bump version of Google Maps API to 3.26
 
 == Changelog ==
 
 The full changelog can be found [on GitHub](https://github.com/webaware/flexible-map/blob/master/changelog.md). Recent entries:
 
+### 1.12.1, 2016-11-18
+
+* changed: bump version of Google Maps API to 3.26
+
 ### 1.12.0, 2016-06-27
 
-* added: support for [Google Maps API key](https://developers.google.com/maps/documentation/javascript/), required [since 2016-06-22 for new websites](http://googlegeodevelopers.blogspot.com.au/2016/06/building-for-scale-updates-to-google.html).
-
-### 1.11.0, 2016-06-05
-
-* fixed: monitor changes to invisible containers, not just non-displayed containers (thanks, [zetoun17](https://profiles.wordpress.org/zetoun17/)!)
-* fixed: "FlexibleMap is not defined" error when `isajax="1"` used without calling `flexmap_load_scripts()` (per the [FAQ](https://en-au.wordpress.org/plugins/wp-flexible-map/faq/))
-* added: ask [Autoptimize](https://wordpress.org/plugins/autoptimize/) to leave our inline script alone, to reduce the number of cached script files
-* changed: use localisation from [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/wp-flexible-map) in preference to local plugin copy
-* changed: translations updated from translate.wordpress.org
-* changed: bump version of Google Maps API to 3.24
+* added: support for [Google Maps API key](https://developers.google.com/maps/documentation/javascript/), required [since 2016-06-22 for new websites](https://googlegeodevelopers.blogspot.com.au/2016/06/building-for-scale-updates-to-google.html).

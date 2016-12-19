@@ -30,14 +30,7 @@ _e('If you mix http and https read <a href="http://www.tinywebgallery.com/blog/i
  
 function printDonation($devOptions, $evanto) {
 if ($evanto) {
-  if ($devOptions['accordeon_menu'] == 'false') { 
-      echo '<div class="ai-anchor" id="qu"></div>
-      ';
-  }
-
-  echo '<h1>';
-       _e('Quickstart guide, display options, vote for the plugin on codecanyon', 'advanced-iframe');
-      echo '</h1>
+      echo '<br/>
       <div>
       <div id="icon-options-general" class="icon_ai">
       <br>
@@ -71,7 +64,7 @@ printQuickstartGuide();
       printTrueFalse(false,$devOptions, __('Check shortcode', 'advanced-iframe'), 'check_shortcode', __('<strong class="move-bottom">If you enable this the plugin does check if the shortcode attributes are known. You will find typos, wrong quotes and missing spaces. It does not check the values! The only reason this is not enabled by default is to make sure that old shortcodes don\'t show a warning after an update! I stongly recommend to enable this setting!</strong>', 'advanced-iframe'), true);  
       printTrueFalse(false,$devOptions, __('Enable expert mode', 'advanced-iframe'), 'expert_mode', __('If you enable the expert mode the description is only shown if you click on the label of the setting. You see more settings at once but only one description at once. Also the padding between the table rows are reduced a lot. So you see a lot of more settings on one screen. Use this if you are common with the settings.', 'advanced-iframe'), 'false');
       printTrueFalse(false,$devOptions, __('Use footer save button', 'advanced-iframe'), 'single_save_button', __('The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section.', 'advanced-iframe'), 'false');
-      printAccordeon($devOptions, __('Use accordeon menu', 'advanced-iframe'), 'accordeon_menu', __('The accordeon menu does not show the different sections in one big page but does only show the sections you open. You can define the default section which is open by default here also. Sections do not close if you open another one because sometimes is is useful to open several sections at once. Also the quick jump links at the top are removed because they do not make sense then anymore. The menu is used after you saved this setting. Only important sections are offered in the dropdown.', 'advanced-iframe'), 'false');
+      printAccordeon($devOptions, __('Use accordeon menu on the advanced tab', 'advanced-iframe'), 'accordeon_menu', __('The accordeon menu on the advanced tab does not show the different sections in one big page but does only show the sections you open. You can define the default section which is open by default here also. Sections do not close if you open another one because sometimes is is useful to open several sections at once. Also the quick jump links at the top are removed because they do not make sense then anymore. The menu is used after you saved this setting. Only important sections are offered in the dropdown.', 'advanced-iframe'), 'false');
       printTextInput(false,$devOptions, __('Alternative shortcode', 'advanced-iframe'), 'alternative_shortcode', __('You can define an alternative shortcode the plugin should evaluate. This is e.g. useful if you chance/upgrade from iframe to advanced iframe (pro). Simply insert "iframe" in the text field. Most if the parameters do already match! Make sure to deactivate the other plugin that used the shortcode. With using iframe also the BBCode [iframe]url[/iframe] is supported. IMPORTANT: If you use this, security codes are NOT checked anymore. So anyone who can e.g. write a post can also insert an iframe!', 'advanced-iframe'));
       printTrueFalse(false,$devOptions, __('Show plugin in main menu', 'advanced-iframe'), 'show_menu_link', __('Show the "Advanced iFrame Pro" Menu link also in the main menu. If set to "False" it is only shown in the settings menu.', 'advanced-iframe'), 'true');
  
@@ -89,13 +82,7 @@ printQuickstartGuide();
 
 } else {
 
-if ($devOptions['accordeon_menu'] == 'false') { 
-    echo '<div class="ai-anchor" id="qu"></div>';
-}
-
-echo '<h1>';
-    _e('Upgrading to Advanced iFrame Pro', 'advanced-iframe');
-echo '</h1>
+echo '<br/>
 <div>
     <div id="icon-options-general" class="icon_ai">
     <br>
@@ -106,7 +93,7 @@ echo '</h1>
   _e('<p>Advanced iframe is <strong>free for personal use</strong> and the Pro version a bargain for your business. The personal version does already contain many of the cool features of the Pro version. It has a limit of 10.000 views a month which should normaly not been hit by a personal website.</p>', 'advanced-iframe' );
 
 echo '<div id="first" class="signup_account_container signup_account_container_active" style="cursor: default;" title="';
-_e('Free - For personal, non-commercial sites and blogs', 'advanced-iframe');
+_e('Free - For personal and non-commercial sites', 'advanced-iframe');
 echo '">
 			<div class="signup_inner">
 				<div class="signup_inner_plan">';
@@ -118,7 +105,7 @@ echo '">
           echo '</strong>
 				</div>
 				<div class="signup_inner_header">';
-        _e('For personal, non-commercial sites and blogs', 'advanced-iframe');
+        _e('For personal and non-commercial sites', 'advanced-iframe');
         echo '</div>
 				<div class="signup_inner_desc">';
         _e('10.000 views/month limit', 'advanced-iframe');
@@ -131,7 +118,7 @@ echo '">
       ';
 echo '
    <div  class="signup_account_container signup_account_container_active" style="cursor: default;" title="';
-   _e('Pro - For commercial, business, and professional sites', 'advanced-iframe');
+   _e('Pro - For commercial, business and professional sites', 'advanced-iframe');
    echo '">
 			<div class="signup_inner">
 				<div class="signup_inner_plan">';
@@ -141,7 +128,7 @@ echo '
 					<strong>PRO</strong>
 				</div>
 				<div class="signup_inner_header">';
-        _e('For commercial, business, and professional sites', 'advanced-iframe');
+        _e('For commercial, business and professional sites', 'advanced-iframe');
         echo '</div>
 				<div class="signup_inner_desc">';
         _e('+ <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-comparison-chart" target="_blank">Many additional features!</a>', 'advanced-iframe');
@@ -181,11 +168,11 @@ printQuickstartGuide();
 
  _e('<h3 class="hide-print">Plugin options</h3>', 'advanced-iframe' );
 echo '<table class="form-table">';
-       printTrueFalse(false,$devOptions, __('Show this section as last tab/at the bottom', 'advanced-iframe'), 'donation_bottom', __('<strong class="move-bottom">Please move this section as last tab/to the bottom after you have read it.</strong>', 'advanced-iframe'));
-       printTrueFalse(false,$devOptions, __('Check shortcode', 'advanced-iframe'), 'check_shortcode', __('<strong class="move-bottom">If you enable this the plugin does check if the shortcode attributes are known. You will find typos, wrong quotes and missing spaces. It does not check the values! The only reason this is not enabled by default is to make sure that old shortcodes don\'t show a warning after an update! I stongly recommend to enable this setting!</strong>', 'advanced-iframe'), true);
+      printTrueFalse(false,$devOptions, __('Show this section as last tab/at the bottom', 'advanced-iframe'), 'donation_bottom', __('<strong class="move-bottom">Please move this section as last tab/to the bottom after you have read it.</strong>', 'advanced-iframe'));
+      printTrueFalse(false,$devOptions, __('Check shortcode', 'advanced-iframe'), 'check_shortcode', __('<strong class="move-bottom">If you enable this the plugin does check if the shortcode attributes are known. You will find typos, wrong quotes and missing spaces. It does not check the values! The only reason this is not enabled by default is to make sure that old shortcodes don\'t show a warning after an update! I stongly recommend to enable this setting!</strong>', 'advanced-iframe'), true);
       printTrueFalse(false,$devOptions, __('Show the administration of the pro version', 'advanced-iframe'), 'demo', __('<strong class="move-bottom">You can enable the administration of the pro version to see the available features there. Everything except the additional buttons are shown there. NONE of this settings do work if you enable them. It is only for demonstration. All pro features have a blue label or differences are described in the documentation!</strong>', 'advanced-iframe'));
-      
       printTrueFalse(false,$devOptions, __('Use footer save button', 'advanced-iframe'), 'single_save_button', __('The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section.', 'advanced-iframe'), 'false');
+      printAccordeon($devOptions, __('Use accordeon menu on the advanced tab', 'advanced-iframe'), 'accordeon_menu', __('The accordeon menu on the advanced tab does not show the different sections in one big page but does only show the sections you open. You can define the default section which is open by default here also. Sections do not close if you open another one because sometimes is is useful to open several sections at once. Also the quick jump links at the top are removed because they do not make sense then anymore. The menu is used after you saved this setting. Only important sections are offered in the dropdown.', 'advanced-iframe'), 'false');
       printTrueFalse(false,$devOptions, __('Allow shortcode attributes', 'advanced-iframe'), 'shortcode_attributes', __('Allow to set attributes in the shortcode. All of the attributes can be overwritten in the shortcode if you set \'Yes\'. Otherwise the settings you specify here are used.', 'advanced-iframe'));
       printTrueFalse(false,$devOptions, __('Use shortcode attributes only', 'advanced-iframe'), 'use_shortcode_attributes_only', __('All iframes you use in your pages use the settings below. With shortcode attributes you can overwrite these settings. When you use several iframes with different settings this can lead to strange behavior because you do not see the whole configuration in the shortcode. By setting this option to true only the parameters defined as attributes are used. So the minimum you need to define is: securitykey and src of the iframe. You can set this for a single iframe as well with the shortcode attribute use_shortcode_attributes_only="true". A minimal shortcode would then look like this: [advanced_iframe securitykey="', 'advanced-iframe') . $devOptions['securitykey'] . __('" use_shortcode_attributes_only="true" src="http://www.tinywebgallery.com"].  Shortcode attribute: use_shortcode_attributes_only="true" or use_shortcode_attributes_only="false"', 'advanced-iframe'));
       printTrueFalse(false,$devOptions, __('Include ai.js in the footer', 'advanced-iframe'), 'include_scripts_in_footer', __('By default now the needed Javascripts are included at the footer. So you can include jQuery also at the footer if you like. If you like/need it in the header set this value to false. Before Wordpress 3.3 jQuery is needed in the header if you want to use lazy-loading! The ai.js has also to be in the footer if it should only be loaded when the shortcode is on the page. This setting cannot be set as shortcode!', 'advanced-iframe'));
