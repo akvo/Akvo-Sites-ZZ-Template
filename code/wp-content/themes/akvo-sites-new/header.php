@@ -29,9 +29,13 @@
 				<div class="col-sm-6 logo">
 					<?php
 						$home_url = home_url('/');
-						$current_site = get_current_site();
-						if( ICL_LANGUAGE_CODE == 'fr' && isset($current_site->domain) && $current_site->domain == "afrialliance.org" ) {
-							$home_url = 'http://afrialliance.org/';
+						
+						if ( is_multisite() ) {
+							// should execute only for multisites
+							$current_site = get_current_site();
+							if( ICL_LANGUAGE_CODE == 'fr' && isset($current_site->domain) && $current_site->domain == "afrialliance.org" ) {
+								$home_url = 'http://afrialliance.org/';
+							}
 						}
 					?>
 					<a class="brand" href="<?php _e($home_url); ?>">
