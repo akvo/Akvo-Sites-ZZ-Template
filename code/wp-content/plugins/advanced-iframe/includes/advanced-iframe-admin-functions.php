@@ -41,6 +41,53 @@ function printTrueFalse($isPro,$options, $label, $id, $description, $default = '
     ';
 }
 
+/**
+ *  Prints a radio selection for the external workaround
+ */
+function printTrueFalseHeight($isPro,$options, $label, $id, $description, $default = 'false', $url='', $showSave = false) {
+    if (!isset($options[$id]) || empty($options[$id])) {
+      $options[$id] = $default;
+    }
+    
+    $offset = '';
+    if (ai_startsWith($label, 'i-')) {
+        $offset = 'class="'.substr($label,0, 5).'" ';
+        $label = substr($label, 5);
+    }
+
+    if (!isset($options['demo']) || $options['demo'] == 'false') {
+      $isPro = false;
+    }
+    $pro_class = $isPro ? ' class="ai-pro"':'';
+
+    if ($isPro) {
+      $label = '<span alt="Pro feature" title="Pro feature">'.$label.'</span>';
+    }
+
+    echo '
+      <tr'.$pro_class.'>
+      <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url) . renderExternalWorkaroundIcon($showSave). '</th>
+      <td><span class="hide-print">
+      ';
+    echo '<input type="radio" id="' . $id . '" name="' . $id . '" value="true" ';
+    if ($options[$id] == "true") {
+        echo 'checked="checked"';
+    }
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="external" ';
+    if ($options[$id] == "external") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('External', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="false" ';
+    if ($options[$id] == "false") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('No', 'advanced-iframe') . '<br>
+    </span><p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+}
+
+
 
 function printTopBottom($options, $label, $id, $description, $default = 'top', $url='', $showSave = false) {
     if (!isset($options[$id]) || empty($options[$id])) {
@@ -153,7 +200,7 @@ function printSameRemote($options, $label, $id, $description, $url='', $showSave
     if ($options[$id] == "false") {
         echo 'checked="checked"';
     }
-    echo '/> ' . __('False', 'advanced-iframe') . '<br></span>
+    echo '/> ' . __('No', 'advanced-iframe') . '<br></span>
     <p class="description">' . $description . '</p></td>
     </tr>
     ';
@@ -186,7 +233,7 @@ function printTrueExternalFalse($options, $label, $id, $description, $url='', $s
     if ($options[$id] == "true") {
         echo 'checked="checked"';
     }
-    echo ' /> ' . __('True', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="external" ';
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="external" ';
     if ($options[$id] == "external") {
         echo 'checked="checked"';
     }
@@ -194,7 +241,47 @@ function printTrueExternalFalse($options, $label, $id, $description, $url='', $s
     if ($options[$id] == "false") {
         echo 'checked="checked"';
     }
-    echo '/> ' . __('False', 'advanced-iframe') . '<br></span>
+    echo '/> ' . __('No', 'advanced-iframe') . '<br></span>
+    <p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+}
+
+function printTrueDebugFalse($options, $label, $id, $description, $url='', $showSave = false) {
+    $offset = '';
+    if (ai_startsWith($label, 'i-')) {
+        $offset = 'class="'.substr($label,0, 5).'" ';
+        $label = substr($label, 5);
+    }
+    
+    $isPro = true;
+    if (!isset($options['demo']) || $options['demo'] == 'false') {
+      $isPro = false;
+    }
+    $pro_class = $isPro ? ' class="ai-pro"':'';
+
+    if ($isPro) {
+      $label = '<span alt="Pro feature" title="Pro feature">'.$label.'</span>';
+    }
+
+    echo '
+      <tr'.$pro_class.'>
+      <th scope="row" '.$offset.'>' . $label .   renderExampleIcon($url)  . renderExternalWorkaroundIcon($showSave). '</th>
+      <td><span class="hide-print">
+      ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
+    if ($options[$id] == "true") {
+        echo 'checked="checked"';
+    }
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="debug" ';
+    if ($options[$id] == "debug") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('Debug', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '3" name="' . $id . '" value="false" ';
+    if ($options[$id] == "false") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('No', 'advanced-iframe') . '<br></span>
     <p class="description">' . $description . '</p></td>
     </tr>
     ';
@@ -240,6 +327,41 @@ function printTrueFalseFull($options, $label, $id, $description, $url='') {
     </tr>
     ';
 }
+
+function printTrueOriginalFalse($options, $label, $id, $description) {
+    $offset = '';
+    if (ai_startsWith($label, 'i-')) {
+        $offset = 'class="'.substr($label,0, 5).'" ';
+        $label = substr($label, 5);
+    }
+    
+    if ($options[$id] == '') {
+        $options[$id] = 'false';
+    }
+    
+    echo '
+      <tr>
+      <th scope="row" '.$offset.'>' . $label . '</th>
+      <td><span class="hide-print">
+      ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
+    if ($options[$id] == "true") {
+        echo 'checked="checked"';
+    }
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="false" ';
+    if ($options[$id] == "false") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('No', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '3" name="' . $id . '" value="original" ';
+    if ($options[$id] == "original") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('Original', 'advanced-iframe') . '<br></span>
+    <p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+}
+
 
 /**
  *  Prints the input field for the auto zoom settings
@@ -381,7 +503,7 @@ function printHeightTrueFalse($options, $label, $id, $description, $url='', $sho
 /**
  *  Prints an input field for the height that acepts only numbers and does a validation
  */
-function printHeightNumberInput($options, $label, $id, $description, $type = 'text', $url='', $showSave = false) {
+function printHeightNumberInput($isPro, $options, $label, $id, $description, $type = 'text', $url='', $showSave = false) {
     if (!isset($options[$id])) {
       $options[$id] = 'false';
     }
@@ -393,16 +515,25 @@ function printHeightNumberInput($options, $label, $id, $description, $type = 'te
     }
 
     $disabled = '';
-    if ($options['store_height_in_cookie'] == 'true') {
+    if ($options['store_height_in_cookie'] == 'true' && $label == 'additional_height' ) {
        $disabled = ' readonly="readonly" ';
        $options[$id] = '0';
     }
 
+    if (!isset($options['demo']) || $options['demo'] == 'false') {
+      $isPro = false;
+    }
+    $pro_class = $isPro ? ' class="ai-pro"':'';
+
+    if ($isPro) {
+      $label = '<span alt="Pro feature" title="Pro feature">'.$label.'</span>';
+    }
+
     echo '
-      <tr>
+      <tr'.$pro_class.'>
       <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url)  . renderExternalWorkaroundIcon($showSave). '</th>
       <td><span class="hide-print">
-      <input ' . $disabled . ' name="' . $id . '" type="' . $type . '" style="width:150px;" id="' . $id . '" onblur="aiCheckInputNumber(this)" value="' . esc_attr($options[$id]) . '"  /><br></span>
+      <input ' . $disabled . ' name="' . $id . '" type="' . $type . '" style="width:150px;" id="' . $id . '" onblur="aiCheckInputNumberOnly(this)" value="' . esc_attr($options[$id]) . '"  /><br></span>
       <p class="description">' . $description . '</p></td>
       </tr>
       ';
@@ -413,16 +544,13 @@ function printAccordeon($options, $label, $id, $description, $default = 'false')
       $options[$id] = $default;
     }
     
-    $values = array ("false" => "No Accordeon menu", 
-                     "no" => "Accordeon menu. No section is open by default.",
-                     "h1-ds" => "Section 'Default settings' is open by default",
+    $values = array ("false" => "No Accordeon menu on the advanced tab", 
+                     "no" => "Accordeon menu on the advanced tab. No section is open by default.",
                      "h1-as" => "Section 'Advanced settings' is open by default", 
                      "h1-so" => "Section 'Show only a part of the iframe' is open by default",
                      "h1-rt" => "Section 'Resize the iframe to the content height/width' is open by default",
                      "h1-mp" => "Section 'Modify the parent page' is open by default",
-                     "h1-ol" => "Section 'Open iframe in layer' is open by default",
-                     "h1-xss" => "Section 'External workaround' is open by default"
-                     );
+                     "h1-ol" => "Section 'Open iframe in layer' is open by default");
     $sel_options = '';
     foreach ($values as $value => $text) {
         $is_selected = ($value == $options[$id]) ? ' selected="selected" ' : ' '; 
@@ -443,7 +571,7 @@ function printAccordeon($options, $label, $id, $description, $default = 'false')
 
 function renderExampleIcon($url) {
   if (! empty($url)) {
-     return '<a target="_new" href="' .$url .'" class="ai-eye" alt="Show a working example" title="Show a working example">Show a working example</a>'; 
+     return '<a target="new" href="' .$url .'" class="ai-eye" alt="Show a working example" title="Show a working example">Show a working example</a>'; 
   } else {
      return '';
   }

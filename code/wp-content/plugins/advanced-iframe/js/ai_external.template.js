@@ -1,5 +1,5 @@
 /**
- *  Advanced iframe external workaround file v7.1.x free 
+ *  Advanced iframe external workaround file v7.3.x free 
  *  Created: PARAM_TIMESTAMP  
 */ 
 

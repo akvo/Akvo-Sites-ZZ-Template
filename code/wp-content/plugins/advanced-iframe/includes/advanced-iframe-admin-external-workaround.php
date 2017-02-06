@@ -1,20 +1,17 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
-<div class="ai-anchor" id="xss"></div>
-<?php } ?>
-<h1 id="h1-xss"><?php _e('External workaround: Howto enable cross domain resize and modification', 'advanced-iframe') ?></h1>
+<br />
 <div>
         <div id="icon-options-general" class="icon_ai">
       <br>
     </div><h2>
       <?php _e('External workaround: Howto enable cross domain resize and modification', 'advanced-iframe') ?></h2>  
       <h3><?php _e('Use this solution if the iframe is NOT on the same domain and you want features like auto height and css modifications.', 'advanced-iframe') ?></h3>
-    <p><?php _e('The external workaround does enable many features which are not possible directly because of cross domain security restrictions. You need to include a Javascript file (ai_exernal.js) to the page in the iframe which is generated dynamically with your settings AND the domains have to have the same protocol. Mixing http and https pages does not work because of browser restrictions! Please follow the instructions below. In the advanced tab are many settings marked with ', 'advanced-iframe');
+    <p><?php _e('The external workaround does enable many features which are not possible directly because of cross domain security restrictions. You need to include a Javascript file (ai_exernal.js) to the page in the iframe which is generated dynamically with your settings. <strong>If you mix http and https pages you NEED to enable "Use post message for communication" and follow  <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e51" target="_blank">example 53</a> for this advanced setup (pro version needed)</strong>! In the advanced tab are many settings marked with ', 'advanced-iframe');
     echo renderExternalWorkaroundIcon(true);
     _e('. This means that this setting is saved to the ai_exernal.js', 'advanced-iframe') ?>
     </p>
-    <p><b><?php _e('You need to be able to modify the external web page you want to have in the iframe and the protocol (http or https) of the pages has to match to use the workaround!', 'advanced-iframe') ?></b></p>
-    <div class="manage-menus nounderline">
-<strong><big><?php _e('Special case sub domain:', 'advanced-iframe') ?></big></strong><p><?php _e('If your iframe is on a sub domain an easier way is possible. You still have to include one line of Javascript but the whole configuration is than like you are on the same domain and all settings can be done by shortcode. To enable this you need to set the value "document.domain" to your main domain (e.g. parent: www.example.com, iframe: subdomain.example.com -> main domain: example.com) with Javascript on both pages. The plugin does set this value to the domain below if you enable this feature. See <a href="http://www.tinywebgallery.com/blog/using-sub-domains-with-advanced-iframe" target="_blank">this blog entry</a> or <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/sub-domain-auto-height-and-css-modifications" target="_blank">example 42</a> for further details.', 'advanced-iframe') ?> 
+    <p><b><?php _e('You need to be able to modify the external web page in the iframe to use the workaround!', 'advanced-iframe') ?></b></p>
+    <div class="manage-menus nounderline sub-domain-container hide-search">
+<strong class="hide-search"><big><?php _e('Special case sub domain:', 'advanced-iframe') ?></big></strong><p><?php _e('If your iframe is on a sub domain an easier way is possible. You still have to include one line of Javascript but the whole configuration is than like you are on the same domain and all settings can be done by shortcode. To enable this you need to set the value "document.domain" to your main domain (e.g. parent: www.example.com, iframe: subdomain.example.com -> main domain: example.com) with Javascript on both pages. The plugin does set this value to the domain below if you enable this feature. See <a href="http://www.tinywebgallery.com/blog/using-sub-domains-with-advanced-iframe" target="_blank">this blog entry</a> or <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/sub-domain-auto-height-and-css-modifications" target="_blank">example 42</a> for further details.', 'advanced-iframe') ?> 
 </p>
 <table class="form-table">
 <?php
@@ -104,15 +101,11 @@ _e('here', 'advanced-iframe');
 echo '</a> ';
 _e('to open this file and check the variable <b>domain</b> at the top. If the url is not o.k. please set the correct url in the file ai_external.template.js. If the file can not be created please change the permissions of this folder.', 'advanced-iframe');
 ?>
-        </li>
-        
-         
-        
+        </li> 
         <li>
           <?php _e('Add enable_external_height_workaround="true" to your shortcode! This is needed to disable the settings with the ', 'advanced-iframe');
           echo renderExternalWorkaroundIcon(true);
           _e(' for the same domain.', 'advanced-iframe');
-          
            ?>
         </li>
         
@@ -130,22 +123,32 @@ _e('to open this file and check the variable <b>domain</b> at the top. If the ur
      </p>
       <table class="form-table">
 <?php
-        printTrueFalse(false,$devOptions, __('Resize remote iframe to content height', 'advanced-iframe'), 'enable_external_height_workaround', __('Enable the auto height workaround by enabling it in the generated Javascript file ai_external.js. This settings only works if you have included the Javascript to the remote page.<br><strong>Important</strong>: Adding enable_external_height_workaround="true" in the shortcode does NOT enable this feature but is needed to disable all settings in the administration for the same domain! These settings would cause Javascipt security errors if set for an external domain! This setting cannot be set by a shortcode. Please see below.', 'advanced-iframe'), "false",'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications',true);
-         if ($evanto || $isDemo) {
-         printNumberInput(true,$devOptions, __('Resize delay', 'advanced-iframe'), 'external_height_workaround_delay', __('Sometimes the external page does not have its full height after loading because e.g. parts of the page are build by Javascript. If this is the case you can define a timeout in millisecounds until the resize is called. Otherwise leave this field empty.', 'advanced-iframe'),'text', '', '', true);
+        printTrueFalseHeight(false,$devOptions, __('Resize remote iframe to content height', 'advanced-iframe'), 'enable_external_height_workaround', __('Enable the auto height workaround by enabling it in the generated Javascript file ai_external.js. This settings only works if you have included the Javascript to the remote page.<br><strong>Important</strong>:<br />"Yes" does disable all settings with a ' . renderExternalWorkaroundIcon(true) . ' in the administration for the <strong>same</strong> domain and enables auto height in the ai_externals.js! This is needed as otherwise the plugin would try to use this settings directly which causes Javascript security errors! Only set this if ALL of your iframes are remote!<br />"External" does enable the setting only in the ai_externals.js. This is the default now as auto height is than working right away. You need to set enable_external_height_workaround="true" or use_shortcode_attributes_only="true" in the shortcode for iframes with external pages that the settings from the administration are not used directly.<br/>So if you use several iframes with the external workaround and the same domain you should set this setting to "External" and set enable_external_height_workaround="true" in the short code for full flexibility. <a href="#mirp">Please see below</a> how to configure ai_external.js directly.', 'advanced-iframe'), "external",'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications',true);
+         if ($evanto || $isDemo) {  
+         printHeightNumberInput(true,$devOptions, __('Additional height', 'advanced-iframe'), 'element_to_measure_offset', __('If you like that the iframe is higher than the calculated value you can add some extra height here. This number is then added to the calculated one. This is e.g. needed if one of your tested browsers displays a scrollbar because of 1 or 2 pixel. Or if there is an additional margin around the body. This setting cannot be set by a shortcode. <a href="#mirp">Please see below</a> how to configure ai_external.js directly.', 'advanced-iframe'),'text', '', true);
+         printNumberInput(true,$devOptions, __('Resize delay', 'advanced-iframe'), 'external_height_workaround_delay', __('Sometimes the external page does not have its full height after loading because e.g. parts of the page are build by Javascript. If this is the case you can define a timeout in millisecounds until the resize is called. Otherwise leave this field empty. This setting cannot be set by a shortcode. <a href="#mirp">Please see below</a> how to configure ai_external.js directly.', 'advanced-iframe'),'text', '', '', true);
          }
         
-        printTrueFalse(false,$devOptions, __('Keep overflow:hidden after resize', 'advanced-iframe'), 'keep_overflow_hidden', __('By default overflow:hidden (removes any scrollbars inside the iframe) is set during the resize to avoid scrollbars and is removed afterwards to allow scrollbars if e.g. the content changes because of dynamic elements. If you set this setting to true the overflow:hidden is not removed and any scrollbars are not shown. This is e.g. helpful if the page is still to wide! If you want to use several iframes please use the description below for configuration. These settings only works if you have included the Javascript to the remote page. This setting cannot be set by a shortcode. Please see below.', 'advanced-iframe'), "false",'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications',true);
+        printTrueFalse(false,$devOptions, __('Keep overflow:hidden after resize', 'advanced-iframe'), 'keep_overflow_hidden', __('By default overflow:hidden (removes any scrollbars inside the iframe) is set during the resize to avoid scrollbars and is removed afterwards to allow scrollbars if e.g. the content changes because of dynamic elements. If you set this setting to true the overflow:hidden is not removed and any scrollbars are not shown. This is e.g. helpful if the page is still to wide! If you want to use several iframes please use the description below for configuration. These settings only works if you have included the Javascript to the remote page. This setting cannot be set by a shortcode. <a href="#mirp">Please see below</a> how to configure ai_external.js directly.', 'advanced-iframe'), "false",'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications',true);
         printTrueFalse(false,$devOptions, __('Hide the iframe until it is completely modified.', 'advanced-iframe'), 'hide_page_until_loaded_external', __('This setting hides the iframe until the external workaround is completely done. This prevents that you see the original site before any modifications. You need to enable this AND in the shortcode. The normal "Hide the iframe until it is loaded" shows the iframe after all modifications are done which are all done by a local script. This way cannot be used for the external workaround because the exact time when the external modifications are done is unknown. Therefore the setting in the shortcode does hide in iframe until the external workaround does call iaShowIframe after all modifications are done. Shortcode attribute: hide_page_until_loaded_external="true" or hide_page_until_loaded_external="false"', 'advanced-iframe'), "false",'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications',true);
     if ($evanto || $isDemo) {
-        printTrueFalse(true,$devOptions, __('Write css directly', 'advanced-iframe'), 'write_css_directly', __('By default changes off the iframe are made by jQuery after the page is loaded. This is the only way this is possible if you do this directly. But with the external workaround it is now also possible that the style is written directly to the page. It is written where the ai_external.js is included. So if you use this option you need to include the ai_external.js as last element in the header. This setting has the advantage that the changes are not done after the page is loaded but when the browser renders the page initially. Also the page is not hidden until the page is fully modified. The settings "Hide elements in iframe" and "Modify content in iframe" are supported! This setting cannot be set by a shortcode. Please see below.', 'advanced-iframe'), "false", 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/resize-on-element-resize#e27',true);
-        printTextInput(true,$devOptions, __('Iframe redirect url', 'advanced-iframe'), 'iframe_redirect_url', __('If you like that the page you want to include can only be viewed in your iframe you can define the parent url here. If someone tries to open the url directly he will be redirected to this url. Existing parameters from the original url are added to the new url. You need to add the possible parameters to the "URL forward parameters" that they will be passed to the iframe again. This setting does use Javascript for the redirect. If Javascript is turned off the user can still access the site. If you also want to avoid this add "html {visibility:hidden;}" to the style sheet of your iframe page. Than the page is simply white. The Javascript does set the page visible after it is loaded!', 'advanced-iframe'), 'text', '',true);
+        printTrueFalse(true,$devOptions, __('Write css directly', 'advanced-iframe'), 'write_css_directly', __('By default changes off the iframe are made by jQuery after the page is loaded. This is the only way this is possible if you do this directly. But with the external workaround it is now also possible that the style is written directly to the page. It is written where the ai_external.js is included. So if you use this option you need to include the ai_external.js as last element in the header. This setting has the advantage that the changes are not done after the page is loaded but when the browser renders the page initially. Also the page is not hidden until the page is fully modified. The settings "Hide elements in iframe" and "Modify content in iframe" are supported! This setting cannot be set by a shortcode. <a href="#mirp">Please see below</a> how to configure ai_external.js directly.', 'advanced-iframe'), "false", 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/resize-on-element-resize#e27',true);
+        printTextInput(true,$devOptions, __('Iframe redirect url', 'advanced-iframe'), 'iframe_redirect_url', __('If you like that the page you want to include can only be viewed in your iframe you can define the parent url here. If someone tries to open the url directly he will be redirected to this url. Existing parameters from the original url are added to the new url. You need to add the possible parameters to the "URL forward parameters" that they will be passed to the iframe again. This setting does use Javascript for the redirect. If Javascript is turned off the user can still access the site. If you also want to avoid this add "html {visibility:hidden;}" to the style sheet of your iframe page. Than the page is simply white. The Javascript does set the page visible after it is loaded! This setting cannot be set by a shortcode. <a href="#mirp">Please see below</a> how to configure ai_external.js directly.', 'advanced-iframe'), 'text', '',true);
         printTextInput(true,$devOptions, __('Add the id to the url of the iframe', 'advanced-iframe'), 'pass_id_by_url', __('This feature adds the id of the iframe to the iframe url. The id is than extracted on the iframe and used as value for the callback to find the right iframe on the parent side. The static way is to set iframe_id (Please see below). The dynamic solution has to be used if you want to include the same page several times to the parent page (e.g. the page you include is called with different parameters and shows different content). You specify the parameter that is added to the url. So e.g. ai_id can be used. Allowed values are only a-zA-Z0-9_. Do NOT use any other characters. You need to set the parameter here or by setting iframe_url_id before you include ai_external.js. Please note the if you specify it here ALL shortcodes with use_shortcode_parameters_only="true" need pass_id_by_url to be set. See example 27 for a working setup. Shortcode: pass_id_by_url=""', 'advanced-iframe'), 'text', 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/resize-on-element-resize#e27',true);
-        printTrueFalse(true,$devOptions, __('Support WP multisite', 'advanced-iframe'), 'multi_domain_enabled', __('By default the callback url is rendered to the ai_external.js. For WP multi sites the default setting does than only work for one of the domains. "Yes" does enable that the Javascript compares the default url with the one from the referrer. Than the default domain will be exchanged with the one from the referrer. This only works if the domain is the only difference between the multi sites. This setting cannot be set by a shortcode.', 'advanced-iframe'), "false", '',true);
+        printTrueFalse(true,$devOptions, __('Support WP multisite', 'advanced-iframe'), 'multi_domain_enabled', __('By default the callback url is rendered to the ai_external.js. For WP multi sites the default setting does than only work for one of the domains. "Yes" does enable that the Javascript compares the default url with the one from the referrer. Than the default domain will be exchanged with the one from the referrer. This only works if the domain is the only difference between the multi sites. <a href="#mirp">Please see below</a> how to configure ai_external.js directly. If you only enable this in ai_external.js directly you need to use multi_domain_enabled="true" in the shortcode! If you use post message for communication please read the documenation there how to use this setting!', 'advanced-iframe'), "false", '',true);
      }
-        printTrueFalse(false,$devOptions, __('Use post message for communication', 'advanced-iframe'), 'use_post_message', __('By default the communication between the iframe and the parent is done like described above. An alternative way is to use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage" target="_blank">window.postMessage</a>. As only browsers &lt;IE8 does not support this, it is also pretty save to use now. Please try this if you have any problems with the default setting. The administration does save the current url as targetOrigin into the ai_external.js. If have a multi site or you include your page into differnt parents than select "Support WP multisite" to "Yes" as than * is used as targetOrigin. Be aware that this setting will most likely be defaut in future versions of Advanced iFrame as the non supported browsers are currently below 0.2%. This setting cannot be set by a shortcode.', 'advanced-iframe'), 'text', '',true);
-       
-    ?></table>
+?>     
+</table>      
+<?php if ($evanto || $isDemo) { ?>
+<div class="manage-menus nounderline sub-domain-container hide-search">
+<table class="form-table">     
+<?php     
+        printTrueDebugFalse($devOptions, __('Use post message for communication', 'advanced-iframe'), 'use_post_message', __('By default the communication between the iframe and the parent is done like described above. An alternative way is to use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage" target="_blank">window.postMessage</a>. As only browsers &lt;IE8 does not support this, it is also pretty save to use now. Please try this if you have any problems with the default setting. If you select "Debug" the feature is enabled and additionally log information about the transfered data is printed to the browser console. Use F12 at your browser to open the developer tools. The administration does save the current url as targetOrigin into the ai_external.js. If have a multi site or you include your page into differnt parents than you need to pro version and select "Support WP multisite" to "Yes" as than * is used as targetOrigin. Also you use post communication if you have a https page in the iframe and your page is http. Please see <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e51" target="_blank">example 53</a> for this advanced setup! Be aware that this setting will most likely be defaut in future versions of Advanced iFrame as the non supported browsers are currently below 0.2%. <a href="#mirp">Please see below</a> how to configure ai_external.js directly. If you only enable this in ai_external.js directly you need to use use_post_message="true"/"debug" in the shortcode!', 'advanced-iframe'), 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e51',true);
+     if ($evanto || $isDemo) {
+        printTextInput(true,$devOptions, __('i-20-Include content directly from the iframe', 'advanced-iframe'), 'data_post_message', __('When you enable post communication you can read elements from the iframe and transfer it to the parent and include it there. This is like the feature "Include content directly" from the "Add files/content" from the next tab  but more powerful. You can define here as many elements you like and insert it to the parent page. To enable this setting you need to specify ther element of the parent and the element of the iframe seperated by a |. Several settings are seperatd by , e.g. #c-id|#content,#s-id|#some-images,#p-id|#iframe-right p:nth-child(2). You can use any valid <a class="jquery-help-link" href="#">jQuery selector pattern</a> here! Currently the iframe is NOT hidden by default. After the setup you need to set display:none; on the basic tab at "Style". Currently there are no additional settings like for the same domain. So make sure that e.g. the divs you want to add the content have e.g. the correct height for optimal display! This setting cannot be set by a shortcode. <a href="#mirp">Please see below</a> how to configure ai_external.js directly.', 'advanced-iframe'), 'text', 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e52',true); 
+     }     
+    ?></table></div>
+<?php } ?>
     <p>
     <?php _e('<strong>Please note:</strong> If you change the settings above I recommend to reload the iframe page in a different tab because otherwise the page is cached by many browsers!', 'advanced-iframe') ?>
     </p>
@@ -163,17 +166,17 @@ _e('to open this file and check the variable <b>domain</b> at the top. If the ur
      _e('
     <h3 id="mirp">How to configure the "Modifies the remote iframe page" options</h3>
     <p>
-    The configuration which is rendered by default to the Javascript is the one you enter in the settings of <a id="modify-content-link" href="#modifycontent">"Modify the content of the iframe if the iframe page is on the same domain"</a>.
+    The configuration which is rendered by default to the Javascript is the one you enter in the settings of <a class="modifycontent-link" href="#">"Modify the content of the iframe if the iframe page is on the same domain"</a>.
     </p>', 'advanced-iframe');
     }
     _e('
-    <h3 id="mirp">How to configure the workaround to work with different settings for different iframes</h3>
+    <h3 id="mirp">How to configure the workaround file ai_external.js directly to work with different settings.</h3>
     <p>
         The file ai_external.js is created when you save the settings.
         If you want to have different settings for different pages you can define the parameters which are used
         in the script before you include the file ai_external.js.
     <p>
-    <div class="manage-menus nounderline">
+    <div class="manage-menus nounderline hide-always">
     <strong>Please note:</strong> All parameters can be set in the administration. This are the settings where a ', 'advanced-iframe');
     echo renderExternalWorkaroundIcon(true);
     _e(' is shown! You only need to define variables before the script or a configuration file if you need to include the SAME ai_external.js with DIFFERENT configurations. See the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-faq#config" target="_blank">FAQ</a> for more details.
@@ -185,7 +188,7 @@ _e('to open this file and check the variable <b>domain</b> at the top. If the ur
       <a href="#" onclick="jQuery('#all-parameters').show(); return false;" > <?php _e('Show me the parameters.', 'advanced-iframe') ?></a>
     </p>
       <?php
-        _e('<div id="all-parameters">
+        _e('<div id="all-parameters" class="hide-always">
        <ul class="ulli">
          <li>iframe_id - By default the id from the settings are used. If you want to use several iframes on the same page with the external workaround you need to specify the id from the shortcode.</li>
          <li>updateIframeHeight - Enable/disable the resize height workaround. Valid values are "true", "false".</li>
@@ -194,12 +197,12 @@ _e('to open this file and check the variable <b>domain</b> at the top. If the ur
       ', 'advanced-iframe');
     if ($evanto || $isDemo) {
       _e('
-          <li>iframe_hide_elements - See <a href="#modifycontent">Hide elements in iframe</a>.</li>
-          <li>onload_show_element_only - See <a href="#modifycontent">Show only one element</a></li>
-          <li>iframe_content_id - See <a href="#modifycontent">Content id in iframe</a></li>
-          <li>iframe_content_styles - See <a href="#modifycontent">Content styles in iframe</a></li>
-          <li>change_iframe_links - See <a href="#modifycontent">Change iframe links</a></li>
-          <li>change_iframe_links_target - See <a href="#modifycontent">Change iframe links target</a></li>
+          <li>iframe_hide_elements - See <a class="modifycontent-link" href="#">Hide elements in iframe</a>.</li>
+          <li>onload_show_element_only - See <a class="modifycontent-link" href="#">Show only one element</a></li>
+          <li>iframe_content_id - See <a class="modifycontent-link" href="#">Content id in iframe</a></li>
+          <li>iframe_content_styles - See <a class="modifycontent-link" href="#">Content styles in iframe</a></li>
+          <li>change_iframe_links - See <a class="modifycontent-link" href="#">Change iframe links</a></li>
+          <li>change_iframe_links_target - See <a class="modifycontent-link" href="#">Change iframe links target</a></li>
           <li>onload_resize_delay - See resize delay above. E.g. var onload_resize_delay=100; means 100 ms resize delay. You also need this setting when you use the hidden tabs feature.</li>
           <li>iframe_redirect_url - Defines an url which is loaded if the page is not included in an iframe. See "Iframe redirect url" above.</li>
           <li>write_css_directly - See "Write css directly" above. Valid settings are write_css_directly="true" or write_css_directly="false". </li>
@@ -212,7 +215,9 @@ _e('to open this file and check the variable <b>domain</b> at the top. If the ur
           <li>element_to_measure_offset - The offset for a fix content </li> 
           <li>add_iframe_url_as_param - See "Add iframe url as param"</li>
           <li>additional_styles_wrapper_div - Adds additional styles to the wrapper div. Depending on the html/css this is sometimes needed that the element can be measured correctly. overflow:auto; is sometimes needed!</li>
-          
+          <li>domainMultisite - Enable/disable multi site settings. See above. Valid values are "true", "false".</li>
+          <li>usePostMessage -  Enable/disable the usage of post message for communication. See above. Valid values are "true", "false".</li>
+          <li>dataPostMessage - Defines the elementes that should be transfered to the client. See above. </li>
           ', 'advanced-iframe');
           
     }

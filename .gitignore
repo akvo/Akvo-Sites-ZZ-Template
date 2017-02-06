@@ -3,5 +3,4 @@
 /code/upgrade/
 /code/uploads/
 /code/wp-config.php*
-/code/wp-content/themes/akvo-sites/bower_components/
-/code/wp-content/themes/akvo-sites/node_modules/
+npm-debug.log

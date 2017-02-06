@@ -32,6 +32,10 @@
   padding-top: 2px;
 }
 
+#ai #accordion h1 {
+  display: block;
+}
+
 #ai h2 small, #ai h1 small {
   font-weight: 400;
 }
@@ -217,11 +221,11 @@ ul#browser-list {
 }
 #ai #accordion > h1,#ai .accordion > a {
 	background-color: #fff;
-	background-image: -moz-linear-gradient(bottom, #c1c1c1, #fff);
-	background-image: -ms-linear-gradient(bottom, #c1c1c1, #fff);
-	background-image: -o-linear-gradient(bottom, #c1c1c1, #fff);
-	background-image: -webkit-linear-gradient(bottom, #c1c1c1, #fff);
-	background-image: linear-gradient(bottom, #c1c1c1, #fff);
+	background-image: -moz-linear-gradient(bottom, #e1e1e1, #fff);
+	background-image: -ms-linear-gradient(bottom, #e1e1e1, #fff);
+	background-image: -o-linear-gradient(bottom, #e1e1e1, #fff);
+	background-image: -webkit-linear-gradient(bottom, #e1e1e1, #fff);
+	background-image: linear-gradient(bottom, #e1e1e1, #fff);
 	border-top: 1px solid #ddd;
 	color: #222;
 	font: 15px/30px 'Verdana', sans-serif;
@@ -463,6 +467,12 @@ margin-bottom: 10px;
 
 #ai .manage-menus {
   margin-top: 10px;
+  margin-bottom:5px;
+}
+
+#ai #spacer-div {
+  display:none;
+  height:1.4em;
 }
 
 #ai .i-20- {
@@ -513,4 +523,18 @@ margin-bottom: 10px;
 
 #ai h1.full-width {
   width:100%;
+}
+
+#ai #ai-selector-help-link {
+margin-left: 20px;
+}
+
+#ai #ai-selector-help {
+display: none;
+}
+
+#ai ul.ai-src-list {
+    list-style-position: outside;
+    list-style-type:disc;
+    margin-left:20px;
 }

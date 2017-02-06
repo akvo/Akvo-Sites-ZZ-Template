@@ -1,7 +1,3 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
-<div class="ai-anchor" id="vi"></div>
-<?php } ?>
-<h1><?php _e('FAQ', 'advanced-iframe'); ?></h1>
 <div>
     <div id="icon-options-general" class="icon_ai">
       <br />
