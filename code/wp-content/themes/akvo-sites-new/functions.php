@@ -182,14 +182,28 @@
 	return $img;
   }
   
-	
-  
-  
-  // Hide revert to editor on pages
-  function custom_admin_css() {
-  echo '<style>
-	.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
-  </style>';
-}
-add_action( 'admin_head', 'custom_admin_css' );
 
+	function custom_admin_css() {
+ 		echo '<style>
+ 			.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
+ 		</style>';
+	}
+	add_action( 'admin_head', 'custom_admin_css' ); 
+	
+	/* remove unnecessary code */
+ 	// Disable REST API link tag
+ 	remove_action('wp_head', 'rest_output_link_wp_head', 10);
+ 
+ 	// Disable oEmbed Discovery Links
+ 	remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
+ 
+ 	// Disable REST API link in HTTP headers
+ 	remove_action('template_redirect', 'rest_output_link_header', 11, 0);
+ 	
+ 	// Diable wp emoji
+ 	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+ 	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
+  
+  
+  
