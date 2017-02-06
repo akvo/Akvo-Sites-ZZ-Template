@@ -1,7 +1,4 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
-<div class="ai-anchor" id="vi"></div>
-<?php } ?>
-<h1><?php _e('Video tutorials', 'advanced-iframe'); ?></h1>
+<br />
 <div>
     <div id="icon-options-general" class="icon_ai">
       <br />

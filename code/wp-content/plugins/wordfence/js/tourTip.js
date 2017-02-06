@@ -25,13 +25,29 @@ window['wordfenceExt'] = {
 			function(){ jQuery('#wordfenceAutoUpdateChoice').fadeOut(); }
 			);
 	},
-	removeFromCache: function(postID){
-		this.ajax('wordfence_removeFromCache', {
-			id: postID
-			}, 
-			function(res){ if(res.ok){ alert("Item removed from the Wordfence cache."); } },
-			function(){}
-			);
+	adminEmailChoice: function(choice) {
+		this.ajax('wordfence_adminEmailChoice', {
+				choice: choice
+			},
+			function(res){ jQuery('#wordfenceAdminEmailWarning').fadeOut(); },
+			function(){ jQuery('#wordfenceAdminEmailWarning').fadeOut(); }
+		);
+	},
+	suPHPWAFUpdateChoice: function(choice) {
+		this.ajax('wordfence_suPHPWAFUpdateChoice', {
+				choice: choice
+			},
+			function(res){ jQuery('#wordfenceSuPHPUpdateWarning').fadeOut(); },
+			function(){ jQuery('#wordfenceSuPHPUpdateWarning').fadeOut(); }
+		);
+	},
+	misconfiguredHowGetIPsChoice : function(choice) {
+		this.ajax('wordfence_misconfiguredHowGetIPsChoice', {
+				choice: choice
+			},
+			function(res){ jQuery('#wordfenceMisconfiguredHowGetIPsNotice').fadeOut(); },
+			function(){ jQuery('#wordfenceMisconfiguredHowGetIPsNotice').fadeOut(); }
+		);
 	},
 	ajax: function(action, data, cb, cbErr, noLoading){
 		if(typeof(data) == 'string'){
@@ -172,5 +188,17 @@ if(WordfenceAdminVars.tourClosed != '1' && WordfenceAdminVars.welcomeClosed != '
 
 	});
 }
+
+	(function($) {
+		$('.wf-dismiss-link').on('click', function() {
+			$('#wf-extended-protection-notice').css({
+				opacity: .75
+			});
+			$.get(this.href, function() {
+				$('#wf-extended-protection-notice').fadeOut(1000);
+			});
+			return false;
+		});
+	})(jQuery);
 });
 

@@ -1,11 +1,7 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
-        <div class="ai-anchor" id="browser-detection"></div>
-<?php } ?> 
-<h1 id="h1-browser-detection"><?php _e('Advanced iframe browser detection', 'advanced-iframe') ?></h1>
 <div>
      <div id="icon-options-general" class="icon_ai">
       <br>
-    </div><h2>
+    </div><h2 id="browser-detection-id">
       <?php _e('Advanced iframe browser detection', 'advanced-iframe'); ?></h2>
       <p>
      Pro users can now specify browser specific iframes. This is imporant especially for the "Show only part of the iframe" feature where browser differences of a few pixels can matter. But you can use this for other things as well because mobile, iphone, ipad can also be detected.

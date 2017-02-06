@@ -79,7 +79,7 @@ if ($show_iframe_loader == 'true') {
                 }     
             }
        
-            $html .= '<'.$display_type.$hide_href.' style="position:absolute;z-index:'.esc_html(trim($values[5])).';'.$x_style.':'.esc_html(trim($r_x)).';'.$y_style.':'.esc_html(trim($r_y)).';width:'.$r_width.';height:'.$r_height.';background-color:'.esc_html(trim($bg_color)).'">'.$div_content.'</'.$display_type.'>';
+            $html .= '<'.$display_type.$hide_href.' id="wrapper-div-element-'.$id.'-'.$hi.'" style="position:absolute;z-index:'.esc_html(trim($values[5])).';'.$x_style.':'.esc_html(trim($r_x)).';'.$y_style.':'.esc_html(trim($r_y)).';width:'.$r_width.';height:'.$r_height.';background-color:'.esc_html(trim($bg_color)).'">'.$div_content.'</'.$display_type.'>';
          } else {
             $html = $error_css . '<div class="errordiv">' . __('ERROR: hide part of iframe does not have the required 6 parameters', 'advanced-iframe') . '</div>';
             return $html;
@@ -133,6 +133,10 @@ if ($this->ai_startsWith(strtolower($src), "http:") &&
     $this->ai_startsWith(strtolower($parent_http), "https:")) {
   // show a warning if https pages are shown in http pages.
   $html .= 'Http iframes are not shown in https pages in many major browsers. Please read <a href="http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https" target="_blank">this post</a> for details.';
+} else if ($this->ai_startsWith(strtolower($src), "https:") && 
+    $this->ai_startsWith(strtolower($parent_http), "http:") &&
+    $enable_external_height_workaround == "true" && $use_post_message == 'false' ) {
+    $html .= 'You use a https iframe in a http page with the external workaround. To enable the external workaround you NEED to enable "Use post message for communication" on the "external workaround" tab.';
 } 
  
 $html .= "<iframe id='" . $id . "' ";

@@ -64,15 +64,15 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 				$query->set( 'paged', $_REQUEST['tribe_paged'] );
 			}
 
-			// Add tribe events post type to tag queries
+			// Add tribe events post type to tag queries only in tag archives
 			if ( $query->is_tag && (array) $query->get( 'post_type' ) != array( Tribe__Events__Main::POSTTYPE ) ) {
 				$types = $query->get( 'post_type' );
 				if ( empty( $types ) ) {
 					$types = array( 'post' );
 				}
-				if ( is_array( $types ) ) {
+				if ( is_array( $types ) && $query->is_main_query() ) {
 					$types[] = Tribe__Events__Main::POSTTYPE;
-				} else {
+				} elseif ( $query->is_main_query() ) {
 					if ( is_string( $types ) ) {
 						$types = array( $types, Tribe__Events__Main::POSTTYPE );
 					} else {
@@ -211,7 +211,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 					$query->query_vars['s'] = $_REQUEST['tribe-bar-search'];
 				}
 
-				$query->query_vars['eventDisplay'] = ! empty( $query->query_vars['eventDisplay'] ) ? $query->query_vars['eventDisplay'] : Tribe__Events__Main::instance()->displaying;
+				$query->set( 'eventDisplay', $query->get( 'eventDisplay', Tribe__Events__Main::instance()->displaying ) );
 
 				//@todo stop calling EOD cutoff transformations all over the place
 
@@ -220,17 +220,22 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 						case 'custom':
 							// if the eventDisplay is 'custom', all we're gonna do is make sure the start and end dates are formatted
 							$start_date = $query->get( 'start_date' );
+
 							if ( $start_date ) {
 								$start_date_string = $start_date instanceof DateTime
 									? $start_date->format( Tribe__Date_Utils::DBDATETIMEFORMAT )
 									: $start_date;
+
 								$query->set( 'start_date', date_i18n( Tribe__Date_Utils::DBDATETIMEFORMAT, strtotime( $start_date_string ) ) );
 							}
+
 							$end_date = $query->get( 'end_date' );
+
 							if ( $end_date ) {
 								$end_date_string = $end_date instanceof DateTime
 									? $end_date->format( Tribe__Date_Utils::DBDATETIMEFORMAT )
 									: $end_date;
+
 								$query->set( 'end_date', date_i18n( Tribe__Date_Utils::DBDATETIMEFORMAT, strtotime( $end_date_string ) ) );
 							}
 							break;
@@ -343,6 +348,9 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 			if ( $query->tribe_is_event_query && $query->get( 'hide_upcoming' ) && ! $query->get( 'suppress_filters' ) ) {
 				$hide_upcoming_ids = self::getHideFromUpcomingEvents();
 				if ( ! empty( $hide_upcoming_ids ) ) {
+					// Merge if there is any items and remove empty items
+					$hide_upcoming_ids = array_filter( array_merge( $hide_upcoming_ids, (array) $query->get( 'post__not_in' ) ) );
+
 					$query->set( 'post__not_in', $hide_upcoming_ids );
 				}
 			}
@@ -402,9 +410,10 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 
 			// otherwise, let's remove the date filters if we're in the admin dashboard and the query is
 			// and event query on the tribe_events edit page
-			return is_admin()
-				&& $query->tribe_is_event_query
-				&& Tribe__Admin__Helpers::instance()->is_screen( 'edit-' . Tribe__Events__Main::POSTTYPE );
+			return ( is_admin()
+						&& $query->tribe_is_event_query
+						&& Tribe__Admin__Helpers::instance()->is_screen( 'edit-' . Tribe__Events__Main::POSTTYPE ) )
+			       || true === $query->get( 'tribe_remove_date_filters', false );
 		}
 
 		/**
@@ -515,7 +524,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 		 * Custom SQL conditional for event duration meta field
 		 *
 		 * @param string   $where_sql
-		 * @param wp_query $query
+		 * @param WP_Query $query
 		 *
 		 * @return string
 		 */
@@ -523,7 +532,15 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 			global $wpdb;
 
 			// if it's a true event query then we to setup where conditions
-			if ( $query->tribe_is_event || $query->tribe_is_event_category ) {
+			// but only if we aren't grabbing a specific post
+			if (
+				(
+					$query->tribe_is_event
+					|| $query->tribe_is_event_category
+				)
+				&& empty( $query->query_vars['name'] )
+				&& empty( $query->query_vars['p'] )
+			) {
 
 				$postmeta_table = self::postmeta_table( $query );
 

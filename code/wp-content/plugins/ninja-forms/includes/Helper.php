@@ -34,6 +34,18 @@ final class WPN_Helper
     }
 
     /**
+     * @param $input
+     * @return array|string
+     */
+    public static function utf8_decode( $input ){
+        if ( is_array( $input ) )    {
+            return array_map( array( 'self', 'utf8_decode' ), $input );
+        }else{
+            return utf8_decode( $input );
+        }
+    }
+
+    /**
      * @param $search
      * @param $replace
      * @param $subject
@@ -180,15 +192,39 @@ final class WPN_Helper
         return $returnString;
     }
 
-    public static function get_query_string( $key )
+    public static function get_query_string( $key, $default = FALSE )
     {
-        if( ! isset( $_GET[ $key ] ) ) return '';
+        if( ! isset( $_GET[ $key ] ) ) return $default;
 
         $value = self::htmlspecialchars( $_GET[ $key ] );
 
         if( is_array( $value ) ) $value = $value[ 0 ];
 
         return $value;
+    }
+
+    public static function sanitize_text_field( $data )
+    {
+        if( is_array( $data ) ){
+            return array_map( array( 'self', 'sanitize_text_field' ), $data );
+        }
+        return sanitize_text_field( $data );
+    }
+
+    public static function get_plugin_version( $plugin )
+    {
+        $plugins = get_plugins();
+
+        if( ! isset( $plugins[ $plugin ] ) ) return false;
+
+        return $plugins[ $plugin ][ 'Version' ];
+    }
+
+    public static function is_func_disabled( $function )
+    {
+        if( ! function_exists( $function ) ) return true;
+        $disabled = explode( ',',  ini_get( 'disable_functions' ) );
+        return in_array( $function, $disabled );
     }
 
 } // End Class WPN_Helper

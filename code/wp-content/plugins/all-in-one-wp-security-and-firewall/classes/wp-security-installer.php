@@ -178,7 +178,7 @@ class AIOWPSecurity_Installer
             //Now let's write any rules to the .htaccess file if necessary
             $res = AIOWPSecurity_Utility_Htaccess::write_to_htaccess();
 
-            if ($res == -1) {
+            if ( !$res ) {
                 $aio_wp_security->debug_logger->log_debug("AIOWPSecurity_Deactivation::run_deactivation_tasks() - Could not write to the .htaccess file. Please check the file permissions.", 4);
                 return false;
             }
@@ -192,29 +192,6 @@ class AIOWPSecurity_Installer
 
     static function miscellaneous_tasks()
     {
-        //Create .htaccess file to protect log files in "logs" dir
-        self::create_htaccess_logs_dir();
-    }
-
-    static function create_htaccess_logs_dir()
-    {
-        global $aio_wp_security;
-        $aiowps_log_dir = AIO_WP_SECURITY_PATH . '/logs';
-        $server_type = AIOWPSecurity_Utility::get_server_type();
-        //Only create .htaccess if server is the right type
-        if ($server_type == 'apache' || $server_type == 'litespeed') {
-            $file = $aiowps_log_dir . '/.htaccess';
-            if (!file_exists($file)) {
-                //Write some rules which will stop people from viewing the log files publicly
-                $rules = '';
-                $rules .= 'order deny,allow' . PHP_EOL;
-                $rules .= 'deny from all' . PHP_EOL;
-                $write_result = file_put_contents($file, $rules);
-                if ($write_result === false) {
-                    $aio_wp_security->debug_logger->log_debug("Creation of .htaccess file in " . $aiowps_log_dir . " directory failed!", 4);
-                }
-            }
-        }
     }
 
 

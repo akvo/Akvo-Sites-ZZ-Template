@@ -1,8 +1,10 @@
 <?php
 /**
  *  In this file the dynamic css is created
- */          
- 
+ */
+
+   // Some themes have iframes hidden by default. We don't want this ;).
+   $html .= '#'.$id.' {visibility:visible;opacity:1;}'; 
    // Fix if iframe is above the header div
    if (!empty($show_iframe_as_layer_header_file) && $show_iframe_as_layer_header_position === 'bottom') {
      $html .= '#'.$id.' {display:block;}';
@@ -46,12 +48,12 @@
   $enable_ie_8_support = false; 
   if (!empty($iframe_zoom)) {
        if ($width != 'not set' && $width != '') {
-           $scale_width = $this->scale_value($width, $iframe_zoom); 
+           $scale_width = AdvancedIframeHelper::scale_value($width, $iframe_zoom); 
        } else {
           return $error_css . '<div class="errordiv">' . __('Configration error: Zoom does need a specified width.', 'advanced-iframe') . '</div>';         
        }
        if ($height != 'not set' && $height != '') {
-            $scale_height = $this->scale_value($height, $iframe_zoom); 
+            $scale_height = AdvancedIframeHelper::scale_value($height, $iframe_zoom); 
        } else {
            return $error_css . '<div class="errordiv">' . __('Configration error: Zoom does need a specified height.', 'advanced-iframe') . '</div>'; 
        }
@@ -125,7 +127,8 @@
          $html .= '   top: 150px;
          }';
        }
-        $html .= '#ai-div-loader-'.$id.' img
+       $html .= '} 
+       #ai-div-loader-'.$id.' img
        {
           border: none;
        }';

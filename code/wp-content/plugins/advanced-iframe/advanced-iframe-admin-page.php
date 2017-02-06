@@ -11,7 +11,7 @@ Administration include
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-functions.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-quickstart.php';
 
-$version = '7.1.1';
+$version = '7.3.1';
 $updated = false;
 $evanto = (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php"));
 if (is_user_logged_in() && is_admin()) {
@@ -21,15 +21,12 @@ if (is_user_logged_in() && is_admin()) {
     if ($evanto) {
       $devOptions['demo'] = 'false';
     } else {
-      $devOptions['accordeon_menu'] = 'false';
       $devOptions['alternative_shortcode'] = '';
     }
     
     
-    if ( $devOptions['accordeon_menu'] == 'false') {
-        if (isset($_POST['scrollposition'])) {
-          $scrollposition = urlencode($_POST['scrollposition']); 
-        }
+    if (isset($_POST['scrollposition'])) {
+      $scrollposition = urlencode($_POST['scrollposition']); 
     }
     
     $is_latest = true;
@@ -53,6 +50,16 @@ if (is_user_logged_in() && is_admin()) {
       $current_tab = urlencode($_POST['current_tab']); 
     }
     $current_tab = processConfigActions($current_tab);
+    
+    if (isset($_POST['current_open_sections'])) {
+      $current_open_sections = urlencode($_POST['current_open_sections']);
+      # and , we decode
+      $current_open_sections = str_replace('%23', '#', $current_open_sections);
+      $current_open_sections = str_replace('%2C', ',', $current_open_sections);    
+    } else {
+      $current_open_sections = ''; 
+    }
+    
     
     if (isset($_POST['update_iframe-loader'])) { //save option changes
         $adminSettings = array('securitykey', 'src', 'width', 'height', 'scrolling',
@@ -103,7 +110,8 @@ if (is_user_logged_in() && is_admin()) {
             'external_height_workaround_delay',  
             'add_document_domain','document_domain',
             'multi_domain_enabled','check_shortcode',
-            'use_post_message' 
+            'use_post_message', 'element_to_measure_offset',
+            'data_post_message'
             );  
         if (!wp_verify_nonce($_POST['twg-options'], 'twg-options')) die('Sorry, your nonce did not verify.');
         
@@ -124,7 +132,8 @@ if (is_user_logged_in() && is_admin()) {
                        || $item == 'accordeon_menu' || $item == 'single_save_button'
                        || $item == 'show_iframe_as_layer' || $item == 'add_iframe_url_as_param'
                        || $item == 'auto_zoom' || $item == 'show_part_of_iframe_zoom'
-                       || $item == 'demo' ||  $item == 'enable_ios_mobile_scolling') {
+                       || $item == 'demo' ||  $item == 'enable_ios_mobile_scolling'
+                       || $item == 'use_post_message' || $item == 'multi_domain_enabled') {
                           $text = 'false';
                      } else if ($item == 'show_menu_link') {
                          $text = 'true';
@@ -134,7 +143,7 @@ if (is_user_logged_in() && is_admin()) {
                          $text = '100';
                      } else if ($item == 'show_iframe_as_layer_header_position') {
                          $text = 'top';
-                     } else if ($item == 'external_height_workaround_delay') {
+                     } else if ($item == 'external_height_workaround_delay' || $item == 'element_to_measure_offset' )  {
                          $text = '0';
                      }
                      else {
@@ -239,8 +248,10 @@ if ($isDemo) { ?>
 </style>
 <div id="ai" class="wrap">
   <!-- options-general.php?page=advanced-iframe.php -->
-  <form name="ai_form" method="post" action="options-general.php?page=advanced-iframe.php">
+  <form id="ai_form" name="ai_form" method="post" action="options-general.php?page=advanced-iframe.php">
     <input type="hidden" id="current_tab" name="current_tab" value="<?php echo $current_tab; ?>">
+    <input type="hidden" id="current_open_sections" name="current_open_sections" value="">
+    
     <?php wp_nonce_field('twg-options', 'twg-options'); ?>
 
       <div id="icon-options-general" class="icon_ai show-always">
@@ -269,9 +280,7 @@ if ($isDemo) { ?>
         ?><span id="help-header">&nbsp;<?php __('attribute help', 'advanced-iframe'); ?></span></h1>
 <?php if (!$isDemo) { ?>
 <br />
-<?php } ?>
-<?php if ($devOptions['accordeon_menu'] == 'false') { 
-
+<?php }
 
 _e('<input type="search" class="ai-input-search" placeholder="Type filter text" />
 <div id="ai-input-search-result">
@@ -289,8 +298,7 @@ if ($devOptions['donation_bottom'] === 'false') {
       <a id="tab_2" class="nav-tab advanced-settings-tab" href="#advanced"><span>Advanced Settings</span></a>
       <a id="tab_3" class="nav-tab external-workaround" href="#external-workaround"><span>External workaround</span></a>
       <a id="tab_4" class="nav-tab" href="#add-files"><span>Add/Include files</span></a>
-      <a id="tab_5" class="nav-tab help-tab" href="#help"><span>Help / FAQ</span></a>
-      ', 'advanced-iframe');
+      <a id="tab_5" class="nav-tab help-tab" href="#help"><span>Help / FAQ</span></a>', 'advanced-iframe');
 } else {
   _e('<a id="tab_1" class="nav-tab nav-tab-active" href="#basic"><span>Basic Settings</span></a>
     <a id="tab_2" class="nav-tab advanced-settings-tab" href="#advanced"><span>Advanced Settings</span></a>
@@ -302,83 +310,60 @@ if ($devOptions['donation_bottom'] === 'false') {
 _e('
 </h2>
 ', 'advanced-iframe');
-} else { 
-_e('Please open the section where you want to change a default setting. Please start at the default section for the basic settings. You can open several sections at once for easier navigation.', 'advanced-iframe');
-} 
-
-
-
-
 ?>
 
 <div style="clear:both;"></div>
+<div id="tab_wrapper">
+<?php
+if ($devOptions['donation_bottom'] === 'false') {
+  echo '<section id="section-quickstart" class="tab_0">';
+  printDonation($devOptions, $evanto);
+  echo "</div>";
+  echo '</section>';
+}
 
+echo '<section id="section-default" class="tab_1">';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-default.php';
+echo '</section><section id="section-advanced" class="tab_2">';
 
-
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
+if ($devOptions['accordeon_menu'] == 'false') { ?>
 <div id="acc">
-<?php } else { ?>
+<?php } else { 
+_e('<p>Please open the section where you want to change a default setting. Please note that some of the advanced features require basic html/css knowhow! You can open several sections at once for easier navigation.</p>', 'advanced-iframe');
+?>
 <div id="accordion">
 <?php }
 
-
-if ($devOptions['donation_bottom'] === 'false') {
-  if ($devOptions['accordeon_menu'] == 'false') {
-    echo '<section id="section-quickstart" class="tab_0">';
-  }
-  printDonation($devOptions, $evanto);
-  echo "</div>";
-  if ($devOptions['accordeon_menu'] == 'false') {
-    echo '</section>';
-  }
-}
-if ($devOptions['accordeon_menu'] == 'false') {
-  echo '<section id="section-default" class="tab_1">';
-}
-include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-default.php';
-if ($devOptions['accordeon_menu'] == 'false') {
-  echo '</section><section id="section-advanced" class="tab_2">';
-}
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-advanced.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-resize.php';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-modify-iframe.php';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-modify-parent.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-zoom.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-lazy-load.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-parameters.php';
-include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-modify-parent.php';
-include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-modify-iframe.php';
-if ($devOptions['accordeon_menu'] == 'false') {
+echo '</div>';
+
 echo '</section><section id="section-external-workaround" class="tab_3">';
-}
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-external-workaround.php';
-if ($devOptions['accordeon_menu'] == 'false') {
 echo '</section><section id="section-add-files" class="tab_4">';
-}
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-add-files.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-include-directly.php';
-if ($devOptions['accordeon_menu'] == 'false') {
 echo '</section><section  id="section-help" class="tab_5">';
-}
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-video.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-faq.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-forum.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-support.php';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-find-id.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-jquery.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-browser.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-twg.php';
-if ($devOptions['accordeon_menu'] == 'false') {
 echo '</section>';
-}
 if ($devOptions['donation_bottom'] === 'true') {
-  if ($devOptions['accordeon_menu'] == 'false') {
   echo '<section id="section-quickstart" class="tab_0">';
-  }
   printDonation($devOptions, $evanto);
   echo "</div>";
-  if ($devOptions['accordeon_menu'] == 'false') {
   echo '</section>';
-  }
 }
-
 ?>
 </div>
 <?php if ($devOptions['single_save_button'] == 'true') { ?>    
@@ -400,7 +385,7 @@ if ($devOptions['donation_bottom'] === 'true') {
            }
            ?></div> 
         <input type="hidden" name="action" id="action" value="update">
-        <input id="wpbarbutton" class="button-primary" type="submit" name="update_iframe-loader" onclick="setAiScrollposition();" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>  <input id="wpresetbutton" class="button-secondary confirmation" name="update_iframe-loader" onclick="resetAiSettings();" type="submit" value="<?php _e('Reset Settings', 'advanced-iframe') ?>" />
+        <input id="wpbarbutton" class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>  <input id="wpresetbutton" class="button-secondary confirmation" name="update_iframe-loader" onclick="resetAiSettings();" type="submit" value="<?php _e('Reset Settings', 'advanced-iframe') ?>" />
         </div>
         
       
@@ -409,11 +394,23 @@ if ($devOptions['donation_bottom'] === 'true') {
 <?php } ?>
 </form>
 </div>
+<?php
+// All sections are closed if we use the accordeon and open sections arlready 
+if ($devOptions['accordeon_menu'] != 'false' && !empty($current_open_sections)) {
+  $devOptions['accordeon_menu'] = 'no';
+} 
+?>
 <script type="text/javascript">
 jQuery(function() {
   initAdminConfiguration(<?php echo ($evanto) ? "true" : "false"; ?>,<?php echo '"' .$devOptions['accordeon_menu'] . '"'; ?>);  
-  document.getElementById('tab_<?php echo $current_tab; ?>').click();
-  jQuery(document).scrollTop(<?php echo $scrollposition; ?>);
+  <?php if (!empty($current_open_sections)) { ?>
+     jQuery('<?php echo $current_open_sections; ?>').click();
+  <?php } ?>
+  document.getElementById('tab_<?php echo $current_tab; ?>').click(); 
+  setTimeout(function() {
+    jQuery(document).scrollTop(<?php echo $scrollposition; ?>);
+    accTime = 400;
+  }, 100);
 });
 </script>
 <?php } ?>
