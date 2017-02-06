@@ -194,8 +194,22 @@ use Mexitek\PHPColors\Color;
 	   		'settings' => 'akvo_logo',
 		) ) );
 
+		/*
+		$wp_customize->add_setting('akvo_logo_size', array(
+			'default' => 0,
+      		'capability' => 'edit_theme_options',
+      		'type'       => 'option',
+      	));*/
+      	$wp_customize->add_setting( 'akvo_logo_size' );
 		
-
+		$wp_customize->add_control('akvo_logo_size', array(
+      		'settings' => 'akvo_logo_size',
+      		'label'    => __('Use Original Logo Size'),
+      		'section'  => 'akvo_logo_section',
+      		'type'     => 'checkbox',
+      		'std' => 1
+      	));
+      	
 		//fonts
 		
 		$fonts_arr = array(
