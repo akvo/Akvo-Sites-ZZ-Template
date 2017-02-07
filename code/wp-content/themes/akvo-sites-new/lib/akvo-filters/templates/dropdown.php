@@ -1,7 +1,15 @@
 <div class='form-group'>
 	<label><?php _e($arr['label']);?></label>
 	<select name="akvo_<?php _e($arr['slug']);?>" class='form-control'>
-		<option value='0'>Not Selected</option>
+		<?php 
+			$default_text = 'Not Selected';
+		
+			$custom_text = get_option('akvo_filter_default_text');
+			if($custom_text){
+				$default_text = $custom_text;
+			}
+		?>	
+		<option value='0'><?php _e($default_text);?></option>
 		<?php foreach($terms as $term):
 			$is_selected = false;
 			if($arr['id'] == $term->term_id){
