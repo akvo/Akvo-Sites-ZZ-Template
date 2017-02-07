@@ -22,7 +22,19 @@
         	'label' => 'Text for apply filters button:',
 	        'section' => 'akvo_filter_section',
     	));
-    	    
+    	
+    	$wp_customize->add_setting('akvo_filter_default_text', array(
+			'default'	 => 'Not Selected',
+       		'capability' => 'edit_theme_options',
+    	   	'type'       => 'option',
+    	));
+ 		
+		$wp_customize->add_control('akvo_filter_default_text', array(
+			'settings' => 'akvo_filter_default_text',
+    		'type' => 'text',
+        	'label' => 'Text for filter - Not Selected:',
+	        'section' => 'akvo_filter_section',
+    	)); 
     	    
     	    
 		/* LABEL FOR SLUGS */

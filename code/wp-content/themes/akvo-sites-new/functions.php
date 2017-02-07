@@ -170,7 +170,6 @@
   }
   add_action( 'wp_head', 'bwpy_customizer_head_styles' );
 
-
   function akvo_featured_img($post_id){
   	$post_type = get_post_type($post_id);
   	$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
@@ -182,7 +181,6 @@
 	return $img;
   }
   
-
 	function custom_admin_css() {
  		echo '<style>
  			.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
@@ -203,7 +201,3 @@
  	// Diable wp emoji
  	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
  	remove_action( 'wp_print_styles', 'print_emoji_styles' );
-
-  
-  
-  
