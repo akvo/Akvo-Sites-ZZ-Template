@@ -225,9 +225,9 @@
         	'section' => 'akvo_card_section',
         ));
 		/* END OF CARD SECTION */
-		
-		$types = akvo_get_card_types(); 
-		foreach($types as $type=>$label){
+		$akvo_card_obj = new Akvo_Card;
+        $types = $akvo_card_obj->get_types(); 
+        foreach($types as $type=>$label){
 		
 			$bg_setting = 'akvo_card[bg_'.$type.'_height]';
 		
@@ -320,7 +320,8 @@
          	}
          	
          	<?php 
-         		$types = akvo_get_card_types(); 
+         		$akvo_card_obj = new Akvo_Card;
+         		$types = $akvo_card_obj->get_types(); 
          		foreach($types as $type=>$label): $bg_setting = 'bg_'.$type.'_height';
          			if(isset($akvo_card[$bg_setting])):
          	?>

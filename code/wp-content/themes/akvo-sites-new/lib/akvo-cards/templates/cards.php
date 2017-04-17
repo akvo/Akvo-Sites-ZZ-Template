@@ -2,44 +2,11 @@
 	<?php foreach($data as $item):?>
 		<div class="col-md-4 eq">
 		<?php
-			
-			
-			//print_r($item);
-			
-			$att_str = '';
-			
-			if($item['title']){
-				$att_str .= ' title="'.$item['title'].'"';
+			$shortcode = '[akvo-card';
+			foreach($item as $key=>$val){
+				$shortcode .= ' '.$key.'="'.$val.'"';	
 			}
-			
-			if($item['date']){
-				$att_str .= ' date="'.$item['date'].'"';
-			}
-			
-			if($item['img']){
-				$att_str .= ' img="'.$item['img'].'"';
-			}	
-			
-			if($item['content']){
-				$att_str .= ' content="'.$item['content'].'"';
-			}
-			
-			if($item['link']){
-				$att_str .= ' link="'.$item['link'].'"';
-			}
-			
-			if($item['type']){
-				$att_str .= ' type="'.$item['type'].'"';
-			}
-			
-			if(isset($item['type-text'])){
-				$att_str .= ' type-text="'.$item['type-text'].'"';
-			}
-			
-			$shortcode = '[akvo-card '.$att_str.']';
-			 
-			//echo $shortcode;
-			
+			$shortcode .= ']';
 			echo do_shortcode($shortcode);
 		?>
 		</div>

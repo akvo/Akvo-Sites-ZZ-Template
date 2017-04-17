@@ -74,22 +74,13 @@
    		* when creating your form elements. This handles the confusing stuff.
    		*/
 		function form( $instance ) {
-
+			$akvo_card_obj = new Akvo_Card;
+			
     		/* Set up some default widget settings. */
     		$defaults = array( 'type' => 'news', 'rsr-id' => 'rsr', 'type-text' => ''); // , 'columns' => '1');
 			$instance = wp_parse_args( (array) $instance, $defaults ); 
 		
-			$post_type_arr = akvo_get_card_types(); /*array(
-				'news' 			=> 'News',
-				'blog' 			=> 'Blog',
-				'video' 		=> 'Videos',
-				'testimonial' 	=> 'Testimonials',
-				'project' 		=> 'RSR Updates',
-				'rsr-project'	=> 'RSR Project',
-				'map' 			=> 'Maps',
-				'flow' 			=> 'Flow',
-				'media' 		=> 'Media Library'
-			);*/
+			$post_type_arr = $akvo_card_obj->get_types(); 
 		
 		?>
     		<p>
@@ -115,11 +106,3 @@
 		}
 	}
 	
-	
-	/* register Foo_Widget widget
-	function register_post_widget() {
-    	register_widget( 'post_widget' );	
-    }
-	add_action( 'widgets_init', 'register_post_widget' );
-	*/
-?>
