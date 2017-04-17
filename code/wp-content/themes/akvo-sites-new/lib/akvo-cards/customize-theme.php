@@ -226,6 +226,23 @@
         ));
 		/* END OF CARD SECTION */
 		
+		$types = akvo_get_card_types(); 
+		foreach($types as $type=>$label){
+		
+			$bg_setting = 'akvo_card[bg_'.$type.'_height]';
+		
+			$wp_customize->add_setting($bg_setting, array(
+       			'default' => '150px',
+       			'capability' => 'edit_theme_options',
+       			'type'       => 'option',
+    		));	
+    		$wp_customize->add_control($bg_setting, array(
+				'settings' => $bg_setting,
+    			'type' => 'text',
+        		'label' => 'BG Image Height of '.$label.' :',
+        		'section' => 'akvo_card_section',
+        	));
+		}
 		
 	}
 	add_action( 'customize_register', 'akvo_card_customize_register' );
@@ -301,6 +318,16 @@
          		color: <?php _e($akvo_card['title_color']);?>;
          		<?php endif;?>
          	}
+         	
+         	<?php 
+         		$types = akvo_get_card_types(); 
+         		foreach($types as $type=>$label): $bg_setting = 'bg_'.$type.'_height';
+         			if(isset($akvo_card[$bg_setting])):
+         	?>
+         		.card.<?php _e($type)?> .card-image{
+         			height: <?php _e($akvo_card[$bg_setting]);?>
+         		}
+         	<?php endif;endforeach;?>	
          	
          	<?php endif;?>
          </style>

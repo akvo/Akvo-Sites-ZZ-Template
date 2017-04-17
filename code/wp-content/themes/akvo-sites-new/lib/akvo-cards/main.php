@@ -6,6 +6,20 @@
 	
 	include "pin-widget.php";
 	
+	function akvo_get_card_types(){
+		$post_type_arr = array(
+			'news' 			=> 'News',
+			'blog' 			=> 'Blog',
+			'video' 		=> 'Videos',
+			'testimonial' 	=> 'Testimonials',
+			'project' 		=> 'RSR Updates',
+			'rsr-project'	=> 'RSR Project',
+			'map' 			=> 'Maps',
+			'flow' 			=> 'Flow',
+			'media' 		=> 'Media Library'
+		);
+		return $post_type_arr;
+	}
 	
 	function akvo_cards_main(){
 		$data = array();

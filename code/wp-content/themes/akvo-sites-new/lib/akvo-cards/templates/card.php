@@ -1,4 +1,4 @@
-<div class='card'>
+<div class='card <?php _e(slugify($atts['type']));?>'>
 	<div class='card-header'>
 		<h3 class='card-title'>
 			<a href="<?php _e($atts['link']);?>"><?php _e($atts['title']);?></a>	

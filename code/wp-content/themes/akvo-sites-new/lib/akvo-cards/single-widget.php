@@ -79,7 +79,7 @@
     		$defaults = array( 'type' => 'news', 'rsr-id' => 'rsr', 'type-text' => ''); // , 'columns' => '1');
 			$instance = wp_parse_args( (array) $instance, $defaults ); 
 		
-			$post_type_arr = array(
+			$post_type_arr = akvo_get_card_types(); /*array(
 				'news' 			=> 'News',
 				'blog' 			=> 'Blog',
 				'video' 		=> 'Videos',
@@ -89,7 +89,7 @@
 				'map' 			=> 'Maps',
 				'flow' 			=> 'Flow',
 				'media' 		=> 'Media Library'
-			);
+			);*/
 		
 		?>
     		<p>
