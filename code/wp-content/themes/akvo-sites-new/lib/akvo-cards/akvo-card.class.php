@@ -189,6 +189,7 @@
 			return $text;
 		}
 		
+		/* add extra params from one array to another */
 		function add_extra_params($data, $atts, $extras = array('type-text', 'type')){
 			foreach($extras as $extra){
 				if($atts[$extra]){
@@ -197,4 +198,55 @@
 			}
 			return $data;
 		}	
+		
+		/* WP QUERY */
+		function wp_query($atts){
+			$data = array();
+			$query = new WP_Query(array(
+						'post_type' => $atts['type'],
+        				'posts_per_page' => $atts['posts_per_page'],
+        				'paged' => $atts['page']			
+					));
+			if ( $query->have_posts() ) { 
+				while ( $query->have_posts() ) {
+					$query->the_post();
+					
+          			$temp = self::parse_post($query->post);
+          			
+          			/* adding extra params */
+					$temp = self::add_extra_params($temp, $atts);
+					
+					array_push($data, $temp);
+          		}
+				wp_reset_postdata();
+			}
+			return $data;
+		}
+		
+		/* Iterate through RSR updates */
+		function rsr_updates($atts){
+			$data = array();
+			$jsondata = self::get_json_data($atts['rsr-id']);
+			
+			$offset = ($atts['page'] - 1) * $atts['posts_per_page'];
+			
+			for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
+				$temp = self::parse_rsr_updates($jsondata->results[$i]);
+				
+				/* adding extra params */
+				$temp = self::add_extra_params($temp, $atts);
+				
+				array_push($data, $temp);
+			}
+			return $data;
+		}
+		
+		function rsr_project($atts){
+			$data = self::get_json_data($atts['rsr-id']);
+			$card = self::parse_rsr_project($data);
+			
+			/* adding extra parameters to the akvo_card array */
+			$card = self::add_extra_params($card, $atts);
+			return $card;
+		}
 	}

@@ -19,42 +19,11 @@
 		}
 		
 		if ($atts['type'] == 'rsr') {
-			/* json data from the data feed plugin */
-			$jsondata = $akvo_card_obj->get_json_data($atts['rsr-id']);
-			
-			$offset = ($atts['page'] - 1) * $atts['posts_per_page'];
-			
-			for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
-				$temp = $akvo_card_obj->parse_rsr_updates($jsondata->results[$i]);
-				
-				/* adding extra params */
-				$temp = $akvo_card_obj->add_extra_params($temp, $atts);
-				
-				array_push($data, $temp);
-			}
+			$data = $akvo_card_obj->rsr_updates($atts);
 		}
 		else {
-			
-      		
-			$query = new WP_Query(array(
-						'post_type' => $atts['type'],
-        				'posts_per_page' => $atts['posts_per_page'],
-        				'paged' => $atts['page']			
-					));
-			if ( $query->have_posts() ) { 
-				while ( $query->have_posts() ) {
-					$query->the_post();
-					
-          			$temp = $akvo_card_obj->parse_post($query->post);
-          			
-          			/* adding extra params */
-					$temp = $akvo_card_obj->add_extra_params($temp, $atts);
-					
-					array_push($data, $temp);
-          		}
-				wp_reset_postdata();
-			}
-		}
+			$data = $akvo_card_obj->wp_query($atts);
+      	}
 		$url = $akvo_card_obj->get_ajax_url('akvo_cards', $atts);
 		include "templates/cards.php";
 		
