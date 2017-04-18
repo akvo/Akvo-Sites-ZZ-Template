@@ -2,13 +2,14 @@
 	
 	class Akvo_Card{
 		
-		function get_ajax_url($action, $atts){
+		function get_ajax_url($action, $atts, $dont_inc = array()){
 			$url = admin_url('admin-ajax.php')."?action=".$action;
 			foreach($atts as $key => $val){
-				$url .= "&".$key."=".$val;
+				if(!in_array($key, $dont_inc)){
+					$url .= "&".$key."=".$val;
+				}	
 			}
 			return $url;
-			//$url .= "?action=akvo_cards&type=".$atts['type']."&posts_per_page=".$atts['posts_per_page']."&rsr-id=".$atts['rsr-id']."&pagination=".$atts['pagination']."&page=".$atts['page']."&type-text=".$atts['type-text'];
 		}
 		
 		function get_base_url(){
@@ -156,4 +157,44 @@
 			);
 			return $post_type_arr;
 		}
+		
+		function form_shortcode($data){
+			$shortcode = '[akvo-card ';
+        	foreach($data as $key=>$val){
+        		$shortcode .= $key.'="'.$val.'" ';
+        	}
+        	$shortcode .= ']';
+        	return $shortcode;
+		}
+		
+		function slugify($text){
+			// replace non letter or digits by -
+  			$text = preg_replace('~[^\pL\d]+~u', '-', $text);
+			// transliterate
+  			$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+  			// remove unwanted characters
+			$text = preg_replace('~[^-\w]+~', '', $text);
+
+			// trim
+			$text = trim($text, '-');
+
+			// remove duplicate -
+			$text = preg_replace('~-+~', '-', $text);
+
+			// lowercase
+			$text = strtolower($text);
+
+			if (empty($text)) {return 'n-a';}
+			return $text;
+		}
+		
+		function add_extra_params($data, $atts, $extras = array('type-text', 'type')){
+			foreach($extras as $extra){
+				if($atts[$extra]){
+					$data[$extra] = $atts[$extra];
+				}	
+			}
+			return $data;
+		}	
 	}

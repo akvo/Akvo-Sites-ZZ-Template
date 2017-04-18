@@ -1,30 +1,19 @@
 <?php
 	
 	add_action( 'widgets_init', create_function( '', 'register_widget("post_widget");' ) );
-	/**
- 	* Adds widget.
- 	*/
+	
 	class post_widget extends WP_Widget {
 
-		/**
-		* Widget setup.
-		*/
+		/* Widget setup */
 		function __construct() {
-    		
     		$widget_ops = array(
             	'classname' => 'single_post',
             	'description' => 'Displays a single post widget'
         	);
-
-        	parent::__construct( 'post_widget', 'Single Post Widget', $widget_ops );
-
-    		
-    		
+			parent::__construct( 'post_widget', 'Single Post Widget', $widget_ops );
 		}
 
-		/**
-		* How to display the widget on the screen.
-		*/
+		/* How to display the widget on the screen */
 		function widget( $args, $instance ) {
     
 			extract( $args );
@@ -38,25 +27,22 @@
       			$counters[$label] = 0;
       		}
       		
-      		//print_r($counters);
-      		
-      		
-    		
-    		if(!isset($instance['type-text'])){
+      		if(!isset($instance['type-text'])){
     			$instance['type-text'] = '';
     		}
     		
-    		$url = admin_url('admin-ajax.php');
-			$url .= "?action=akvo_card&type=".$instance['type']."&offset=".$counters[$label]."&rsr-id=".$instance['rsr-id']."&type-text=".$instance['type-text'];
-			
-			echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
+    		$instance['offset'] = $counters[$label];
+    		
+    		/* get the ajax url for the card widget */
+    		$akvo_card_obj = new Akvo_Card;
+    		$url = $akvo_card_obj->get_ajax_url('akvo_card', $instance, array('panels_info'));
+    		
+    		echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
 			
     		$counters[$label]++;
 		}
 
-  		/**
-   		* Update the widget settings.
-   		*/
+  		/* Update the widget settings */
   		function update( $new_instance, $old_instance ) {
     		$instance = $old_instance;
 			
@@ -74,35 +60,9 @@
    		* when creating your form elements. This handles the confusing stuff.
    		*/
 		function form( $instance ) {
-			$akvo_card_obj = new Akvo_Card;
-			
-    		/* Set up some default widget settings. */
-    		$defaults = array( 'type' => 'news', 'rsr-id' => 'rsr', 'type-text' => ''); // , 'columns' => '1');
-			$instance = wp_parse_args( (array) $instance, $defaults ); 
-		
-			$post_type_arr = $akvo_card_obj->get_types(); 
-		
-		?>
-    		<p>
-      			<label for="<?php echo $this->get_field_id( 'type' ); ?>"><?php _e('Type:', 'single_post'); ?></label> 
-      			<select id="<?php echo $this->get_field_id( 'type' ); ?>" name="<?php echo $this->get_field_name( 'type' ); ?>" class="widefat" style="width:100%;">
-      				<?php foreach($post_type_arr as $post_type => $val):?>
-      				<option <?php if ($post_type == $instance['type']) echo 'selected="selected"'; ?> value="<?php _e($post_type);?>"><?php _e($val);?></option>
-        			<?php endforeach;?>
-        		</select>
-    		</p>
-    		
-    		<p>
-      			<label for="<?php echo $this->get_field_id('rsr-id'); ?>"><?php _e('RSR ID (from data-feed):', 'single_post'); ?></label> 
-      			<input id="<?php echo $this->get_field_id('rsr-id'); ?>" type='text' name="<?php echo $this->get_field_name('rsr-id'); ?>" value="<?php _e($instance['rsr-id']);?>" />
-      		</p>
-      		
-    		<p>
-      			<label for="<?php echo $this->get_field_id('type-text'); ?>"><?php _e('Custom Tag (such as news, blog, etc):', 'single_post'); ?></label> 
-      			<input id="<?php echo $this->get_field_id('type-text'); ?>" type='text' name="<?php echo $this->get_field_name('type-text'); ?>" value="<?php _e($instance['type-text']);?>" />
-      		</p>
-      		
-			<?php
+			/* Set up some default widget settings. */
+    		$instance = wp_parse_args( (array) $instance, array( 'type' => 'news', 'rsr-id' => 'rsr', 'type-text' => '') ); 
+			include "templates/single_post_widget.php";
 		}
 	}
 	
