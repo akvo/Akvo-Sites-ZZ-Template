@@ -7,7 +7,11 @@
 	Version: 1.0
 */
 
-body { font-family: VAGRoundedStd-Bold; }
+body { 
+	font-family: "VAGRoundedStd-Bold";
+	font-weight: normal;
+	font-style: normal !important; 
+}
 
 h1, h2, h3, h4, h5, h6{
 	font-family: VAGRoundedStd-Bold;
@@ -17,11 +21,9 @@ h1, h2, h3, h4, h5, h6{
 
 h1{margin-top: 10px !important;}
 
-body{ 
-	font-family: VAGRoundedStd-Bold;
-	font-weight: normal;
-	font-style: normal !important;
-}
+p,nav ul.navbar-nav li a{ font-family: Verdana !important;}
+
+.banner{ padding-top: 0 !important;}
 
 header nav.navbar-collapse{
 	background: none;
@@ -45,9 +47,11 @@ header nav.navbar-collapse i.fa.fa-chevron-down{
 
 .menu-mobile{margin-bottom: 20px;}
 
+nav ul.navbar-nav li a{font-family:verdana !important; font-size:12px;}
+
 .logo-list img{height: 30px; width: auto;margin: 5px;}
 
-#sub-header{margin-top: 15px; }
+#sub-header{margin-top: 12px; }
 
 #main-page-container{margin-top: 0px !important;}
 
@@ -55,10 +59,11 @@ header nav.navbar-collapse i.fa.fa-chevron-down{
 #result-icon-list li span{font-size: 22px;font-weight: bold; color: #fff;}
 
 .btn-red{ padding: 0.5em 1em;color: #fff;background: #c90c0f;font-size: 1.15em;}
+.btn-red:hover{text-decoration: none; color:#FFF;}
 
 .widget_sow-image .widget-title{margin-top: 10px}
 
-.bg-cover{background-size:cover !important; padding-top: 60% !important;padding-bottom: 5% !important;background-position: center !important;}
+.bg-cover{background-size:cover !important; padding-top: 40% !important;padding-bottom: 5% !important;background-position: center !important;}
 .bg-cover h1{text-align:center;color:#FFF; font-size:60px;}
 
 .text-full-width{padding: 30px;}
@@ -81,11 +86,14 @@ header nav.navbar-collapse i.fa.fa-chevron-down{
 }
 
 @media (min-width:768px){
-        body{font-size:14pt !important;}
+        body{
+        	font-size:13pt !important;
+        	line-height: 1.4 !important;
+        }
         #menu-menu1{ text-align: center; display: block; width: 100%;}
         #menu-menu1 li{position:relative;float: none;display: inline-block;}
         
-        #menu-menu1 li:after{position:absolute;content:" ";border-right:#000 solid 1px; height:13px; top:13px; right:0;}
+        #menu-menu1 li:after{position:absolute;content:" ";border-right:#000 solid 1px; height:13px; top:13px; right:-3px;}
         #menu-menu1 li:last-child:after{display:none;}
         .search-wrap{
                 margin-bottom: 10px;

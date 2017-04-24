@@ -201,3 +201,25 @@
  	// Diable wp emoji
  	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
  	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+ 	
+ 	
+ 	
+ 	// Allow iframe tags within editor
+	function akvo_allow_multisite_tags( $multisite_tags ){
+		$multisite_tags['iframe'] = array(
+			'src' => true,
+			'width' => true,
+			'height' => true,
+			'align' => true,
+			'class' => true,
+			'name' => true,
+			'id' => true,
+			'frameborder' => true,
+			'seamless' => true,
+			'srcdoc' => true,
+			'sandbox' => true,
+			'allowfullscreen' => true
+		);
+		return $multisite_tags;
+	}
+	add_filter('wp_kses_allowed_html','akvo_allow_multisite_tags', 1);
