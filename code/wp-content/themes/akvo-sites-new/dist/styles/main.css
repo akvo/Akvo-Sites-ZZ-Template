@@ -7103,4 +7103,9 @@ article .intro, .article .intro {
   .tribe-list-widget .tribe-list .tribe-events-event-image {
     margin-bottom: 5px; }
 
+.tribe-events-list .tribe-events-venue-details {
+  font-style: italic;
+  font-weight: normal;
+  margin-bottom: 10px; }
+
 /*# sourceMappingURL=main.css.map */
