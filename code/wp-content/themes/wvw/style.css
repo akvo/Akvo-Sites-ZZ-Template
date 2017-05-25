@@ -19,11 +19,15 @@ h1, h2, h3, h4, h5, h6{
 	font-style: normal !important;
 }
 
+a[href]{ font-family: Verdana !important;}
+
+h1 a[href], h2 a[href], h3 a[href], h4 a[href]{ font-family: inherit !important;}
+
 h1{margin-top: 10px !important;}
 
 p,nav ul.navbar-nav li a{ font-family: Verdana !important;}
 
-.banner{ padding-top: 0 !important;}
+.banner{ padding-top: 0 !important;min-height: 180px;}
 
 header nav.navbar-collapse{
 	background: none;
@@ -83,10 +87,12 @@ nav ul.navbar-nav li a{font-family:verdana !important; font-size:12px;}
         .logo-list img{height: 20px; width: auto;margin: 0px;}
         .text-full-width{padding: 20px;}
         .img-box{margin-bottom: 20px;}
+        .img-box-2{margin-top:10px;}
 }
 
 @media (min-width:768px){
 	#sub-header{margin-top: 35px; }
+	#main-page-container{margin-top: -40px !important;}
         body{
         	font-size:13pt !important;
         	line-height: 1.4 !important;
@@ -109,63 +115,19 @@ nav ul.navbar-nav li a{font-family:verdana !important; font-size:12px;}
         .img-box-2 .sow-image-container{max-height: 350px; overflow: hidden;}
 }
 	
-	
-#rsr{
-	background-size: cover;
-	width:100%;
-	position: relative;
-	min-height: 350px;
-	width: 100%;
-	padding-top:20px;	
-	margin-bottom: 30px;
+.swpm-login-widget-form, .swpm-registration-widget-form{
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  border-radius: 5px;
+  border: #CCC solid 1px;
 }
-#rsr svg{
-	left: 0 !important;
-	display: block;
-	margin: 0 auto;
+
+.swpm-registration-widget-form td{
+  min-width: 200px !important;
+  display: block;
 }
-	
-#rsr h1{
-	display: none;
-}
-	
-#rsr a[href].back{
-	display: none;
-}
-	
-#rsr.sub-page a[href].back{
-	display: block;
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	padding: 5px 10px;
-	background: #FFF;
-}
-	
-#rsr.sub-page h1{
-	display: block;
-	text-shadow: 2px 2px 2px rgba(50, 50, 50, 1);
-	text-transform: uppercase;
-	font-size: 37px;
-	color: #FFF;
-	margin-left: 270px;
-	margin-top: -40px;
-	padding-bottom: 20px;
-	font-weight: 400;
-}
-#rsr.sub-page svg{
-	margin-left: 20px;
-}
-@media(max-width : 767px){
-	#rsr.sub-page h1{
-		margin-left: 20px;
-		margin-top: 20px;
-		text-align:center;
-	}
-	#rsr.sub-page svg{
-		margin-left: auto;
-	}
-	#rsr.sub-page a[href].back{
-		display: none;
-	}
+.swpm-registration-widget-form td:first-child{
+  margin-top: 10px;
 }
