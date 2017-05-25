@@ -1,3 +1,69 @@
+Thursday, 25 May 2017 by @lynngre
+
+## New & noteworthy
+
+Higher quality, sharper images are possible now when uploading JPEGs & any 404's will redirect to the homepage.
+
+The ability to include a cookies consent popup has been added and each site will be updated with a cookies policy in the coming few days.
+
+## New Features
+
+### Sharpen Resized Images
+Plugin added for automatic sharpening of images on upload.
+
+Github issue: #296
+
+### 404 redirects
+
+404's/page not found redirect to site's homepage.
+
+Github issue: #262 
+
+### Cookies consent
+
+Cookies consent popup has been added, each site requires a cookies policy page.
+
+Github issue: #46 
+
+## Bugs/fixes
+
+### Styling fixes
+
+Small fixes in styling or CSS of the sites.
+
+Github issue: #284  
+
+### Iframes
+
+Permission for admins/editors to add iframes to posts or pages.
+
+Github issue: #283 
+
+### Customisation allowances for card widgets
+
+Fixing options around image height etc for card widgets.
+
+Github issue: #278 
+
+### Summary pages
+
+Number of card widgets to be evenly distributed.
+
+Github issue: #279 
+
+### Horizontal logo resizing
+
+Options to customise logo sizes has been increased.
+
+Github issue: #257 
+
+### Navigation bar colouring
+
+The navigation bar colouring does not continue past the last menu item.
+
+Github issue: #293 
+-----
+
 Thursday 22 September 2016, @lynngre
 
 ## New & noteworthy
