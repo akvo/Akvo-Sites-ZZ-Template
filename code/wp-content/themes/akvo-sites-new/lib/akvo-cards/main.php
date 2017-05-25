@@ -26,6 +26,8 @@
 			'page'				=> 1
 		)); 
 		
+		
+		
 		$akvo_card = array();
 		$data = array();
 		

@@ -202,10 +202,14 @@
 		/* WP QUERY */
 		function wp_query($atts){
 			$data = array();
+			
+			
+			
 			$query = new WP_Query(array(
 						'post_type' => $atts['type'],
         				'posts_per_page' => $atts['posts_per_page'],
-        				'paged' => $atts['page']			
+        				//'paged' => $atts['page'],
+        				'offset'=> (((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset']
 					));
 			if ( $query->have_posts() ) { 
 				while ( $query->have_posts() ) {

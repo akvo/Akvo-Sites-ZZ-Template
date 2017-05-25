@@ -22,10 +22,14 @@
 			
 			$label = $instance['type'].'-'.$instance['rsr-id'];
 			
+			
+			
 			/* reset offset counter if rsr-id or type has changed */
 			if (!isset($counters[$label])) {
       			$counters[$label] = 0;
       		}
+      		
+      		
       		
       		if(!isset($instance['type-text'])){
     			$instance['type-text'] = '';
@@ -36,6 +40,7 @@
     		/* get the ajax url for the card widget */
     		$akvo_card_obj = new Akvo_Card;
     		$url = $akvo_card_obj->get_ajax_url('akvo_card', $instance, array('panels_info'));
+    		
     		
     		echo "<div data-behaviour='reload-html' data-url='".$url."'></div>";
 			
