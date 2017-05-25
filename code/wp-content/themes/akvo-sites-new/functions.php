@@ -132,39 +132,27 @@
 
   function bwpy_customizer_head_styles() {
     $header_option = get_option('sage_header_options');
-    $menu_bg_child = $header_option['bg_child_menu'];
-    $menu_cl_child = $header_option['color_child_menu'];
-    $menu_bg = $header_option['bg_menu'];
-    $menu_cl = $header_option['color_menu'];
-    $menu_bg_parent = $header_option['bg_parent_menu'];
-    $menu_cl_parent = $header_option['color_parent_menu'];
-
     
-    if($header_option != NULL){ ?>
+	if($header_option != NULL):?>
     <style type="text/css">
-      <?php if($menu_bg_child != "" || $menu_cl_child != ""){?>
-      #menu-main-nav .menu-item .current-menu-item a,
-      #menu-main-nav .menu-item .menu-item a:hover{
-        <?php if($menu_bg_child != "") echo 'background: '.$menu_bg_child.';'?>
-        <?php if($menu_cl_child != "") echo 'color: '.$menu_cl_child.';'?>
+      
+      #menu-main-nav .menu-item .current-menu-item a, #menu-main-nav .menu-item .menu-item a:hover{
+        <?php if(isset($header_option['bg_child_menu']) && $header_option['bg_child_menu'] != "") echo 'background: '.$header_option['bg_child_menu'].';'?>
+        <?php if(isset($header_option['color_child_menu']) && $header_option['color_child_menu'] != "") echo 'color: '.$header_option['color_child_menu'].';'?>
       }
-      <?php } ?>
-      <?php if($menu_bg != "" || $menu_cl != ""){?>
+      
       nav ul.navbar-nav li a{
-        <?php if($menu_bg != "") echo 'background: '.$menu_bg.';'?>
-        <?php if($menu_cl != "") echo 'color: '.$menu_cl.';'?>
+        <?php if(isset($header_option['bg_menu']) && $header_option['bg_menu'] != "") echo 'background: '.$header_option['bg_menu'].';'?>
+        <?php if(isset($header_option['color_menu']) && $header_option['color_menu'] != "") echo 'color: '.$header_option['color_menu'].';'?>
       }
-      <?php } ?>
-      <?php if($menu_bg_parent != "" || $menu_cl_parent != ""){?>
-      nav ul.navbar-nav li:hover a,
-      nav ul.navbar-nav li a:focus,
-      nav ul.navbar-nav li.current-menu-item a{
-        <?php if($menu_bg_parent != "") echo 'background: '.$menu_bg_parent.' !important;'?>
-        <?php if($menu_cl_parent != "") echo 'color: '.$menu_cl_parent.' !important;'?>
+      
+      nav ul.navbar-nav li:hover a,nav ul.navbar-nav li a:focus,nav ul.navbar-nav li.current-menu-item a{
+        <?php if(isset($header_option['bg_parent_menu']) && $header_option['bg_parent_menu'] != "") echo 'background: '.$header_option['bg_parent_menu'].' !important;'?>
+        <?php if(isset($header_option['color_parent_menu']) && $header_option['color_parent_menu'] != "") echo 'color: '.$header_option['color_parent_menu'].' !important;'?>
       }
-      <?php } ?>
+      
     </style>
-    <?php }
+    <?php endif;
 
     
   }

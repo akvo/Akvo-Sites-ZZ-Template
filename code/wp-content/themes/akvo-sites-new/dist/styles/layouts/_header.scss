@@ -266,3 +266,18 @@ nav {
 header nav.navbar-collapse i.fa.fa-chevron-down{
 	display: none;
 }
+
+header nav.navbar-collapse{
+	background: none;
+}
+
+nav ul.navbar-nav li:last-child, nav ul.navbar-nav li:last-child a{
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-menu li:last-child a{
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+} 
+
