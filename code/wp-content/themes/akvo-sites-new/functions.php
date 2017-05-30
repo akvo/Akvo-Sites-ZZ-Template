@@ -141,6 +141,24 @@
       		'type'     => 'checkbox',
       		'std' => 1
       	));
+      	
+      	$headers_arr = array(
+			'header1' => 'Header One',
+			'header2' => 'Header Two',
+	    );
+    	
+    	$wp_customize->add_setting( 'sage_header_options[header_type]', array(
+	    	'default' 	=> 'header1',
+	    	'type'		=> 'option',
+			'transport' => 'refresh',
+		));
+		$wp_customize->add_control( 'sage_header_options[header_type]', array(
+			'type' 		=> 'select',
+		    'label'    	=> __( 'Header Type', 'sage' ),
+		    'section'  	=> 'sage_header_scheme',
+		    'settings' 	=> 'sage_header_options[header_type]',
+		    'choices' 	=> $headers_arr
+		));
 	}
 
 	add_action('customize_register', 'sage_customize_footer_register',40);
