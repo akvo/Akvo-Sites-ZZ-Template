@@ -582,6 +582,3 @@ function mytheme_customize_css(){
     <?php
 }
 add_action( 'wp_head', 'mytheme_customize_css');
-
-
-?>

@@ -126,6 +126,21 @@
     				'section' => 'sage_header_scheme',
     				'settings' => 'sage_header_options[color_child_menu]',
     	) ) );
+    	
+    	
+    	$wp_customize->add_setting('sage_header_options[hide_search]', array(
+			'default' => 0,
+      		'capability' => 'edit_theme_options',
+      		'type'       => 'option',
+      	));
+		
+		$wp_customize->add_control('sage_header_options[hide_search]', array(
+      		'settings' => 'sage_header_options[hide_search]',
+      		'label'    => __('Hide Search Bar'),
+      		'section'  => 'sage_header_scheme',
+      		'type'     => 'checkbox',
+      		'std' => 1
+      	));
 	}
 
 	add_action('customize_register', 'sage_customize_footer_register',40);
