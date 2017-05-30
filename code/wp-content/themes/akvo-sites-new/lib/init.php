@@ -82,6 +82,16 @@ use Roots\Sage\Assets;
           	'before_title'  => '<h2 class="widgettitle">',
           	'after_title'   => '</h2>',
     	]);
+    	
+    	register_sidebar([
+        	'name' 			=> __( 'Replace Search Bar', 'theme-slug' ),
+          	'id' 			=> 'replace-search',
+          	'description' 	=> __( 'Widgets that would replace the search bar in the header', 'sage' ),
+          	'before_widget' => '<div id="%1$s" class="widget %2$s">',
+          	'after_widget'  => '</div>',
+          	'before_title'  => '<h2 class="widgettitle">',
+          	'after_title'   => '</h2>',
+    	]);
 		
 		/*
 		register_sidebar([

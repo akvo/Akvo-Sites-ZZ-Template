@@ -28,6 +28,18 @@
 			<div class="row">
 				<div class="col-sm-6 logo">
 					<?php
+						
+						 $header_option = get_option('sage_header_options');
+						 
+						 $search_flag = true;
+						 
+						 if($header_option && isset($header_option['hide_search']) && $header_option['hide_search']){
+						 	$search_flag = false;
+						 }
+						 
+						 
+						 
+					
 						$home_url = home_url('/');
 						
 						if ( is_multisite() ) {
@@ -58,20 +70,25 @@
 					</a>
 				</div>
 				<div class="col-sm-6 wrap-search-menu">
-					<div class="hidden-xs">
-						<?php get_search_form();?>	
-					</div>
+					<?php if( $search_flag ):?>
+					<div class="hidden-xs"><?php get_search_form();?></div>
+					<?php else: ?>
+						<?php if ( is_active_sidebar( 'replace-search' ) ){
+							dynamic_sidebar( 'replace-search' );
+						}?>
+					<?php endif;?>
+					
 					<div class="navbar-header menu-mobile">
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 							<span class="sr-only">Toggle navigation</span>
 							<i class="fa fa-bars fa-2x"></i>
 						</button>
-
+						<?php if( $search_flag ):?>
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".search-collapse">
 							<span class="sr-only">Toggle search</span>
 							<i class="fa fa-search fa-2x"></i>
 						</button>
-
+						<?php endif;?>
 					</div>
 					<?php if ( is_active_sidebar( 'sub-header' ) ) : ?>
 					<div id="sub-header" class="clearfix">
@@ -82,10 +99,11 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12 navi">
+					<?php if( $search_flag ):?>
 					<div class="collapse search-collapse">
 						<?php get_search_form();?>	
 					</div>
-
+					<?php endif;?>
 					<nav class="navbar-collapse collapse" role="navigation" aria-expanded="true" style="">
 						<?php
 							if (has_nav_menu('primary_navigation')){
