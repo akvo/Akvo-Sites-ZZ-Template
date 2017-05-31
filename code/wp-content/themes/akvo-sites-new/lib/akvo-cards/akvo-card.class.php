@@ -229,10 +229,11 @@
 		
 		/* Iterate through RSR updates */
 		function rsr_updates($atts){
+			
 			$data = array();
 			$jsondata = self::get_json_data($atts['rsr-id']);
 			
-			$offset = ($atts['page'] - 1) * $atts['posts_per_page'];
+			$offset = (((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
 			
 			for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
 				$temp = self::parse_rsr_updates($jsondata->results[$i]);
