@@ -145,6 +145,7 @@
       	$headers_arr = array(
 			'header1' => 'Header One',
 			'header2' => 'Header Two',
+			'header3' => 'Header Three'
 	    );
     	
     	$wp_customize->add_setting( 'sage_header_options[header_type]', array(
