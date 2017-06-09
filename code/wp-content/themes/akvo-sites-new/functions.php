@@ -1,6 +1,6 @@
 <?php
 	$sage_includes = [
-  		'lib/utils.php',                 // Utility functions
+  		//'lib/utils.php',                 // Utility functions
   		'lib/init.php',                  // Initial theme setup and constants
   		'lib/conditional-tag-check.php', // ConditionalTagCheck class
   		'lib/config.php',                // Configuration
@@ -191,6 +191,9 @@
     
   }
   add_action( 'wp_head', 'bwpy_customizer_head_styles' );
+  
+  
+  add_filter('show_admin_bar', '__return_false');
 
   function akvo_featured_img($post_id){
   	$post_type = get_post_type($post_id);
