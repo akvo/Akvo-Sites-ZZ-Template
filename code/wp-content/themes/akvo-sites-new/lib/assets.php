@@ -74,7 +74,7 @@ namespace Roots\Sage\Assets;
 		
 		
   		wp_enqueue_style( 'fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', false, null);
-  		wp_enqueue_style('sage_css', asset_path('styles/main.css'), false, '2.0.1');
+  		wp_enqueue_style('sage_css', asset_path('styles/main.css'), false, '2.0.2');
   		wp_enqueue_style( 'opensans', '//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic', false, null);
 
   		$font_face[] = get_theme_mod('akvo_font');
@@ -104,7 +104,7 @@ namespace Roots\Sage\Assets;
 		//wp_enqueue_script('modernizr', asset_path('scripts/modernizr.js'), [], null, true);
 		wp_enqueue_script('bootstrap_js', asset_path('scripts/bootstrap.min.js'), ['jquery'], '1.0.1', true);
 		
-		wp_enqueue_script('akvo_js', asset_path('scripts/main.js'), ['jquery'], "1.0.2", true);
+		wp_enqueue_script('akvo_js', asset_path('scripts/main.js'), ['jquery'], "1.0.3", true);
 		
 		
 	}

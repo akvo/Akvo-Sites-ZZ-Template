@@ -213,18 +213,19 @@ use Mexitek\PHPColors\Color;
 		//fonts
 		
 		$fonts_arr = array(
-			'Open Sans' => 'Open Sans',
-	        'Roboto' => 'Roboto',
-	        'Lora' => 'Lora',
-	        'Raleway' => 'Raleway',
-	        'Merriweather' => 'Merriweather',
-	        'Arvo' => 'Arvo',
-	        'Muli' => 'Muli',
-	        'Alegreya' => 'Alegreya',
-	        'Exo 2' => 'Exo 2',
-	        'Crimson Text' => 'Crimson Text',
-	        'Lobster Two' => 'Lobster Two',
-	        'Maven Pro' => 'Maven Pro',
+			'Open Sans' 	=> 'Open Sans',
+	        'Roboto' 		=> 'Roboto',
+	        'Lora' 			=> 'Lora',
+	        'Raleway' 		=> 'Raleway',
+	        'Merriweather'	=> 'Merriweather',
+	        'Arvo' 			=> 'Arvo',
+	        'Muli' 			=> 'Muli',
+	        'Alegreya' 		=> 'Alegreya',
+	        'Exo 2' 		=> 'Exo 2',
+	        'Crimson Text' 	=> 'Crimson Text',
+	        'Lobster Two' 	=> 'Lobster Two',
+	        'Maven Pro' 	=> 'Maven Pro',
+	        'Arial'			=> 'Arial'
 		);
 		
 		$wp_customize->add_section( 'akvo_font_section' , array(
