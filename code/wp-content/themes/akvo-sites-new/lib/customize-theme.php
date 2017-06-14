@@ -228,6 +228,8 @@ use Mexitek\PHPColors\Color;
 	        'Arial'			=> 'Arial'
 		);
 		
+		$fonts_arr = apply_filters('akvo_fonts', $fonts_arr);
+		
 		$wp_customize->add_section( 'akvo_font_section' , array(
 	    	'title'       => __( 'Font', 'sage' ),
 		    'priority'    => 30,
