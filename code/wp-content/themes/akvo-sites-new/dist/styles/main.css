@@ -6506,9 +6506,27 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
   max-width: 300px;
   margin: 0 auto 10px; }
 
-.header3 .navbar-fixed-top {
-  background-color: #FFF;
-  padding: 20px 10px 10px; }
+.header3 .navbar {
+  min-height: auto;
+  border-radius: 0px; }
+.header3 #bs-example-navbar-collapse-1 {
+  margin: 0 auto; }
+  @media (min-width: 768px) {
+    .header3 #bs-example-navbar-collapse-1 {
+      max-width: 750px; } }
+  @media (min-width: 992px) {
+    .header3 #bs-example-navbar-collapse-1 {
+      max-width: 970px; } }
+  @media (min-width: 1200px) {
+    .header3 #bs-example-navbar-collapse-1 {
+      max-width: 1170px; } }
+  .header3 #bs-example-navbar-collapse-1.collapsing, .header3 #bs-example-navbar-collapse-1.collapse.in {
+    margin-top: 60px;
+    width: 100%; }
+.header3 .affix {
+  top: 0;
+  width: 100%;
+  z-index: 1200; }
 
 #siderbar .widgettitle {
   font-family: Roboto;

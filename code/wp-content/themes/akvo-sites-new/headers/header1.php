@@ -1,20 +1,12 @@
+<?php global $akvo;?>
 <header class="banner" role="banner">
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 logo">
-			<?php
-				$header_option = get_option('sage_header_options');
-						 
-				$search_flag = true;
-						 
-				if($header_option && isset($header_option['hide_search']) && $header_option['hide_search']){
-					$search_flag = false;
-				}
-			?>
 				<?php get_template_part('partials/logo');?>
 			</div>
 			<div class="col-sm-6 wrap-search-menu">
-				<?php if( $search_flag ):?>
+				<?php if( $akvo->search_flag ):?>
 				<div class="hidden-xs"><?php get_search_form();?></div>
 				<?php else: ?>
 					<?php if ( is_active_sidebar( 'replace-search' ) ){ dynamic_sidebar( 'replace-search' ); }?>
@@ -26,7 +18,7 @@
 						<i class="fa fa-bars fa-2x"></i>
 					</button>
 					
-					<?php if( $search_flag ):?>
+					<?php if( $akvo->search_flag ):?>
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".search-collapse">
 						<span class="sr-only">Toggle search</span>
 						<i class="fa fa-search fa-2x"></i>
@@ -44,7 +36,7 @@
 		<div class="row">
 			<div class="col-md-12 navi">
 				
-				<?php if( $search_flag ):?>
+				<?php if( $akvo->search_flag ):?>
 				<div class="collapse search-collapse">
 					<?php get_search_form();?>	
 				</div>

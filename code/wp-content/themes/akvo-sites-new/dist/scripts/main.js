@@ -5,12 +5,13 @@
 
 /* Lazy Loading of the List */
 (function($){
-	
+	/*
 	function resizeHeader() {
     	$(".header-push").height($(".header3 .navbar").height());
 	}
 	resizeHeader();
 	$(window).resize(resizeHeader);
+	*/
 	
 	$.fn.ajax_loading = function(){
         return this.each(function(){

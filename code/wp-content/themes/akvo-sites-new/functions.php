@@ -28,6 +28,29 @@
 	unset($file, $filepath);
 	
 	
+	class Akvo{
+		
+		public $header_options;
+		public $search_flag = true;
+		
+		
+		function __construct(){
+			// get header options
+			$this->header_options = get_option('sage_header_options');
+			
+			// get search is enabled/disabled
+			if($this->header_options && isset($this->header_options['hide_search']) && $this->header_options['hide_search']){
+				$this->search_flag = false;
+			}
+		}
+		
+		
+	}
+	
+	global $akvo;
+	
+	$akvo = new Akvo;
+	
 	function sage_customize_footer_register($wp_customize){
 
 		//Header
@@ -144,8 +167,7 @@
       	
       	$headers_arr = array(
 			'header1' => 'Header One',
-			'header2' => 'Header Two',
-			'header3' => 'Header Three'
+			'header2' => 'Header Two'
 	    );
     	
     	$wp_customize->add_setting( 'sage_header_options[header_type]', array(
