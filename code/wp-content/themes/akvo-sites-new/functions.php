@@ -166,8 +166,8 @@
       	));
       	
       	$headers_arr = array(
-			'header1' => 'Header One',
-			'header2' => 'Header Two'
+			'header1' => 'Default',
+			'header2' => 'Sticky'
 	    );
     	
     	$wp_customize->add_setting( 'sage_header_options[header_type]', array(

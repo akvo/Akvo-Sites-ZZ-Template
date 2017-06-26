@@ -6508,7 +6508,8 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
 
 .header3 .navbar {
   min-height: auto;
-  border-radius: 0px; }
+  border-radius: 0px;
+  border: none !important; }
 .header3 #bs-example-navbar-collapse-1 {
   margin: 0 auto; }
   @media (min-width: 768px) {
