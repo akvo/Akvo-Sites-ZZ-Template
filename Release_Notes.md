@@ -1,3 +1,35 @@
+Monday, 26 June 2017 by @lynngre
+
+## New 
+
+The option to hide the search bar, or to replace it with a different widget has been added. It can be accessed via 'Customize/Header' in the admin area.
+
+You now have the option to keep the navigation menu area sticky, which means that when a visitor scrolls down your site, the menu will be kept at the top. This is available via the 'Customize/Header' area. 
+ Select 'Header type' default or sticky. 
+
+
+## New Features
+
+### Sticky navigation
+Navigation remains at the top of the screen when visitor scrolls down.
+
+Github issue: #292  & #289 
+
+### Search bar
+
+Option to hide the search bar or add a different widget where the search bar is.
+
+Github issue: #291 
+
+## Fixes
+
+### Arial added
+
+Arial font has been added to the font options under 'Customize/font'.
+
+Github issue: #302 
+
+
 Thursday, 25 May 2017 by @lynngre
 
 ## New & noteworthy
