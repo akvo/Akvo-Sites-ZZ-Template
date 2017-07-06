@@ -194,12 +194,8 @@ use Mexitek\PHPColors\Color;
 	   		'settings' => 'akvo_logo',
 		) ) );
 
-		/*
-		$wp_customize->add_setting('akvo_logo_size', array(
-			'default' => 0,
-      		'capability' => 'edit_theme_options',
-      		'type'       => 'option',
-      	));*/
+		
+      	
       	$wp_customize->add_setting( 'akvo_logo_size' );
 		
 		$wp_customize->add_control('akvo_logo_size', array(
@@ -208,6 +204,26 @@ use Mexitek\PHPColors\Color;
       		'section'  => 'akvo_logo_section',
       		'type'     => 'checkbox',
       		'std' => 1
+      	));
+      	
+      	
+      	$logo_location_arr = array(
+      		'left'	=> 'Left',
+      		'right'	=> 'Right'
+      	);
+      	
+      	$wp_customize->add_setting( 'akvo_logo_location', array(
+      		'default' 		=> 'left',
+      		'transport'   	=> 'refresh',
+      		'type' 			=> 'option'
+      	)  );
+		
+		$wp_customize->add_control('akvo_logo_location', array(
+      		'settings' 	=> 'akvo_logo_location',
+      		'label'    	=> __('Logo location'),
+      		'section'  	=> 'akvo_logo_section',
+      		'type'     	=> 'select',
+      		'choices' 	=> $logo_location_arr
       	));
       	
 		//fonts
@@ -247,7 +263,7 @@ use Mexitek\PHPColors\Color;
 		    'choices' => $fonts_arr
 		));
 		$wp_customize->add_setting( 'akvo_font_nav', array(
-	    	 'default' => 'Open Sans',
+	    	'default' => 'Open Sans',
 	     	'transport'   => 'refresh',
 		));
 		$wp_customize->add_control( 'akvo_font_nav', array(
