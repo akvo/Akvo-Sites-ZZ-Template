@@ -1,6 +1,8 @@
 <?php 
 	global $akvo;
 	$location = get_option( 'akvo_logo_location' );
+	
+	if( ! $location ){ $location = "left"; }
 ?>
 
 <div class="row">
