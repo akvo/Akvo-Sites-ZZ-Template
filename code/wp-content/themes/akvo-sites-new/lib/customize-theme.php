@@ -194,12 +194,8 @@ use Mexitek\PHPColors\Color;
 	   		'settings' => 'akvo_logo',
 		) ) );
 
-		/*
-		$wp_customize->add_setting('akvo_logo_size', array(
-			'default' => 0,
-      		'capability' => 'edit_theme_options',
-      		'type'       => 'option',
-      	));*/
+		
+      	
       	$wp_customize->add_setting( 'akvo_logo_size' );
 		
 		$wp_customize->add_control('akvo_logo_size', array(
@@ -208,6 +204,26 @@ use Mexitek\PHPColors\Color;
       		'section'  => 'akvo_logo_section',
       		'type'     => 'checkbox',
       		'std' => 1
+      	));
+      	
+      	
+      	$logo_location_arr = array(
+      		'left'	=> 'Left',
+      		'right'	=> 'Right'
+      	);
+      	
+      	$wp_customize->add_setting( 'akvo_logo_location', array(
+      		'default' 		=> 'left',
+      		'transport'   	=> 'refresh',
+      		'type' 			=> 'option'
+      	)  );
+		
+		$wp_customize->add_control('akvo_logo_location', array(
+      		'settings' 	=> 'akvo_logo_location',
+      		'label'    	=> __('Logo location'),
+      		'section'  	=> 'akvo_logo_section',
+      		'type'     	=> 'select',
+      		'choices' 	=> $logo_location_arr
       	));
       	
 		//fonts
@@ -247,7 +263,7 @@ use Mexitek\PHPColors\Color;
 		    'choices' => $fonts_arr
 		));
 		$wp_customize->add_setting( 'akvo_font_nav', array(
-	    	 'default' => 'Open Sans',
+	    	'default' => 'Open Sans',
 	     	'transport'   => 'refresh',
 		));
 		$wp_customize->add_control( 'akvo_font_nav', array(
@@ -508,7 +524,7 @@ function mytheme_customize_css(){
             body { font-family: '<?php echo $font; ?>'; background: <?php echo $background; ?>;}
             h1,h2,h3,h4,h5,h6 { font-family: '<?php echo $font_head; ?>';  }
             nav { font-family: '<?php echo $font_nav; ?>'; }
-            .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active { background: <?php echo $licht;?>; }
+            .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active { background: <?php echo $licht;?> !important; }
             nav .lang .fa-circle, nav ul.navbar-nav li i { color: <?php echo $main;?>; }
             .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, footer .custom { background: <?php echo $main;?>; }
             nav ul.navbar-nav li .fa-circle, a { color: <?php echo $main;?>; }

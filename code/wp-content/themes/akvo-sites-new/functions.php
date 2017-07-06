@@ -42,6 +42,9 @@
 			if($this->header_options && isset($this->header_options['hide_search']) && $this->header_options['hide_search']){
 				$this->search_flag = false;
 			}
+			
+			print_r( get_option( 'akvo-logo-location' ) );
+			
 		}
 		
 		

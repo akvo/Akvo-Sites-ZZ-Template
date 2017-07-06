@@ -1,17 +1,9 @@
 <?php global $akvo;?>
 <header class="banner" role="banner">
 	<div class="container">
+		<?php get_template_part('partials/logo-search');?>
 		<div class="row">
-			<div class="col-sm-6 logo">
-				<?php get_template_part('partials/logo');?>
-			</div>
-			<div class="col-sm-6 wrap-search-menu">
-				<?php if( $akvo->search_flag ):?>
-				<div class="hidden-xs"><?php get_search_form();?></div>
-				<?php else: ?>
-					<?php if ( is_active_sidebar( 'replace-search' ) ){ dynamic_sidebar( 'replace-search' ); }?>
-				<?php endif;?>
-					
+			<div class="col-sm-12">		
 				<div class="navbar-header menu-mobile">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 						<span class="sr-only">Toggle navigation</span>
