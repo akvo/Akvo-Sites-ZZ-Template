@@ -1,22 +1,22 @@
 <?php
 	$sage_includes = [
-  		//'lib/utils.php',                 // Utility functions
-  		'lib/init.php',                  // Initial theme setup and constants
-  		'lib/conditional-tag-check.php', // ConditionalTagCheck class
-  		'lib/config.php',                // Configuration
-  		'lib/assets.php',                // Scripts and stylesheets
-  		'lib/titles.php',                // Page titles
-  		'lib/extras.php',                // Custom functions
-  		'lib/custom-posts.php',          // Custom posts
-  		'lib/custom-widgets.php',        // Custom widgets G!
-  		'lib/bootstrap-nav-walker.php',        // BS Nav walker
-  		'plugins/boxes.php',        // Custom input fields
-  		'plugins/related.php',        // Related posts
-  		'lib/customize-theme.php',        // Theme customizer
+  		//'lib/utils.php',                 	// Utility functions
+  		'lib/init.php',                  	// Initial theme setup and constants
+  		'lib/conditional-tag-check.php', 	// ConditionalTagCheck class
+  		'lib/config.php',                	// Configuration
+  		'lib/assets.php',                	// Scripts and stylesheets
+  		'lib/titles.php',                	// Page titles
+  		'lib/extras.php',                	// Custom functions
+  		'lib/custom-posts.php',          	// Custom posts
+  		'lib/custom-widgets.php',        	// Custom widgets G!
+  		'lib/bootstrap-nav-walker.php',    	// BS Nav walker
+  		'plugins/boxes.php',        		// Custom input fields
+  		'plugins/related.php',        		// Related posts
+  		'lib/customize-theme.php',        	// Theme customizer
   		//'lib/taxonomies.php',             // Custom categories for eg media library
-  		'lib/akvo-cards/main.php',        // Cards
-  		'lib/akvo-carousel/main.php',     // Carousel
-  		'lib/akvo-filters/main.php',      // Filters for post types
+  		'lib/akvo-cards/main.php',        	// Cards
+  		'lib/akvo-carousel/main.php',     	// Carousel
+  		'lib/akvo-filters/main.php',      	// Filters for post types
 	];
 	
 	foreach ($sage_includes as $file) {
@@ -35,15 +35,26 @@
 		
 		
 		function __construct(){
+		
 			// get header options
 			$this->header_options = get_option('sage_header_options');
+			
+			if( ! is_array( $this->header_options ) ){
+				
+				$this->header_options = array();
+				
+			}
 			
 			// get search is enabled/disabled
 			if($this->header_options && isset($this->header_options['hide_search']) && $this->header_options['hide_search']){
 				$this->search_flag = false;
 			}
 			
-			print_r( get_option( 'akvo-logo-location' ) );
+			if($this->header_options && !isset($this->header_options['search_text'])){
+				
+				$this->header_options['search_text'] = "Search " . get_bloginfo("name");
+				
+			}
 			
 		}
 		
@@ -167,6 +178,20 @@
       		'type'     => 'checkbox',
       		'std' => 1
       	));
+      	
+      	$wp_customize->add_setting('sage_header_options[search_text]', array(
+			'default'	 => 'Search ' . get_bloginfo('name'),
+       		'capability' => 'edit_theme_options',
+    	   	'type'       => 'option',
+    	   	'transport'	 => 'refresh',
+    	));
+ 		
+		$wp_customize->add_control('sage_header_options[search_text]', array(
+			'settings' => 'sage_header_options[search_text]',
+    		'type' => 'text',
+        	'label' => 'Text for Search Placeholder:',
+	        'section' => 'sage_header_scheme',
+    	)); 
       	
       	$headers_arr = array(
 			'header1' => 'Default',
