@@ -278,6 +278,48 @@
  	remove_action( 'wp_print_styles', 'print_emoji_styles' );
  	
  	
+ 	add_action( 'admin_init', function(){
+ 		
+ 		if( ! current_user_can('editor') ) return false;
+ 		
+ 		/* MAIN MENU ITEMS TO BE REMOVED */
+ 		$menu_arr = array(
+ 			'edit.php',					// Posts section
+ 			'plugins.php',				// Plugins section
+ 			'tools.php',				// Tools
+ 			'edit.php?post_type=acf'	// Custom fields
+ 		);
+ 		
+ 		foreach( $menu_arr as $menu){ remove_menu_page( $menu ); }
+ 		
+ 		
+ 		/* SUB MENU ITEMS TO BE REMOVED */
+ 		
+ 		$sub_menu_arr = array(
+ 			array('themes.php', 'themes.php'	), 					// Themes section from Appearance
+ 			array('users.php', 'users.php'	),						// List of all users
+ 			array('users.php', 'user-new.php'),						// New user
+ 			array('options-general.php', 'options-writing.php'),	// Options for writing
+ 			array('options-general.php', 'options-media.php'),		// Options for media
+ 			array('options-general.php', 'options-discussion.php'),	// Options for media
+ 			array('options-general.php', 'options-permalink.php')	// Options for permalinks
+ 			
+ 		);
+ 		
+ 		foreach( $sub_menu_arr as $menu){ remove_submenu_page( $menu[0], $menu[1] );}
+ 		
+ 		// remove the theme editor option
+ 		remove_action('admin_menu', '_add_themes_utility_last', 101);
+ 		
+
+ 		
+ 	} );
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
  	
  	// Allow iframe tags within editor
 	function akvo_allow_multisite_tags( $multisite_tags ){
