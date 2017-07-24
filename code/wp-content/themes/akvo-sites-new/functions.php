@@ -239,7 +239,8 @@
       	
       	$headers_arr = array(
 			'header1' => 'Default',
-			'header2' => 'Sticky'
+			'header2' => 'Sticky',
+			'header3' => 'Narrow Single Row'
 	    );
     	
     	$wp_customize->add_setting( 'sage_header_options[header_type]', array(
