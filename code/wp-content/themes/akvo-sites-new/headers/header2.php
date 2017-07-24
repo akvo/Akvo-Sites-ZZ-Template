@@ -1,5 +1,5 @@
 <?php global $akvo;?>
-<header class="banner header3" role="banner">
+<header class="banner header2" role="banner">
 	<div class="container"> 
     	<?php get_template_part('partials/logo-search');?>	
      </div>
