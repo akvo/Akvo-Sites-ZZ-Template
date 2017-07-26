@@ -304,6 +304,13 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
 		}
 	}
 	
+	.affix-menu{
+		@media (max-width: 768px){
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+	}
+	
 	.affix{
 		top: 0;
 		width: 100%;
