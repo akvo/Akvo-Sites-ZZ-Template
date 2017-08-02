@@ -31,27 +31,19 @@ $event_id = get_the_ID();
 	<?php tribe_the_notices() ?>
 	
 	<article>
-		<header>
+		<header style="margin-top:20px;">
 			<h3 class='text-center'><?php the_title();?></h3>
 		</header>
-		<!--div class="meta">
-			<div class="row">
-				<div class="col-lg-12">
-					<time class="updated date" datetime="<?php the_time('c'); ?>"><?php echo tribe_events_event_schedule_details( $event_id ); ?></time>
-					<span <?php post_class('type'); ?>><?php _e('Event'); ?></span>
-					<div class="social">
-						<?php if (function_exists('synved_social_share_markup')) echo synved_social_share_markup(); ?>
-					</div>
-         		</div>
-        	</div>
-    	</div-->
-    	
 		<hr>
 		<div class='row'>
 			<div class='col-sm-4'>
 				<h4><i class='fa fa-calendar'></i>&nbsp;<?php echo tribe_events_event_schedule_details( $event_id ); ?></h4>
+				
 				<?php if ( tribe_get_cost() ) : ?>
-				<h4><i class='fa fa-money'></i>&nbsp;Cost &nbsp; <span class='label label-default'><?php echo tribe_get_cost( null, true ) ?></span></h4><?php endif; ?>
+				<h4>
+					<i class='fa fa-money'></i>&nbsp;Cost &nbsp; <span class='label label-default'><?php echo tribe_get_cost( null, true ) ?></span>
+				</h4>
+				<?php endif; ?>
 		
 				<a target='_blank' href="<?php echo tribe_get_single_ical_link();?>" class='btn btn-default'>+ ICAL EXPORT</a>
 				<a target='_blank' href="<?php echo tribe_get_gcal_link();?>" class='btn btn-default'>+ GOOGLE CALENDAR</a>
@@ -63,29 +55,49 @@ $event_id = get_the_ID();
 			<div class='col-sm-4'>
 			<?php if(have_rows('partners')):?>
 				<span>Meet:</span>
-				<ul>
+				<ul class="list-inline">
 				<?php while(have_rows('partners')): the_row();?>
 					<li><?php the_sub_field('name');?></li>
 						
 				<?php endwhile;?>
 				</ul>	 
 			<?php endif;?>
-			</div>		
+			</div>
+		</div> <!-- end of row -->			
 		<hr>
 		
 		
 		<div class='content'>
 			<?php while ( have_posts() ) :  the_post(); ?>
-				<!-- Event featured image, but exclude link -->
-				<?php echo tribe_event_featured_image( $event_id, 'full', false ); ?>
 				
-				<!-- Event content -->
-				<?php do_action( 'tribe_events_single_event_before_the_content' ) ?>
-				<div class="tribe-events-single-event-description tribe-events-content">
-					<?php the_content(); ?>
+				<div class="row">
+					<div class="col-sm-3">
+						<!-- Event featured image, but exclude link -->
+						<?php echo tribe_event_featured_image( $event_id, 'full', false ); ?>
+						
+						<?php 
+							$event_url = tribe_get_event_website_url( $event_id );
+							if($event_url):
+						?>
+						
+						<a href="<?php echo $event_url;?>">Visit official event website</a>
+						<?php endif; ?>
+					</div>
+					<div class="col-sm-9">
+						<!-- Event content -->
+						<?php do_action( 'tribe_events_single_event_before_the_content' ) ?>
+						<div class="tribe-events-single-event-description tribe-events-content">
+							<?php the_content(); ?>
+						</div>
+						<?php if ( tribe_has_organizer() ) { tribe_get_template_part( 'modules/meta/organizer' );}?>
+					</div>
 				</div>
+			
 				
-				<?php if ( tribe_has_organizer() ) { tribe_get_template_part( 'modules/meta/organizer' );}?>
+				
+				
+				
+				
 				
 				<!-- Event meta -->
 				<?php do_action( 'tribe_events_single_event_before_the_meta' ) ?>
