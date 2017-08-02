@@ -311,10 +311,16 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
 		}
 	}
 	
+	
 	.affix{
-		top: 0;
-		width: 100%;
-		z-index: 1200;
+		position: relative;
+		@media (min-width: 769px){
+			top: 0;
+			width: 100%;
+			z-index: 1200;
+			position: fixed;
+		}
+		
 	}
 }
 

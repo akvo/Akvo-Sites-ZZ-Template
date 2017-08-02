@@ -74,7 +74,7 @@ namespace Roots\Sage\Assets;
 		
 		
   		wp_enqueue_style( 'fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', false, null);
-  		wp_enqueue_style('sage_css', asset_path('styles/main.css'), false, '2.1.0');
+  		wp_enqueue_style('sage_css', asset_path('styles/main.css'), false, '2.1.2');
   		wp_enqueue_style( 'opensans', '//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic', false, null);
 
   		$font_face[] = get_theme_mod('akvo_font');
