@@ -53,8 +53,25 @@ $event_id = get_the_ID();
 				<?php tribe_get_template_part( 'modules/meta/venue' ); ?>
 			</div>
 			<div class='col-sm-4'>
-			<?php if(have_rows('partners')):?>
-				<h4 class="text-muted">Meet:</h4>
+			<?php 
+				
+				if(have_rows('partners')):
+					
+					$akvo_events = get_option('akvo_events');
+					
+
+					
+					$meet_text = 'Meet:';
+					
+					if( isset( $akvo_events['meet_text'] ) ){
+						
+						$meet_text = $akvo_events['meet_text'];
+						
+					}
+					
+			?>
+			
+				<h4 class="text-muted"><?php _e($meet_text);?></h4>
 				<ul class="list-inline">
 				<?php while(have_rows('partners')): the_row();?>
 					<li><?php the_sub_field('name');?></li>

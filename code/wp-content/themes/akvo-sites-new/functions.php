@@ -13,6 +13,7 @@
   		'plugins/boxes.php',        		// Custom input fields
   		'plugins/related.php',        		// Related posts
   		'lib/customize-theme.php',        	// Theme customizer
+  		'lib/customize-theme/main.php',		// Library of theme customisation
   		//'lib/taxonomies.php',             // Custom categories for eg media library
   		'lib/akvo-cards/main.php',        	// Cards
   		'lib/akvo-carousel/main.php',     	// Carousel
