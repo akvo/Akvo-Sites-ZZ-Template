@@ -18,8 +18,9 @@ body {
 .top-row {
 	margin-bottom: 15px;
 }
+
 .brand img {
-	width: 100%;
+	width: auto;
 }
 
 

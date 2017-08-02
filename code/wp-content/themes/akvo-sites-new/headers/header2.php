@@ -1,11 +1,13 @@
 <?php global $akvo;?>
-<header class="banner header3" role="banner">
+<header class="banner header2" role="banner">
 	<div class="container"> 
     	<?php get_template_part('partials/logo-search');?>	
      </div>
      <div>
      	<div class="affix-menu">	
   			<nav class="navbar affix-top" data-spy="affix" data-offset-top="60">
+  			
+  				
   				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 					<span class="sr-only">Toggle navigation</span>
 					<i class="fa fa-bars fa-2x"></i>
