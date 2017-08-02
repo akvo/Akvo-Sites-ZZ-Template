@@ -81,26 +81,26 @@ $event_id = get_the_ID();
 			<?php endif;?>
 			</div>
 		</div> <!-- end of row -->			
-		<hr>
-		
-		
+		<hr />
 		<div class='content'>
 			<?php while ( have_posts() ) :  the_post(); ?>
 				
+				<?php
+					/* Event featured image, but exclude link */
+					$event_image = tribe_event_featured_image( $event_id, 'full', false );
+					$event_url = tribe_get_event_website_url( $event_id );
+					if($event_url){
+						$event_image .= "<a href='". $event_url ."'>Visit official event website</a>";
+					}	
+				?>
+				
 				<div class="row">
+					<?php if($event_image):?>
 					<div class="col-sm-3">
-						<!-- Event featured image, but exclude link -->
-						<?php echo tribe_event_featured_image( $event_id, 'full', false ); ?>
-						
-						<?php 
-							$event_url = tribe_get_event_website_url( $event_id );
-							if($event_url):
-						?>
-						
-						<a href="<?php echo $event_url;?>">Visit official event website</a>
-						<?php endif; ?>
+						<?php echo $event_image;?>
 					</div>
-					<div class="col-sm-9">
+					<?php endif;?>
+					<div class="<?php if($event_image):?>col-sm-9<?php else:?>col-sm-12<?php endif;?>">
 						<!-- Event content -->
 						<?php do_action( 'tribe_events_single_event_before_the_content' ) ?>
 						<div class="tribe-events-single-event-description tribe-events-content">
