@@ -134,8 +134,11 @@
 					'read_more_text'=> 'Read more'
 				), $atts, 'akvo_card');
 			
+			//print_r($atts);
+			
 			/* get from customise */
 			$akvo_card_options = get_option('akvo_card');
+			
 			if($akvo_card_options && array_key_exists('read_more_text', $akvo_card_options)){
 				$atts['read_more_text'] = $akvo_card_options['read_more_text'];
 			}
@@ -160,11 +163,19 @@
 		
 		function form_shortcode($data){
 			$shortcode = '[akvo-card ';
-        	foreach($data as $key=>$val){
-        		$shortcode .= $key.'="'.$val.'" ';
-        	}
-        	$shortcode .= ']';
-        	return $shortcode;
+        		
+        		foreach($data as $key=>$val){
+        		
+        			$val = str_replace("[","&#91;",$val);
+        			$val = str_replace("]","&#93;",$val);
+        			
+        			$shortcode .= $key.'="'.$val.'" ';
+        		}
+        		$shortcode .= ']';
+        		
+
+        		
+        		return $shortcode;
 		}
 		
 		function slugify($text){
