@@ -54,7 +54,7 @@ $event_id = get_the_ID();
 			</div>
 			<div class='col-sm-4'>
 			<?php if(have_rows('partners')):?>
-				<span>Meet:</span>
+				<h4 class="text-muted">Meet:</h4>
 				<ul class="list-inline">
 				<?php while(have_rows('partners')): the_row();?>
 					<li><?php the_sub_field('name');?></li>
