@@ -29,6 +29,12 @@
 	unset($file, $filepath);
 	
 	
+	add_action( 'admin_notices', function(){
+		_e('<div class="notice notice-warning is-dismissible"><p>');
+		_e( 'For Akvo Sites support, please check the <a target="_blank" href="http://sitessupport.akvo.org">documentation</a>.', 'akvo' );
+		_e('</p></div>');
+	} );
+	
 	
 	add_action( 'admin_init', function(){
  		
