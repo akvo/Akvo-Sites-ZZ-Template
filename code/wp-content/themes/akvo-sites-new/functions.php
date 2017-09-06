@@ -61,10 +61,25 @@
     	return $old_help;
 	}, 999, 3 );
 	
+	
+	// REMOVE LINKS FROM TOP ADMIN BAR
+	add_action( 'admin_bar_menu', function( $wp_admin_bar ) {
+		// REMOVE LOGO
+		$wp_admin_bar->remove_node( 'wp-logo' );
+		$wp_admin_bar->remove_node( 'new-post' );
+		
+		$wp_admin_bar->add_node(  array(
+			'id'    => 'akvo-sites-support',
+			'title' => 'Support',
+			'href'  => 'http://sitessupport.akvo.org',
+			'meta'  => array( 'class' => 'my-toolbar-page' )
+		) );
+	}, 999 );
 
 	
 	
 	
+	// TO REMOVE MENUS FOR EDITOR
 	add_action( 'admin_init', function(){
  		
  		if( ! current_user_can('editor') ) return false;
