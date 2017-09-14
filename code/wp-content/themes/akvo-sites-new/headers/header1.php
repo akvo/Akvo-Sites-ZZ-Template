@@ -17,13 +17,7 @@
 					</button>
 					<?php endif;?>
 				</div>
-					
-				<?php if ( is_active_sidebar( 'sub-header' ) ) : ?>
-				<div id="sub-header" class="clearfix">
-					<?php dynamic_sidebar( 'sub-header' ); ?>
-				</div>
-      			<?php endif; ?>
-      		</div>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12 navi">

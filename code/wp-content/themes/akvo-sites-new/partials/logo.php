@@ -52,3 +52,7 @@
 <?php endif; ?>
 	<p><?php bloginfo('description');?></p>
 </a>
+
+<?php if ( is_active_sidebar( 'sub-header' ) ) : ?>
+<div id="sub-header" class="clearfix"><?php dynamic_sidebar( 'sub-header' ); ?></div>
+<?php endif; ?>

@@ -6,7 +6,6 @@
      <div>
      	<div class="affix-menu">	
   			<nav class="navbar affix-top" data-spy="affix" data-offset-top="60">
-  			
   				
   				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 					<span class="sr-only">Toggle navigation</span>
