@@ -14,7 +14,14 @@
 	<div class="col-sm-6 wrap-search-menu">
 		<?php if( $akvo->search_flag ):?>
 		
-		<div class="hidden-xs"><?php get_search_form();?></div>
+		<div class="hidden-xs">
+			<?php get_search_form();?>
+			
+			<?php if ( is_active_sidebar( 'sub-header-r' ) ) : ?>
+			<div id="sub-header-r" class="clearfix"><?php dynamic_sidebar( 'sub-header-r' ); ?></div>
+      		<?php endif; ?>
+		
+		</div>
 		
 		<?php else: ?>
 			
