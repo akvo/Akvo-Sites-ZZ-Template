@@ -1,3 +1,53 @@
+
+Monday, 18 September 2017 by @lynngre
+
+## New 
+You can now choose to add your logo to either the left or the right side of your site.
+
+We've also added a 'Help' button to every page in the backend Admin area too. This links to our Akvo Sites support pages and offers assistance to your web editors.
+
+
+## New Features
+
+### Logo location
+Switch logo location from left to right via the 'logo' options under 'customise'.
+
+Github issue: #308  
+
+### Help
+A link to the Akvo Sites Support Hero pages has been added to the admin area of Akvo Sites. This means that it is easier for web editors to find the help they need when creating or editing pages and posts.
+
+Github issue: #332 
+
+## Fixes
+
+### Event website URL
+Original event website URLs were not being displayed on the events pages, these now appear below the image.
+
+Github issue: #319 
+
+### Formatting issues
+Changes made to allow for sticky header resulted in incorrect menu colour combinations being used by the theme. 
+
+Github issue: #310 
+
+### RSR API content problem
+The RSR integration/widgets broke if the content contained '[' or ']'. There is no official escape syntax in the shortcodes API. Wordpress will not recognize ] as the end of the shortcode
+
+Github issue: #321
+
+### Event images
+If no image is selected for Events, the homepage event widget allows the text to fill the space.
+
+Github issue: #324 
+
+### Event 'meet' text
+Option has been added under 'customise/events' to update the 'Meet' text.
+
+Github issue: #323 
+
+------
+
 Monday, 26 June 2017 by @lynngre
 
 ## New 
