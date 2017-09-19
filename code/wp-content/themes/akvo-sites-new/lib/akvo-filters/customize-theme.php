@@ -3,11 +3,20 @@
 
 	function akvo_filter_customize_register( $wp_customize ) {
 		
-		/* CARD SECTION */
+		$wp_customize->add_panel('akvo_filter_panel', array(
+			'priority' => 30,
+			'capability' => 'edit_theme_options',
+			'theme_supports' => '',
+			'title' => __( 'Filter Widget', 'sage' ),
+			'description' => __( '', 'sage' ),
+		) );
+		
+		/* LABELS SECTION */
 		$wp_customize->add_section('akvo_filter_section' , array(
-	    	'title'       => __( 'Filter Widget', 'akvo' ),
-		    'priority'    => 30,
-		    'description' => 'Select filter options',
+	    	'title'       	=> __( 'Labels', 'sage' ),
+		    'priority'    	=> 30,
+		    'description' 	=> '',
+		    'panel'			=> 'akvo_filter_panel'
 		) );
 		
 		$wp_customize->add_setting('akvo_filter_btn_text', array(
@@ -53,6 +62,7 @@
 	        	'section' => 'akvo_filter_section',
     	    ));
 		}
+		/* END OF LABELS SECTION */
 		
 		
 		
@@ -66,6 +76,19 @@
 		);
 		
 		foreach($post_types as $post_type => $slugs){
+			
+			$section_id = 'akvo_filter_'.$post_type.'section';
+			
+			
+			/* EACH SEPERATE SECTION FOR POST TYPE */
+			$wp_customize->add_section( $section_id, array(
+	    		'title'       	=> __( 'Filters for '.$post_type, 'sage' ),
+		    	'priority'    	=> 30,
+		    	'description' 	=> '',
+		    	'panel'			=> 'akvo_filter_panel'
+			) );
+			
+			
 			foreach($slugs as $slug){
 				
 				$wp_customize->add_setting('akvo_filter['.$post_type.']['.$slug.']', array(
@@ -80,7 +103,7 @@
 				$wp_customize->add_control('akvo_filter['.$post_type.']['.$slug.']', array(
       				'settings' => 'akvo_filter['.$post_type.']['.$slug.']',
 		      		'label'    => $label,
-      				'section'  => 'akvo_filter_section',
+      				'section'  => $section_id,
 		      		'type'     => 'checkbox',
 		      		'std' => 1
       			));

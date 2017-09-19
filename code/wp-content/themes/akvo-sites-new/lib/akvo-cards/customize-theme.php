@@ -3,27 +3,26 @@
 
 	function akvo_card_customize_register( $wp_customize ) {
 		
-		/* CARD SECTION */
+		$wp_customize->add_panel('akvo_card_panel', array(
+			'priority' => 30,
+			'capability' => 'edit_theme_options',
+			'theme_supports' => '',
+			'title' => __( 'Card Widget', 'sage' ),
+			'description' => __( 'Single Post, RSR Widgets', 'sage' ),
+		) );
+
+		
+		/* GENERAL THEME SECTION */
 		$wp_customize->add_section( 'akvo_card_section' , array(
-	    	'title'       => __( 'Card Widget', 'sage' ),
-		    'priority'    => 30,
-		    'description' => 'Select card styles',
+	    	'title'       	=> __( 'General Theme', 'sage' ),
+		    'priority'    	=> 30,
+		    'description' 	=> 'Select card styles',
+		    'panel'			=> 'akvo_card_panel'	
 		) );
 		
 		
-		$wp_customize->add_setting( 'akvo_card[bg_img]', array(
-      		'default' => get_bloginfo('template_url').'/dist/images/placeholder800x400.jpg',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control( 
-      		new WP_Customize_Image_Control( 
-        		$wp_customize, 'akvo_card[bg_img]', array(
-          			'label' => 'Default Image',
-          			'section' => 'akvo_card_section',
-          			'settings' => 'akvo_card[bg_img]',
-    	)));
+		
+		
 		
 		/* CARD BG */
 		$wp_customize->add_setting( 'akvo_card[bg]', array(
@@ -225,6 +224,31 @@
         	'section' => 'akvo_card_section',
         ));
 		/* END OF CARD SECTION */
+		
+		
+		/* IMAGE SECTION */
+		$wp_customize->add_section( 'akvo_card_image_section' , array(
+	    	'title'       	=> __( 'Image Styles', 'sage' ),
+		    'priority'    	=> 30,
+		    'description' 	=> 'Change image styles',
+		    'panel'			=> 'akvo_card_panel'	
+		) );
+		
+		/* DEFAULT IMAGE */
+		$wp_customize->add_setting( 'akvo_card[bg_img]', array(
+      		'default' => get_bloginfo('template_url').'/dist/images/placeholder800x400.jpg',
+      		'transport'   => 'refresh',
+      		'type' => 'option'
+      	) );
+
+    	$wp_customize->add_control( 
+      		new WP_Customize_Image_Control( 
+        		$wp_customize, 'akvo_card[bg_img]', array(
+          			'label' => 'Default Image',
+          			'section' => 'akvo_card_image_section',
+          			'settings' => 'akvo_card[bg_img]',
+    	)));
+		
 		$akvo_card_obj = new Akvo_Card;
         $types = $akvo_card_obj->get_types(); 
         foreach($types as $type=>$label){
@@ -240,7 +264,7 @@
 				'settings' => $bg_setting,
     			'type' => 'text',
         		'label' => 'BG Image Height of '.$label.' :',
-        		'section' => 'akvo_card_section',
+        		'section' => 'akvo_card_image_section',
         	));
 		}
 		
