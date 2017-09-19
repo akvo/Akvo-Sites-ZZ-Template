@@ -6,23 +6,3 @@
 	Author: Samuel Thomas
 	Version: 1.0
 */
-
-@font-face {
-	font-family: OxfamBold;
-	src: url('fonts/TSTARPRO-Bold.otf');
-}
-
-@font-face {
-	font-family: OxfamLight;
-	src: url('fonts/TSTARPRO-Light.otf');
-}
-
-@font-face {
-	font-family: OxfamRegular;
-	src: url('fonts/TSTARPRO-Regular.otf');
-}
-
-@font-face {
-	font-family: OxfamHeadline;
-	src: url('fonts/OxfamGlobalHeadline.ttf');
-}

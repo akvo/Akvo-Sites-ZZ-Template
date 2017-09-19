@@ -1,6 +1,7 @@
 <?php
 	$sage_includes = [
   		//'lib/utils.php',                 	// Utility functions
+  		'lib/akvo.class.php',				// Akvo Class
   		'lib/init.php',                  	// Initial theme setup and constants
   		'lib/conditional-tag-check.php', 	// ConditionalTagCheck class
   		'lib/config.php',                	// Configuration
@@ -123,42 +124,9 @@
  	
 	
 	
-	class Akvo{
-		
-		public $header_options;
-		public $search_flag = true;
-		
-		
-		function __construct(){
-		
-			// get header options
-			$this->header_options = get_option('sage_header_options');
-			
-			if( ! is_array( $this->header_options ) ){
-				
-				$this->header_options = array();
-				
-			}
-			
-			// get search is enabled/disabled
-			if($this->header_options && isset($this->header_options['hide_search']) && $this->header_options['hide_search']){
-				$this->search_flag = false;
-			}
-			
-			if($this->header_options && !isset($this->header_options['search_text'])){
-				
-				$this->header_options['search_text'] = "Search " . get_bloginfo("name");
-				
-			}
-			
-		}
-		
-		
-	}
 	
-	global $akvo;
 	
-	$akvo = new Akvo;
+	
 	
 	function sage_customize_footer_register($wp_customize){
 

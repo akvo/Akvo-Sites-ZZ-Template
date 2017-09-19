@@ -12,7 +12,8 @@ namespace Roots\Sage\Assets;
  * 1. /theme/dist/scripts/modernizr.js
  * 2. /theme/dist/scripts/main.js
  */
-
+	
+	/*
 	class JsonManifest {
 		private $manifest;
 		
@@ -47,7 +48,9 @@ namespace Roots\Sage\Assets;
     		return $collection;
   		}
 	}
-
+	
+	
+	
 	function asset_path($filename) {
 		$dist_path = get_template_directory_uri() . DIST_DIR;
 		$directory = dirname($filename) . '/';
@@ -66,46 +69,36 @@ namespace Roots\Sage\Assets;
 			return $dist_path . $directory . $file;
 		}
 	}
+	*/
 	
-	
-
-	function assets() {
+	add_action('wp_enqueue_scripts', function(){
 		
-		
+		global $akvo;
 		
   		wp_enqueue_style( 'fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', false, null);
-  		wp_enqueue_style('sage_css', asset_path('styles/main.css'), false, '2.1.2');
-  		wp_enqueue_style( 'opensans', '//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic', false, null);
+  		wp_enqueue_style( 'sage_css', get_template_directory_uri().'/dist/styles/main.css', false, '2.1.2');
+  		
 
-  		$font_face[] = get_theme_mod('akvo_font');
-  		$font_face[] = get_theme_mod('akvo_font_head');
-  		$font_face[] = get_theme_mod('akvo_font_nav');
-
-		if (in_array('Roboto', $font_face )) wp_enqueue_style( 'roboto', '//fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic', false, null);
-		if (in_array('Lora', $font_face )) wp_enqueue_style( 'lora', '//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic', false, null);
-		if (in_array('Raleway', $font_face )) wp_enqueue_style( 'raleway', '//fonts.googleapis.com/css?family=Raleway:400,700', false, null);
-		if (in_array('Merriweather', $font_face )) wp_enqueue_style( 'Merriweather', '//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic', false, null);
-		if (in_array('Arvo', $font_face )) wp_enqueue_style( 'Arvo', '//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic', false, null);
-		if (in_array('Muli', $font_face )) wp_enqueue_style( 'Muli', '//fonts.googleapis.com/css?family=Muli:400,400italic', false, null);
-		if (in_array('Nunito', $font_face )) wp_enqueue_style( 'Nunito', '//fonts.googleapis.com/css?family=Nunito:400,700', false, null);
-		if (in_array('Alegreya', $font_face )) wp_enqueue_style( 'Alegreya', '//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700', false, null);
-		if (in_array('Exo 2', $font_face )) wp_enqueue_style( 'Exo2', '//fonts.googleapis.com/css?family=Exo+2:400,400italic,700,700italic', false, null);
-		if (in_array('Crimson Text', $font_face )) wp_enqueue_style( 'Crimson', '//fonts.googleapis.com/css?family=Crimson+Text:400,400italic,700,700italic', false, null);
-		if (in_array('Lobster Two', $font_face )) wp_enqueue_style( 'Lobster', '//fonts.googleapis.com/css?family=Lobster+Two:400,400italic,700,700italic', false, null);
-		if (in_array('Maven Pro', $font_face )) wp_enqueue_style( 'Maven', '//fonts.googleapis.com/css?family=Maven+Pro:400,500,700,900', false, null);
+		$font_face = $akvo->selected_fonts();
+		
+		$google_fonts = $akvo->fonts();
+		
+		// ENQUEUE FONTS THAT ARE SELECTED
+		foreach( $google_fonts as $google_font ){
+			if( in_array( $google_font['name'], $font_face ) ){
+				wp_enqueue_style( $google_font['slug'], $google_font['url'], false, null);
+			}
+		}
+		
+		
 		
 		if (is_single() && comments_open() && get_option('thread_comments')) {
 			wp_enqueue_script('comment-reply');
 		}
 		
-		//print_r(asset_path('scripts/bootstrap.min.js'));
 		
-		//wp_enqueue_script( 'jquery' );
-		//wp_enqueue_script('modernizr', asset_path('scripts/modernizr.js'), [], null, true);
-		wp_enqueue_script('bootstrap_js', asset_path('scripts/bootstrap.min.js'), ['jquery'], '1.0.1', true);
+		wp_enqueue_script('bootstrap_js', get_template_directory_uri().'/dist/scripts/bootstrap.min.js', ['jquery'], '1.0.1', true);
 		
-		wp_enqueue_script('akvo_js', asset_path('scripts/main.js'), ['jquery'], "1.0.3", true);
+		wp_enqueue_script('akvo_js', get_template_directory_uri().'/dist/scripts/main.js', ['jquery'], "1.0.3", true);
 		
-		
-	}
-	add_action('wp_enqueue_scripts', __NAMESPACE__ . '\\assets', 100);
+	}, 100);

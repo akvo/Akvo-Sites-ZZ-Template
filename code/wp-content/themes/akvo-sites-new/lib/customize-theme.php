@@ -226,25 +226,15 @@ use Mexitek\PHPColors\Color;
       		'choices' 	=> $logo_location_arr
       	));
       	
-		//fonts
+		// Fonts
+		global $akvo;
+		$google_fonts = $akvo->fonts();
 		
-		$fonts_arr = array(
-			'Open Sans' 	=> 'Open Sans',
-	        'Roboto' 		=> 'Roboto',
-	        'Lora' 			=> 'Lora',
-	        'Raleway' 		=> 'Raleway',
-	        'Merriweather'	=> 'Merriweather',
-	        'Arvo' 			=> 'Arvo',
-	        'Muli' 			=> 'Muli',
-	        'Alegreya' 		=> 'Alegreya',
-	        'Exo 2' 		=> 'Exo 2',
-	        'Crimson Text' 	=> 'Crimson Text',
-	        'Lobster Two' 	=> 'Lobster Two',
-	        'Maven Pro' 	=> 'Maven Pro',
-	        'Arial'			=> 'Arial'
-		);
+		$fonts_arr = array();
 		
-		$fonts_arr = apply_filters('akvo_fonts', $fonts_arr);
+		foreach( $google_fonts as $google_font ){
+			$fonts_arr[$google_font['name']] = $google_font['name'];
+		}
 		
 		$wp_customize->add_section( 'akvo_font_section' , array(
 	    	'title'       => __( 'Font', 'sage' ),
