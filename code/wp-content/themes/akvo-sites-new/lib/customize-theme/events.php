@@ -7,9 +7,10 @@
 		
 		
 		$wp_customize->add_section( 'events_section' , array(
-	    	'title'       => __( 'Events', 'sage' ),
-		    'priority'    => 30,
-		    'description' => 'Customize templates for events',
+	    	'title'       	=> __( 'Akvo Theme', 'sage' ),
+		    'priority'    	=> 30,
+		    'description' 	=> 'Customize templates for events',
+		    'panel'			=> 'tribe_customizer'
 		) );
 		
 		$wp_customize->add_setting('akvo_events[title_font_size]', array(
