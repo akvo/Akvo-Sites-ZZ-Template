@@ -4,13 +4,22 @@ include("color.php");
 use Mexitek\PHPColors\Color;
 
 	function akvo_customize_register( $wp_customize ) {
-
+		
+		$wp_customize->add_panel('akvo_theme_panel', array(
+			'priority' => 30,
+			'capability' => 'edit_theme_options',
+			'theme_supports' => '',
+			'title' => __( 'Theme Options', 'sage' ),
+			'description' => __( '', 'sage' ),
+		) );
+		
+		
    		/* All our sections, settings, and controls will be added here */
 		
 		$wp_customize->add_section( 'akvo_color' , array(
-	    	'title'      => __( 'Adjust colours', 'sage' ),
-	    	'priority'   => 30,
-	    	//'active_callback' => 'create_scss'
+	    	'title'     => __( 'Adjust colours', 'sage' ),
+	    	'priority'  => 30,
+	    	'panel'		=> 'akvo_theme_panel'
 		) );
 		
 		//main
@@ -182,9 +191,10 @@ use Mexitek\PHPColors\Color;
 
 		//logo
 		$wp_customize->add_section( 'akvo_logo_section' , array(
-	    	'title'       => __( 'Logo', 'sage' ),
-	    	'priority'    => 30,
-	    	'description' => 'Upload your logo',
+	    	'title'       	=> __( 'Logo', 'sage' ),
+	    	'priority'    	=> 30,
+	    	'description' 	=> 'Upload your logo',
+	    	'panel'			=> 'akvo_theme_panel'
 		) );
 
 		$wp_customize->add_setting( 'akvo_logo' );
@@ -237,52 +247,54 @@ use Mexitek\PHPColors\Color;
 		}
 		
 		$wp_customize->add_section( 'akvo_font_section' , array(
-	    	'title'       => __( 'Font', 'sage' ),
-		    'priority'    => 30,
-		    'description' => 'Select site typography',
+	    	'title'       	=> __( 'Font', 'sage' ),
+		    'priority'    	=> 30,
+		    'description' 	=> 'Select site typography',
+		    'panel'			=> 'akvo_theme_panel'
 		) );
 		$wp_customize->add_setting( 'akvo_font_head', array(
-			'default' => 'Open Sans',
-		    'transport'   => 'refresh',
+			'default' 	=> 'Open Sans',
+		    'transport' => 'refresh',
 		));
 		$wp_customize->add_control( 'akvo_font_head', array(
 			'type' 		=> 'select',
-		    'label'    => __( 'Header font', 'sage' ),
-		    'section'  => 'akvo_font_section',
-		    'settings' => 'akvo_font_head',
-		    'choices' => $fonts_arr
+		    'label'    	=> __( 'Header font', 'sage' ),
+		    'section'  	=> 'akvo_font_section',
+		    'settings' 	=> 'akvo_font_head',
+		    'choices' 	=> $fonts_arr
 		));
 		$wp_customize->add_setting( 'akvo_font_nav', array(
-	    	'default' => 'Open Sans',
-	     	'transport'   => 'refresh',
+	    	'default' 	=> 'Open Sans',
+	     	'transport' => 'refresh',
 		));
 		$wp_customize->add_control( 'akvo_font_nav', array(
 			'type' 		=> 'select',
-		    'label'    => __( 'Navigation font', 'sage' ),
-		    'section'  => 'akvo_font_section',
-		    'settings' => 'akvo_font_nav',
-		    'choices' => $fonts_arr
+		    'label'    	=> __( 'Navigation font', 'sage' ),
+		    'section'  	=> 'akvo_font_section',
+		    'settings' 	=> 'akvo_font_nav',
+		    'choices' 	=> $fonts_arr
 		));
 		$wp_customize->add_setting( 'akvo_font', array(
-	    	 'default' => 'Open Sans',
-	     	'transport'   => 'refresh',
+	    	 'default' 	=> 'Open Sans',
+	     	'transport' => 'refresh',
 		));
 		$wp_customize->add_control( 'akvo_font', array(
 			'type' 		=> 'select',
-		    'label'    => __( 'Body font', 'sage' ),
-		    'section'  => 'akvo_font_section',
-		    'settings' => 'akvo_font',
-		    'choices' => $fonts_arr
+		    'label'    	=> __( 'Body font', 'sage' ),
+		    'section'  	=> 'akvo_font_section',
+		    'settings' 	=> 'akvo_font',
+		    'choices' 	=> $fonts_arr
 		));
 
-		$wp_customize->remove_section( 'nav');
+		//$wp_customize->remove_section( 'nav');
 		$wp_customize->remove_section( 'static_front_page');
 		
 		/* ARTICLE SECTION */
 		$wp_customize->add_section( 'article_section' , array(
-	    	'title'       => __( 'Article (Single Posts)', 'sage' ),
-		    'priority'    => 30,
-		    'description' => 'Select Article styles for single posts, akvopedia, etc',
+	    	'title'       	=> __( 'Article (Single Posts)', 'sage' ),
+		    'priority'    	=> 30,
+		    'description' 	=> 'Select Article styles for single posts, akvopedia, etc',
+		    'panel'			=> 'akvo_theme_panel'
 		) );
 		
 		/* font size of the title */
