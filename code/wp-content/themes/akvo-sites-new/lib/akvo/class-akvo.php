@@ -28,6 +28,42 @@
 				
 			}
 			
+			/* CUSTOM IMAGE SIZES */
+			add_action( 'after_setup_theme', function(){
+		
+				add_image_size( 'thumb-small', 224, 126, true ); // Hard crop to exact dimensions (crops sides or top and bottom)
+    			add_image_size( 'thumb-medium', 320, 180, true ); 
+    			add_image_size( 'thumb-large', 640, 360, true );
+    			add_image_size( 'thumb-xlarge', 960, 540, true );
+		
+			} );
+			
+			/* SUPPORT LINK */
+			add_action( 'admin_notices', function(){
+				include "templates/support.php";
+			} );
+	
+			/* REMOVE SUPPORT LINK */
+			add_filter( 'contextual_help', function($old_help, $screen_id, $screen){
+				$screen->remove_help_tabs();
+    			return $old_help;
+			}, 999, 3 );
+	
+	
+			// REMOVE LINKS FROM TOP ADMIN BAR
+			add_action( 'admin_bar_menu', function( $wp_admin_bar ) {
+				// REMOVE LOGO
+				$wp_admin_bar->remove_node( 'wp-logo' );
+				$wp_admin_bar->remove_node( 'new-post' );
+		
+				$wp_admin_bar->add_node(  array(
+					'id'    => 'akvo-sites-support',
+					'title' => 'Support',
+					'href'  => 'http://sitessupport.akvo.org',
+					'meta'  => array( 'class' => 'my-toolbar-page' )
+				) );
+			}, 999 );
+			
 		}
 		
 		function selected_fonts(){
@@ -131,6 +167,51 @@
 	  		
 	  		return $fonts_arr;
 	  		
+		}
+		
+		function register_taxonomy($slug, $plural_label, $singular_label, $post_types){
+	
+			$args = array(
+				'labels' => array(
+					'name'                       => _x( $plural_label, 'Taxonomy General Name', 'text_domain' ),
+					'singular_name'              => _x( $singular_label, 'Taxonomy Singular Name', 'text_domain' ),
+					'menu_name'                  => __( $plural_label, 'text_domain' ),
+					'all_items'                  => __( 'All Items', 'text_domain' ),
+					'parent_item'                => __( 'Parent Item', 'text_domain' ),
+					'parent_item_colon'          => __( 'Parent Item:', 'text_domain' ),
+					'new_item_name'              => __( 'New Item Name', 'text_domain' ),
+					'add_new_item'               => __( 'Add New Item', 'text_domain' ),
+					'edit_item'                  => __( 'Edit Item', 'text_domain' ),
+					'update_item'                => __( 'Update Item', 'text_domain' ),
+					'view_item'                  => __( 'View Item', 'text_domain' ),
+					'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+					'add_or_remove_items'        => __( 'Add or remove items', 'text_domain' ),
+					'choose_from_most_used'      => __( 'Choose from the most used', 'text_domain' ),
+					'popular_items'              => __( 'Popular Items', 'text_domain' ),
+					'search_items'               => __( 'Search Items', 'text_domain' ),
+					'not_found'                  => __( 'Not Found', 'text_domain' ),
+				),
+				'hierarchical'      => true,
+				'public'            => true,
+				'show_ui'           => true,
+				'show_admin_column' => true,
+				'show_in_nav_menus' => true,
+				'show_tagcloud'     => true,
+			);
+			register_taxonomy($slug, $post_types, $args );
+		}
+		
+		function register_post_type($slug, $plural_label, $singular_label, $menu_icon, $exclude_from_search = false){
+			
+			register_post_type($slug, array(
+      			'labels' => array('name' => __( $plural_label ), 'singular_name' => __( $singular_label )),
+      			'public' 				=> true,
+      			'has_archive' 			=> true,
+      			'menu_position' 		=> 20,
+      			'menu_icon' 			=> $menu_icon,
+      			'exclude_from_search' 	=> $exclude_from_search,
+      			'supports' 				=> array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
+    		));
 		}
 		
 	}

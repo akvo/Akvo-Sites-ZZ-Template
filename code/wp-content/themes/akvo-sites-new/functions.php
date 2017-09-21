@@ -1,7 +1,7 @@
 <?php
 	$sage_includes = [
   		//'lib/utils.php',                 	// Utility functions
-  		'lib/akvo.class.php',				// Akvo Class
+  		'lib/akvo/class-akvo.php',			// Akvo Class
   		'lib/init.php',                  	// Initial theme setup and constants
   		'lib/conditional-tag-check.php', 	// ConditionalTagCheck class
   		'lib/config.php',                	// Configuration
@@ -30,55 +30,6 @@
 	unset($file, $filepath);
 	
 	
-	add_action( 'admin_notices', function(){
-	?>
-		<div id="akvo-support-link" class="">
-			<a target="_blank" href="http://sitessupport.akvo.org">Help</a>
-		</div>
-		<style>
-			#akvo-support-link{
-				font-size: 16px;
-				background-color: #009900;
-				color: #fff;
-				position: fixed;
-				right: -10px;
-				padding: 8px 10px 10px;
-				z-index:230;
-				transform: rotate(270deg);
-				top: 200px;
-				border-top-left-radius: 5px;
-				border-top-right-radius: 5px;
-			}
-			#akvo-support-link a[href]{
-				color: inherit;
-				text-decoration: none;
-			}
-		</style>
-	<?php
-	} );
-	
-	add_filter( 'contextual_help', function($old_help, $screen_id, $screen){
-		$screen->remove_help_tabs();
-    	return $old_help;
-	}, 999, 3 );
-	
-	
-	// REMOVE LINKS FROM TOP ADMIN BAR
-	add_action( 'admin_bar_menu', function( $wp_admin_bar ) {
-		// REMOVE LOGO
-		$wp_admin_bar->remove_node( 'wp-logo' );
-		$wp_admin_bar->remove_node( 'new-post' );
-		
-		$wp_admin_bar->add_node(  array(
-			'id'    => 'akvo-sites-support',
-			'title' => 'Support',
-			'href'  => 'http://sitessupport.akvo.org',
-			'meta'  => array( 'class' => 'my-toolbar-page' )
-		) );
-	}, 999 );
-
-	
-	
 	
 	// TO REMOVE MENUS FOR EDITOR
 	add_action( 'admin_init', function(){
@@ -87,13 +38,13 @@
  		
  		/* MAIN MENU ITEMS TO BE REMOVED */
  		$menu_arr = array(
- 			'edit.php',					// Posts section
- 			'plugins.php',				// Plugins section
- 			'tools.php',				// Tools
- 			'edit.php?post_type=acf',	// Custom fields
- 			'mailchimp-for-wp',			// Mailchimp
- 			'advanced-iframe.php',		// Advanced Iframe
- 			'aiowpsec',					// WP SECURITY
+ 			'edit.php',						// Posts section
+ 			'plugins.php',					// Plugins section
+ 			'tools.php',					// Tools
+ 			'edit.php?post_type=acf',		// Custom fields
+ 			'mailchimp-for-wp',				// Mailchimp
+ 			'advanced-iframe.php',			// Advanced Iframe
+ 			'aiowpsec',						// WP SECURITY
  			'wpdatatables-administration'	// WP Data Tables
  		);
  		
@@ -125,31 +76,25 @@
 	
 	
 	
-	
-	
-	
-	
-  
-  
-  add_filter('show_admin_bar', '__return_false');
+	add_filter('show_admin_bar', '__return_false');
 
-  function akvo_featured_img($post_id){
-  	$post_type = get_post_type($post_id);
-  	$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
+  	function akvo_featured_img($post_id){
+  		$post_type = get_post_type($post_id);
+  		$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
         			
-	if(!$img && $post_type == 'video'){
-    	/* featured image is not selected and the type is video */
-        $img = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
-	}	
-	return $img;
-  }
+		if(!$img && $post_type == 'video'){
+    		/* featured image is not selected and the type is video */
+        	$img = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
+		}	
+		return $img;
+  	}
   
-	function custom_admin_css() {
- 		echo '<style>
+	
+	add_action( 'admin_head', function(){
+		echo '<style>
  			.siteorigin-panels-builder .so-builder-toolbar .so-switch-to-standard[style] { display: none !important; }
  		</style>';
-	}
-	add_action( 'admin_head', 'custom_admin_css' ); 
+	} ); 
 	
 	/* remove unnecessary code */
  	// Disable REST API link tag
@@ -173,8 +118,10 @@
  	
  	
  	
- 	// Allow iframe tags within editor
-	function akvo_allow_multisite_tags( $multisite_tags ){
+	
+	// Allow iframe tags within editor
+	add_filter('wp_kses_allowed_html', function($multisite_tags){
+		
 		$multisite_tags['iframe'] = array(
 			'src' => true,
 			'width' => true,
@@ -190,5 +137,49 @@
 			'allowfullscreen' => true
 		);
 		return $multisite_tags;
+	
+	}, 1);
+	
+	
+	
+	function convertYoutubeImg($string) {
+  		return preg_replace(
+    		"/\s*[a-zA-Z\/\/:\.]*youtu(be.com\/watch\?v=|.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/i",
+    		"http://i1.ytimg.com/vi/$2/mqdefault.jpg",
+    		$string
+  		);
 	}
-	add_filter('wp_kses_allowed_html','akvo_allow_multisite_tags', 1);
+
+	function convertYoutube($string) {
+  		return preg_replace(
+      		"/\s*[a-zA-Z\/\/:\.]*youtu(be.com\/watch\?v=|.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/i",
+      		"<iframe src=\"//www.youtube.com/embed/$2\" allowfullscreen></iframe>",
+      		$string
+    	);
+	}
+	
+	function truncate($string, $length, $stopanywhere=false) {
+    	//truncates a string to a certain char length, stopping on a word if not specified otherwise.
+    	if (strlen($string) > $length) {
+        	//limit hit!
+        	$string = substr($string,0,($length -3));
+        	if ($stopanywhere) {
+            	//stop anywhere
+            	$string .= '...';
+        	} else{
+            	//stop on a word.
+            	$string = substr($string,0,strrpos($string,' ')).'...';
+        	}
+    	}
+    	return $string;
+	}
+	
+	function show_flickr($id,$handle) {
+  		$output = "<style>.embed-container { position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; max-width: 100%; height: auto; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style>";
+  		$output .= "<div class='flickr'><div class='embed-container'><iframe src='https://www.flickr.com/photos/";
+  		$output .= $handle;
+  		$output .= "/sets/";
+  		$output .= $id;
+  		$output .= "/player/' frameborder='0' allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe></div></div>";
+  		return $output;
+	}
