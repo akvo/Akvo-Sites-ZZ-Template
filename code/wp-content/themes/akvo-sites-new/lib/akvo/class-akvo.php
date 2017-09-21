@@ -8,35 +8,14 @@
 		
 		function __construct(){
 		
-			// get header options
-			$this->header_options = get_option('sage_header_options');
 			
-			if( ! is_array( $this->header_options ) ){
-				
-				$this->header_options = array();
-				
-			}
+			$this->init_header_options();
 			
-			// get search is enabled/disabled
-			if($this->header_options && isset($this->header_options['hide_search']) && $this->header_options['hide_search']){
-				$this->search_flag = false;
-			}
 			
-			if($this->header_options && !isset($this->header_options['search_text'])){
-				
-				$this->header_options['search_text'] = "Search " . get_bloginfo("name");
-				
-			}
 			
-			/* CUSTOM IMAGE SIZES */
-			add_action( 'after_setup_theme', function(){
-		
-				add_image_size( 'thumb-small', 224, 126, true ); // Hard crop to exact dimensions (crops sides or top and bottom)
-    			add_image_size( 'thumb-medium', 320, 180, true ); 
-    			add_image_size( 'thumb-large', 640, 360, true );
-    			add_image_size( 'thumb-xlarge', 960, 540, true );
-		
-			} );
+			add_action( 'after_setup_theme', array( $this, 'custom_image_sizes' ) );
+			
+			
 			
 			/* SUPPORT LINK */
 			add_action( 'admin_notices', function(){
@@ -64,6 +43,58 @@
 				) );
 			}, 999 );
 			
+			
+			add_action( 'wp_dashboard_setup', array( $this, 'remove_dashboard_items' ) );
+			
+			
+
+			
+		}
+		
+		function init_header_options(){
+			
+			// get header options
+			$this->header_options = get_option('sage_header_options');
+			
+			if( ! is_array( $this->header_options ) ){
+				
+				$this->header_options = array();
+				
+			}
+			
+			// get search is enabled/disabled
+			if($this->header_options && isset($this->header_options['hide_search']) && $this->header_options['hide_search']){
+				$this->search_flag = false;
+			}
+			
+			if($this->header_options && !isset($this->header_options['search_text'])){
+				
+				$this->header_options['search_text'] = "Search " . get_bloginfo("name");
+				
+			}
+			
+		}
+		
+		/* CUSTOM IMAGE SIZES */
+		function custom_image_sizes(){
+			add_image_size( 'thumb-small', 224, 126, true ); // Hard crop to exact dimensions (crops sides or top and bottom)
+    		add_image_size( 'thumb-medium', 320, 180, true ); 
+    		add_image_size( 'thumb-large', 640, 360, true );
+    		add_image_size( 'thumb-xlarge', 960, 540, true );
+		}
+		
+		function remove_dashboard_items(){
+			global $wp_meta_boxes;
+ 
+	    	unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press']);
+    		unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_incoming_links']);
+    		//unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now']);
+    		unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']);
+    		//unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_drafts']);
+    		//unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']);
+    		unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']);
+    		unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']);
+    		unset($wp_meta_boxes['dashboard']['normal']['core']['tribe_dashboard_widget']);
 		}
 		
 		function selected_fonts(){
