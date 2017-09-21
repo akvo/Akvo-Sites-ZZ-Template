@@ -1,6 +1,6 @@
 <?php
 	
-	function akvo_carousel(){
+	add_shortcode( 'akvo-carousel', function(){
 		
 		$atts = get_option('sage_carousel_options');
 		
@@ -11,21 +11,21 @@
 		$query_carousel = new WP_Query( $args);
 		
 		ob_start();
-		if ( $query_carousel->have_posts() ) : 
+		if ( $query_carousel->have_posts() ){
 			include "templates/carousel.php";
-		endif;
+		}
 		return ob_get_clean();
-	}
-
-	add_shortcode( 'akvo-carousel', 'akvo_carousel' );
+		
+	} );
 	
 	
-	function akvo_carousel_customize_register($wp_customize){
+	add_action('customize_register',  function($wp_customize){
 		//Carousel
     	$wp_customize->add_section('sage_carousel_scheme', array(
       		'title'    => __('Carousel', 'sage'),
       		'description' => '',
       		'priority' => 40,
+      		'panel'		=> 'akvo_theme_panel'
      	));
 
     	// add color picker setting
@@ -85,12 +85,12 @@
         	'label' => 'Carousel Interval:',
         	'section' => 'sage_carousel_scheme',
         ));
-	}
+	}, 40);
 
-	add_action('customize_register', 'akvo_carousel_customize_register',40);
-
-  	function akvo_carousel_customize_head_styles() {
-    	$carousel_option = get_option('sage_carousel_options');
+  	
+  	add_action( 'wp_head', function(){
+  		
+  		$carousel_option = get_option('sage_carousel_options');
     	
 		?>
     	<?php if($carousel_option):?>
@@ -106,5 +106,6 @@
       		<?php endif; ?>
     	</style>
     	<?php endif;
-	}
-  	add_action( 'wp_head', 'akvo_carousel_customize_head_styles' );
+  		
+  		
+  	} );
