@@ -5,49 +5,29 @@
 		public $header_options;
 		public $search_flag = true;
 		
+		public $text_domain = 'sage';
+		
 		
 		function __construct(){
 		
 			
 			$this->init_header_options();
 			
-			
-			
-			add_action( 'after_setup_theme', array( $this, 'custom_image_sizes' ) );
-			
-			
-			
-			/* SUPPORT LINK */
-			add_action( 'admin_notices', function(){
-				include "templates/support.php";
-			} );
-	
-			/* REMOVE SUPPORT LINK */
-			add_filter( 'contextual_help', function($old_help, $screen_id, $screen){
-				$screen->remove_help_tabs();
-    			return $old_help;
-			}, 999, 3 );
-	
-	
-			// REMOVE LINKS FROM TOP ADMIN BAR
-			add_action( 'admin_bar_menu', function( $wp_admin_bar ) {
-				// REMOVE LOGO
-				$wp_admin_bar->remove_node( 'wp-logo' );
-				$wp_admin_bar->remove_node( 'new-post' );
-		
-				$wp_admin_bar->add_node(  array(
-					'id'    => 'akvo-sites-support',
-					'title' => 'Support',
-					'href'  => 'http://sitessupport.akvo.org',
-					'meta'  => array( 'class' => 'my-toolbar-page' )
-				) );
-			}, 999 );
-			
-			
 			add_action( 'wp_dashboard_setup', array( $this, 'remove_dashboard_items' ) );
 			
+			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ), 100 );
 			
-
+			add_action( 'init', array( $this, 'custom_posts' ) );
+			
+			add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ) );
+			
+			add_action( 'excerpt_more', array( $this, 'excerpt_more' ) );
+			
+			
+			$this->add_support_link();
+			
+			
+			
 			
 		}
 		
@@ -75,12 +55,121 @@
 			
 		}
 		
-		/* CUSTOM IMAGE SIZES */
-		function custom_image_sizes(){
+		function add_support_link(){
+			
+			/* SUPPORT LINK */
+			add_action( 'admin_notices', function(){
+				include "templates/support.php";
+			} );
+			
+			/* REMOVE HELP FROM DASHBOARD */
+			add_filter( 'contextual_help', function($old_help, $screen_id, $screen){
+				$screen->remove_help_tabs();
+    			return $old_help;
+			}, 999, 3 );
+			
+			// REMOVE LINKS FROM TOP ADMIN BAR
+			add_action( 'admin_bar_menu', function( $wp_admin_bar ) {
+				// REMOVE LOGO
+				$wp_admin_bar->remove_node( 'wp-logo' );
+				$wp_admin_bar->remove_node( 'new-post' );
+		
+				$wp_admin_bar->add_node(  array(
+					'id'    => 'akvo-sites-support',
+					'title' => 'Support',
+					'href'  => 'http://sitessupport.akvo.org',
+					'meta'  => array( 'class' => 'my-toolbar-page' )
+				) );
+			}, 999 );
+			
+		}
+		
+		
+		
+		
+		
+		function after_setup_theme(){
+		
+			/* Make theme available for translation. Community translations can be found at https://github.com/roots/sage-translations */
+			load_theme_textdomain($this->text_domain, get_template_directory() . '/lang');
+		
+			/* Enable plugins to manage the document title. http://codex.wordpress.org/Function_Reference/add_theme_support#Title_Tag */
+			add_theme_support('title-tag');
+		
+			/* Register wp_nav_menu() menus. http://codex.wordpress.org/Function_Reference/register_nav_menus */
+  			register_nav_menus(['primary_navigation' => __('Primary Navigation', $this->text_domain)]);
+
+			/* Add post thumbnails */
+			add_theme_support('post-thumbnails');
+		
+			/* Add post formats */
+  			add_theme_support('post-formats', ['aside', 'gallery', 'link', 'image', 'quote', 'video', 'audio']);
+
+			/* Add HTML5 markup for captions */
+			add_theme_support('html5', ['caption', 'comment-form', 'comment-list']);
+			
+			/* CUSTOM IMAGE SIZES */
 			add_image_size( 'thumb-small', 224, 126, true ); // Hard crop to exact dimensions (crops sides or top and bottom)
     		add_image_size( 'thumb-medium', 320, 180, true ); 
     		add_image_size( 'thumb-large', 640, 360, true );
     		add_image_size( 'thumb-xlarge', 960, 540, true );
+		}
+		
+		
+		/* CUSTOM POST TYPES AND TAXONOMIES */
+		function custom_posts(){
+			
+			/* LANGUAGE AND COUNTRIES FOR ALL TYPES */
+			$this->register_taxonomy('languages', 'Languages', 'Language', array('map', 'media', 'blog', 'news', 'video', 'testimonial'));
+			$this->register_taxonomy('countries', 'Locations', 'Location', array('map', 'media', 'blog', 'news', 'video', 'testimonial'));
+		
+			/* TYPES */
+			$this->register_taxonomy('types', 'Types', 'Type', array('media'));
+			$this->register_taxonomy('map-types', 'Types', 'Type', array('map'));
+			$this->register_taxonomy('video-types', 'Types', 'Type', array('video'));
+		
+			/* CATEGORY */
+			$this->register_taxonomy('media-category', 'Categories', 'Category', array('media'));
+			$this->register_taxonomy('map-category', 'Categories', 'Category', array('map'));
+			$this->register_taxonomy('blog-category', 'Categories', 'Category', array('blog'));
+			$this->register_taxonomy('news-category', 'Categories', 'Category', array('news'));
+			$this->register_taxonomy('video-category', 'Categories', 'Category', array('video'));
+			$this->register_taxonomy('testimonial-category', 'Categories', 'Category', array('testimonial'));
+		
+			/* REGISTER POST TYPES */
+			$this->register_post_type('blog', 'Blog posts', 'Blog post', 'dashicons-calendar-alt');
+			$this->register_post_type('news', 'News', 'News', 'dashicons-format-aside');
+			$this->register_post_type('video', 'Videos', 'Video', 'dashicons-media-video');
+			$this->register_post_type('media', 'Media Library', 'Media Item', 'dashicons-book');
+			$this->register_post_type('testimonial', 'Testimonials', 'Testimonial', 'dashicons-megaphone');
+			$this->register_post_type('map', 'Maps', 'Map', 'dashicons-location-alt');
+			$this->register_post_type('carousel', 'Carousel', 'Carousel slide', 'dashicons-images-alt', true);
+			$this->register_post_type('flow', 'Akvo Flow', 'Flow item', 'dashicons-welcome-widgets-menus');
+		}
+		
+		function load_scripts(){
+			
+			wp_enqueue_style( 'fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', false, null);
+  			wp_enqueue_style( 'sage_css', get_template_directory_uri().'/dist/styles/main.css', false, '2.1.2');
+  		
+			/* SELECTED FONTS FROM THE CUSTOMIZE */
+			$font_face = $this->selected_fonts();
+			
+			/* LIST OF ALL THE FONTS */
+			$google_fonts = $this->fonts();
+		
+			// ENQUEUE FONTS THAT ARE SELECTED
+			foreach( $google_fonts as $google_font ){
+				if( in_array( $google_font['name'], $font_face ) ){
+					wp_enqueue_style( $google_font['slug'], $google_font['url'], false, null);
+				}
+			}
+		
+			/* COMMENTS REPLY JS */
+			if (is_single() && comments_open() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); }
+		
+			wp_enqueue_script('bootstrap_js', get_template_directory_uri().'/dist/scripts/bootstrap.min.js', ['jquery'], '1.0.1', true);
+			wp_enqueue_script('akvo_js', get_template_directory_uri().'/dist/scripts/main.js', ['jquery'], "1.0.3", true);
 		}
 		
 		function remove_dashboard_items(){
@@ -204,23 +293,23 @@
 	
 			$args = array(
 				'labels' => array(
-					'name'                       => _x( $plural_label, 'Taxonomy General Name', 'text_domain' ),
-					'singular_name'              => _x( $singular_label, 'Taxonomy Singular Name', 'text_domain' ),
-					'menu_name'                  => __( $plural_label, 'text_domain' ),
-					'all_items'                  => __( 'All Items', 'text_domain' ),
-					'parent_item'                => __( 'Parent Item', 'text_domain' ),
-					'parent_item_colon'          => __( 'Parent Item:', 'text_domain' ),
-					'new_item_name'              => __( 'New Item Name', 'text_domain' ),
-					'add_new_item'               => __( 'Add New Item', 'text_domain' ),
-					'edit_item'                  => __( 'Edit Item', 'text_domain' ),
-					'update_item'                => __( 'Update Item', 'text_domain' ),
-					'view_item'                  => __( 'View Item', 'text_domain' ),
-					'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-					'add_or_remove_items'        => __( 'Add or remove items', 'text_domain' ),
-					'choose_from_most_used'      => __( 'Choose from the most used', 'text_domain' ),
-					'popular_items'              => __( 'Popular Items', 'text_domain' ),
-					'search_items'               => __( 'Search Items', 'text_domain' ),
-					'not_found'                  => __( 'Not Found', 'text_domain' ),
+					'name'                       => _x( $plural_label, 'Taxonomy General Name', $this->text_domain ),
+					'singular_name'              => _x( $singular_label, 'Taxonomy Singular Name', $this->text_domain ),
+					'menu_name'                  => __( $plural_label, $this->text_domain ),
+					'all_items'                  => __( 'All Items', $this->text_domain ),
+					'parent_item'                => __( 'Parent Item', $this->text_domain ),
+					'parent_item_colon'          => __( 'Parent Item:', $this->text_domain ),
+					'new_item_name'              => __( 'New Item Name', $this->text_domain ),
+					'add_new_item'               => __( 'Add New Item', $this->text_domain ),
+					'edit_item'                  => __( 'Edit Item', $this->text_domain ),
+					'update_item'                => __( 'Update Item', $this->text_domain ),
+					'view_item'                  => __( 'View Item', $this->text_domain ),
+					'separate_items_with_commas' => __( 'Separate items with commas', $this->text_domain ),
+					'add_or_remove_items'        => __( 'Add or remove items', $this->text_domain ),
+					'choose_from_most_used'      => __( 'Choose from the most used', $this->text_domain ),
+					'popular_items'              => __( 'Popular Items', $this->text_domain ),
+					'search_items'               => __( 'Search Items', $this->text_domain ),
+					'not_found'                  => __( 'Not Found', $this->text_domain ),
 				),
 				'hierarchical'      => true,
 				'public'            => true,
@@ -243,6 +332,11 @@
       			'exclude_from_search' 	=> $exclude_from_search,
       			'supports' 				=> array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
     		));
+    		
+		}
+		
+		function excerpt_more(){
+			return ' &hellip; <a href="' . get_permalink() . '">' . __('Continued', $this->text_domain) . '</a>';
 		}
 		
 	}

@@ -1,10 +1,11 @@
 <?php
 
-include("color.php");
-use Mexitek\PHPColors\Color;
+//include("color.php");
+	use Mexitek\PHPColors\Color;
 
-	function akvo_customize_register( $wp_customize ) {
-		
+	
+	add_action( 'customize_register', function($wp_customize){
+	
 		$wp_customize->add_panel('akvo_theme_panel', array(
 			'priority' => 30,
 			'capability' => 'edit_theme_options',
@@ -340,102 +341,77 @@ use Mexitek\PHPColors\Color;
         ));
         
         /* END OF ARTICLE SECTION */
-        
-    }
-	add_action( 'customize_register', 'akvo_customize_register' );
-
-// retrieves the attachment ID from the file URL
-function pn_get_attachment_id_from_url( $attachment_url = '' ) {
- 
-	global $wpdb;
-	$attachment_id = false;
- 
-	// If there is no url, return.
-	if ( '' == $attachment_url )
-		return;
- 
-	// Get the upload directory paths
-	$upload_dir_paths = wp_upload_dir();
- 
-	// Make sure the upload path base directory exists in the attachment URL, to verify that we're working with a media library image
-	if ( false !== strpos( $attachment_url, $upload_dir_paths['baseurl'] ) ) {
- 
-		// If this is the URL of an auto-generated thumbnail, get the URL of the original image
-		$attachment_url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $attachment_url );
- 
-		// Remove the upload path base directory from the attachment URL
-		$attachment_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $attachment_url );
- 
-		// Finally, run a custom database query to get the attachment ID from the modified attachment URL
-		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value = '%s' AND wposts.post_type = 'attachment'", $attachment_url ) );
- 
-	}
- 
-	return $attachment_id;
-}
-
-function mytheme_customize_css(){
-
-	$main = get_theme_mod('main_color');
+		
+		
 	
-	if (empty( $main )) $main = '#00a99d';
-	$main2 = new Color("$main"); 
-	$licht = '#'.$main2->mix('ffffff', 10);
-	$donker = '#'.$main2->darken();
+	} );
 
-	$grijs = get_theme_mod('grijs');
-	if (empty( $grijs )) $grijs = '#e6e6e6';
-	$grijs2 = new Color("$grijs");
-	$lichtgrijs = '#'.$grijs2->lighten(5);
-	$donkergrijs = '#'.$grijs2->darken(10);
-	if($grijs == "#ffffff") $hovergrijs = "#e6e6e6";
-	else $hovergrijs = $grijs;
 
-	$font = get_theme_mod('akvo_font');
-	if (empty( $font )) $font = 'Open Sans';
 
-	$font_head = get_theme_mod('akvo_font_head');
-	if (empty( $font_head )) $font_head = 'Open Sans';
 
-	$font_nav = get_theme_mod('akvo_font_nav');
-	if (empty( $font_nav )) $font_nav = 'Open Sans';
-
-	$background = get_theme_mod('background');
-	if (empty( $background )) $background = '#ffffff';
-
-	$info_bar_blog = get_theme_mod('info_bar_blog');
-	if (empty( $info_bar_blog )) $info_bar_blog = '#a3d165';
-
-	$info_bar_news = get_theme_mod('info_bar_news');
-	if (empty( $info_bar_news ))  $info_bar_news = '#f9ba41';
-
-	$info_bar_video = get_theme_mod('info_bar_video');
-	if (empty( $info_bar_video )) $info_bar_video = '#f47b50';
-
-	$info_bar_update = get_theme_mod('info_bar_update');
-	if (empty( $info_bar_update )) $info_bar_update = '#54bce8';
-
-	$info_bar_flow = get_theme_mod('info_bar_flow');
-	if (empty( $info_bar_flow )) $info_bar_flow = '#54bce8';
-
-	$info_bar_page = get_theme_mod('info_bar_page');
-	if (empty( $info_bar_page )) $info_bar_page = '#6d3a7d';
-
-	$info_bar_media = get_theme_mod('info_bar_media');
-	if (empty( $info_bar_media )) $info_bar_media = '#9d897b';
-
-	$info_bar_project = get_theme_mod('info_bar_project');
-	if (empty( $info_bar_project )) $info_bar_project = '#7381fa';
-
-	$info_bar_map = get_theme_mod('info_bar_map');
-	if (empty( $info_bar_map )) $info_bar_map = '#ad1c3c';
-
-	$info_bar_testimonial = get_theme_mod('info_bar_testimonial');
-	if (empty( $info_bar_testimonial )) $info_bar_testimonial = '#007ba8';
+	add_action( 'wp_head', function(){
+		
+		
+		$main = get_theme_mod('main_color');
 	
-	$akvo_article = get_option('akvo_article');
+		if (empty( $main )) $main = '#00a99d';
+		$main2 = new Color("$main"); 
+		$licht = '#'.$main2->mix('ffffff', 10);
+		$donker = '#'.$main2->darken();
+
+		$grijs = get_theme_mod('grijs');
+		if (empty( $grijs )) $grijs = '#e6e6e6';
+		$grijs2 = new Color("$grijs");
+		$lichtgrijs = '#'.$grijs2->lighten(5);
+		$donkergrijs = '#'.$grijs2->darken(10);
+		if($grijs == "#ffffff") $hovergrijs = "#e6e6e6";
+		else $hovergrijs = $grijs;
+
+		$font = get_theme_mod('akvo_font');
+		if (empty( $font )) $font = 'Open Sans';
+
+		$font_head = get_theme_mod('akvo_font_head');
+		if (empty( $font_head )) $font_head = 'Open Sans';
+
+		$font_nav = get_theme_mod('akvo_font_nav');
+		if (empty( $font_nav )) $font_nav = 'Open Sans';
+
+		$background = get_theme_mod('background');
+		if (empty( $background )) $background = '#ffffff';
+
+		$info_bar_blog = get_theme_mod('info_bar_blog');
+		if (empty( $info_bar_blog )) $info_bar_blog = '#a3d165';
+
+		$info_bar_news = get_theme_mod('info_bar_news');
+		if (empty( $info_bar_news ))  $info_bar_news = '#f9ba41';
+
+		$info_bar_video = get_theme_mod('info_bar_video');
+		if (empty( $info_bar_video )) $info_bar_video = '#f47b50';
+
+		$info_bar_update = get_theme_mod('info_bar_update');
+		if (empty( $info_bar_update )) $info_bar_update = '#54bce8';
+
+		$info_bar_flow = get_theme_mod('info_bar_flow');
+		if (empty( $info_bar_flow )) $info_bar_flow = '#54bce8';
+
+		$info_bar_page = get_theme_mod('info_bar_page');
+		if (empty( $info_bar_page )) $info_bar_page = '#6d3a7d';
+
+		$info_bar_media = get_theme_mod('info_bar_media');
+		if (empty( $info_bar_media )) $info_bar_media = '#9d897b';
+
+		$info_bar_project = get_theme_mod('info_bar_project');
+		if (empty( $info_bar_project )) $info_bar_project = '#7381fa';
+
+		$info_bar_map = get_theme_mod('info_bar_map');
+		if (empty( $info_bar_map )) $info_bar_map = '#ad1c3c';
+
+		$info_bar_testimonial = get_theme_mod('info_bar_testimonial');
+		if (empty( $info_bar_testimonial )) $info_bar_testimonial = '#007ba8';
 	
-	$akvo_events = get_option('akvo_events');
+		$akvo_article = get_option('akvo_article');
+	
+		$akvo_events = get_option('akvo_events');
 	
     ?>
          <style type="text/css">
@@ -470,9 +446,7 @@ function mytheme_customize_css(){
          	.box-wrap:hover {background: <?php echo $hovergrijs;?>;}
          	.search-wrap .input-group-btn .btn {color:<?php echo $donkergrijs;?>;}
          	
-         	/*
-         	nav ul.navbar-nav .dropdown-menu li { background: <?php echo $licht;?>;}
-         	*/
+         	
          	
          	.nav>li>a:focus, .nav>li>a:hover {background:<?php echo $licht;?>; }
          	blockquote {border-color: $donkergrijs;}
@@ -508,5 +482,6 @@ function mytheme_customize_css(){
          	
          </style>
     <?php
-}
-add_action( 'wp_head', 'mytheme_customize_css');
+		
+		
+	});
