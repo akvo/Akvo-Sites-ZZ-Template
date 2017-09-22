@@ -1,19 +1,14 @@
 <?php
 	$sage_includes = [
-  		//'lib/utils.php',                 	// Utility functions
   		'lib/akvo/class-akvo.php',			// Akvo Class
-  		'lib/init.php',                  	// Initial theme setup and constants
   		'lib/conditional-tag-check.php', 	// ConditionalTagCheck class
   		'lib/config.php',                	// Configuration
-  		'lib/assets.php',                	// Scripts and stylesheets
-  		'lib/titles.php',                	// Page titles
   		'lib/extras.php',                	// Custom functions
-  		'lib/custom-posts.php',          	// Custom posts
   		'lib/custom-widgets.php',        	// Custom widgets G!
   		'lib/bootstrap-nav-walker.php',    	// BS Nav walker
   		'plugins/boxes.php',        		// Custom input fields
   		'plugins/related.php',        		// Related posts
-  		'lib/customize-theme.php',        	// Theme customizer
+  		'lib/color.php',					// COLOR
   		'lib/customize-theme/main.php',		// Library of theme customisation
   		//'lib/taxonomies.php',             // Custom categories for eg media library
   		'lib/akvo-cards/main.php',        	// Cards
@@ -182,4 +177,58 @@
   		$output .= $id;
   		$output .= "/player/' frameborder='0' allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe></div></div>";
   		return $output;
+	}
+	
+	function title() {
+		if (is_home()) {
+    		if (get_option('page_for_posts', true)) {
+      			return get_the_title(get_option('page_for_posts', true));
+    		} 
+	    	else {
+    	  		return __('Latest Posts', 'sage');
+    		}
+  		} 
+	  	elseif (is_archive()) {
+    		return get_the_archive_title();
+  		} 
+	  	elseif (is_search()) {
+    		return sprintf(__('Search Results for %s', 'sage'), get_search_query());
+  		} 
+	  	elseif (is_404()) {
+    		return __('Not Found', 'sage');
+	  	} 
+  		else {
+    		return get_the_title();
+  		}
+	}
+	
+	
+	// retrieves the attachment ID from the file URL
+	function pn_get_attachment_id_from_url( $attachment_url = '' ) {
+ 
+		global $wpdb;
+		$attachment_id = false;
+ 
+		// If there is no url, return.
+		if ( '' == $attachment_url )
+			return;
+ 
+		// Get the upload directory paths
+		$upload_dir_paths = wp_upload_dir();
+ 
+		// Make sure the upload path base directory exists in the attachment URL, to verify that we're working with a media library image
+		if ( false !== strpos( $attachment_url, $upload_dir_paths['baseurl'] ) ) {
+ 
+			// If this is the URL of an auto-generated thumbnail, get the URL of the original image
+			$attachment_url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $attachment_url );
+ 
+			// Remove the upload path base directory from the attachment URL
+			$attachment_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $attachment_url );
+ 
+			// Finally, run a custom database query to get the attachment ID from the modified attachment URL
+			$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value = '%s' AND wposts.post_type = 'attachment'", $attachment_url ) );
+ 
+		}
+ 
+		return $attachment_id;
 	}
