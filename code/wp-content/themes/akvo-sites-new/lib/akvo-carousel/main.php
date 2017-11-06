@@ -20,71 +20,36 @@
 	
 	
 	add_action('customize_register',  function($wp_customize){
-		//Carousel
-    	$wp_customize->add_section('sage_carousel_scheme', array(
-      		'title'    => __('Carousel', 'sage'),
-      		'description' => '',
-      		'priority' => 40,
-      		'panel'		=> 'akvo_theme_panel'
-     	));
+	
+		global $akvo_customize;
+		
+		$akvo_customize->section( $wp_customize, 'akvo_theme_panel', 'akvo_carousel_section', 'Carousel', '');
+		
+		/** COLORS */
+		$colors = array(
+			'sage_carousel_options[bg_carousel]' => array(
+				'default' 	=> '',
+				'label' 	=> 'Background Carousel',
+			),
+			'sage_carousel_options[color_title_carousel]' => array(
+				'default' 	=> '',
+				'label' 	=> 'Color Title Carousel',
+			),
+			'sage_carousel_options[color_content_carousel]' => array(
+				'default' 	=> '',
+				'label' 	=> 'Color Content Carousel',
+			)
+		);
+		
+		foreach( $colors as $id => $color ){
+			$akvo_customize->color( $wp_customize, 'akvo_carousel_section', $id, $color['label'], $color['default'] );
+		}
+		/** END OF COLORS */
 
-    	// add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[bg_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-    	// add color picker control
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'bg_carousel', array(
-          			'label' => 'Background Carousel',
-          			'section' => 'sage_carousel_scheme',
-          			'settings' => 'sage_carousel_options[bg_carousel]',
-    	)));
-
-    	// add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[color_title_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-    	// add color picker control
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'color_title_carousel', array(
-          			'label' => 'Color Title Carousel',
-          			'section' => 'sage_carousel_scheme',
-          			'settings' => 'sage_carousel_options[color_title_carousel]',
-    	) ) );
-
-	    // add color picker setting
-    	$wp_customize->add_setting( 'sage_carousel_options[color_content_carousel]', array(
-      		'default' => '',
-      		'type'    => 'option',
-      	) );
-
-	    // add color picker control
-    	$wp_customize->add_control( 
-			new WP_Customize_Color_Control( 
-		        $wp_customize, 'color_content_carousel', array(
-        		  'label' => 'Color Content Carousel',
-		          'section' => 'sage_carousel_scheme',
-		          'settings' => 'sage_carousel_options[color_content_carousel]',
-        	) ) );
-
-   		$wp_customize->add_setting('sage_carousel_options[interval]', array(
-       		'default' => '3000',
-       		'capability' => 'edit_theme_options',
-       		'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('sage_carousel_options[interval]', array(
-			'settings' => 'sage_carousel_options[interval]',
-    		'type' => 'text',
-        	'label' => 'Carousel Interval:',
-        	'section' => 'sage_carousel_scheme',
-        ));
+		/* CAROUSEL INTERVAL */
+		$akvo_customize->text( $wp_customize, 'akvo_carousel_section', 'sage_carousel_options[interval]', 'Carousel Interval:', '3000');
+		
+		
 	}, 40);
 
   	

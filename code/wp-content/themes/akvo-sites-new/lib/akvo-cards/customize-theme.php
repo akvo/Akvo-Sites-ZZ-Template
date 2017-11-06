@@ -3,236 +3,119 @@
 
 	function akvo_card_customize_register( $wp_customize ) {
 		
-		$wp_customize->add_panel('akvo_card_panel', array(
-			'priority' => 30,
-			'capability' => 'edit_theme_options',
-			'theme_supports' => '',
-			'title' => __( 'Card Widget', 'sage' ),
-			'description' => __( 'Single Post, RSR Widgets', 'sage' ),
-		) );
+		global $akvo_customize;
+		
+		$akvo_customize->panel( $wp_customize, 'akvo_card_panel', 'Card Widget' );
 
 		
 		/* GENERAL THEME SECTION */
-		$wp_customize->add_section( 'akvo_card_section' , array(
-	    	'title'       	=> __( 'General Theme', 'sage' ),
-		    'priority'    	=> 30,
-		    'description' 	=> 'Select card styles',
-		    'panel'			=> 'akvo_card_panel'	
-		) );
+		
+		$akvo_customize->section( $wp_customize, 'akvo_card_panel', 'akvo_card_section', 'General Theme', 'Customize styles for card widget');
+		
+		$colors = array(
+			'akvo_card[bg]' 			=> array(
+				'default' 				=> '#EEEEEE',
+				'label'					=> 'Background'
+			),
+			'akvo_card[title_color]' 	=> array(
+				'default' 				=> '#333333',
+				'label'					=> 'Title Color'
+			),
+			'akvo_card[content_color]' 	=> array(
+				'default' 				=> '#333333',
+				'label'					=> 'Content Color'
+			),
+			'akvo_card[infobar_bg]' 	=> array(
+				'default' 				=> '#54bce8',
+				'label'					=> 'Infobar Background'
+			),
+			'akvo_card[infobar_color]' 	=> array(
+				'default' 				=> '#ffffff',
+				'label'					=> 'Infobar Font Color'
+			)			
+		);
 		
 		
 		
+		foreach( $colors as $color_id => $color ){
+			
+			$akvo_customize->color( $wp_customize, 'akvo_card_section', $color_id, $color['label'], $color['default'] );
+			
+		}
+		
+		$text_el = array(
+			'akvo_card[title_font_size]' => array(
+				'default' 	=> '24px',
+				'label' 	=> 'Font size of title:',
+			),
+			'akvo_card[infobar_font_size]' => array(
+				'default' 	=> '12px',
+				'label' 	=> 'Font size of infobar:',
+			),
+			'akvo_card[content_font_size]' => array(
+				'default' 	=> '14px',
+				'label' 	=> 'Font size of content:',
+			),	
+			'akvo_card[border_radius]' => array(
+				'default' 	=> '5px',
+				'label' 	=> 'Border radius:',
+			),	
+		);
+		
+		foreach( $text_el as $id => $el){
+			$akvo_customize->text( $wp_customize, 'akvo_card_section', $id, $el['label'], $el['default']);	
+		}
 		
 		
-		/* CARD BG */
-		$wp_customize->add_setting( 'akvo_card[bg]', array(
-      		'default' => '#EEEEEE',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	
-    	
-    	
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_card[bg]', array(
-          			'label' => 'Background',
-          			'section' => 'akvo_card_section',
-          			'settings' => 'akvo_card[bg]',
-    	)));
-    	
-    	/* CARD FONT COLOR */
-		$wp_customize->add_setting('akvo_card[title_color]', array(
-      		'default' => '#333333',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_card[title_color]', array(
-          			'label' => 'Title Color',
-          			'section' => 'akvo_card_section',
-          			'settings' => 'akvo_card[title_color]',
-    	)));
-    	
-    	$wp_customize->add_setting('akvo_card[content_color]', array(
-      		'default' => '#333333',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_card[content_color]', array(
-          			'label' => 'Content Color',
-          			'section' => 'akvo_card_section',
-          			'settings' => 'akvo_card[content_color]',
-    	)));
-    	
-    	/* CARD INFOBAR */
-		$wp_customize->add_setting('akvo_card[infobar_bg]', array(
-      		'default' => '#54bce8',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_card[infobar_bg]', array(
-          			'label' => 'Infobar Background',
-          			'section' => 'akvo_card_section',
-          			'settings' => 'akvo_card[infobar_bg]',
-    	)));
-    	
-    	$wp_customize->add_setting('akvo_card[infobar_color]', array(
-      		'default' => '#ffffff',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_card[infobar_color]', array(
-          			'label' => 'Infobar Font Color',
-          			'section' => 'akvo_card_section',
-          			'settings' => 'akvo_card[infobar_color]',
-    	)));
+		
+		/* END OF THEME SECTION */
 		
 		
 		/* HIDE ELEMENTS */
-		$wp_customize->add_setting('akvo_card[hide_card_title]', array(
-			'default' => 0,
-      		'capability' => 'edit_theme_options',
-      		'type'       => 'option',
-      	));
+		$akvo_customize->section( $wp_customize, 'akvo_card_panel', 'akvo_card_hide_section', 'Hide Elements', '');
+    	
+    	$hide_el = array(
+			'akvo_card[hide_card_title]'	=> 'Hide Widget Title',
+			'akvo_card[hide_infobar]'		=> 'Hide Widget Infobar',
+			'akvo_card[hide_content]'		=> 'Hide Widget Content'
+		);
 		
-		$wp_customize->add_control('akvo_card[hide_card_title]', array(
-      		'settings' => 'akvo_card[hide_card_title]',
-      		'label'    => __('Hide Widget Title'),
-      		'section'  => 'akvo_card_section',
-      		'type'     => 'checkbox',
-      		'std' => 1
-      	));
-      	
-      	$wp_customize->add_setting('akvo_card[hide_infobar]', array(
-			'default' => 0,
-      		'capability' => 'edit_theme_options',
-      		'type'       => 'option',
-      	));
+		foreach( $hide_el as $id => $label ){
+			
+			$akvo_customize->checkbox( $wp_customize, 'akvo_card_hide_section', $id, $label );
+			
+		}
 		
-		$wp_customize->add_control('akvo_card[hide_infobar]', array(
-      		'settings' => 'akvo_card[hide_infobar]',
-      		'label'    => __('Hide Widget Infobar'),
-      		'section'  => 'akvo_card_section',
-      		'type'     => 'checkbox',
-      		'std' => 1
-      	));
-      	
-      	$wp_customize->add_setting('akvo_card[hide_content]', array(
-			'default' => 0,
-      		'capability' => 'edit_theme_options',
-      		'type'       => 'option',
-      	));
+		/* END OF HIDE ELEMENTS SECTION */
 		
-		$wp_customize->add_control('akvo_card[hide_content]', array(
-      		'settings' => 'akvo_card[hide_content]',
-      		'label'    => __('Hide Widget Content'),
-      		'section'  => 'akvo_card_section',
-      		'type'     => 'checkbox',
-      		'std' => 1
-      	));
+		/** EXTRAS SECTION */
 		
-		$wp_customize->add_setting('akvo_card[title_font_size]', array(
-       		'default' => '24px',
-       		'capability' => 'edit_theme_options',
-       		'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_card[title_font_size]', array(
-			'settings' => 'akvo_card[title_font_size]',
-    		'type' => 'text',
-        	'label' => 'Font size of the card title:',
-        	'section' => 'akvo_card_section',
-        ));
+		$akvo_customize->section( $wp_customize, 'akvo_card_panel', 'akvo_card_extras_section', 'Extras', '');
+		
+		
+		$text_el = array(
+			'akvo_card[akvoapp]' => array(
+				'default' 	=> 'http://rsr.akvo.org',
+				'label' 	=> 'Akvoapp URL:',
+			),
+			'akvo_card[read_more_text]' => array(
+				'default' 	=> 'Read more',
+				'label' 	=> 'Read More Text:',
+			),
+			
+		);
+		
+		foreach( $text_el as $id => $el){
+			$akvo_customize->text( $wp_customize, 'akvo_card_extras_section', $id, $el['label'], $el['default']);	
+		}
+		
         
-        $wp_customize->add_setting('akvo_card[infobar_font_size]', array(
-       		'default' => '12px',
-       		'capability' => 'edit_theme_options',
-       		'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_card[infobar_font_size]', array(
-			'settings' => 'akvo_card[infobar_font_size]',
-    		'type' => 'text',
-        	'label' => 'Font size of the card infobar:',
-        	'section' => 'akvo_card_section',
-        ));
-        
-        $wp_customize->add_setting('akvo_card[content_font_size]', array(
-       		'default' => '14px',
-       		'capability' => 'edit_theme_options',
-       		'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_card[content_font_size]', array(
-			'settings' => 'akvo_card[content_font_size]',
-    		'type' => 'text',
-        	'label' => 'Font size of the card infobar:',
-        	'section' => 'akvo_card_section',
-        ));
-        
-        $wp_customize->add_setting('akvo_card[border_radius]', array(
-       		'default' => '5px',
-       		'capability' => 'edit_theme_options',
-       		'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_card[border_radius]', array(
-			'settings' => 'akvo_card[border_radius]',
-    		'type' => 'text',
-        	'label' => 'Border radius of the card:',
-        	'section' => 'akvo_card_section',
-        ));
-        
-        $wp_customize->add_setting('akvo_card[akvoapp]', array(
-       		'default' => 'http://rsr.akvo.org',
-       		'capability' => 'edit_theme_options',
-       		'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_card[akvoapp]', array(
-			'settings' => 'akvo_card[akvoapp]',
-    		'type' => 'text',
-        	'label' => 'Akvoapp URL:',
-        	'section' => 'akvo_card_section',
-        ));
-        
-        $wp_customize->add_setting('akvo_card[read_more_text]', array(
-       		'default' => 'Read more',
-       		'capability' => 'edit_theme_options',
-       		'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_card[read_more_text]', array(
-			'settings' => 'akvo_card[read_more_text]',
-    		'type' => 'text',
-        	'label' => 'Read More Text:',
-        	'section' => 'akvo_card_section',
-        ));
-		/* END OF CARD SECTION */
+		/* END OF HIDE ELEMENTS SECTION */
 		
 		
 		/* IMAGE SECTION */
-		$wp_customize->add_section( 'akvo_card_image_section' , array(
-	    	'title'       	=> __( 'Image Styles', 'sage' ),
-		    'priority'    	=> 30,
-		    'description' 	=> 'Change image styles',
-		    'panel'			=> 'akvo_card_panel'	
-		) );
+		$akvo_customize->section( $wp_customize, 'akvo_card_panel', 'akvo_card_image_section', 'Image Styles', '');
+		
 		
 		/* DEFAULT IMAGE */
 		$wp_customize->add_setting( 'akvo_card[bg_img]', array(
@@ -249,23 +132,14 @@
           			'settings' => 'akvo_card[bg_img]',
     	)));
 		
+		
+		/* IMAGE HEIGHTS FOR EACH CUSTOM TYPE */
 		$akvo_card_obj = new Akvo_Card;
         $types = $akvo_card_obj->get_types(); 
-        foreach($types as $type=>$label){
-		
-			$bg_setting = 'akvo_card[bg_'.$type.'_height]';
-		
-			$wp_customize->add_setting($bg_setting, array(
-       			'default' => '150px',
-       			'capability' => 'edit_theme_options',
-       			'type'       => 'option',
-    		));	
-    		$wp_customize->add_control($bg_setting, array(
-				'settings' => $bg_setting,
-    			'type' => 'text',
-        		'label' => 'BG Image Height of '.$label.' :',
-        		'section' => 'akvo_card_image_section',
-        	));
+        foreach($types as $type=>$label){	
+        
+        	$akvo_customize->text( $wp_customize, 'akvo_card_image_section', 'akvo_card[bg_'.$type.'_height]', 'Image Height in '.$label.' :', '150px');	
+			
 		}
 		
 	}

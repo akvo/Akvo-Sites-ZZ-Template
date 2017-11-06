@@ -5,345 +5,78 @@
 
 	
 	add_action( 'customize_register', function($wp_customize){
-	
-		$wp_customize->add_panel('akvo_theme_panel', array(
-			'priority' => 30,
-			'capability' => 'edit_theme_options',
-			'theme_supports' => '',
-			'title' => __( 'Theme Options', 'sage' ),
-			'description' => __( '', 'sage' ),
-		) );
 		
+		global $akvo_customize;
 		
-   		/* All our sections, settings, and controls will be added here */
+		/** MAIN AKVO PANEL */
+		$akvo_customize->panel( $wp_customize, 'akvo_theme_panel', 'Theme Options' );
 		
-		$wp_customize->add_section( 'akvo_color' , array(
-	    	'title'     => __( 'Adjust colours', 'sage' ),
-	    	'priority'  => 30,
-	    	'panel'		=> 'akvo_theme_panel'
-		) );
+		/* All our sections, settings, and controls will be added here */
+   		
+   		$akvo_customize->section( $wp_customize, 'akvo_theme_panel', 'akvo_color', 'Adjust Colors', '');
 		
-		//main
-		$wp_customize->add_setting( 'main_color' , array(
-	    	'default'     => '#00a99d',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'main_color', array(
-			'label'        => __( 'Main Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'main_color',
-		) ) );
-	
-		//background
-		$wp_customize->add_setting( 'background' , array(
-	    	'default'     => '#ffffff',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'background', array(
-			'label'        => __( 'Background', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'background',
-		) ) );
-	
-		//grijskleur
-		$wp_customize->add_setting( 'grijs' , array(
-	   		'default'     => '#e6e6e6',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'grijs', array(
-			'label'        => __( 'Shades of grey', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'grijs',
-		) ) );
-	
-		//bar
-		$wp_customize->add_setting( 'info_bar_blog' , array(
-	    	'default'     => '#a3d165',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_blog', array(
-			'label'        => __( 'Blog Post Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_blog',
-		) ) );
-
-		//bar
-		$wp_customize->add_setting( 'info_bar_news' , array(
-	    	'default'     => '#f9ba41',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_news', array(
-			'label'        => __( 'News Post Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_news',
-		) ) );
-
-		//bar
-		$wp_customize->add_setting( 'info_bar_video' , array(
-	    	'default'     => '#f47b50',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_video', array(
-			'label'        => __( 'Video Post Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_video',
-		) ) );
+		$colors = array(
+			'main_color' 		=> array(
+				'default'		=> '#00a99d',
+				'label'			=> 'Main Color'
+			),
+			'background'		=> array(
+				'default'		=> '#ffffff',
+				'label'			=> 'Background'
+			),
+			'grijs'				=> array(
+				'default'		=> '#e6e6e6',
+				'label'			=> 'Shades of grey'
+			),
+			'info_bar_blog'		=> array(
+				'default'		=> '#a3d165',
+				'label'			=> 'Blog Post'
+			),
+			'info_bar_news'		=> array(
+				'default'		=> '#f9ba41',
+				'label'			=> 'News Post'
+			),
+			'info_bar_video'	=> array(
+				'default'		=> '#f47b50',
+				'label'			=> 'Video Post'
+			),
+			'info_bar_update'	=> array(
+				'default'		=> '#54bce8',
+				'label'			=> 'Post Update'
+			),
+			'info_bar_page'		=> array(
+				'default'		=> '#6d3a7d',
+				'label'			=> 'Page Color'
+			),
+			'info_bar_project'	=> array(
+				'default'		=> '#7381fa',
+				'label'			=> 'Project Update'
+			),
+			'info_bar_map'		=> array(
+				'default'		=> '#ad1c3c',
+				'label'			=> 'Map'
+			),
+			'info_bar_testimonial'	=> array(
+				'default'			=> '#007ba8',
+				'label'				=> 'Testimonial'
+			),
+			'info_bar_flow'	=> array(
+				'default'		=> '#54bce8',
+				'label'			=> 'Flow'
+			),
+			'info_bar_media'		=> array(
+				'default'		=> '#9d897b',
+				'label'			=> 'Media Item'
+			),
+		);
 		
-		//bar
-		$wp_customize->add_setting( 'info_bar_update' , array(
-	    	'default'     => '#54bce8',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_update', array(
-			'label'        => __( 'Update Post Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_update',
-		) ) );
-
-		//bar
-		$wp_customize->add_setting( 'info_bar_page' , array(
-	    	'default'     => '#6d3a7d',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_page', array(
-			'label'        => __( 'Page Post Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_page',
-		) ) );
-		//bar
-		$wp_customize->add_setting( 'info_bar_project' , array(
-	    	'default'     => '#7381fa',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_project', array(
-			'label'        => __( 'Project Update Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_project',
-		) ) );
-		//bar
-		$wp_customize->add_setting( 'info_bar_map' , array(
-		    'default'     => '#ad1c3c',
-	    	'transport'   => 'refresh',
-		    'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_map', array(
-			'label'        => __( 'Map Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_map',
-		) ) );
-		//bar
-		$wp_customize->add_setting( 'info_bar_testimonial' , array(
-		    'default'     => '#007ba8',
-	    	'transport'   => 'refresh',
-		    'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_testimonial', array(
-			'label'        => __( 'Testimonial Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_testimonial',
-		) ) );
-	
-		//bar
-		$wp_customize->add_setting( 'info_bar_flow' , array(
-	    	'default'     => '#54bce8',
-	    	'transport'   => 'refresh',
-	    	'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_flow', array(
-			'label'        => __( 'Flow Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_flow',
-		) ) );
-	
-		//bar
-		$wp_customize->add_setting( 'info_bar_media' , array(
-		    'default'     => '#9d897b',
-	    	'transport'   => 'refresh',
-		    'sanitize_callback' => 'sanitize_hex_color',
-		) );
-
-		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'info_bar_media', array(
-			'label'        => __( 'Media item Color', 'sage' ),
-			'section'    => 'akvo_color',
-			'settings'   => 'info_bar_media',
-		) ) );
-	
-
-		//logo
-		$wp_customize->add_section( 'akvo_logo_section' , array(
-	    	'title'       	=> __( 'Logo', 'sage' ),
-	    	'priority'    	=> 30,
-	    	'description' 	=> 'Upload your logo',
-	    	'panel'			=> 'akvo_theme_panel'
-		) );
-
-		$wp_customize->add_setting( 'akvo_logo' );
-		$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'akvo_logo', array(
-	    	'label'    => __( 'Logo', 'sage' ),
-	    	'section'  => 'akvo_logo_section',
-	   		'settings' => 'akvo_logo',
-		) ) );
-
+		foreach( $colors as $color_id => $color ){
 		
-      	
-      	$wp_customize->add_setting( 'akvo_logo_size' );
-		
-		$wp_customize->add_control('akvo_logo_size', array(
-      		'settings' => 'akvo_logo_size',
-      		'label'    => __('Use Original Logo Size'),
-      		'section'  => 'akvo_logo_section',
-      		'type'     => 'checkbox',
-      		'std' => 1
-      	));
-      	
-      	
-      	$logo_location_arr = array(
-      		'left'	=> 'Left',
-      		'right'	=> 'Right'
-      	);
-      	
-      	$wp_customize->add_setting( 'akvo_logo_location', array(
-      		'default' 		=> 'left',
-      		'transport'   	=> 'refresh',
-      		'type' 			=> 'option'
-      	)  );
-		
-		$wp_customize->add_control('akvo_logo_location', array(
-      		'settings' 	=> 'akvo_logo_location',
-      		'label'    	=> __('Logo location'),
-      		'section'  	=> 'akvo_logo_section',
-      		'type'     	=> 'select',
-      		'choices' 	=> $logo_location_arr
-      	));
-      	
-		// Fonts
-		global $akvo;
-		$google_fonts = $akvo->fonts();
-		
-		$fonts_arr = array();
-		
-		foreach( $google_fonts as $google_font ){
-			$fonts_arr[$google_font['name']] = $google_font['name'];
+			$akvo_customize->color( $wp_customize, 'akvo_color', $color_id, $color['label'], $color['default'] );
+			
+				
 		}
 		
-		$wp_customize->add_section( 'akvo_font_section' , array(
-	    	'title'       	=> __( 'Font', 'sage' ),
-		    'priority'    	=> 30,
-		    'description' 	=> 'Select site typography',
-		    'panel'			=> 'akvo_theme_panel'
-		) );
-		$wp_customize->add_setting( 'akvo_font_head', array(
-			'default' 	=> 'Open Sans',
-		    'transport' => 'refresh',
-		));
-		$wp_customize->add_control( 'akvo_font_head', array(
-			'type' 		=> 'select',
-		    'label'    	=> __( 'Header font', 'sage' ),
-		    'section'  	=> 'akvo_font_section',
-		    'settings' 	=> 'akvo_font_head',
-		    'choices' 	=> $fonts_arr
-		));
-		$wp_customize->add_setting( 'akvo_font_nav', array(
-	    	'default' 	=> 'Open Sans',
-	     	'transport' => 'refresh',
-		));
-		$wp_customize->add_control( 'akvo_font_nav', array(
-			'type' 		=> 'select',
-		    'label'    	=> __( 'Navigation font', 'sage' ),
-		    'section'  	=> 'akvo_font_section',
-		    'settings' 	=> 'akvo_font_nav',
-		    'choices' 	=> $fonts_arr
-		));
-		$wp_customize->add_setting( 'akvo_font', array(
-	    	 'default' 	=> 'Open Sans',
-	     	'transport' => 'refresh',
-		));
-		$wp_customize->add_control( 'akvo_font', array(
-			'type' 		=> 'select',
-		    'label'    	=> __( 'Body font', 'sage' ),
-		    'section'  	=> 'akvo_font_section',
-		    'settings' 	=> 'akvo_font',
-		    'choices' 	=> $fonts_arr
-		));
-
-		//$wp_customize->remove_section( 'nav');
-		$wp_customize->remove_section( 'static_front_page');
-		
-		/* ARTICLE SECTION */
-		$wp_customize->add_section( 'article_section' , array(
-	    	'title'       	=> __( 'Article (Single Posts)', 'sage' ),
-		    'priority'    	=> 30,
-		    'description' 	=> 'Select Article styles for single posts, akvopedia, etc',
-		    'panel'			=> 'akvo_theme_panel'
-		) );
-		
-		/* font size of the title */
-		$wp_customize->add_setting( 'akvo_article[title_font_size]', array(
-      		'default' => '24px',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control('akvo_article[title_font_size]', array(
-			'settings' => 'akvo_article[title_font_size]',
-    		'type' => 'text',
-        	'label' => 'Font size of the article title:',
-        	'section' => 'article_section',
-        ));
-        
-        /* font-size of the meta */
-        $wp_customize->add_setting( 'akvo_article[meta_font_size]', array(
-      		'default' => '16px',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control('akvo_article[meta_font_size]', array(
-			'settings' => 'akvo_article[meta_font_size]',
-    		'type' => 'text',
-        	'label' => 'Font size of the article meta (date, etc):',
-        	'section' => 'article_section',
-        ));
-        
-        /* font-size of the content */
-        $wp_customize->add_setting( 'akvo_article[content_font_size]', array(
-      		'default' => '16px',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control('akvo_article[content_font_size]', array(
-			'settings' => 'akvo_article[content_font_size]',
-    		'type' => 'text',
-        	'label' => 'Font size of the article content:',
-        	'section' => 'article_section',
-        ));
-        
-        /* END OF ARTICLE SECTION */
-		
-		
-	
 	} );
 
 

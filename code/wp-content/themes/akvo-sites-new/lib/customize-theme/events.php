@@ -4,99 +4,57 @@
 	
 	add_action( 'customize_register', function($wp_customize){
 		
+		global $akvo_customize;
+		
+		$akvo_customize->section( $wp_customize, 'tribe_customizer', 'akvo_events_section', 'Akvo Sites Theme', 'Customize templates for events');
+		
+		/** TEXT ELEMENTS */
+		$text_el = array(
+			'akvo_events[title_font_size]'	=> array(
+				'default' => '16px',
+				'label'    => 'Title: Font size'
+			),
+			'akvo_events[btn_text]'	=> array(
+				'default' => 'View All Events',
+				'label'   => 'Button Text',	
+			),
+			'akvo_events[btn_font_size]' => array(
+				'default' => '14px',
+				'label'   => 'Button: Font size',
+			),
+			'akvo_events[meet_text]' => array(
+				'default' => 'Meet:',
+				'label'   => 'Text for event partners',
+			),
+		);
+		
+		foreach( $text_el as $id => $el ){
+			$akvo_customize->text( $wp_customize, 'akvo_events_section', $id, $el['label'], $el['default']);
+		}
 		
 		
-		$wp_customize->add_section( 'events_section' , array(
-	    	'title'       	=> __( 'Akvo Theme', 'sage' ),
-		    'priority'    	=> 30,
-		    'description' 	=> 'Customize templates for events',
-		    'panel'			=> 'tribe_customizer'
-		) );
+		$colors = array(
+			'akvo_events[title_color]'	=> array(
+				'default'	=> '#000000',
+				'label'		=> 'Color of Title:'
+			),
+			'akvo_events[btn_bg_color]'	=> array(
+				'default' 	=> '#000000',
+				'label'		=> 'Button: BG Color',
+			),
+			'akvo_events[btn_color]'	=> array(
+				'default' 	=> '#000000',
+				'label' 	=> 'Button: Color',
+			)
+		);
 		
-		$wp_customize->add_setting('akvo_events[title_font_size]', array(
-      		'default' => '16px',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-		$wp_customize->add_control('akvo_events[title_font_size]', array(
-		    'label'    => __( 'Title: Font size', 'akvo' ),
-	    	'section'  => 'events_section',
-		    'settings' => 'akvo_events[title_font_size]',
-		));
-		
-		$wp_customize->add_setting('akvo_events[title_color]', array(
-      		'default' => '#000000',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_events[title_color]', array(
-          			'label' => 'Title: Color',
-          			'section' => 'events_section',
-          			'settings' => 'akvo_events[title_color]',
-    	)));
+		foreach( $colors as $color_id => $color ){
+			$akvo_customize->color( $wp_customize, 'akvo_events_section', $color_id, $color['label'], $color['default'] );
+		}
 		
 		
 		
-		$wp_customize->add_setting('akvo_events[btn_text]', array(
-      		'default' => 'View All Events',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-		$wp_customize->add_control('akvo_events[btn_text]', array(
-		    'label'    => __( 'Button Text', 'akvo' ),
-	    	'section'  => 'events_section',
-		    'settings' => 'akvo_events[btn_text]',
-		));
 		
-		$wp_customize->add_setting('akvo_events[btn_bg_color]', array(
-      		'default' => '#000000',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-		$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_events[btn_bg_color]', array(
-          			'label' => 'Button: BG Color',
-          			'section' => 'events_section',
-          			'settings' => 'akvo_events[btn_bg_color]',
-    	)));
-		$wp_customize->add_setting('akvo_events[btn_color]', array(
-      		'default' => '#000000',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-		$wp_customize->add_control( 
-      		new WP_Customize_Color_Control( 
-        		$wp_customize, 'akvo_events[btn_color]', array(
-          			'label' => 'Button: Color',
-          			'section' => 'events_section',
-          			'settings' => 'akvo_events[btn_color]',
-    	)));
-		
-		$wp_customize->add_setting('akvo_events[btn_font_size]', array(
-      		'default' => '14px',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-		$wp_customize->add_control('akvo_events[btn_font_size]', array(
-		    'label'    => __( 'Button: Font size', 'akvo' ),
-	    	'section'  => 'events_section',
-		    'settings' => 'akvo_events[btn_font_size]',
-		));
-		
-		$wp_customize->add_setting('akvo_events[meet_text]', array(
-      		'default' => 'Meet:',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-		$wp_customize->add_control('akvo_events[meet_text]', array(
-		    'label'    => __( 'Header text for event partners', 'akvo' ),
-	    	'section'  => 'events_section',
-		    'settings' => 'akvo_events[meet_text]',
-		));
 		
 	} );
 	
