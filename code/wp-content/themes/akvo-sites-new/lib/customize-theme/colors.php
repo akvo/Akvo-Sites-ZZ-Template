@@ -5,24 +5,15 @@
 
 	
 	add_action( 'customize_register', function($wp_customize){
-	
-		$wp_customize->add_panel('akvo_theme_panel', array(
-			'priority' => 30,
-			'capability' => 'edit_theme_options',
-			'theme_supports' => '',
-			'title' => __( 'Theme Options', 'sage' ),
-			'description' => __( '', 'sage' ),
-		) );
 		
+		global $akvo_customize;
 		
-   		/* All our sections, settings, and controls will be added here */
+		/** MAIN AKVO PANEL */
+		$akvo_customize->panel( $wp_customize, 'akvo_theme_panel', 'Theme Options' );
 		
-		$wp_customize->add_section( 'akvo_color' , array(
-	    	'title'     => __( 'Adjust colours', 'sage' ),
-	    	'priority'  => 30,
-	    	'panel'		=> 'akvo_theme_panel'
-		) );
-		
+		/* All our sections, settings, and controls will be added here */
+   		
+   		$akvo_customize->section( $wp_customize, 'akvo_theme_panel', 'akvo_color', 'Adjust Colors', '');
 		
 		$colors = array(
 			'main_color' 		=> array(
@@ -80,19 +71,9 @@
 		);
 		
 		foreach( $colors as $color_id => $color ){
-			// SETTINGS FIELD
-			$wp_customize->add_setting( $color_id , array(
-	    		'default'     		=> $color['default'],
-	    		'transport'   		=> 'refresh',
-	    		'sanitize_callback' => 'sanitize_hex_color',
-			) );
+		
+			$akvo_customize->color( $wp_customize, 'akvo_color', $color_id, $color['label'], $color['default'] );
 			
-			// CONTROL FIELD
-			$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, $color_id, array(
-				'label'      => __( $color['label'], 'sage' ),
-				'section'    => 'akvo_color',
-				'settings'   => $color_id,
-			) ) );
 				
 		}
 		

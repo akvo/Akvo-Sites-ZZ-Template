@@ -1,66 +1,34 @@
 <?php
-
-
-	function akvo_filter_customize_register( $wp_customize ) {
+	
+	add_action( 'customize_register', function( $wp_customize ){
 		
-		$wp_customize->add_panel('akvo_filter_panel', array(
-			'priority' => 30,
-			'capability' => 'edit_theme_options',
-			'theme_supports' => '',
-			'title' => __( 'Filter Widget', 'sage' ),
-			'description' => __( '', 'sage' ),
-		) );
+		global $akvo_customize;
+		
+		// ADD PANEL
+		$akvo_customize->panel( $wp_customize, 'akvo_filter_panel', 'Filter Widget' );
 		
 		/* LABELS SECTION */
-		$wp_customize->add_section('akvo_filter_section' , array(
-	    	'title'       	=> __( 'Labels', 'sage' ),
-		    'priority'    	=> 30,
-		    'description' 	=> '',
-		    'panel'			=> 'akvo_filter_panel'
-		) );
+		$akvo_customize->section( $wp_customize, 'akvo_filter_panel', 'akvo_filter_section', 'Labels', '');
 		
-		$wp_customize->add_setting('akvo_filter_btn_text', array(
-			'default'	 => 'Apply Filters',
-       		'capability' => 'edit_theme_options',
-    	   	'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_filter_btn_text', array(
-			'settings' => 'akvo_filter_btn_text',
-    		'type' => 'text',
-        	'label' => 'Text for apply filters button:',
-	        'section' => 'akvo_filter_section',
-    	));
-    	
-    	$wp_customize->add_setting('akvo_filter_default_text', array(
-			'default'	 => 'Not Selected',
-       		'capability' => 'edit_theme_options',
-    	   	'type'       => 'option',
-    	));
- 		
-		$wp_customize->add_control('akvo_filter_default_text', array(
-			'settings' => 'akvo_filter_default_text',
-    		'type' => 'text',
-        	'label' => 'Text for filter - Not Selected:',
-	        'section' => 'akvo_filter_section',
-    	)); 
-    	    
-    	    
-		/* LABEL FOR SLUGS */
+		$text_el = array(
+			'akvo_filter_btn_text' => array(
+				'default' 	=> 'Apply Filters',
+				'label' 	=> 'Text for apply filters button:',
+			),
+			'akvo_filter_default_text' => array(
+				'default' 	=> 'Not Selected',
+				'label' 	=> 'Text for filter - Not Selected:',
+			),
+		);
+		
+		foreach( $text_el as $id => $el){
+			$akvo_customize->text( $wp_customize, 'akvo_filter_section', $id, $el['label'], $el['default']);	
+		}
+		
+		
 		$slugs = array('languages', 'countries', 'map-types', 'map-category', 'types', 'media-category', 'blog-category', 'news-category', 'testimonial-category', 'video-types', 'video-category');
-		
-		foreach($slugs as $slug){
-			$wp_customize->add_setting('akvo_filter_label['.$slug.']', array(
-       			'capability' => 'edit_theme_options',
-    	   		'type'       => 'option',
-    		));
- 		
-			$wp_customize->add_control('akvo_filter_label['.$slug.']', array(
-				'settings' => 'akvo_filter_label['.$slug.']',
-    			'type' => 'text',
-        		'label' => 'Label for '.$slug,
-	        	'section' => 'akvo_filter_section',
-    	    ));
+		foreach($slugs as $slug){ /* LABEL FOR SLUGS */
+			$akvo_customize->text( $wp_customize, 'akvo_filter_section', 'akvo_filter_label['.$slug.']', 'Label for '.$slug, '');	
 		}
 		/* END OF LABELS SECTION */
 		
@@ -81,36 +49,13 @@
 			
 			
 			/* EACH SEPERATE SECTION FOR POST TYPE */
-			$wp_customize->add_section( $section_id, array(
-	    		'title'       	=> __( 'Filters for '.$post_type, 'sage' ),
-		    	'priority'    	=> 30,
-		    	'description' 	=> '',
-		    	'panel'			=> 'akvo_filter_panel'
-			) );
-			
+			$akvo_customize->section( $wp_customize, 'akvo_filter_panel', $section_id, 'Filters for '.$post_type, '');
 			
 			foreach($slugs as $slug){
-				
-				$wp_customize->add_setting('akvo_filter['.$post_type.']['.$slug.']', array(
-					'default' => 0,
-		      		'capability' => 'edit_theme_options',
-      				'type'       => 'option',
-		      	));
-				
-				
-				$label = "Enable ".$slug." for ".$post_type;
-				
-				$wp_customize->add_control('akvo_filter['.$post_type.']['.$slug.']', array(
-      				'settings' => 'akvo_filter['.$post_type.']['.$slug.']',
-		      		'label'    => $label,
-      				'section'  => $section_id,
-		      		'type'     => 'checkbox',
-		      		'std' => 1
-      			));
-				
+				// FILTER OPTION FOR EACH CUSTOM POST TYPE				
+				$akvo_customize->checkbox( $wp_customize, $section_id, 'akvo_filter['.$post_type.']['.$slug.']', "Enable ".$slug." for ".$post_type );
 			}
 		}
 		
-	}
-	add_action( 'customize_register', 'akvo_filter_customize_register' );
+	} );
 	
