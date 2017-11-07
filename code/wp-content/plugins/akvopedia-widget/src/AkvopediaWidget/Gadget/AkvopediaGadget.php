@@ -30,7 +30,7 @@ class AkvopediaGadget {
 		$script = "//<!--\n" .
 			"(function(\$, document) {\n" .
 			"    var init = function() {\n" .
-			'    $("#' . $this->div_id . "\").akvopedia({\n";
+			'    $("#' . $this->div_id . "\").akvopedia({server:'https://akvopedia.org',\n";
 		$first = true;
 		foreach ($this->options as $key => $value ) {
 			if ($first) {
