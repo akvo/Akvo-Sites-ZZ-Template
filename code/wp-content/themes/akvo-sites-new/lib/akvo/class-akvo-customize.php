@@ -87,6 +87,23 @@
 		
 		}
 		
+		function textarea( $wp_customize, $section, $id, $label, $default){
+			
+			$wp_customize->add_setting($id, array(
+       			'default' 	=> $default,
+       			'capability'=> 'edit_theme_options',
+       			'type'      => 'option',
+    		));
+ 		
+			$wp_customize->add_control($id, array(
+				'settings' 	=> $id,
+	    		'type' 		=> 'textarea',
+    	    	'label' 	=> $label,
+        		'section' 	=> $section,
+	        ));
+		
+		}
+		
 		function dropdown( $wp_customize, $section, $id, $label, $default, $choices){
 			
 			$wp_customize->add_setting( $id, array(
