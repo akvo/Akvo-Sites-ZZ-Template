@@ -1,7 +1,6 @@
 <?php
-
-
-	function akvo_card_customize_register( $wp_customize ) {
+	
+	add_action( 'customize_register', function( $wp_customize ){
 		
 		global $akvo_customize;
 		
@@ -65,9 +64,6 @@
 		foreach( $text_el as $id => $el){
 			$akvo_customize->text( $wp_customize, 'akvo_card_section', $id, $el['label'], $el['default']);	
 		}
-		
-		
-		
 		/* END OF THEME SECTION */
 		
 		
@@ -85,13 +81,10 @@
 			$akvo_customize->checkbox( $wp_customize, 'akvo_card_hide_section', $id, $label );
 			
 		}
-		
 		/* END OF HIDE ELEMENTS SECTION */
 		
 		/** EXTRAS SECTION */
-		
 		$akvo_customize->section( $wp_customize, 'akvo_card_panel', 'akvo_card_extras_section', 'Extras', '');
-		
 		
 		$text_el = array(
 			'akvo_card[akvoapp]' => array(
@@ -108,131 +101,85 @@
 		foreach( $text_el as $id => $el){
 			$akvo_customize->text( $wp_customize, 'akvo_card_extras_section', $id, $el['label'], $el['default']);	
 		}
-		
-        
-		/* END OF HIDE ELEMENTS SECTION */
+		/* END OF EXTRAS SECTION */
 		
 		
 		/* IMAGE SECTION */
 		$akvo_customize->section( $wp_customize, 'akvo_card_panel', 'akvo_card_image_section', 'Image Styles', '');
 		
-		
-		/* DEFAULT IMAGE */
-		$wp_customize->add_setting( 'akvo_card[bg_img]', array(
-      		'default' => get_bloginfo('template_url').'/dist/images/placeholder800x400.jpg',
-      		'transport'   => 'refresh',
-      		'type' => 'option'
-      	) );
-
-    	$wp_customize->add_control( 
-      		new WP_Customize_Image_Control( 
-        		$wp_customize, 'akvo_card[bg_img]', array(
-          			'label' => 'Default Image',
-          			'section' => 'akvo_card_image_section',
-          			'settings' => 'akvo_card[bg_img]',
-    	)));
+		$akvo_customize->image( 													/* DEFAULT IMAGE */
+			$wp_customize, 
+			'akvo_card_image_section', 												// SECTION
+			'akvo_card[bg_img]', 													// SETTINGS
+			'Default Image', 														// LABEL
+			get_bloginfo('template_url').'/dist/images/placeholder800x400.jpg'		// DEFAULT IMAGE
+		);
 		
 		
-		/* IMAGE HEIGHTS FOR EACH CUSTOM TYPE */
 		$akvo_card_obj = new Akvo_Card;
         $types = $akvo_card_obj->get_types(); 
         foreach($types as $type=>$label){	
-        
+			/* IMAGE HEIGHTS FOR EACH CUSTOM TYPE */
         	$akvo_customize->text( $wp_customize, 'akvo_card_image_section', 'akvo_card[bg_'.$type.'_height]', 'Image Height in '.$label.' :', '150px');	
-			
 		}
-		
-	}
-	add_action( 'customize_register', 'akvo_card_customize_register' );
+		/* END OF IMAGE SECTION */
+	} );
 
 	
-
-	function akvo_card_css(){
+	/** ADD CUSTOMISE CSS */
+	add_action( 'wp_head', function(){
+		
 		$akvo_card = get_option('akvo_card');
 		
 		//print_r($akvo_card);
 	?>
-         <style type="text/css">
-         	
-         	
-         	<?php if($akvo_card):?>
+		<style type="text/css">
+				
+		<?php if( $akvo_card ):?>
          	.card{
-         		<?php if(isset($akvo_card['bg'])):?>
-         		background: <?php _e($akvo_card['bg']);?>;
-         		<?php endif;?>
-         		<?php if(isset($akvo_card['border_radius'])):?>
-         		border-radius: <?php _e($akvo_card['border_radius']);?>
-         		<?php endif;?>
+         		<?php if(isset($akvo_card['bg'])):?>background: <?php _e($akvo_card['bg']);?>;<?php endif;?>
+         		<?php if(isset($akvo_card['border_radius'])):?>border-radius: <?php _e($akvo_card['border_radius']);?><?php endif;?>
          	}
          	
-         	
+         	<?php if(isset($akvo_card['bg_img'])):?>
          	.card .card-image{
-         		<?php if(isset($akvo_card['bg_img'])):?>
          		background-image: url("<?php _e($akvo_card['bg_img']);?>");
-         		<?php endif;?>
          	}
+			<?php endif;?>
          	
          	.card .card-info{
-         		<?php if(isset($akvo_card['infobar_bg'])):?>
-         		background: <?php _e($akvo_card['infobar_bg']);?>;
-         		<?php endif;?>
-         		
-         		<?php if(isset($akvo_card['infobar_color'])):?>
-         		color: <?php _e($akvo_card['infobar_color']);?>;
-         		<?php endif;?>
-         		
-         		<?php if($akvo_card['hide_infobar']):?>
-         		display: none;
-         		<?php endif;?>
-         		
-         		<?php if(isset($akvo_card['infobar_font_size'])):?>
-         		font-size: <?php _e($akvo_card['infobar_font_size']);?>;
-         		<?php endif;?>
+         		<?php if(isset($akvo_card['infobar_bg'])):?>background: <?php _e($akvo_card['infobar_bg']);?>;<?php endif;?>
+         		<?php if(isset($akvo_card['infobar_color'])):?>color: <?php _e($akvo_card['infobar_color']);?>;<?php endif;?>
+         		<?php if($akvo_card['hide_infobar']):?>display: none;<?php endif;?>
+         		<?php if(isset($akvo_card['infobar_font_size'])):?>font-size: <?php _e($akvo_card['infobar_font_size']);?>;<?php endif;?>
          	}
          	
          	.card .card-content{
-         		<?php if($akvo_card['hide_content']):?>
-         		display: none;
-         		<?php endif;?>
-         		
-         		<?php if(isset($akvo_card['content_color'])):?>
-         		color: <?php _e($akvo_card['content_color']);?>;
-         		<?php endif;?>
-         		
-         		<?php if(isset($akvo_card['content_font_size'])):?>
-         		font-size: <?php _e($akvo_card['content_font_size']);?>;
-         		<?php endif;?>
+         		<?php if($akvo_card['hide_content']):?>display: none;<?php endif;?>
+				<?php if(isset($akvo_card['content_color'])):?>color: <?php _e($akvo_card['content_color']);?>;<?php endif;?>
+         		<?php if(isset($akvo_card['content_font_size'])):?>font-size: <?php _e($akvo_card['content_font_size']);?>;<?php endif;?>
          	}
+			
          	.card .card-title{
-         		<?php if($akvo_card['hide_card_title']):?>
-         		display: none;
-         		<?php endif;?>
-         		
-         		<?php if(isset($akvo_card['title_font_size'])):?>
-         		font-size: <?php _e($akvo_card['title_font_size']);?>;
-         		<?php endif;?>
-         		
-         		<?php if(isset($akvo_card['title_color'])):?>
-         		color: <?php _e($akvo_card['title_color']);?>;
-         		<?php endif;?>
+         		<?php if($akvo_card['hide_card_title']):?>display: none;<?php endif;?>
+         		<?php if(isset($akvo_card['title_font_size'])):?>font-size: <?php _e($akvo_card['title_font_size']);?>;<?php endif;?>
+         		<?php if(isset($akvo_card['title_color'])):?>color: <?php _e($akvo_card['title_color']);?>;<?php endif;?>
          	}
          	
          	<?php 
          		$akvo_card_obj = new Akvo_Card;
          		$types = $akvo_card_obj->get_types(); 
-         		foreach($types as $type=>$label): $bg_setting = 'bg_'.$type.'_height';
-         			if(isset($akvo_card[$bg_setting])):
+         		foreach($types as $type=>$label): $bg_setting = 'bg_'.$type.'_height';if(isset($akvo_card[$bg_setting])):
          	?>
          		.card.<?php _e($type)?> .card-image{
          			height: <?php _e($akvo_card[$bg_setting]);?>
          		}
          	<?php endif;endforeach;?>	
          	
-         	<?php endif;?>
-         </style>
+		<?php endif;?>
+		</style>
     <?php
-	}
-	add_action( 'wp_head', 'akvo_card_css');
+		
+		
+	});
 
-
-?>

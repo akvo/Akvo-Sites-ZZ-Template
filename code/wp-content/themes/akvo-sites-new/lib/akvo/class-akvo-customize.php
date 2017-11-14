@@ -120,6 +120,21 @@
 			));
 		}
 		
+		function image( $wp_customize, $section, $id, $label, $default){
+			
+			$wp_customize->add_setting( $id, array(
+				'default' 	=> $default,
+				'transport' => 'refresh',
+				'type' 		=> 'option'
+			) );
+
+			$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, $id, array(
+          		'label' 	=> $label,
+          		'section' 	=> $section,
+          		'settings' 	=> $id,
+			)));
+		}
+		
 	}
 	
 	global $akvo_customize;
