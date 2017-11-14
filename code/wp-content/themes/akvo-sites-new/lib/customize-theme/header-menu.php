@@ -15,11 +15,11 @@
 				'label'		=> 'Background Item Menu'
 			),
 			'sage_header_options[color_menu]' => array(
-				'default'	=> '#ffffff',
+				'default'	=> '#000000',
 				'label' 	=> 'Color Item Menu',	
 			),
 			'sage_header_options[bg_parent_menu]' => array(
-				'default'	=> '#ffffff',
+				'default'	=> '#000000',
 				'label' 	=> 'Background Active Item Menu Parent',	
 			),
 			'sage_header_options[color_parent_menu]' => array(
@@ -27,7 +27,7 @@
 				'label' 	=> 'Color Active Item Menu Parent',	
 			),
 			'sage_header_options[bg_child_menu]' => array(
-				'default'	=> '#ffffff',
+				'default'	=> '#000000',
 				'label' 	=> 'Background Active Item Menu Children',
 			),
 			'sage_header_options[color_child_menu]' => array(
