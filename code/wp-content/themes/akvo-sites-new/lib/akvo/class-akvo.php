@@ -1,6 +1,6 @@
 <?php
 
-	class Akvo{
+	class AKVO{
 		
 		public $header_options;
 		public $search_flag = true;
@@ -149,26 +149,19 @@
 		
 		function load_scripts(){
 			
+			/* FONTAWESOME STYLE */
 			wp_enqueue_style( 'fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', false, null);
-  			wp_enqueue_style( 'sage_css', get_template_directory_uri().'/dist/styles/main.css', false, '2.1.2');
+  			
+			/* AKVO SITES STYLESHEET */
+			wp_enqueue_style( 'sage_css', get_template_directory_uri().'/dist/styles/main.css', false, '2.1.2');
   		
-			/* SELECTED FONTS FROM THE CUSTOMIZE */
-			$font_face = $this->selected_fonts();
-			
-			/* LIST OF ALL THE FONTS */
-			$google_fonts = $this->fonts();
-		
-			// ENQUEUE FONTS THAT ARE SELECTED
-			foreach( $google_fonts as $google_font ){
-				if( in_array( $google_font['name'], $font_face ) ){
-					wp_enqueue_style( $google_font['slug'], $google_font['url'], false, null);
-				}
-			}
-		
 			/* COMMENTS REPLY JS */
 			if (is_single() && comments_open() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); }
-		
+			
+			/* BOOTSTRAP JS */
 			wp_enqueue_script('bootstrap_js', get_template_directory_uri().'/dist/scripts/bootstrap.min.js', ['jquery'], '1.0.1', true);
+			
+			/* CUSTOM SCRIPT JS */
 			wp_enqueue_script('akvo_js', get_template_directory_uri().'/dist/scripts/main.js', ['jquery'], "1.0.3", true);
 		}
 		
@@ -186,108 +179,9 @@
     		unset($wp_meta_boxes['dashboard']['normal']['core']['tribe_dashboard_widget']);
 		}
 		
-		function selected_fonts(){
-			
-			// GET FONTS SELECTED THROUGH CUSTOMIZE
-			$custom_akvo_fonts = array(
-				'body'	=>  get_theme_mod('akvo_font'),
-				'nav'	=> 	get_theme_mod('akvo_font_nav'),
-				'head'	=> 	get_theme_mod('akvo_font_head')
-			);
 		
-			$font_face = array();
 		
-			foreach( $custom_akvo_fonts as $font ){
-				// CHECK IF FONT IS EMPTY
-				if( count($font) ){
-					$font_face[] = $font;
-				}
-			
-			}
 		
-			// DEFAULT FONT IF NONE IS SELECTED THROUGH CUSTOMIZE
-			if( ! count( $font_face ) ){
-				$font_face[] = "Open Sans";
-			}
-			
-			return $font_face;
-		}
-		
-		function fonts(){
-			
-			$fonts_arr = array(
-  				array(
-  					'slug'	=> 'opensans',
-	  				'name'	=> 'Open Sans',
-  					'url'	=> '//fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic'
-  				),
-  				array(
-  					'slug'	=> 'roboto',
-	  				'name'	=> 'Roboto',
-  					'url'	=> '//fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic'
-  				),
-  				array(
-  					'slug'	=> 'lora',
-	  				'name'	=> 'Lora',
-  					'url'	=> '//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic'
-  				),
-  				array(
-  					'slug'	=> 'raleway',
-	  				'name'	=> 'Raleway',
-  					'url'	=> '//fonts.googleapis.com/css?family=Raleway:400,700'
-  				),
-	  			array(
-  					'slug'	=> 'merriweather',
-  					'name'	=> 'Merriweather',
-  					'url'	=> '//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic'
-	  			),
-  				array(
-  					'slug'	=> 'arvo',
-  					'name'	=> 'Arvo',
-  					'url'	=> '//fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic'
-	  			),
-  				array(
-  					'slug'	=> 'muli',
-  					'name'	=> 'Muli',
-  					'url'	=> '//fonts.googleapis.com/css?family=Muli:400,400italic'
-	  			),
-  				array(
-  					'slug'	=> 'nunito',
-  					'name'	=> 'Nunito',
-  					'url'	=> '//fonts.googleapis.com/css?family=Nunito:400,700'
-  				),
-	  			array(
-  					'slug'	=> 'alegreya',
-  					'name'	=> 'Alegreya',
-  					'url'	=> '//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700'
-  				),
-	  			array(
-  					'slug'	=> 'exo2',
-  					'name'	=> 'Exo 2',
-  					'url'	=> '//fonts.googleapis.com/css?family=Exo+2:400,400italic,700,700italic'
-	  			),
-  				array(
-  					'slug'	=> 'crimson',
-  					'name'	=> 'Crimson Text',
-  					'url'	=> '//fonts.googleapis.com/css?family=Crimson+Text:400,400italic,700,700italic'
-	  			),
-  				array(
-  					'slug'	=> 'lobster',
-  					'name'	=> 'Lobster Two',
-  					'url'	=> '//fonts.googleapis.com/css?family=Lobster+Two:400,400italic,700,700italic'
-  				),
-	  			array(
-  					'slug'	=> 'maven',
-  					'name'	=> 'Maven Pro',
-  					'url'	=> '//fonts.googleapis.com/css?family=Maven+Pro:400,500,700,900'
-  				),
-	  		);
-	  		
-	  		$fonts_arr = apply_filters('akvo_fonts', $fonts_arr);
-	  		
-	  		return $fonts_arr;
-	  		
-		}
 		
 		function register_taxonomy($slug, $plural_label, $singular_label, $post_types){
 	
@@ -344,4 +238,4 @@
 	
 	global $akvo;
 	
-	$akvo = new Akvo;
+	$akvo = new AKVO;

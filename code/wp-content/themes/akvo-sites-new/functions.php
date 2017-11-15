@@ -27,12 +27,12 @@
 	
 	
 	
-	// TO REMOVE MENUS FOR EDITOR
+	/* TO REMOVE MENUS FOR EDITOR
 	add_action( 'admin_init', function(){
  		
  		if( ! current_user_can('editor') ) return false;
  		
- 		/* MAIN MENU ITEMS TO BE REMOVED */
+ 		/* MAIN MENU ITEMS TO BE REMOVED *
  		$menu_arr = array(
  			'edit.php',						// Posts section
  			'plugins.php',					// Plugins section
@@ -47,7 +47,7 @@
  		foreach( $menu_arr as $menu){ remove_menu_page( $menu ); }
  		
  		
- 		/* SUB MENU ITEMS TO BE REMOVED */
+ 		/* SUB MENU ITEMS TO BE REMOVED *
  		
  		$sub_menu_arr = array(
  			array('themes.php', 'themes.php'	), 					// Themes section from Appearance
@@ -68,7 +68,7 @@
 
  		
  	} );
- 	
+ 	*/
 	
 	
 	

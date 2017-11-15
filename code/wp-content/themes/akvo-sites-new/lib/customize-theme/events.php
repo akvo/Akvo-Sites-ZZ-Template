@@ -63,10 +63,11 @@
 		
 		$akvo_events = get_option('akvo_events');
 		
+		if($akvo_events != NULL):
+		
 		?>
         <style type="text/css">
-        	<?php if(isset($akvo_events)):?>
-         	.tribe-events-list-widget h3.widget-title{
+        	.tribe-events-list-widget h3.widget-title{
          		<?php if(isset($akvo_events['title_font_size'])){ _e("font-size:".$akvo_events['title_font_size'].";");}?>
          		<?php if(isset($akvo_events['title_color'])){ _e("color:".$akvo_events['title_color'].";");}?>
          	}
@@ -75,8 +76,9 @@
          		<?php if(isset($akvo_events['btn_bg_color'])){ _e("background-color:".$akvo_events['btn_bg_color'].";");}?>
          		<?php if(isset($akvo_events['btn_color'])){ _e("color:".$akvo_events['btn_color'].";");}?>
          	}
-         	<?php endif;?> 		
-         </style>
+		</style>
         <?php 
+		
+		endif;
 	});
 	
