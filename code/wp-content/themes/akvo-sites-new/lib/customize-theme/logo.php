@@ -46,4 +46,20 @@
     	
       	
 	} );
-
+	
+	
+	add_action( 'wp_head', function(){
+		
+		$header_option = get_option('sage_header_options');
+		
+		/* FOR STICKY HEADER */
+		if($header_option && isset($header_option['header_type']) && 'header2' == $header_option['header_type']){
+			_e("<style type=\"text/css\">");
+			_e(".banner{margin-bottom: 0px;}");
+			_e("#main-page-container{margin-top: 0px;}");
+			_e("</style>");
+		}
+		
+		
+		
+	});
