@@ -100,14 +100,11 @@
 		if($grijs == "#ffffff") $hovergrijs = "#e6e6e6";
 		else $hovergrijs = $grijs;
 
-		$font = get_theme_mod('akvo_font');
-		if (empty( $font )) $font = 'Open Sans';
+		
 
-		$font_head = get_theme_mod('akvo_font_head');
-		if (empty( $font_head )) $font_head = 'Open Sans';
+		
 
-		$font_nav = get_theme_mod('akvo_font_nav');
-		if (empty( $font_nav )) $font_nav = 'Open Sans';
+		
 
 		$background = get_theme_mod('background');
 		if (empty( $background )) $background = '#ffffff';
@@ -142,16 +139,13 @@
 		$info_bar_testimonial = get_theme_mod('info_bar_testimonial');
 		if (empty( $info_bar_testimonial )) $info_bar_testimonial = '#007ba8';
 	
-		$akvo_article = get_option('akvo_article');
-	
-		$akvo_events = get_option('akvo_events');
+		
 	
     ?>
          <style type="text/css">
          	html {background:<?php echo $donker;?>; }
-            body { font-family: '<?php echo $font; ?>'; background: <?php echo $background; ?>;}
-            h1,h2,h3,h4,h5,h6 { font-family: '<?php echo $font_head; ?>';  }
-            nav { font-family: '<?php echo $font_nav; ?>'; }
+            body { background: <?php echo $background; ?>;}
+            
             .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active { background: <?php echo $licht;?> !important; }
             nav .lang .fa-circle, nav ul.navbar-nav li i { color: <?php echo $main;?>; }
             .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, footer .custom { background: <?php echo $main;?>; }
@@ -182,38 +176,14 @@
          	
          	
          	.nav>li>a:focus, .nav>li>a:hover {background:<?php echo $licht;?>; }
-         	blockquote {border-color: $donkergrijs;}
+         	blockquote {border-color: <?php echo $donkergrijs;?>;}
          	@media (min-width: 768px) {
          		nav  {background: <?php echo $lichtgrijs;?>;}
          		nav ul.navbar-nav li a:hover, nav ul.navbar-nav li:hover a { background: <?php echo $licht;?>;}
          		nav ul.navbar-nav .dropdown-menu li a:hover {background: <?php echo $main;?>; }
-         		
          		nav ul.navbar-nav .dropdown-menu li.current-menu-item a{background: <?php echo $main;?>;}
          	}
-         	
-         	
-         	<?php if($akvo_article):?>
-         	article header h3{
-         		<?php if(isset($akvo_article['title_font_size'])):?>
-         		font-size: <?php _e($akvo_article['title_font_size'])?>;
-         		<?php endif;?>
-         	}
-         	
-         	article .meta{
-         		<?php if(isset($akvo_article['meta_font_size'])):?>
-         		font-size: <?php _e($akvo_article['meta_font_size'])?>;
-         		<?php endif;?>
-         	}
-         	
-         	article .content{
-         		<?php if(isset($akvo_article['content_font_size'])):?>
-         		font-size: <?php _e($akvo_article['content_font_size'])?>;
-         		<?php endif;?>
-         	}
-         	<?php endif;?>
-         	
-         	
-         </style>
+		</style>
     <?php
 		
 		
