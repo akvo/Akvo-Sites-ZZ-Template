@@ -85,14 +85,14 @@
 	add_action( 'wp_head', function(){
 		
 		
-		$main = get_theme_mod('main_color');
+		$main = get_option('main_color');
 	
 		if (empty( $main )) $main = '#00a99d';
 		$main2 = new Color("$main"); 
 		$licht = '#'.$main2->mix('ffffff', 10);
 		$donker = '#'.$main2->darken();
 
-		$grijs = get_theme_mod('grijs');
+		$grijs = get_option('grijs');
 		if (empty( $grijs )) $grijs = '#e6e6e6';
 		$grijs2 = new Color("$grijs");
 		$lichtgrijs = '#'.$grijs2->lighten(5);
@@ -106,37 +106,37 @@
 
 		
 
-		$background = get_theme_mod('background');
+		$background = get_option('background');
 		if (empty( $background )) $background = '#ffffff';
 
-		$info_bar_blog = get_theme_mod('info_bar_blog');
+		$info_bar_blog = get_option('info_bar_blog');
 		if (empty( $info_bar_blog )) $info_bar_blog = '#a3d165';
 
-		$info_bar_news = get_theme_mod('info_bar_news');
+		$info_bar_news = get_option('info_bar_news');
 		if (empty( $info_bar_news ))  $info_bar_news = '#f9ba41';
 
-		$info_bar_video = get_theme_mod('info_bar_video');
+		$info_bar_video = get_option('info_bar_video');
 		if (empty( $info_bar_video )) $info_bar_video = '#f47b50';
 
-		$info_bar_update = get_theme_mod('info_bar_update');
+		$info_bar_update = get_option('info_bar_update');
 		if (empty( $info_bar_update )) $info_bar_update = '#54bce8';
 
-		$info_bar_flow = get_theme_mod('info_bar_flow');
+		$info_bar_flow = get_option('info_bar_flow');
 		if (empty( $info_bar_flow )) $info_bar_flow = '#54bce8';
 
-		$info_bar_page = get_theme_mod('info_bar_page');
+		$info_bar_page = get_option('info_bar_page');
 		if (empty( $info_bar_page )) $info_bar_page = '#6d3a7d';
 
-		$info_bar_media = get_theme_mod('info_bar_media');
+		$info_bar_media = get_option('info_bar_media');
 		if (empty( $info_bar_media )) $info_bar_media = '#9d897b';
 
-		$info_bar_project = get_theme_mod('info_bar_project');
+		$info_bar_project = get_option('info_bar_project');
 		if (empty( $info_bar_project )) $info_bar_project = '#7381fa';
 
-		$info_bar_map = get_theme_mod('info_bar_map');
+		$info_bar_map = get_option('info_bar_map');
 		if (empty( $info_bar_map )) $info_bar_map = '#ad1c3c';
 
-		$info_bar_testimonial = get_theme_mod('info_bar_testimonial');
+		$info_bar_testimonial = get_option('info_bar_testimonial');
 		if (empty( $info_bar_testimonial )) $info_bar_testimonial = '#007ba8';
 	
 		
