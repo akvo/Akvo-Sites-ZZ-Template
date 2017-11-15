@@ -10,10 +10,7 @@
 		
 		function __construct(){
 		
-			
 			$this->init_header_options();
-			
-			add_action( 'wp_dashboard_setup', array( $this, 'remove_dashboard_items' ) );
 			
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ), 100 );
 			
@@ -22,12 +19,6 @@
 			add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ) );
 			
 			add_action( 'excerpt_more', array( $this, 'excerpt_more' ) );
-			
-			
-			$this->add_support_link();
-			
-			
-			
 			
 		}
 		
@@ -54,39 +45,6 @@
 			}
 			
 		}
-		
-		function add_support_link(){
-			
-			/* SUPPORT LINK */
-			add_action( 'admin_notices', function(){
-				include "templates/support.php";
-			} );
-			
-			/* REMOVE HELP FROM DASHBOARD */
-			add_filter( 'contextual_help', function($old_help, $screen_id, $screen){
-				$screen->remove_help_tabs();
-    			return $old_help;
-			}, 999, 3 );
-			
-			// REMOVE LINKS FROM TOP ADMIN BAR
-			add_action( 'admin_bar_menu', function( $wp_admin_bar ) {
-				// REMOVE LOGO
-				$wp_admin_bar->remove_node( 'wp-logo' );
-				$wp_admin_bar->remove_node( 'new-post' );
-		
-				$wp_admin_bar->add_node(  array(
-					'id'    => 'akvo-sites-support',
-					'title' => 'Support',
-					'href'  => 'http://sitessupport.akvo.org',
-					'meta'  => array( 'class' => 'my-toolbar-page' )
-				) );
-			}, 999 );
-			
-		}
-		
-		
-		
-		
 		
 		function after_setup_theme(){
 		
@@ -164,23 +122,6 @@
 			/* CUSTOM SCRIPT JS */
 			wp_enqueue_script('akvo_js', get_template_directory_uri().'/dist/scripts/main.js', ['jquery'], "1.0.3", true);
 		}
-		
-		function remove_dashboard_items(){
-			global $wp_meta_boxes;
- 
-	    	unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press']);
-    		unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_incoming_links']);
-    		//unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now']);
-    		unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']);
-    		//unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_drafts']);
-    		//unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']);
-    		unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']);
-    		unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']);
-    		unset($wp_meta_boxes['dashboard']['normal']['core']['tribe_dashboard_widget']);
-		}
-		
-		
-		
 		
 		
 		function register_taxonomy($slug, $plural_label, $singular_label, $post_types){
