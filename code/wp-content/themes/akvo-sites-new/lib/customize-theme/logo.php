@@ -57,6 +57,7 @@
 			_e("<style type=\"text/css\">");
 			_e(".banner{margin-bottom: 0px;}");
 			_e("#main-page-container{margin-top: 0px;}");
+			_e("@media(min-width: 960px){ #main-page-container{ min-height: 600px;} }");
 			_e("</style>");
 		}
 		
