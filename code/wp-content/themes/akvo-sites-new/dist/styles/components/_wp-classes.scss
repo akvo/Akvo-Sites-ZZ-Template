@@ -29,12 +29,8 @@
 }
 
 // Captions
-.wp-caption {
-  @extend .thumbnail;
-}
-.wp-caption-text {
-  padding: $thumbnail-caption-padding;
-}
+.wp-caption { @extend .thumbnail;}
+.wp-caption-text { padding: $thumbnail-caption-padding;}
 
 // Text meant only for screen readers
 .screen-reader-text {

@@ -5,7 +5,7 @@ article, .article {
 	}
 	img {
 		max-width: 100%;
-                height: auto;
+		height: auto;
 	}
 	h1 {
 		text-align: center;
@@ -20,21 +20,15 @@ article, .article {
 		margin-top:15px;
 		padding:5px 10px;
 		@include icons;
-		span, time {
-			margin-right: 15px;
-		}
-		.type, .author {
-			display: none;
-		}
+		span, time { margin-right: 15px; }
+		.type, .author { display: none; }
 		&.single {
 			border-bottom: 0;
 			padding: 0;
 			margin: 5px 0 10px;
 		}
 	}
-	.intro {
-		font-size: 1.3em;
-	}
+	.intro { font-size: 1.3em;}
 }
 
 .social {
@@ -42,9 +36,7 @@ article, .article {
 	float: right;
 }
 
-.avatar {
-	display: none;
-}
+.avatar { display: none;}
 
 .thumb-wrapper {
 	overflow:hidden;

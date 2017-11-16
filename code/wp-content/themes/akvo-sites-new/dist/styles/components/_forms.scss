@@ -26,12 +26,8 @@
 }
 
 .form {
-	.bg {
-		padding:10px 15px;
-	}
-	p {
-		margin-bottom: 0;
-	}
+	.bg { padding:10px 15px;}
+	p { margin-bottom: 0; }
 	.text-wrap, .textarea-wrap, .spam-wrap {
 		input, textarea {
 			border:1px solid $grijs;

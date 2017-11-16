@@ -8,9 +8,7 @@
 	}
 }
 
-a {
-	transition:all .2s;
-}
+a { transition:all .2s; }
 
 .carousel {
 	margin-bottom: 15px;
@@ -21,9 +19,7 @@ a {
 		margin-bottom: 15px;
 		font-size: 3em;
 	}
-	h2 {
-		margin-top: 0;
-	}
+	h2 { margin-top: 0;}
 	.text {
 		background: $primary-light;
 		text-align: center;
@@ -72,7 +68,6 @@ a {
 	&:hover {
 		.text {
 			background: darken($primary-light, 10%);
-			//color:#fff;
 		}
 	}
 }
@@ -143,91 +138,39 @@ a {
 			overflow: hidden;
 		}
 	}
-	// &.middel {
-	// 	.header-wrap {
-	// 		height: 65px;
-	// 		h2 {
-	// 			font-size: 1.8em;
-	// 		}
-	// 	}
-	// }
-	// &.groot {
-	// 	.header-wrap {
-	// 		height: 70px;
-	// 		h2 {
-	// 			font-size: 2em;
-	// 		}
-	// 	}
-	// }
-	// &.megagroot {
-	// 	.header-wrap {
-	// 		height: 75px;
-	// 		h2 {
-	// 			font-size: 2.2em;
-	// 		}
-	// 	}
-	// }
+	
 	.icon-wrap {
 		text-align: center;
 		margin:10px 15px;
 		background: darken($grijs,15%);
 		padding: 46px 15px;
 	}
-	&.home {
-		width: 100%;
-	}
+	&.home { width: 100%;}
 	.infobar {
 		padding:3px 15px;
 		color: $white;
 		border-top: 1px solid $white;
 		border-bottom: 1px solid $white;
 		@include icons;
-		&.blog, &.type-blog {
-			background: $infobar-blog;
-		}
-		&.post, &.type-post {
-			background: $infobar-news;
-		}
-		&.video, &.type-video {
-			background: $infobar-video;
-		}
-		&.map, &.type-map {
-			background: $infobar-map;
-		}
-		&.project, &.type-project {
-			background: $infobar-project;
-		}
-		&.testimonial, &.type-testimonial {
-			background: $infobar-testimonial;
-		}
-		&.page {
-			background: $infobar-page;
-		}
-		&.update, &.type-update {
-			background: $infobar-update;
-		}
-		&.flow, &.flow-update {
-			background: $infobar-flow;
-		}
-		&.media, &.type-media {
-			margin-top:0;
-			background: $infobar-media;
-		}
-		.type {
-			float: right;
-		}
+		&.blog, &.type-blog { background: $infobar-blog;}
+		&.post, &.type-post { background: $infobar-news;}
+		&.video, &.type-video { background: $infobar-video;}
+		&.map, &.type-map { background: $infobar-map;}
+		&.project, &.type-project { background: $infobar-project;}
+		&.testimonial, &.type-testimonial { background: $infobar-testimonial;}
+		&.page { background: $infobar-page;}
+		&.update, &.type-update { background: $infobar-update;}
+		&.flow, &.flow-update { background: $infobar-flow;}
+		&.media, &.type-media { margin-top:0; background: $infobar-media;}
+		.type { float: right;}
 	}
 	img {
 		padding:10px 15px 0 15px;
 		width: 100%;
 		height: auto;
 	}
-	.excerpt {
-		padding:10px 15px;
-	}
-	.readmore {
-		padding:0 15px 10px 15px;
-	}
+	.excerpt { padding:10px 15px;}
+	.readmore { padding:0 15px 10px 15px;}
 }
 
 .article {
@@ -252,9 +195,7 @@ a {
 		padding-bottom: 10px;
 		margin-bottom: 10px;
 	}
-	.says {
-
-	}
+	
 }
 
 .embed-container { 
@@ -348,9 +289,7 @@ a {
 				border-radius: 8px;
 				cursor: pointer;
 				background-color: $white;
-				&.active {
-					background-color: $brand-primary;
-				}
+				&.active { background-color: $brand-primary; }
 			}
 		}
 	}
@@ -367,9 +306,7 @@ a {
 				margin-bottom: 10px;
 			}
 		}
-		.item {
-			height: 230px;
-		}
+		.item { height: 230px; }
 	}
 }
 
