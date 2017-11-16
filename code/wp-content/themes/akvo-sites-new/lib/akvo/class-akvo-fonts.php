@@ -48,9 +48,9 @@
 		
 		function customize_fonts(){
 			return array(
-				'body'	=>  get_option('akvo_font'),
-				'nav'	=> 	get_option('akvo_font_nav'),
-				'head'	=> 	get_option('akvo_font_head')
+				'body'	=>  get_option('akvo_font') ? get_option('akvo_font') : "Open Sans",
+				'nav'	=> 	get_option('akvo_font_nav') ? get_option('akvo_font_nav') : "Open Sans",
+				'head'	=> 	get_option('akvo_font_head') ? get_option('akvo_font_head') : "Open Sans",
 			);
 		}
 		
