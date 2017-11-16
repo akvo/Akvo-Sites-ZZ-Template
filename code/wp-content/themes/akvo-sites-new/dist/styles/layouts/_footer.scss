@@ -1,12 +1,10 @@
 .wp-pagenavi {
 	padding: 15px 0;
-	.pages {
-		//display: none;
-	}
+	
 	a, span {
-		padding:3px 10px;
-		margin:0;
-		border:1px solid $grijs;
+		padding: 3px 10px;
+		margin: 0;
+		border: 1px solid $grijs;
 		border-right: 0;
 	}
 	a {
@@ -18,11 +16,11 @@
 	}
 	.current {
 		background-color: $primary-light;
-		color:$brand-primary;
-		border-color:$grijs !important;
+		color: $brand-primary;
+		border-color: $grijs !important;
 	}
 	span:last-child, a:last-child {
-		border-right:1px solid $grijs;
+		border-right: 1px solid $grijs;
 		border-top-right-radius: $border-radius-base;
 		border-bottom-right-radius: $border-radius-base;
 	}
@@ -34,16 +32,14 @@
 
 footer {
 	text-align: center;
-	/*color:$white;*/
+	
 	h3 {
 		font-size: 18px;
 		margin-top:10px;
 	}
 	section {
 		padding:10px 0;
-		&.widget_synved_social_follow {
-			padding-top:0;
-		}
+		&.widget_synved_social_follow { padding-top:0; }
 	}
 	.twitter {
 		background: $primary-light;
@@ -83,11 +79,7 @@ footer {
 		.tweet_secondary_meta {
 			font-size: .8em;
 		}
-		.tweet_intents {
-			a {
-				margin:0 5px;
-			}
-		}
+		.tweet_intents a { margin:0 5px; }
 		.tweet_icon_reply:before, .tweet_icon_retweet:before, .tweet_icon_favourite:before {
 			font-family: 'FontAwesome';
 			margin-right: 5px;
@@ -101,53 +93,10 @@ footer {
 		.tweet_icon_favourite:before {
 			content: "\f005";
 		}
-
-		// ul.fetched_tweets {
-		// 	li {
-		// 		box-shadow:none !important;
-		// 		border:none !important;
-		// 		border-radius:$border-radius-base !important;
-		// 	}
-		// 	.tweet_wrap {
-		// 		box-shadow:none;
-		// 		.wdtf-user-card {
-		// 			float: left;
-		// 			width:auto;
-		// 		}
-		// 		.tweet_data {
-		// 			text-align: left;
-		// 			float: none;
-		// 		}
-		// 	}
-		// 	.times {
-		// 		font-size: .7em;
-		// 		float: right;
-		// 	}
-		// 	.stats-narrow {
-		// 		.stats a {
-		// 			width:40% !important;
-		// 			float:left;
-		// 			&:last-of-type {
-		// 				float: right;
-		// 			}
-		// 		}
-		// 	}
-		// 	br {
-		// 		display: none;
-		// 	}
-		// 	.tweets-intent-data a:hover {
-		// 		text-decoration: none;
-		// 	}
-		// }
 	}
 	.custom {
 		background: $brand-primary;
-		// .socialmedia {
-		// 	i {
-		// 		font-size: 2em;
-		// 		margin:0 10px;
-		// 	}
-		// }
+		
 		.btn {
 			background: $primary-dark;
 			color:$white;
@@ -162,8 +111,6 @@ footer {
 			font-size: 2em;
 			text-decoration: none;
 		}
-		.small {
-			color: $footertxt;
-		}
+		.small { color: $footertxt; }
 	}
 }
