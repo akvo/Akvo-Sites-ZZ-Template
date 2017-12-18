@@ -31,13 +31,13 @@
 		
 		function color( $wp_customize, $section, $id, $label, $default ){
 			
-			
-			
+			$this->add_setting( $wp_customize, $id, $default );
+			/*
 			$wp_customize->add_setting( $id, array(
       			'default' => $default,
       			'transport'   => 'refresh',
       			'type' => 'option'
-      		) );
+      		) );*/
 
     		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, $id, array(
           		'label' => $label,
@@ -52,11 +52,13 @@
 		
 		function checkbox( $wp_customize, $section, $id, $label ){
 			
+			$this->add_setting( $wp_customize, $id, $default );
+			/*
 			$wp_customize->add_setting($id, array(
 				'default' => 0,
       			'capability' => 'edit_theme_options',
       			'type'       => 'option',
-      		));
+      		));*/
 		
 			$wp_customize->add_control($id, array(
       			'settings' 	=> $id,
@@ -72,12 +74,8 @@
 		
 		function text( $wp_customize, $section, $id, $label, $default){
 			
-			$wp_customize->add_setting($id, array(
-       			'default' 	=> $default,
-       			'capability'=> 'edit_theme_options',
-       			'type'      => 'option',
-    		));
- 		
+			$this->add_setting( $wp_customize, $id, $default );
+			
 			$wp_customize->add_control($id, array(
 				'settings' 	=> $id,
 	    		'type' 		=> 'text',
@@ -89,12 +87,8 @@
 		
 		function textarea( $wp_customize, $section, $id, $label, $default){
 			
-			$wp_customize->add_setting($id, array(
-       			'default' 	=> $default,
-       			'capability'=> 'edit_theme_options',
-       			'type'      => 'option',
-    		));
- 		
+			$this->add_setting( $wp_customize, $id, $default );
+			
 			$wp_customize->add_control($id, array(
 				'settings' 	=> $id,
 	    		'type' 		=> 'textarea',
@@ -106,11 +100,8 @@
 		
 		function dropdown( $wp_customize, $section, $id, $label, $default, $choices){
 			
-			$wp_customize->add_setting( $id, array(
-	    		'default' 	=> $default,
-	    		'type'		=> 'option',
-				'transport' => 'refresh',
-			));
+			$this->add_setting( $wp_customize, $id, $default );
+			
 			$wp_customize->add_control( $id, array(
 				'type' 		=> 'select',	
 		    	'label'    	=> $label,
@@ -122,17 +113,23 @@
 		
 		function image( $wp_customize, $section, $id, $label, $default){
 			
-			$wp_customize->add_setting( $id, array(
-				'default' 	=> $default,
-				'transport' => 'refresh',
-				'type' 		=> 'option'
-			) );
-
+			$this->add_setting( $wp_customize, $id, $default );
+			
 			$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, $id, array(
           		'label' 	=> $label,
           		'section' 	=> $section,
           		'settings' 	=> $id,
 			)));
+		}
+		
+		function add_setting( $wp_customize, $id, $default ){
+			
+			$wp_customize->add_setting( $id, array(
+				'default' 	=> $default,
+				'transport' => 'refresh',
+				'type' 		=> 'option'
+			) );
+			
 		}
 		
 	}
