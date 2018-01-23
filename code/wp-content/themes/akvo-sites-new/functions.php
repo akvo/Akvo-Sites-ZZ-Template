@@ -233,3 +233,46 @@
  
 		return $attachment_id;
 	}
+	
+	
+	add_action('wp_ajax_api', function(){
+		
+		
+		$url = "https://ethersource.gavagai.se/ethersource/rest/v2/sectors/1179?apiKey=123";
+		
+		//$url = "http://testfarm.kreablo.se/wikis/api.php?action=query&meta=siteinfo&format=json";
+		
+		$username = "groundtruthadmin@gavagai.se";
+		$password = "waterAQUA";
+		
+		//$username = "gt20@gavagai.se";
+		//$password = "vattenFOKUS";
+		
+		
+		$curl = curl_init();
+		
+		
+		
+		print_r( $url );
+
+		// Optional Authentication:
+		curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_setopt($curl, CURLOPT_USERPWD, $username.":".$password );
+		
+		curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		
+		
+		
+		$result = curl_exec($curl);
+		
+		
+		
+		curl_close($curl);
+		
+		print_r( $result );
+		
+		exit( 0 );
+	});
