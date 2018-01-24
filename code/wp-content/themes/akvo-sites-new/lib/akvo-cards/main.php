@@ -34,7 +34,7 @@
 		switch($instance['type']){
 			case 'rsr-project': 
 				// RSR Project Card
-				$akvo_card = $akvo_card_obj->rsr_project($instance);
+				$data = $akvo_card_obj->rsr_project($instance);
 				break;
 			case 'project': 
 				// RSR Updates Card

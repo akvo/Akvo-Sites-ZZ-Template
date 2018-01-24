@@ -3,4 +3,6 @@
 /code/upgrade/
 /code/uploads/
 /code/wp-config.php*
+/code/.htaccess
 npm-debug.log
+
