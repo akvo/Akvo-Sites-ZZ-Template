@@ -7,7 +7,8 @@
 		'logo.php', 
 		'article.php', 
 		'search.php',
-		'external-assets.php'		// HEADER AND FOOTER SECTION
+		'external-assets.php',		// HEADER AND FOOTER SECTION
+		'fonts.php'
 	);
 	
 	foreach($inc_files as $inc_file){
