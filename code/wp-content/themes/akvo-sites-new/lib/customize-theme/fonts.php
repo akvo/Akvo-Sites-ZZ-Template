@@ -22,19 +22,20 @@
 		
 		$akvo_fonts = get_option('akvo_fonts');
 		
-		foreach( $akvo_fonts as $font ){
-			
-			if( isset( $font['label'] ) && isset( $font['url'] ) ){
-			
-				$fonts[] = array(
-					'slug'	=> sanitize_title( $font['label'] ),
-					'name'	=> $font['label'],
-					'url'	=> $font['url']
-				);
+		if( is_array( $akvo_fonts ) ){
+			foreach( $akvo_fonts as $font ){
+				
+				if( isset( $font['label'] ) && isset( $font['url'] ) ){
+				
+					$fonts[] = array(
+						'slug'	=> sanitize_title( $font['label'] ),
+						'name'	=> $font['label'],
+						'url'	=> $font['url']
+					);
+				}
+				
 			}
-			
 		}
-		
 		//print_r( $fonts ); wp_die();
 		
 		return $fonts;
