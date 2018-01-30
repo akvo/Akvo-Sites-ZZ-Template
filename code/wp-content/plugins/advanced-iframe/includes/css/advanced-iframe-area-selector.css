@@ -34,7 +34,7 @@ textarea, input, select, button {
 
 .text-pad-top {
    display: inline-block;
-   width:100px;
+   width:150px;
    vertical-align:top;
 }
 
@@ -50,4 +50,10 @@ input {
 textarea {
    width: 800px;
    height:80px;
+}
+
+#hide_additional_div {
+     margin-left: 20px;
+     margin-bottom:10px;
+     display:none;
 }

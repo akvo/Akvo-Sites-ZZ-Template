@@ -1,19 +1,29 @@
 <?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  In this file the dynamic css is created
  */
+   // currently this is only use for "show only a part of an iframe" without any options 
+   // because this avoids that global width styles for the iframe will kill this feature!
+   $css_important = ' !important';
 
    // Some themes have iframes hidden by default. We don't want this ;).
    $html .= '#'.$id.' {visibility:visible;opacity:1;}'; 
+    
    // Fix if iframe is above the header div
    if (!empty($show_iframe_as_layer_header_file) && $show_iframe_as_layer_header_position === 'bottom') {
      $html .= '#'.$id.' {display:block;}';
-   }
-   $html .= '#ai-layer-div-'.$id.' p {height:100%;margin:0;padding:0}';
+     $html .= '#ai-layer-div-'.$id.' p {height:0;margin:0;padding:0}';
+   } else {
+     $html .= '#ai-layer-div-'.$id.' p {height:100%;margin:0;padding:0}';
+   } 
    if ($show_part_of_iframe == 'true') {
+       
+       // important cannot be used with different viewports as the javascript would not be able to change this. 
+       $spoi_css_important = empty($show_part_of_iframe_next_viewports) ? $css_important: '';
+       
        $html .= '
-        #ai-div-'.$id.'
-        {
+        #ai-div-'.$id.' {
             width    : '.esc_html($this->addPx($show_part_of_iframe_width)) . ';
             height   : '.esc_html($this->addPx($show_part_of_iframe_height)) .';
             overflow : hidden;
@@ -32,13 +42,12 @@
         }
         $html .= '
         }
-        #'.$id.'
-        {
+        #'.$id.' {
             position : absolute;
-            top      : -'.esc_html($show_part_of_iframe_y).'px;
-            left     : -'.esc_html($show_part_of_iframe_x).'px;
-            width    : '.esc_html($width).';
-            height   : '.esc_html($height).';
+            top      : -'.esc_html($this->addPx($show_part_of_iframe_y)). ($spoi_css_important).';
+            left     : -'.esc_html($this->addPx($show_part_of_iframe_x)). ($spoi_css_important).';
+            width    : '.esc_html($this->addPx($width)). ($spoi_css_important).';
+            height   : '.esc_html($this->addPx($height)). ($spoi_css_important).';
         }';
    }
    

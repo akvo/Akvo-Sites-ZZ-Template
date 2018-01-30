@@ -7,11 +7,12 @@ Administration include
 */
 ?>
 <?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-functions.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-quickstart.php';
 
-$version = '7.3.1';
+$version = '7.5.1';
 $updated = false;
 $evanto = (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php"));
 if (is_user_logged_in() && is_admin()) {
@@ -111,7 +112,9 @@ if (is_user_logged_in() && is_admin()) {
             'add_document_domain','document_domain',
             'multi_domain_enabled','check_shortcode',
             'use_post_message', 'element_to_measure_offset',
-            'data_post_message'
+            'data_post_message', 'element_to_measure',
+            'show_iframe_as_layer_keep_content','roles',
+            'parent_content_css'  
             );  
         if (!wp_verify_nonce($_POST['twg-options'], 'twg-options')) die('Sorry, your nonce did not verify.');
         
@@ -126,27 +129,32 @@ if (is_user_logged_in() && is_admin()) {
                      $text = trim($_POST[$item]);
                  } else {  
                      if ($item == 'show_part_of_iframe' || $item == 'show_part_of_iframe_next_viewports_loop'
-                       || $item == 'show_part_of_iframe_next_viewports_hide' || $item == 'write_css_directly' 
-                       || $item == 'enable_responsive_iframe' || $item == 'enable_lazy_load' 
                        || $item == 'show_iframe_loader' || $item == 'enable_lazy_load_manual' 
+                       || $item == 'show_part_of_iframe_next_viewports_hide' || $item == 'write_css_directly' 
+                       || $item == 'enable_responsive_iframe' || $item == 'enable_lazy_load'   
                        || $item == 'accordeon_menu' || $item == 'single_save_button'
                        || $item == 'show_iframe_as_layer' || $item == 'add_iframe_url_as_param'
                        || $item == 'auto_zoom' || $item == 'show_part_of_iframe_zoom'
                        || $item == 'demo' ||  $item == 'enable_ios_mobile_scolling'
+                       || $item == 'store_height_in_cookie' || $item == 'show_iframe_as_layer_full'
                        || $item == 'use_post_message' || $item == 'multi_domain_enabled') {
                           $text = 'false';
-                     } else if ($item == 'show_menu_link') {
+                     } else if ($item == 'show_menu_link' || $item == 'resize_on_ajax_jquery' 
+                       || $item == 'show_iframe_as_layer_keep_content') {
                          $text = 'true';
                      } else if ($item == 'resize_on_element_resize_delay') {
                          $text = '250';
-                     }  else if ($item == 'show_iframe_as_layer_header_height') {
+                     } else if ($item == 'show_iframe_as_layer_header_height') {
                          $text = '100';
                      } else if ($item == 'show_iframe_as_layer_header_position') {
                          $text = 'top';
                      } else if ($item == 'external_height_workaround_delay' || $item == 'element_to_measure_offset' )  {
                          $text = '0';
-                     }
-                     else {
+                     } else if ($item == 'element_to_measure' )  {
+                         $text = 'default';
+                     } else if ($item == 'roles' )  {
+                         $text = 'none';
+                     } else {
                          $text = '';
                      }
                  }
@@ -157,8 +165,14 @@ if (is_user_logged_in() && is_admin()) {
              if ($item != 'src')  {
                 $text = str_replace("'", '"' ,$text);
              }
+             if ($item == 'roles') {
+                // roles can only be changed by administrators!
+                $user = wp_get_current_user();
+                if ( in_array( 'administrator', (array) $user->roles ) ) {
+                    $devOptions[$item] = stripslashes($text);
+                }
              // replace ' with " 
-             if ($item == 'include_url' || $item == 'src') {
+              } else if ($item == 'include_url' || $item == 'src') {
                 $text = str_replace('{', '__BRACKETS_OPEN__' ,$text);
                 $text = str_replace('}', '__BRACKETS_CLOSE__' ,$text);
                 $text = esc_url($text);
@@ -184,6 +198,8 @@ if (is_user_logged_in() && is_admin()) {
              }
              if ($item == 'id') {
                 $devOptions[$item] =  preg_replace("/\W/", "_", $text);
+                // remove trailing numbers
+                $devOptions[$item] = preg_replace('/^[0-9]+/', '', $devOptions[$item]);
              }
              
              // we check if we have an invalid configuration!
@@ -193,6 +209,8 @@ if (is_user_logged_in() && is_admin()) {
                 $scrollposition = 0;
              }
              
+          
+             
           }
         } else {
           $securityKey = $devOptions['securitykey'];
@@ -201,7 +219,7 @@ if (is_user_logged_in() && is_admin()) {
           $devOptions['securitykey'] = $securityKey;
           $devOptions['install_date'] = $it;  
         }
-                                                                                                                                                                                                                                                                   if ($evanto && empty($devOptions['install_date'])) {$devOptions['install_date'] = time();}
+                                                                                                                                                                                                                                                              if ($evanto && empty($devOptions['install_date'])) {$devOptions['install_date'] = time();}
         update_option($this->adminOptionsName, $devOptions);
 
         // create the external js file with the url of the wordpress installation
@@ -228,6 +246,10 @@ if (is_user_logged_in() && is_admin()) {
   }
 }
 
+// needs to be set after the save again.
+if ($evanto) {
+    $devOptions['demo'] = 'false';
+}
 $isDemo =  $devOptions['demo'] == 'true';
     
 if ($isDemo) { ?>
@@ -282,13 +304,13 @@ if ($isDemo) { ?>
 <br />
 <?php }
 
-_e('<input type="search" class="ai-input-search" placeholder="Type filter text" />
+_e('<input type="search" class="ai-input-search" placeholder="Search for settings" />
 <div id="ai-input-search-result">
 No settings found for this search term.
 </div><div id="ai-input-search-result-show">&nbsp;</div>
 <div style="clear:left;"></div>
 <div id="ai-input-search-help">
-The filter text does look for the search term in the label and the description of each setting on all tabs. Tabs with findings are marked yellow. It does not search in the additional documentation that does exist in each section. Please use the browser search for a full text of this page.
+The search does look for the search term in the label and the description of each setting on all tabs. Tabs with findings are marked yellow. It does not search in the additional documentation that does exist in each section. Please use the browser search for a full text of this page.
 </div>', 'advanced-iframe');
 
 _e('<h2 class="nav-tab-wrapper show-always">', 'advanced-iframe');
@@ -356,6 +378,7 @@ include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-support.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-find-id.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-jquery.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-browser.php';
+include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-help-post.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-twg.php';
 echo '</section>';
 if ($devOptions['donation_bottom'] === 'true') {

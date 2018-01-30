@@ -1,4 +1,7 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
+<?php 
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+
+if ($devOptions['accordeon_menu'] == 'false') { ?>
 <div class="ai-anchor" id="so"></div>
 <?php } ?>
 <h1 id="h1-so"><?php _e('Show only a part of the iframe', 'advanced-iframe'); ?></h1>
@@ -7,11 +10,10 @@
       <br>
     </div><h2>
       <?php _e('Show only a part of the iframe', 'advanced-iframe'); ?></h2>
-       <h3><?php _e('Options if the iframe is on a different OR the same domain', 'advanced-iframe') ?></h3>
 <?php if ($evanto || $isDemo) { ?>
     <p>
 
-<?php _e('You can only show a part of the iframe. This solution DOES WORK across domains without any hacks! This is a solution that works only with css by placing a window over the iframe which does a clipping. All areas of the iframe that are not inside the window cannot be seen. Please specify the upper left corner coordinates x and y and the height and width that should be shown. Specify a fixed height and width in the iframe options at the top for optimal results! Simply select the area you want to show with the graphical area selector! You can even zoom the selected area that it fits properly e.g. on a mobile phone. Please go to the <a target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo">pro demo</a> for some working examples. Please also check the additional 5 options. These are the advanced features to handle changes in the iframe', 'advanced-iframe');
+<?php _e('You can only show a part of the iframe. This solution DOES WORK across domains without any hacks! This is a solution that works only with css by placing a window over the iframe which does a clipping. All areas of the iframe that are not inside the window cannot be seen. Please specify the upper left corner coordinates x and y and the height and width that should be shown. Specify a fixed height and width in the iframe options at the top for optimal results! Simply select the area you want to show with the graphical area selector! You can even zoom the selected area that it fits properly e.g. on a mobile phone. Please go to the <a target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo">pro demo</a> for some working examples. Please also check the additional 5 options. These are the advanced features to handle changes in the iframe.<p>Also media queries are supported! This enables you to show different areas depending on the browser width. Please see <a  target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/show-only-a-part-of-the-iframe#e55">example 55</a> for a working demo.</p>', 'advanced-iframe');
 
 echo '<p><input id="s" class="button-primary" type="button" name="update_iframe-loader" onclick="openSelectorWindow(\''. plugins_url() .'/advanced-iframe/includes/advanced-iframe-area-selector.html\');" value="';
  _e('Open the area selector', 'advanced-iframe');
@@ -38,15 +40,57 @@ echo '<p>';
        _e('With the following 5 options you can do something when the page in the iframe does change. The parent page does only know the url of the iframe that is loaded initially. This is a browser restriction when the pages are not on the same domain. The parent only can find out when the page inside does change. But it does not know to which url. So the options below rely on a counting of the onload event. But for certain solutions (e.g. show only the login part of a page and then open the result page as parent) this will work.', 'advanced-iframe');
 echo '</p><table class="form-table">';
 
-    printTextInput(true,$devOptions, __('i-20-Change the viewport when iframe changes to the next step', 'advanced-iframe'), 'show_part_of_iframe_next_viewports', __('You can define different viewports when the page inside the iframe does change and a onload event is fired. Each time this event is fired a different viewport is shown. A viewport is defined the following way: left,top,width,height e.g. 50,100,500,600. You can define several viewports (if you e.g. have a straigt  workflow) by separating the viewports by ; e.g. 50,100,500,600;10,40,200,400. Shortcode attribute:  show_part_of_iframe_next_viewports=""', 'advanced-iframe'));
+    printTextInput(true,$devOptions, __('i-20-Change the viewport when iframe changes to the next step', 'advanced-iframe'), 'show_part_of_iframe_next_viewports', __('You can define different viewports when the page inside the iframe does change and a onload event is fired. Each time this event is fired a different viewport is shown. A viewport is defined the following way: left,top,width,height e.g. 50,100,500,600. You can define several viewports (if you e.g. have a straigt  workflow) by separating the viewports by ; e.g. 50,100,500,600;10,40,200,400. Each viewport has its own class: ai-viewport-X. X is the number of the viewport starting with 0! You can e.g. enable scroll for specific viewports with this setting. Shortcode attribute:  show_part_of_iframe_next_viewports=""', 'advanced-iframe'));
     printTrueFalse(true,$devOptions, __('i-20-Restart the viewports from the beginning after the last step.', 'advanced-iframe'), 'show_part_of_iframe_next_viewports_loop', __('If you define different viewports it could make sense always to use them in a loop. E.g. if you have an image gallery where you have an overview with viewport 1 and a detail page with viewport 2. And you can only can come from the overview to the detail page and back. Shortcode attribute: show_part_of_iframe_next_viewports_loop="true" or show_part_of_iframe_next_viewports_loop="false" ', 'advanced-iframe'));
     printTextInput(true,$devOptions, __('i-20-Open iFrame in new window after the last step', 'advanced-iframe'), 'show_part_of_iframe_new_window', __('You can define if the iframe is opened in a new tab/window or as full window. the options you can use are "_top" = as full window, "_blank" = new tab/window or you leave it blank to stay in the iframe. Because of the browser restriction not the current url of the iframe can be loaded. It is either the initial one or the one you specify in the next setting. Shortcode attribute: show_part_of_iframe_new_window="", show_part_of_iframe_new_window="_top" or show_part_of_iframe_new_window="_blank" ', 'advanced-iframe'));
     printTextInput(true,$devOptions, __('i-20-Url that is opened after the last step', 'advanced-iframe'), 'show_part_of_iframe_new_url', __('You can define the url that is loaded after the last step. This enables you to jump to a certain page after your workflow. This is useful with the above. Shortcode attribute: show_part_of_iframe_new_url="" ', 'advanced-iframe'));
     printTrueFalse(true,$devOptions, __('i-20-Hide the iframe after the last step', 'advanced-iframe'), 'show_part_of_iframe_next_viewports_hide', __('Hides the iframe after the last step completely. Shortcode attribute: show_part_of_iframe_next_viewports_hide="true" or show_part_of_iframe_next_viewports_hide="false" ', 'advanced-iframe'));
 
-    printTextInput(true,$devOptions, __('Hide/cover parts of the iframe. Make an iframe read only', 'advanced-iframe'), 'hide_part_of_iframe', __('Please note: This is an advanced setting! You need to know basic html/css! You can define an area which will be hidden by a rectangle you define. This can e.g. be used to hide a logo. A rectangle is defined the following way: left,top,width,height,color,z-index e.g. 10,20,200,50,#ffffff,10. This defines a rectangle in white with the z-index of 10. z-index means the layer the rectangle is placed. If you don\'t see your rectangle please use a higher z-index. You can also define a background image here! use e.g. 10,20,200,50,#ffffff;background-image:url(your-logo.gif);background-repeat:no-repeat;,10 for a white rectangle with the given background image. Use the area selector to get the coordinates very easy. You can specify several rectangles by separating them by |. Please see the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo#e8">pro demo</a> for a cool example where a logo is exchanged.<p class="description">You can also create read only iframes with this feature. Use hide_part_of_iframe="0,0,100%,100%,transparent,10". For a working example please see example 21 of the pro demo.</p><p class="description">It is also possilbe to define an optional link and an optional target for this area. Parameter 7 is the url and parameter 8 the target. So a working example would be: hide_part_of_iframe="0,0,100%,100%,transparent,10,http://www.tinywebgallery.com,_blank".</p><p class="description">The divs can also be right and bottom aligned. You need to specify the prefix r for right instead of left and b for bottom instead of top. An example would look like this: r10,b20,200,50,#ffffff,10.</p><p class="description">The div does also support the usage of an external html files even with shortcodes. Below you see the existing external files, how to use them and you can also create/edit/delete them. </p><p class="description">Shortcode attribute: hide_part_of_iframe=""</p>', 'advanced-iframe'),'text','http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe', $evanto || $isDemo);
-
 echo '</table>'; ?>
+
+
+
+
+<?php if ($devOptions['single_save_button'] == 'false') { ?>
+    <p class="button-submit">
+        <input id="onload-button" class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>
+    </p>
+    <?php } ?>
+<?php } else { ?>
+    <p>
+     <?php _e('This feature is only available in the Pro version where you have the option to show only a part of the iframe even when the content you want to include is on a different domain. Please note that there is still no way to modify anything on the remote site.', 'advanced-iframe') ?>
+    </p>
+    <?php } ?>
+</div>  
+
+<?php if ($evanto || $isDemo) { ?>  
+
+<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
+<div class="ai-anchor" id="hi"></div>
+<?php } ?>
+<h1 id="h1-hi"><?php _e('Hide/cover parts of the iframe.', 'advanced-iframe'); ?></h1>
+<div>
+    <div id="icon-options-general" class="icon_ai">
+      <br>
+    </div><h2 id="mi-hi">
+      <?php _e('Hide/cover parts of the iframe.', 'advanced-iframe'); ?></h2>
+    
+    <p>
+       <?php _e('Please note: This is an advanced setting! You need to know basic html/css to use all possibilities of this feature! You can define an area which will be hidden by a rectangle you define. This can e.g. be used to hide a logo.', 'advanced-iframe'); ?>
+    </p>
+    <?php 
+    echo '<p><input id="s" class="button-primary" type="button" name="update_iframe-loader" onclick="openSelectorWindow(\''. plugins_url() .'/advanced-iframe/includes/advanced-iframe-area-selector.html?hide_feature=true\');" value="';
+    _e('Open the area selector in the hide parts mode', 'advanced-iframe');
+    echo '" /></p>';
+    ?>
+    
+    <table class="form-table">
+<?php
+      if ($evanto || $isDemo) {
+          printTextInput(true,$devOptions, __('Hide/cover parts of the iframe. Make an iframe read only', 'advanced-iframe'), 'hide_part_of_iframe', __('A rectangle is defined the following way: left,top,width,height,color,z-index e.g. 10,20,200,50,#ffffff,10. This defines a rectangle in white with the z-index of 10. z-index means the layer the rectangle is placed. If you don\'t see your rectangle please use a higher z-index. You can also define a background image here! use e.g. 10,20,200,50,#ffffff;background-image:url(your-logo.gif);background-repeat:no-repeat;,10 for a white rectangle with the given background image. Use the area selector to get the coordinates very easy. You can specify several rectangles by separating them by |. Please see the <a target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e8">pro demo</a> for a cool example where a logo is exchanged.<p class="description">You can also create read only iframes with this feature. Use hide_part_of_iframe="0,0,100%,100%,transparent,10". For a working example please see example 21 of the pro demo.</p><p class="description">It is also possible to define an optional link and an optional target for this area. Parameter 7 is the url and parameter 8 the target. So a working example would be: hide_part_of_iframe="0,0,100%,100%,transparent,10,http://www.tinywebgallery.com,_blank".</p><p class="description">The divs can also be right and bottom aligned. You need to specify the prefix r for right instead of left and b for bottom instead of top. An example would look like this: r10,b20,200,50,#ffffff,10.</p><p class="description">Also media queries are supported! This enables you to hides areas depending on the browser width. Please see <a  target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e50">example 50</a> for a working demo.</p><p class="description">The div does also support the usage of an external html files even with shortcodes. Below you see the existing external files, how to use them and you can also create/edit/delete them. </p><p class="description">Shortcode attribute: hide_part_of_iframe=""</p>', 'advanced-iframe'),'text','http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe', $evanto || $isDemo);
+      }
+      ?>
+    </table>
 
 <?php if ($evanto || $isDemo) { ?>     
   <div class="hide-print">    <h4>
@@ -62,7 +106,7 @@ echo '</table>'; ?>
   foreach (glob(dirname(__FILE__) .'/../../advanced-iframe-custom/hide_*.html') as $filename) {
     $base = basename($filename);
     $base_url1 = site_url() . '/wp-admin/plugin-editor.php?file=advanced-iframe-custom%2F';
-    $base_url2 = '&plugin=advanced-iframe%2Fadvanced-iframe.php';
+    $base_url2 = ''; // '&plugin=advanced-iframe%2Fadvanced-iframe.php';
     $config_files[] = $base ; 
   }
 echo "<hr height=1>";
@@ -93,18 +137,20 @@ echo "<hr height=1>";
   <?php } ?>
 
 
-<?php if ($devOptions['single_save_button'] == 'false') { ?>
+
+
+
+<?php if ($devOptions['single_save_button'] == 'false') { ?>      
     <p class="button-submit">
-        <input id="onload-button" class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>
+      <input id="rt" class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>
     </p>
-    <?php } ?>
-    <?php } else { ?>
-    <p>
-     <?php _e('This feature is only available in the Pro version where you have the option to show only a part of the iframe even when the content you want to include is on a different domain. Please note that there is still no way to modify anything on the remote site.', 'advanced-iframe') ?>
-    </p>
-    <?php } ?>
-</div>    
-    <?php if ($devOptions['accordeon_menu'] == 'false') { ?>
+<?php } ?> 
+</div>
+
+<?php } ?>
+
+  
+<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
 <div class="ai-anchor" id="mi"></div>
 <?php } ?>
 <h1 id="h1-mi"><?php _e('Modify the iframe', 'advanced-iframe'); ?></h1>
@@ -145,7 +191,7 @@ echo '</p><table class="form-table">';
         printTextInput(false,$devOptions, __('Content styles in iframe', 'advanced-iframe'), 'iframe_content_styles', __('Define the styles that have to be overwritten to enable the full width. Most of the time you have to modify some of the following attributes: width, margin-left, margin-right, padding-left. Please use ; as separator between styles. If you have defined more than one element above (Content id in iframe) please separate the different style sets with |. The default values are: Wordpress default: \'width:450px;padding-left:45px;\'. Twenty Ten: \'margin-left:20px;margin-right:240px\'. iNove: \'width:605px\'. Please read the note below how to find these styles for other templates. If you have defined #content|h2 at the Content id you can e.g. set \'width:650px;padding-left:25px;|padding-left:15px;\'. Shortcode attribute: iframe_content_styles=""', 'iframe_advanced-iframe'),'text','www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications', $evanto || $isDemo);
         
    if ($evanto || $isDemo) {
-       printTextInput(true,$devOptions, __('Add css styles to iframe', 'advanced-iframe'), 'iframe_content_css', __('This setting does add the css you enter here directly as last element to the body of the iframe page. The big difference to the two settings before is, that the modification is not done by jQuery but the css is directly written to the iframe. The advantage is that also !important can be used to overwrite such styles. This setting is only supported for the <strong>same domain</strong>. Use "Write css directly" for the external workaround. Enter the styles without &lt;style&gt;. Shortcode attribute: iframe_content_css=""', 'iframe_advanced-iframe'),'text','', false);
+       printTextInput(true,$devOptions, __('Add css styles to iframe', 'advanced-iframe'), 'iframe_content_css', __('This setting does add the css you enter here directly as last element to the body of the iframe page. The big difference to the two settings before is, that not the css styles are modified by Javascript but a style element is added directly to the iframe. The advantage is that also !important can be used to overwrite such styles. This setting is only supported for the <strong>same domain</strong>. The disadvantage is that adding the style element is still done after the iframe is fully loaded and that writting valid css is a little bit more complicated. Use "Write css directly" for the external workaround. Enter the styles without &lt;style&gt;. The value is sanitized at the output! Therefore not all styles do work! e.g. body &gt; p cannot be used. Use external files if you need this. Shortcode attribute: iframe_content_css=""', 'iframe_advanced-iframe'),'text','', false);
    }          
       ?>
     </table>
@@ -154,8 +200,8 @@ echo '</p><table class="form-table">';
         _e('<p>With the next 2 options you can modify the target of links in your iframe if <strong>it is on the same domain or if you can use the external workaround and have the pro version. This settings are save to the ai_external.js. </strong>.</p>', 'advanced-iframe');
 echo '</p><table class="form-table">';
         
-        printTextInput(true,$devOptions, __('Change iframe links', 'advanced-iframe'), 'change_iframe_links', __('Change links of the iframe page to open the url at a different target. This option does add the attribute target="your target" to the links you define. The targets are defined in the next setting. You can use any valid <a class="jquery-help-link" href="#">jQuery selector pattern</a> here! So if your link e.g. has an id="link1" you have to use "a#link1". If you want to change all links e.g. in the div with the id="menu-div" you have to use "#menu-div a". If you e.g. only want to change all links of pdfs you can use "a[href$=.pdf]"). You can also define more than one element. Please separate them with |. Shortcode attribute: change_iframe_links=""', 'iframe_advanced-iframe'),'text', 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/change-links-targets', true);
-        printTextInput(true,$devOptions, __('Change iframe links target', 'advanced-iframe'), 'change_iframe_links_target', __('Here you define the targets for the links you define in the setting before. If you have defined more than one element above (Change iframe links) please separate the different targets with |. E.g. "_blank|_top". Shortcode attribute: change_iframe_links_target=""', 'iframe_advanced-iframe'),'text', 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/change-links-targets', true);
+        printTextInput(true,$devOptions, __('Change iframe links/forms target', 'advanced-iframe'), 'change_iframe_links', __('Change links of the iframe page to open the url at a different target. This option does add the attribute target="your target" to the links you define. The targets are defined in the next setting. You can use any valid <a class="jquery-help-link" href="#">jQuery selector pattern</a> here! So if your link e.g. has an id="link1" you have to use "a#link1". If you want to change all links e.g. in the div with the id="menu-div" you have to use "#menu-div a". If you e.g. only want to change all links of pdfs you can use "a[href$=.pdf]"). Also the target of a form can be changed. So using "form" will change the target of all forms. You can also define more than one element. Please separate them with |. Shortcode attribute: change_iframe_links=""', 'iframe_advanced-iframe'),'text', 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/change-links-targets', true);
+        printTextInput(true,$devOptions, __('Change iframe links/forms target value', 'advanced-iframe'), 'change_iframe_links_target', __('Here you define the targets for the links you define in the setting before. If you have defined more than one element above (Change iframe links) please separate the different targets with |. E.g. "_blank|_top". Shortcode attribute: change_iframe_links_target=""', 'iframe_advanced-iframe'),'text', 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/change-links-targets', true);
         echo '</table>';
         }
       ?>

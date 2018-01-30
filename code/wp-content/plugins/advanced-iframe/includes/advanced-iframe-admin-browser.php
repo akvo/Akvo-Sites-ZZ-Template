@@ -1,3 +1,6 @@
+<?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+?>
 <div>
      <div id="icon-options-general" class="icon_ai">
       <br>
@@ -60,13 +63,13 @@
 
       <h3>Credit and update</h3>
       <p>
-        Advanced iFrame Pro uses an integrated browser detection which is based on the wordpress plugin php-browser-detection 2.2.3 and the browser detection file (6011, 24 December 2015) from browscap.org.
+        Advanced iFrame Pro uses an integrated browser detection which is based on the wordpress plugin php-browser-detection 3.2.
       </p>
       <p>
-         You can get an updated version of the browsercap.ini lite file here: http://browscap.org/<br />Please use the light version as it conains all settings for the provided settings and the full version is really big! 
+         If the automatich update does not work you can get an updated version of the browsercap.ini lite file here: http://browscap.org/<br />Please use the light version as it conains all settings for the provided settings ! 
       </p>
       <p>
-         If you want to update the browser detection file get the lite_php_browscap.ini from there and rename it to php-browser-detection-browscap.ini.<br />
+         If you want to update the browser detection file get the lite_php_browscap.ini from there and rename it to php-browser-detection/cache/browscap.ini.<br />
          Or always get the latest version of the advanced iframe pro plugin. This file is also updated there!
       </p>
       </div>

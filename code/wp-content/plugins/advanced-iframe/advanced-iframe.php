@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: Advanced iFrame 
+Plugin Name: Advanced iFrame
 Plugin URI: http://www.tinywebgallery.com/blog/advanced-iframe
-Version: 7.3.1
+Version: 7.5.1
 Text Domain: advanced-iframe
 Domain Path: /languages
-Author: Michael Dempfle 
+Author: Michael Dempfle
 Author URI: http://www.tinywebgallery.com
 Description: This plugin includes any webpage as shortcode in an advanced iframe or embeds the content directly.
 
@@ -21,6 +21,11 @@ Description: This plugin includes any webpage as shortcode in an advanced iframe
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+define('_VALID_AI', '42');
+define('AIP_URL', plugin_dir_url( __FILE__ ));
+define('AIP_IMGURL',  AIP_URL.'img');
+
+
 include dirname(__FILE__) . '/includes/advanced-iframe-main-helper.php';
 
 if (!class_exists('advancediFrame')) {
@@ -99,7 +104,7 @@ if (!class_exists('advancediFrame')) {
                 'add_iframe_url_as_param' => 'false', 'add_iframe_url_as_param_prefix' => '',
                 'reload_interval' => '', 'iframe_content_css' => '',
                 'additional_js_file_iframe' => '', 'additional_css_file_iframe' => '',
-                'add_css_class_iframe' => 'false', 'editorbutton' => 'securitykey',
+                'add_css_class_iframe' => 'false', 'editorbutton' => 'securitykey,src,width,height',
                 'iframe_zoom_ie8' => 'false', 'enable_lazy_load_reserve_space' => 'true',
                 'hide_content_until_iframe_color' => '', 'use_zoom_absolute_fix' => 'false',
                 'include_html' => '', 'enable_ios_mobile_scolling' => 'false',
@@ -111,7 +116,10 @@ if (!class_exists('advancediFrame')) {
                 'add_document_domain' => 'false', 'document_domain' => '',
                 'multi_domain_enabled' => 'false', 'check_shortcode' => 'false',
                 'use_post_message' => 'false', 'element_to_measure_offset' => '0',
-                'data_post_message' => ''
+                'data_post_message' => '', 'element_to_measure' => 'default',
+                'show_iframe_as_layer_keep_content' => 'true','roles' => 'none',
+                'parent_content_css' => '',
+                'include_scripts_in_content' => 'false'
             );
             return $iframeAdminOptions;
         }
@@ -136,6 +144,11 @@ if (!class_exists('advancediFrame')) {
             if (!empty($devOptions)) {
                 foreach ($devOptions as $key => $option)
                     $iframeAdminOptions[$key] = $option;
+            }  else {
+                // new installations do now get postMessage as default
+                if (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php")) {
+                    $iframeAdminOptions['use_post_message'] = 'true';
+                }
             }
             update_option("advancediFrameAdminOptions", $iframeAdminOptions);
             return $iframeAdminOptions;
@@ -171,11 +184,24 @@ if (!class_exists('advancediFrame')) {
         function addAiButtonJs()
         {
             $options = get_option('advancediFrameAdminOptions');
-            if ($options['editorbutton'] == 'securitykey') {
+            if ($options['editorbutton'] != '' && $this->hasValidRole()) {
+                $additional_settings = '';
+                    $elements = explode (',',  $options['editorbutton']);
+                    foreach ($elements as $setting) {
+                        if ($setting != 'securitykey') {
+                            if (isset($options[$setting])) {
+                                $new_setting = $options[$setting];
+                                if (!empty($new_setting)) {
+                                    $additional_settings .= ' ' .  esc_html(trim($setting)) . '=\"' . esc_html(trim($new_setting)) . '\"';
+                                }
+                            }
+                        }       
+                    }
+ 
                 echo '<script type="text/javascript">
               jQuery(document).ready(function(){
                  jQuery("#insert-iframe-button").click(function() {
-                    send_to_editor("[advanced_iframe securitykey=\"' . $options['securitykey'] . '\"]");
+                    send_to_editor("[advanced_iframe securitykey=\"' . $options['securitykey'] . '\"' . $additional_settings . ']");
                     return false;
                  });
               });
@@ -187,24 +213,8 @@ if (!class_exists('advancediFrame')) {
         function addAiButton()
         {
             $options = get_option('advancediFrameAdminOptions');
-            if ($options['editorbutton'] == 'securitykey') {
-                echo '<a title="Insert Advanced iFrame" class="button insert-media add_media" id="insert-iframe-button" href="#">Add Advanced iFrame</a>';
-            }
-        }
-
-        /* Adds a quicktags button - currently not used as the media button solution is used. */
-        function advanced_iframe_add_quicktags()
-        {
-            if (wp_script_is('quicktags')) {
-                $options = get_option('advancediFrameAdminOptions');
-                $editorbutton = $options['editorbutton'];
-                if ($editorbutton == 'securitykey') {
-                    ?>
-                    <script type="text/javascript">
-                        QTags.addButton('ai_iframe', 'advanced iframe', '[advanced_iframe securitykey="<?php echo $options['securitykey']; ?>"]', '', '', 'Advanced iframe');
-                    </script>
-                    <?php
-                }
+            if ($options['editorbutton'] != '' && $this->hasValidRole()) {
+                echo '<a title="Insert Advanced iFrame" class="button insert-media add_media" id="insert-iframe-button" href="#"><img style="padding-bottom:3px;" src="'. AIP_IMGURL . '/logo_16x16.png" />Add Advanced iFrame</a>';
             }
         }
 
@@ -226,7 +236,15 @@ if (!class_exists('advancediFrame')) {
             $this->include_additional_files($additional_css, $additional_js, $version_counter, $older_version, $to_footer);
 
             $dep = ($options['load_jquery'] === 'true') ? array('jquery') : array();
-            wp_enqueue_script('ai-js', plugins_url('js/ai.js', __FILE__), $dep, $version_counter, $to_footer);
+            wp_enqueue_script('ai-js', plugins_url('js/ai.js', __FILE__), $dep, $version_counter, $to_footer);    
+        }
+
+        function addCustomCss($parent_content_css) {             
+             if (!empty($parent_content_css)) {  
+                 echo '<style>';
+                 echo wp_kses($parent_content_css, array());
+                 echo '</style>';
+             }
         }
 
         /**
@@ -275,7 +293,7 @@ if (!class_exists('advancediFrame')) {
         function do_iframe_script($atts, $content = null)
         {
             global $aip_standalone, $iframeStandaloneDefaultOptions, $iframeStandaloneOptions;
-
+  
             $isValidBrowser = true;
             $html = ''; // the output
 
@@ -348,8 +366,7 @@ if (!class_exists('advancediFrame')) {
             $template_name = dirname(__FILE__) . '/js/ai_external.template.js';
 
             $jquery_path = site_url() . '/wp-includes/js/jquery/jquery.js';
-            $resize_path = plugins_url() . '/advanced-iframe/includes/scripts/jquery.ba-resize.min.js';
-
+          
             $content = file_get_contents($template_name);
             $new_content = str_replace('PLUGIN_URL', plugins_url() . '/advanced-iframe', $content);
             $new_content = str_replace('PARAM_ID', $devOptions['id'], $new_content);
@@ -376,7 +393,6 @@ if (!class_exists('advancediFrame')) {
             $new_content = str_replace('PARAM_URL_ID', $devOptions['pass_id_by_url'], $new_content);
 
             $new_content = str_replace('PARAM_JQUERY_PATH', $jquery_path, $new_content);
-            $new_content = str_replace('PARAM_RESIZE_PATH', $resize_path, $new_content);
             $new_content = str_replace('PARAM_ADD_IFRAME_URL_AS_PARAM', $devOptions['add_iframe_url_as_param'], $new_content);
             $new_content = str_replace('PARAM_ADDITIONAL_CSS_FILE_IFRAME', $devOptions['additional_css_file_iframe'], $new_content);
             $new_content = str_replace('PARAM_ADDITIONAL_JS_FILE_IFRAME', $devOptions['additional_js_file_iframe'], $new_content);
@@ -394,11 +410,19 @@ if (!class_exists('advancediFrame')) {
             $new_content = str_replace('POST_MESSAGE_DOMAIN', $post_domain, $new_content);
 
             $new_content = str_replace('PARAM_ELEMENT_TO_MEASURE_OFFSET', $devOptions['element_to_measure_offset'], $new_content);
+            $new_content = str_replace('PARAM_ELEMENT_TO_MEASURE', $devOptions['element_to_measure'], $new_content);
 
             $script_name = dirname(__FILE__) . '/js/ai_external.js';
+            clearstatcache();
             if (file_exists($script_name)) {
-                @unlink($script_name);
-            }
+                if (!unlink($script_name)) {
+                    if ($backend) {
+                        $errorText = __('The file "advanced-iframe/js/ai_external.js" can not be removed before saving. Please check the permissions of the js folder and the ai_external.js and save the settings again. This file is needed for the external workaround! If you don\'t use the external workaround please create a empty file with the name ai_external.js in the js folder of the plugin.', "advanced-iframe");
+                        printError($errorText);
+                    } 
+                    return '';
+                }
+            }  
             $fh = fopen($script_name, 'w');
             if ($fh) {
                 fwrite($fh, $new_content);
@@ -463,6 +487,47 @@ if (!class_exists('advancediFrame')) {
             }
             return $links;
         }
+            
+        function aiCheckContent($content) {           
+              // content contains [advanced AND role is not enough....          
+              if (!$this->hasValidRole() && strpos($content, '[advanced_iframe') !== false) {    
+                  set_transient("ai_no_rights_post_errors",  __('This page/post contains an advanced iframe shortcode but you don\'t have the needed role to use this plugin. Please contact your system administrator to get the needed role.', 'advanced-iframe'), 5);
+                  wp_redirect( admin_url());  
+              }             
+        return $content;
+        }
+        
+        function aiRolesError() {
+            if ( $error = get_transient( "ai_no_rights_post_errors" ) ) { ?>
+                <div class="error">
+                    <p><?php echo $error ?></p>
+                </div><?php
+            }        
+        }
+        
+        function hasValidRole () {
+              $options = get_option('advancediFrameAdminOptions');
+              $config_role = $options['roles'];
+              if  ($config_role == 'none' || $config_role == '') {
+                  return true;
+              }
+             
+              global $wp_roles; 
+              if ( ! isset( $wp_roles ) ) {
+                  return true;
+              }
+              $roles_by_index = array_flip(array_keys($wp_roles->get_names()));
+             
+              // get the user role              
+              $current_user = wp_get_current_user();
+              $user_roles = $current_user->roles;
+              $user_role = array_shift( $user_roles );
+
+              $user_index = $roles_by_index[$user_role];
+              $config_index = $roles_by_index[$config_role];          
+              return  $user_index <= $config_index;
+        }
+        
 
         /**
          *  Intercepts the Ajax resize events in iframes.
@@ -567,13 +632,14 @@ if (isset($cons_advancediFrame)) {
 
             $pro = (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php")) ? " Pro" : "";
 
+            $cap = ai_map_role_to_capability($aiOptions['roles']);
             if (function_exists('add_options_page')) {
-                add_options_page('Advanced iFrame' . $pro, 'Advanced iFrame' . $pro, 'manage_options',
+                add_options_page('Advanced iFrame' . $pro, 'Advanced iFrame' . $pro, $cap,
                     basename(__FILE__), array($cons_advancediFrame, 'printAdminPage'));
             }
             if ($aiOptions['show_menu_link'] == "true") {
-                add_menu_page('Advanced iFrame' . $pro, 'Advanced iFrame' . $pro, 'manage_options',
-                    basename(__FILE__), array($cons_advancediFrame, 'printAdminPage'));
+                add_menu_page('Advanced iFrame' . $pro, 'Advanced iFrame' . $pro, $cap,
+                    basename(__FILE__), array($cons_advancediFrame, 'printAdminPage'), AIP_IMGURL.'/logo_24x24.png'  );
             }
             if (!empty($aiOptions['alternative_shortcode'])) {
                 // setup shortcode alternative style  
@@ -590,10 +656,14 @@ if (isset($cons_advancediFrame)) {
     add_action('admin_enqueue_scripts', array($cons_advancediFrame, 'addAdminHeaderCode'), 99); // load css
     add_action('wp_enqueue_scripts', array($cons_advancediFrame, 'addWpHeaderCode'), 98); // load js
     add_action('wp_footer', array($cons_advancediFrame, 'add_script_footer'), 2);
+    add_action( 'admin_notices', array($cons_advancediFrame, 'aiRolesError'), 3);
+    
     add_shortcode('advanced_iframe', array($cons_advancediFrame, 'do_iframe_script'), 1); // setup shortcode
     add_shortcode('advanced-iframe', array($cons_advancediFrame, 'do_iframe_script'), 1); // setup shortcode alternative style   
     register_activation_hook(__FILE__, array($cons_advancediFrame, 'activate'));
 
+
+    add_filter( 'content_edit_pre', array($cons_advancediFrame, 'aiCheckContent'), 1); 
     add_filter('widget_text', 'shortcode_unautop');
     add_filter('widget_text', 'do_shortcode');
     add_filter('plugin_action_links', array($cons_advancediFrame, 'ai_plugin_action_links'), 10, 2);
@@ -661,6 +731,16 @@ function advanced_iframe_plugin_meta_pro($links, $file)
             ));
     }
     return $links;
+}
+
+/**
+ * 
+ *
+ */
+function ai_map_role_to_capability($role) {
+         $role_map = array('administrator' => 'manage_options', 'editor' => 'delete_others_pages', 
+         'author' => 'delete_published_posts', 'contributor' => 'delete_posts','subscriber' => 'read');
+         return (isset ($role_map[$role])) ? $role_map[$role] : 'manage_options';         
 }
 
 if (!isset($aip_standalone)) {

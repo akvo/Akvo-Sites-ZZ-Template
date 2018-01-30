@@ -1,3 +1,6 @@
+<?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+?>
 <br />
 <div>
     <div id="icon-options-general" class="icon_ai">
@@ -6,6 +9,9 @@
       <?php _e('Add additional files', 'advanced-iframe') ?></h2>
      <p>
       <?php _e('All settings above are designed for smaller changes of the parent or the iframe. If you want to make bigger changes and you are able to store this in a file including a whole file is the better solution. Below you can add additional Javascript or css files to the different pages.', 'advanced-iframe'); ?>
+    </p> 
+      <p>
+      <?php _e('<strong>Please note:</strong> The files are edited/viewed by the default Worpdress plugin editor! It is o.k. that "inactive" is shown in the editor as the advanced-iframe-custom folder is not a real plugin folder. If the editor does not work because of file permissions please edit the files directly on your server.', 'advanced-iframe'); ?>
     </p> 
     
     
@@ -18,7 +24,7 @@
   foreach (glob(dirname(__FILE__) .'/../../advanced-iframe-custom/custom_*.*') as $filename) {
     $base = basename($filename);
     $base_url1 = site_url() . '/wp-admin/plugin-editor.php?file=advanced-iframe-custom%2F';
-    $base_url2 = '&plugin=advanced-iframe%2Fadvanced-iframe.php';
+    $base_url2 = ''; //  '&plugin=advanced-iframe%2Fadvanced-iframe.php';
     $config_files[] = $base ; 
   }
 echo "<hr height=1>";
@@ -53,7 +59,7 @@ echo "<hr height=1>";
     </p>
     <table class="form-table">
 <?php
-        printTextInput(false,$devOptions, __('Additional css', 'advanced-iframe'), 'additional_css', __('If you want to include an additional css into the parent page please specify the path to this file here. The css file will be added into the header of the page. You can specify a full or relative url. If you specify a relative one /style.css means that the style.css is located in the main directory of Wordpress. Start relative urls with /. Please note: Before Wordpress 3.3 the shortcode attribute cannot be used. You can only set it here. Shortcode attribute: additional_css=""', 'advanced-iframe'));
+        printTextInput(false,$devOptions, __('Additional css', 'advanced-iframe'), 'additional_css', __('If you want to include an additional css into the parent page please specify the path to this file here. The css file will be added into the header of the page. You can specify a full or relative url. Make sure you take "<a href="https://designshack.net/articles/css/what-the-heck-is-css-specificity/" target="blank">CSS specificity"</a> into account if you want to overwrite styles! If you specify a relative one /style.css means that the style.css is located in the main directory of Wordpress. Start relative urls with /. Please note: Before Wordpress 3.3 the shortcode attribute cannot be used. You can only set it here. Shortcode attribute: additional_css=""', 'advanced-iframe'));
         printTextInput(false,$devOptions, __('Additional js', 'advanced-iframe'), 'additional_js', __('If you want to include an additional Javascript into the parent page please specify the path to this file here. The Javascript will be added after the iframe or if you use Wordpress >= 3.3 in the footer section. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of Wordpress. Start relative urls with /. Please note: Before Wordpress 3.3 the shortcode attribute cannot be used. You can only set it here. Shortcode attribute: additional_js=""', 'advanced-iframe'));
                           ?>
     </table>
@@ -65,8 +71,8 @@ echo "<hr height=1>";
     </p>
         <table class="form-table">
 <?php
-        printTextInput(true,$devOptions, __('Additional css in iframe', 'advanced-iframe'), 'additional_css_file_iframe', __('You can also include a css file directly into the iframe page. The css file will be added at the bottom of the body to overwrite also all inline styles. The styles are added after the page is loaded. You can specify a full or relative url. If you specify a relative one /style.css means that the style.css is located in the main directory of the iframe page. Shortcode attribute: additional_css_file_iframe=""', 'advanced-iframe'),'text','', $evanto);
-        printTextInput(true,$devOptions, __('Additional Javascript in iframe', 'advanced-iframe'), 'additional_js_file_iframe', __('For the same domain you can also include a css file directly into the iframe page. The css file will be added at the bottom of the body to overwrite also all inline styles. The styles are added after the page is loaded. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of the iframe page. Shortcode attribute: additional_js_file_iframe=""', 'advanced-iframe'),'text','', $evanto);
+        printTextInput(true,$devOptions, __('Additional css in iframe', 'advanced-iframe'), 'additional_css_file_iframe', __('You can also include a css file directly into the iframe page. The css file will be added at the bottom of the body to overwrite also all inline styles. The styles are added after the page is loaded. Make sure you take "<a href="https://designshack.net/articles/css/what-the-heck-is-css-specificity/" target="blank">CSS specificity"</a> into account if you want to overwrite styles! You can specify a full or relative url. If you specify a relative one /style.css means that the style.css is located in the main directory of the iframe page. In the external workaround the file is added after the ai_external.js. Shortcode attribute: additional_css_file_iframe=""', 'advanced-iframe'),'text','', $evanto);
+        printTextInput(true,$devOptions, __('Additional Javascript in iframe', 'advanced-iframe'), 'additional_js_file_iframe', __('You can also include a js file directly into the iframe page. The js file will be added at the bottom of the body. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of the iframe page. In the external workaround the file is added after the ai_external.js. Shortcode attribute: additional_js_file_iframe=""', 'advanced-iframe'),'text','', $evanto);
 ?>
     </table>
 <?php } ?>    
