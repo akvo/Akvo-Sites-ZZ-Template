@@ -90,9 +90,9 @@
 			
 			global $submenu;
 			
-			//echo "<pre>";print_r( $submenu );echo "</pre>";
-			
-			
+			foreach( $exclude_menu as $menu_slug ){
+				// echo "<pre>";print_r( $submenu[ $menu_slug ] );echo "</pre>";
+			}
 		?>
 			<h3><?php _e("Hide Menu Items"); ?></h3>
 
@@ -111,6 +111,10 @@
 						&nbsp;&nbsp;
 						<?php endif;?>
 					<?php endforeach;?>
+					
+					<?php foreach( $exclude_menu as $menu_slug ):?>
+						
+					<?php endforeach; ?>
 					</ul>
 				</td>
 			</tr>
