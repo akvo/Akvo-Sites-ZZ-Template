@@ -18,7 +18,6 @@
 				'posts_per_page' 	=> 3,
 				'rsr-id' 			=> 'rsr', 
 				'type-text' 		=> '',
-				'taxonomy'			=> '',
 				'filter_by'			=> '',
 				'page' 				=> 1,
 				'pagination' 		=> 0
