@@ -1,6 +1,6 @@
 <?php global $akvo;?>
 <header class="banner header2" role="banner">
-	<div class="container"><?php get_template_part('partials/logo-search');?></div>
+	<div class="<?php _e( $akvo->header_container_class );?>"><?php get_template_part('partials/logo-search');?></div>
     <div>
      	<div class="affix-menu">	
   			<nav class="navbar affix-top" data-spy="affix" data-offset-top="60">

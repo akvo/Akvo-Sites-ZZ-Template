@@ -5,14 +5,16 @@
 		
 		global $akvo_customize;
 		
-		$akvo_customize->section( $wp_customize, 'akvo_theme_panel', 'akvo_logo_section', 'Logo & Header Type', 'Upload your logo');
+		$section = 'akvo_logo_section';
+		
+		$akvo_customize->section( $wp_customize, 'akvo_theme_panel', $section, 'Logo & Header Type', 'Upload your logo');
 		
 		
 		/** LOGO IMAGE */ 
 		$wp_customize->add_setting( 'akvo_logo' );
 		$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'akvo_logo', array(
 	    	'label'    => __( 'Logo', 'sage' ),
-	    	'section'  => 'akvo_logo_section',
+	    	'section'  => $section,
 	   		'settings' => 'akvo_logo',
 		) ) );
 
@@ -22,7 +24,7 @@
 		$wp_customize->add_control('akvo_logo_size', array(
       		'settings' => 'akvo_logo_size',
       		'label'    => __('Use Original Logo Size'),
-      		'section'  => 'akvo_logo_section',
+      		'section'  => $section,
       		'type'     => 'checkbox',
       		'std' => 1
       	));
@@ -32,7 +34,7 @@
       		'left'	=> 'Left',
       		'right'	=> 'Right'
       	);
-      	$akvo_customize->dropdown( $wp_customize, 'akvo_logo_section', 'akvo_logo_location', 'Logo Location', 'left', $logo_location_arr);
+      	$akvo_customize->dropdown( $wp_customize, $section, 'akvo_logo_location', 'Logo Location', 'left', $logo_location_arr);
       	
       	
       	
@@ -42,7 +44,10 @@
 			'header2' => 'Sticky',
 			'header3' => 'Narrow Single Row'
 	    );
-    	$akvo_customize->dropdown( $wp_customize, 'akvo_logo_section', 'sage_header_options[header_type]', 'Header Type', 'header1', $headers_arr);
+    	$akvo_customize->dropdown( $wp_customize, $section, 'sage_header_options[header_type]', 'Header Type', 'header1', $headers_arr);
+		
+		/* STRECTH HEADER OPTION */
+		$akvo_customize->checkbox( $wp_customize, $section, 'sage_header_options[header_stretch]', 'Stretch Header' );
     	
       	
 	} );
