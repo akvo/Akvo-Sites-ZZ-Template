@@ -1,6 +1,6 @@
-<?php
+<?php 
 	
-	class Akvo_Card{
+	class AKVO_CARD_BASE{
 		
 		function get_ajax_url($action, $atts, $dont_inc = array()){
 			$url = admin_url('admin-ajax.php')."?action=".$action;
@@ -10,6 +10,57 @@
 				}	
 			}
 			return $url;
+		}
+		
+		function rsr_updates($atts){
+			
+			$data = array();
+			$jsondata = self::get_json_data($atts['rsr-id']);
+			
+			$offset = self::get_offset( $atts ); //(((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
+			
+			for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
+				$temp = self::parse_rsr_updates($jsondata->results[$i]);
+				
+				/* adding extra params */
+				$temp = self::add_extra_params($temp, $atts);
+				
+				array_push($data, $temp);
+			}
+			return $data;
+		}
+		
+		
+		function rsr_project($atts){
+			$data = array();
+			$jsondata = self::get_json_data($atts['rsr-id']);
+			
+			// SINGULAR DATA
+			if( !isset( $jsondata->results ) ){
+				
+				$temp = self::parse_rsr_project($jsondata);
+				
+				/* adding extra parameters to the akvo_card array */
+				$temp = self::add_extra_params($temp, $atts);
+				
+				array_push($data, $temp);
+			}
+			else{
+				// MULTIPLE VALUES
+				$offset = self::get_offset( $atts );
+				
+				for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
+					$temp = self::parse_rsr_project($jsondata->results[$i]);
+					
+					/* adding extra params */
+					$temp = self::add_extra_params($temp, $atts);
+					
+					array_push($data, $temp);
+				}
+				
+			}
+			
+			return $data;
 		}
 		
 		function get_base_url(){
@@ -121,31 +172,6 @@
 			return $akvo_card;
 		}
 		
-		/* main shortcode function that displays the card */
-		function display($atts){
-			$atts = shortcode_atts(array(
-					'title' 		=> 'Untitled',
-					'content' 		=> '',
-					'date' 			=> '',
-					'type' 			=> 'Blog',
-					'link' 			=> '',
-					'img' 			=> '', 
-					'type-text' 	=> '',
-					'read_more_text'=> 'Read more'
-				), $atts, 'akvo_card');
-			
-			//print_r($atts);
-			
-			/* get from customise */
-			$akvo_card_options = get_option('akvo_card');
-			
-			if($akvo_card_options && array_key_exists('read_more_text', $akvo_card_options)){
-				$atts['read_more_text'] = $akvo_card_options['read_more_text'];
-			}
-			
-			include "templates/card.php";
-		}
-		
 		function get_types(){
 			$post_type_arr = array(
 				'news' 			=> 'News',
@@ -214,15 +240,27 @@
 		function wp_query($atts){
 			$data = array();
 			
+			$query_atts = array(
+				'post_type' 	=> $atts['type'],
+        		'posts_per_page' => $atts['posts_per_page'],
+        		'offset'	=> self::get_offset( $atts ),
+			);
+			
+			/* TAXONOMY QUERY - CUSTOM TYPES AND TERMS */
+			if( isset( $atts['taxonomy'] ) && isset( $atts['filter_by'] ) ){
+				$query_atts['tax_query'] = array(
+					array(
+						'taxonomy' => $atts['taxonomy'],
+						'field'    => 'slug',
+						'terms'    => $atts['filter_by'],
+					)
+				);
+			}
 			
 			
-			$query = new WP_Query(array(
-						'post_type' 	=> $atts['type'],
-        				'posts_per_page' => $atts['posts_per_page'],
-        				//'paged' => $atts['page'],
-        				//'offset'=> (((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset']
-						'offset'	=> self::get_offset( $atts ),
-					));
+			
+			$query = new WP_Query( $query_atts );
+			
 			if ( $query->have_posts() ) { 
 				while ( $query->have_posts() ) {
 					$query->the_post();
@@ -240,59 +278,8 @@
 		}
 		
 		/* Iterate through RSR updates */
-		
 		function get_offset( $atts ){
 			return (((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
 		}
 		
-		function rsr_updates($atts){
-			
-			$data = array();
-			$jsondata = self::get_json_data($atts['rsr-id']);
-			
-			$offset = self::get_offset( $atts ); //(((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
-			
-			for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
-				$temp = self::parse_rsr_updates($jsondata->results[$i]);
-				
-				/* adding extra params */
-				$temp = self::add_extra_params($temp, $atts);
-				
-				array_push($data, $temp);
-			}
-			return $data;
-		}
-		
-		
-		function rsr_project($atts){
-			$data = array();
-			$jsondata = self::get_json_data($atts['rsr-id']);
-			
-			// SINGULAR DATA
-			if( !isset( $jsondata->results ) ){
-				
-				$temp = self::parse_rsr_project($jsondata);
-				
-				/* adding extra parameters to the akvo_card array */
-				$temp = self::add_extra_params($temp, $atts);
-				
-				array_push($data, $temp);
-			}
-			else{
-				// MULTIPLE VALUES
-				$offset = self::get_offset( $atts );
-				
-				for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
-					$temp = self::parse_rsr_project($jsondata->results[$i]);
-					
-					/* adding extra params */
-					$temp = self::add_extra_params($temp, $atts);
-					
-					array_push($data, $temp);
-				}
-				
-			}
-			
-			return $data;
-		}
 	}
