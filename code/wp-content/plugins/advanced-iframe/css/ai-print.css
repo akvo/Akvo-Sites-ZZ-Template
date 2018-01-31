@@ -14,6 +14,6 @@ display: inline-block;
     margin-left: 0px;
 }
 
-#details-workaround, #details-javascript, #jquery-help, #browser-help, #all-parameters {
+#details-workaround, #details-javascript, #jquery-help, #browser-help, #all-parameters,  #ai #details-not-work {
 	display: block;
 }

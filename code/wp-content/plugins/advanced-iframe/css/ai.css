@@ -39,8 +39,8 @@
 #ai h2 small, #ai h1 small {
   font-weight: 400;
 }
-
-#ai .shortcode span {
+                   
+#ai .shortcode span, .bold {
 	font-weight: bold;
   white-space: nowrap;
 }
@@ -57,7 +57,7 @@
 	padding: 10px;
 	padding-bottom: 10px;
 	margin: 10px;
-  max-width: 600px;
+  max-width: 740px;
 }
 
 #ai .move-bottom {
@@ -187,7 +187,7 @@ ul#browser-list {
 #ai #last .signup_account_container {
 	width: auto;
 }
-#ai #details-workaround,#ai #details-javascript,#ai #jquery-help,#ai #browser-help,#ai #jquery-gen,#ai #all-parameters,#ai #details-config, #ai #user-help, #ai #meta-help {
+#ai #details-workaround,#ai #details-javascript,#ai #jquery-help,#ai #browser-help,#ai #jquery-gen,#ai #all-parameters,#ai #details-config, #ai #user-help, #ai #meta-help, #ai #details-not-work {
 	background: #F2F7F9;
 	border: 1px solid #d2d7d9;
 	padding: 10px;
@@ -195,6 +195,7 @@ ul#browser-list {
 	margin: 10px;
 	display: none;
 }
+
 #ai .nounderline a {
 	text-decoration: none;
 }
@@ -403,7 +404,7 @@ font-size:1.1em
 
 
 #ai input[type="text"].ai-input-search {
-  width: 200px;
+  width: 250px;
   margin-top: 5px;
   margin-bottom: 5px;
   float:left;
@@ -458,7 +459,6 @@ display:block;
 #ai .small-menu {
 float:left; 
 margin-right:30px;
-height:40px;
 }
 
 #ai #ai-input-search-help {
@@ -537,4 +537,16 @@ display: none;
     list-style-position: outside;
     list-style-type:disc;
     margin-left:20px;
+}
+
+.description span {
+ display: block;
+ padding-left: 20px;
+}
+
+.description > span:before{
+  color: 000;
+  z-index: -1;
+  content: '•   ';
+  margin-left: -10px;
 }

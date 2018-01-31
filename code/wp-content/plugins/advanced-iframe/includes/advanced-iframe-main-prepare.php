@@ -1,7 +1,13 @@
 <?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  Prepares Javascript and values for the iframe
  */
+ 
+if ($include_scripts_in_content == 'true') {
+    $html .= '<script type="text/javascript" src="' . plugins_url() . $aiPath . '/js/ai.js" ></script>';
+}  
+ 
 $html .= '<script type="text/javascript">';
 $html .= '   var ai_iframe_width_'.$id.' = 0;';
 $html .= '   var ai_iframe_height_'.$id.' = 0;';
@@ -13,10 +19,11 @@ if ($add_document_domain == 'true') {
 if ($use_post_message != 'false') {
 
     $iframe_origin_full = $src;
+    $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https:' : 'http:';
     if ($this->ai_startsWith($src, '//')) {
-      // we add the protocol
-      $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https:' : 'http:';
       $iframe_origin_full = $protocol . $iframe_origin_full; 
+    } else if (!$this->ai_startsWith($src, 'http')) {
+       $iframe_origin_full = $protocol . '//'.$_SERVER['HTTP_HOST'] . '/';    
     }
     $iframe_origin_parts = parse_url($iframe_origin_full);
     $iframe_origin = $iframe_origin_parts['scheme'] . '://' . $iframe_origin_parts['host'];
@@ -79,12 +86,7 @@ if (typeof aiReadyCallbacks === \'undefined\') {
     var aiReadyCallbacks = [];
 }';
 
-$html .= 'var onloadFired'.$id.' = false; ';       
-$html .= '    function aiShowIframe() { jQuery("#'.$id.'").css("visibility", "visible");';
-if (!empty($hide_part_of_iframe)) {                  
-    $html .= '        jQuery("#wrapper-div-'.$id.'").css("visibility", "visible");';
-}
-$html .= '    }';
+$html .= 'var onloadFired'.$id.' = false; '; 
 $html .= '    function aiShowIframeId(id_iframe) { jQuery("#"+id_iframe).css("visibility", "visible");';
 if (!empty($hide_part_of_iframe)) {
     $html .= '        jQuery("#wrapper-div-"+id_iframe).css("visibility", "visible");';
@@ -170,9 +172,11 @@ if (!empty($map_parameter_to_url)) {
                 if (!$this->ai_startsWith($src,"http")) {
                    if ($this->ai_startsWith($src,"s|")) { 
                      $src = "https://" . $prefix . substr($src,2);
+                   } else if ($this->ai_startsWith($src_orig,"https")) {
+                     $src = "https://" . $prefix . $src;
                    } else {
                      $src = "http://" . $prefix . $src;
-                   }  
+                   } 
                 }  
             }
          } else {
@@ -243,6 +247,7 @@ if ($this->ai_endsWith($src, '.pdf')) {
     $html .= '}';
     
     $aiReady = '';
+    $hide_page_sum = ($hide_page_until_loaded  == 'true' || $hide_page_until_loaded_external == 'true')? 'true':'false';
     //  Change parent links target
     if (!empty($change_parent_links_target) && $show_iframe_as_layer !== 'external') {
       $elementArray = explode("|", $change_parent_links_target);
@@ -251,14 +256,14 @@ if ($this->ai_endsWith($src, '.pdf')) {
       }
      
       if ($show_iframe_as_layer == 'true') {
-        $aiReady .=  'jQuery("'.$change_parent_links_target.'").on( "click", function() { ai_showLayerIframe("' . $id . '","'.plugins_url() . $aiPath.'/img/"); });'; 
+        $aiReady .=  'jQuery("'.$change_parent_links_target.'").on( "click", function(event) { var reload=ai_checkReload(this, "' . $id . '"); ai_showLayerIframe(event,"' . $id . '","'.plugins_url() . $aiPath.'/img/","'.$hide_page_sum.'","'.$show_iframe_loader_layer.'", '.$show_iframe_as_layer_keep_content.', reload); });'; 
       }      
     }
     if ($show_iframe_as_layer == 'external') {   
          $aiReady .=  'jQuery("a").each(function () {
           if (this.host !== location.host) {
             jQuery(this).attr("target", "'.$id.'");
-            jQuery(this).on("click", function() { ai_showLayerIframe("' . $id . '","'.plugins_url() . $aiPath.'/img/"); });
+            jQuery(this).on("click", function(event) { var reload=ai_checkReload(this, "' . $id . '"); ai_showLayerIframe(event,"' . $id . '","'.plugins_url() . $aiPath.'/img/","'.$hide_page_sum.'","'.$show_iframe_loader_layer.'", '.$show_iframe_as_layer_keep_content.', reload); });
           }
       });';
     }
@@ -375,7 +380,7 @@ if ($this->ai_endsWith($src, '.pdf')) {
         }
     }
     if (!empty($iframe_content_css)) {
-        $hideiframehtml .= 'aiAddCss("#'.$id.'","'.urlencode($iframe_content_css).'");';
+        $hideiframehtml .= 'aiAddCss("#'.$id.'","'.urlencode(wp_kses($iframe_content_css, array())).'");';
     }
     if (!empty($additional_css_file_iframe)) {
         $hideiframehtml .= 'aiAddCssFile("#'.$id.'","'.$additional_css_file_iframe.'");';

@@ -1,4 +1,5 @@
 <?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  In this file the iframe itself and the sourounding divs are created
  */
@@ -15,7 +16,7 @@ if ($show_iframe_loader == 'true') {
    // div around 
    $html .= '<div id="ai-div-container-'.$id.'">';
    // div for the loader 
-   $html .= '<div id="ai-div-loader-'.$id.'"><img src="' . plugins_url() . $aiPath . '/img/loader.gif" width="66" height="66" title="Loading" alt="Loading"></div>';
+   $html .= '<div id="ai-div-loader-'.$id.'"><img src="' . AIP_IMGURL . '/loader.gif" width="66" height="66" title="Loading" alt="Loading"></div>';
  }
 
  if (!empty($hide_part_of_iframe)) {
@@ -29,8 +30,7 @@ if ($show_iframe_loader == 'true') {
       
       for($hi=0;$hi<count($rectangles);++$hi){
          $values = explode(',' , $rectangles[$hi]);
-         
-         
+               
          $num_values = count($values);
          if ($num_values == 6 || $num_values == 7 || $num_values == 8) {
             // add px or %
@@ -61,7 +61,7 @@ if ($show_iframe_loader == 'true') {
             } 
             
             // $values[4] does also support a html file which also includes a shortcode
-            // It is added with a ; after the color. html files needs to be in the custom folder.
+            // It is added with a $ after the color. html files needs to be in the custom folder.
             $values_color = explode('$' , $values[4]);
             $bg_color = $values_color[0];
             // file or shortcode
@@ -79,7 +79,11 @@ if ($show_iframe_loader == 'true') {
                 }     
             }
        
-            $html .= '<'.$display_type.$hide_href.' id="wrapper-div-element-'.$id.'-'.$hi.'" style="position:absolute;z-index:'.esc_html(trim($values[5])).';'.$x_style.':'.esc_html(trim($r_x)).';'.$y_style.':'.esc_html(trim($r_y)).';width:'.$r_width.';height:'.$r_height.';background-color:'.esc_html(trim($bg_color)).'">'.$div_content.'</'.$display_type.'>';
+            $html .= '<style>';
+            $html .= '#wrapper-div-element-'.$id.'-'.$hi.' {';
+            $html .= 'position:absolute;z-index:'.esc_html(trim($values[5])).';'.$x_style.':'.esc_html(trim($r_x)).';'.$y_style.':'.esc_html(trim($r_y)).';width:'.$r_width.';height:'.$r_height.';background-color:'.esc_html(trim($bg_color)).';';
+            $html .= '}</style>';     
+            $html .= '<'.$display_type.$hide_href.' id="wrapper-div-element-'.$id.'-'.$hi.'">'.$div_content.'</'.$display_type.'>';
          } else {
             $html = $error_css . '<div class="errordiv">' . __('ERROR: hide part of iframe does not have the required 6 parameters', 'advanced-iframe') . '</div>';
             return $html;
@@ -136,7 +140,7 @@ if ($this->ai_startsWith(strtolower($src), "http:") &&
 } else if ($this->ai_startsWith(strtolower($src), "https:") && 
     $this->ai_startsWith(strtolower($parent_http), "http:") &&
     $enable_external_height_workaround == "true" && $use_post_message == 'false' ) {
-    $html .= 'You use a https iframe in a http page with the external workaround. To enable the external workaround you NEED to enable "Use post message for communication" on the "external workaround" tab.';
+    $html .= 'You use a https iframe in a http page with the external workaround. To enable the external workaround you NEED to enable "Use postMessage for communication" on the "external workaround" tab.';
 } 
  
 $html .= "<iframe id='" . $id . "' ";
@@ -188,9 +192,10 @@ if (!empty ($sandbox)) {
 if (!empty ($style) || $show_part_of_iframe == 'true' || $enable_responsive_iframe == 'true') {
     if (strpos($style, 'max-width') === false) {
       if ($show_part_of_iframe == 'true') {
-          $style .= 'max-width:none;';
+          $style .= ';max-width:none;';
       } else if ($enable_responsive_iframe == 'true') {
-          $style .= 'max-width:100%;';
+          // width:1px;min-width:100%; fix for IOS 
+          $style .= ';width:1px;min-width:100%;max-width:100%;';
       }
     }
     $html .= " style='" . esc_html(trim($style)) . "' ";
@@ -226,6 +231,9 @@ if (!empty ($tab_hidden)) {
 
 if ($show_iframe_loader == 'true') {
     $onload_str .= ';jQuery("#ai-div-loader-'.$id.'").hide();';
+}
+if ($show_iframe_loader_layer == 'true') {
+    $onload_str .= ';jQuery("#ai-div-loader-global").hide();';
 }
 
 if (!empty($hide_content_until_iframe_color)) {
@@ -266,8 +274,8 @@ if (!empty($iframe_height_ratio)) {
     $onload_str .= ';aiResizeIframeRatio(this, "'.$iframe_height_ratio.'");';
 }
 
-if ($onload_scroll_top == 'true') {
-    $onload_str .= ';aiScrollToTop();';
+if ($onload_scroll_top == 'true' || $onload_scroll_top == 'iframe') {
+    $onload_str .= ';aiScrollToTop("'.$id.'","'.$onload_scroll_top.'");';
 }
 // hide_page_until_loaded
 if ($hide_page_until_loaded  == 'true') {

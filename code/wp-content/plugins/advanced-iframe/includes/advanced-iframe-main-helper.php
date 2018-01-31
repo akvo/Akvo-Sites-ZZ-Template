@@ -1,4 +1,5 @@
 <?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 
 class AdvancedIframeHelper {
 

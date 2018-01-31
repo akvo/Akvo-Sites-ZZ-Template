@@ -1,5 +1,6 @@
-
 <?php 
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+
 if ($evanto || $isDemo) {  
 if ($devOptions['accordeon_menu'] == 'false') { ?>
 <div class="ai-anchor" id="zo"></div>

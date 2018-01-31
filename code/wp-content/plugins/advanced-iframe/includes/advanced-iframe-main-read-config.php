@@ -157,6 +157,9 @@ extract(array('securitykey' => 'not set',
   'add_document_domain'  => $options['add_document_domain'],
   'document_domain'  => $options['document_domain'], 
   'sandbox'  => $options['sandbox'],
+  'show_iframe_as_layer_keep_content', $options['show_iframe_as_layer_keep_content'],
+  'parent_content_css'  => $options['parent_content_css'], 
+  'include_scripts_in_content'  => $options['include_scripts_in_content'],
    $atts));
 }
 
@@ -193,6 +196,14 @@ if ($options['shortcode_attributes'] == 'true') {
     $error_array = array();
     // we go through all parameters and theck if they are valid.
      foreach ($atts as $key => $option) {
+        if ($key == 'id') {
+            $id_new =  preg_replace("/\W/", "_", $option);
+            $id_new = preg_replace('/^[0-9]+/', '', $id_new);   
+            if ($id_new != $option) {
+               $error_array[] = 'Id "' . esc_html($option) . '" is not valid. Please check the documentation.';                
+            }
+        }
+        
         if (!array_key_exists ( $key , $defaults )) {
           if (strlen($key) == 1 ) {
             $error_array[] = $option;    
@@ -307,7 +318,11 @@ if ($options['shortcode_attributes'] == 'true') {
       'document_domain'  => $options['document_domain'],
       'sandbox'  => $options['sandbox'],
       'use_post_message'  => $use_post_message,
-      'multi_domain_enabled' => $multi_domain_enabled
+      'multi_domain_enabled' => $multi_domain_enabled,
+      'show_iframe_as_layer_keep_content' => $options['show_iframe_as_layer_keep_content'],
+      'parent_content_css'  => $options['parent_content_css'],      
+      // this setting is only available in the shortcode as it is only needed in the special case if no footer is rendered.
+      'include_scripts_in_content'  => $options['include_scripts_in_content']  
        )
       , $atts));
 
@@ -338,7 +353,9 @@ if ($options['shortcode_attributes'] == 'true') {
              $name = $autoid;
          }
       }
-  }
+  } 
+ 
+   
 } else {
   // only the secrity key is read.
   extract(shortcode_atts(array('securitykey' => 'not set'), $atts));
@@ -372,6 +389,15 @@ if ($enable_external_height_workaround == "true") {
   $additional_css_file_iframe = '';
   $add_css_class_iframe = 'false';
 }
+
+// check if the iframe is called inside wp-admin. if this is the case we 
+// disable the hide_unit_loaded stuff that is is shown there properly.
+if (false !== strpos($_SERVER['REQUEST_URI'], 'wp-admin')) {
+   $hide_page_until_loaded='false';
+   $hide_page_until_loaded_external='false';
+   $hide_content_until_iframe_color='';
+}
+
 
 // Settings defaults
 // Invalid user input is replaced as good as possible 
@@ -413,6 +439,7 @@ if (!file_exists(dirname(__FILE__) . "/class-cw-envato-api.php")) {
   $add_css_class_iframe = $hide_content_until_iframe_color = '';
   $include_html = $show_iframe_as_layer = '';
   $enable_ios_mobile_scolling = $add_document_domain = 'false';
+  $parent_content_css = '';
 } else { $default_options = 0; }
 
 if (!empty($iframe_zoom)) {
@@ -428,6 +455,7 @@ $id = (empty ($id)) ? 'advanced_iframe' : preg_replace("/[^a-zA-Z0-9]/", "_", $i
 $name = (empty ($name)) ? 'advanced_iframe'  : preg_replace("/[^a-zA-Z0-9]/", "_", $name);
 
 // end defaults
+$this->addCustomCss($parent_content_css);
 
 if ($auto_zoom == 'same' || $auto_zoom == 'remote') {
   $iframe_zoom = '1';
@@ -436,9 +464,6 @@ if ($auto_zoom == 'same' || $auto_zoom == 'remote') {
 if ($enable_ios_mobile_scolling == 'true' || $browser != '' || (!empty($iframe_zoom) ||
    ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external'))) {
 if (file_exists(dirname(__FILE__) . '/advanced-iframe-browser-detection.php')) {
-    if ( !defined( 'AIP' ) ) {
-        define("AIP", "Advanced iFrame Pro");
-    }
     include_once dirname(__FILE__) . '/advanced-iframe-browser-detection.php';
     if ($browser != '' || (!empty($iframe_zoom))) {
       if (!is_selected_browser($browser,$id)) {
@@ -467,6 +492,7 @@ if (strpos($height, '-') !== false || strpos($height, '+') !== false ) {
 
 $show_iframe_as_layer_div = false;
 $show_iframe_as_layer_div_header = false;
+$show_iframe_loader_layer = $show_iframe_loader;
 
 if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
    $ios_scroll = $enable_ios_mobile_scolling == 'true' && ai_is_ios() && ai_is_mobile();
@@ -484,24 +510,24 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
        $layer_div_base .= ';left:50%;top:50%;transform: translate(-50%,-50%);max-width:' . $esc_width . ';max-height:' . $esc_height;
      }
    }
-   
-   
+    
+   $layer_div_base .= ';background-color:#fff;display:none;position:fixed;z-index:100003;margin:0px !important;padding:0px !important;';
    
    if ($ios_scroll) {
      $width='100%';
      $height='100%';
      $style .= ";width:100%;height:100%;margin:0px !important;padding:0px !important;";
      if (empty($show_iframe_as_layer_header_file)) {
-       $layer_div_style = "-webkit-overflow-scrolling: touch; overflow: auto;display:none;position:fixed;z-index:100000;".$layer_div_base. ";margin:0px !important;padding:0px !important;";
+       $layer_div_style = "-webkit-overflow-scrolling: touch; overflow: auto;".$layer_div_base;
      } else {
-       $layer_div_style = "display:none;position:fixed;z-index:100000;".$layer_div_base.";margin:0px !important;padding:0px !important;";
+       $layer_div_style = $layer_div_base;
        $show_iframe_as_layer_div_header = true;
        $adHeight = esc_html($this->addPx($show_iframe_as_layer_header_height));
        $layer_div_header_style = ";-webkit-overflow-scrolling: touch; overflow: auto;margin:0px !important;padding:0px !important;width:100%;height:calc(100% - ". $adHeight .")";
      }
    } else if (!empty($show_iframe_as_layer_header_file)) {
      // sticky ist normalles div und iframe scrollt mit calc height - 96%
-     $layer_div_style = "display:none;position:fixed;z-index:100000;".$layer_div_base.";margin:0px !important;padding:0px !important;";
+     $layer_div_style = $layer_div_base;
      $height = '';
      $adHeight = esc_html($this->addPx($show_iframe_as_layer_header_height));
      $width='100%';
@@ -510,7 +536,7 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
      $layer_div_style = ""; 
      $width='100%';
      $height='100%';
-     $style .= ";display:none;margin:0px !important;padding:0px !important;position:fixed;z-index:100000;" . $layer_div_base;
+     $style .= $layer_div_base;
    }
    $src="about:blank";
    $show_part_of_iframe = 'false';

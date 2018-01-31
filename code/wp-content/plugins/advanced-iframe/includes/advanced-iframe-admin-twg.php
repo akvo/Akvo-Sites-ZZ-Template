@@ -1,3 +1,6 @@
+<?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+?>
 <div>
   <div id="icon-options-general" class="icon_ai">
     <br>

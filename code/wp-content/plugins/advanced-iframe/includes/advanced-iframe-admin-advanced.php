@@ -1,4 +1,7 @@
- <div id="spacer-div"></div>
+<?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+?>
+<div id="spacer-div"></div>
 <?php if ($devOptions['accordeon_menu'] == 'false') { ?>
     <div class="ai-anchor" id="ad"></div>
 <?php } ?>
@@ -23,17 +26,17 @@ if ($evanto || $isDemo) {
 _e(' 
 <div class="small-menu">
   <a href="#rt">Auto height/width</a><br />
-  <a href="#so">Show only a part of the iframe</a>
+  <a href="#so">Show only a part of the iframe</a><br />
+  <a href="#hi">Hide/cover parts of the iframe</a> 
 </div>
 <div class="small-menu">
   <a href="#mi">Modify the iframe</a><br />
-  <a href="#mp">Modify the parent page</a>
+  <a href="#mp">Modify the parent page</a><br />
+  <a href="#ol">Open iframe in layer</a>
 </div>
+
 <div class="small-menu">
-  <a href="#ol">Open iframe in layer</a><br />
-  <a href="#zo">Zoom</a>
-</div>
-<div class="small-menu">
+ <a href="#zo">Zoom</a><br />
   <a href="#la">Lazy load</a><br />
   <a href="#pa">Url parameter handling</a>
 </div>
@@ -57,9 +60,8 @@ _e('<div style="clear:left;"></div>
 ?>       
     
     <table class="form-table">
-    <?php    
-           
-        printTrueFalse(false,$devOptions, __('Scrolls the parent window to the top', 'advanced-iframe'), 'onload_scroll_top', __('If you like that if you click on a link in the iframe the parent page should scroll to the top you should set this to \'Yes\'. Please note that this is done by Javascript! So if a user has Javascript deactivated no scrolling is done.   This setting generates the code onload="aiScrollToTop();" to the iframe. If you select the resize iframe as well then onload="aiResizeIframe(this);aiScrollToTop();" is generated. If you like a different order please enter the javascript functions directly in the onload parameter in the order you like. Shortcode attribute: onload_scroll_top="true" or onload_scroll_top="false" ', 'advanced-iframe'));
+    <?php               
+        printTrueIframeFalse($devOptions, __('Scrolls the parent window/iframe to the top', 'advanced-iframe'), 'onload_scroll_top', __('If you like that if you click on a link in the iframe the parent page should scroll to the top of the whole page you should set this to \'Yes\'. Please note that this is done by Javascript! So if a user has Javascript deactivated no scrolling is done. This setting generates the code onload="aiScrollToTop("id","true");" to the iframe. If you select the resize iframe as well then onload="aiResizeIframe(this);aiScrollToTop("your_id","true");" is generated. If you like a different order please enter the javascript functions directly in the onload parameter in the order you like. You can also scroll to the top of the iframe by selecting \'Iframe\'. Then this setting generates the code onload="aiScrollToTop("your_id","iframe");". Shortcode attribute: onload_scroll_top="true", onload_scroll_top="iframe" or onload_scroll_top="false" ', 'advanced-iframe'));
 
         printTrueFalse(false,$devOptions, __('Hide the iframe until it is loaded', 'advanced-iframe'), 'hide_page_until_loaded', __('This setting hides the iframe until it is loaded. This prevents the iframe white flash issue while loading. When you use the external workaround please check the setting for the "<a id="external-workaround-link" href="#xss">External workaround</a>". The setting there overwrites this setting because otherwise the iframe is maybe shown too early! Shortcode attribute: hide_page_until_loaded="true" or hide_page_until_loaded="false" ', 'advanced-iframe'));
     if ($evanto || $isDemo) {        

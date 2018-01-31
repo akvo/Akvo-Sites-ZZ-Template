@@ -1,4 +1,5 @@
 <?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  Prints a simple true/false radio selection
  */
@@ -27,11 +28,11 @@ function printTrueFalse($isPro,$options, $label, $id, $description, $default = '
       <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url) . renderExternalWorkaroundIcon($showSave). '</th>
       <td><span class="hide-print">
       ';
-    echo '<input type="radio" id="' . $id . '" name="' . $id . '" value="true" ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
     if ($options[$id] == "true") {
         echo 'checked="checked"';
     }
-    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="false" ';
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="false" ';
     if ($options[$id] == "false") {
         echo 'checked="checked"';
     }
@@ -69,15 +70,15 @@ function printTrueFalseHeight($isPro,$options, $label, $id, $description, $defau
       <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url) . renderExternalWorkaroundIcon($showSave). '</th>
       <td><span class="hide-print">
       ';
-    echo '<input type="radio" id="' . $id . '" name="' . $id . '" value="true" ';
+    echo '<input type="radio" id="' . $id . '" name="' . $id . '1" value="true" ';
     if ($options[$id] == "true") {
         echo 'checked="checked"';
     }
-    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="external" ';
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="external" ';
     if ($options[$id] == "external") {
         echo 'checked="checked"';
     }
-    echo '/> ' . __('External', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="false" ';
+    echo '/> ' . __('External', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '3" name="' . $id . '" value="false" ';
     if ($options[$id] == "false") {
         echo 'checked="checked"';
     }
@@ -115,11 +116,11 @@ function printTopBottom($options, $label, $id, $description, $default = 'top', $
       <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url) . renderExternalWorkaroundIcon($showSave). '</th>
       <td><span class="hide-print">
       ';
-    echo '<input type="radio" id="' . $id . '" name="' . $id . '" value="top" ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="top" ';
     if ($options[$id] == "top") {
         echo 'checked="checked"';
     }
-    echo ' /> ' . __('Top', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="bottom" ';
+    echo ' /> ' . __('Top', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="bottom" ';
     if ($options[$id] == "bottom") {
         echo 'checked="checked"';
     }
@@ -281,7 +282,7 @@ function printTrueDebugFalse($options, $label, $id, $description, $url='', $show
     if ($options[$id] == "false") {
         echo 'checked="checked"';
     }
-    echo '/> ' . __('No', 'advanced-iframe') . '<br></span>
+    echo '/> ' . __('No (iframe)', 'advanced-iframe') . '<br></span>
     <p class="description">' . $description . '</p></td>
     </tr>
     ';
@@ -289,6 +290,10 @@ function printTrueDebugFalse($options, $label, $id, $description, $url='', $show
 
 
 function printTrueFalseFull($options, $label, $id, $description, $url='') {
+    if (!isset($options[$id]) || empty($options[$id])) {
+      $options[$id] = 'false';
+    }
+    
     $offset = '';
     if (ai_startsWith($label, 'i-')) {
         $offset = 'class="'.substr($label,0, 5).'" ';
@@ -310,15 +315,15 @@ function printTrueFalseFull($options, $label, $id, $description, $url='') {
       <th scope="row" '.$offset.'>' . $label .  renderExampleIcon($url)  .'</th>
       <td><span class="hide-print">
       ';
-    echo '<input type="radio" id="' . $id . '" name="' . $id . '" value="true" ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
     if ($options[$id] == "true") {
         echo 'checked="checked"';
     }
-    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="false" ';
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="false" ';
     if ($options[$id] == "false") {
         echo 'checked="checked"';
     }
-    echo '/> ' . __('No', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '" name="' . $id . '" value="full" ';
+    echo '/> ' . __('No', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '3" name="' . $id . '" value="full" ';
     if ($options[$id] == "full") {
         echo 'checked="checked"';
     }
@@ -406,6 +411,40 @@ function printScollAutoManuall($options, $label, $id, $description) {
     ';
 }
 
+function printTrueIframeFalse($options, $label, $id, $description) {
+    $offset = '';
+    if (ai_startsWith($label, 'i-')) {
+        $offset = 'class="'.substr($label,0, 5).'" ';
+        $label = substr($label, 5);
+    }
+    
+    if ($options[$id] == '') {
+        $options[$id] = 'false';
+    }
+    
+    echo '
+      <tr>
+      <th scope="row" '.$offset.'>' . $label . '</th>
+      <td><span class="hide-print">
+      ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
+    if ($options[$id] == "true") {
+        echo 'checked="checked"';
+    }
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="iframe" ';
+    if ($options[$id] == "iframe") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('Iframe', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '3" name="' . $id . '" value="false" ';
+    if ($options[$id] == "false") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('False', 'advanced-iframe') . '<br></span>
+    <p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+}
+
 /**
  *  Prints a default input field that acepts only numbers and does a validation
  */
@@ -486,11 +525,11 @@ function printHeightTrueFalse($options, $label, $id, $description, $url='', $sho
       <th scope="row" '.$offset.'>' . $label .   renderExampleIcon($url)  . renderExternalWorkaroundIcon($showSave). '</th>
       <td><span class="hide-print">
       ';
-    echo '<input onclick="aiDisableHeight();" type="radio" id="' . $id . '" name="' . $id . '" value="true" ';
+    echo '<input onclick="aiDisableHeight();" type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
     if ($options[$id] == "true") {
         echo 'checked="checked"';
     }
-    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="aiEnableHeight();"  type="radio" id="' . $id . '" name="' . $id . '" value="false" ';
+    echo ' /> ' . __('Yes', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="aiEnableHeight();"  type="radio" id="' . $id . '2" name="' . $id . '" value="false" ';
     if ($options[$id] == "false") {
         echo 'checked="checked"';
     }
@@ -568,6 +607,28 @@ function printAccordeon($options, $label, $id, $description, $default = 'false')
     </tr>
     ';
 } 
+
+function printRoles($options, $label, $id, $description, $default = 'false') {
+    if (!isset($options[$id]) || empty($options[$id])) {
+      $options[$id] = $default;
+    }
+    
+    $user_role = $options[$id];
+    echo '
+      <tr>
+      <th scope="row">' . $label . '</th>
+      <td>
+      <select name="'.$id.'">
+          <option value="none">'. __('Default restrictions', 'advanced-iframe') .'</option>';
+          wp_dropdown_roles($user_role);
+    echo '  
+      </select>
+    <br>
+    <p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+} 
+
 
 function renderExampleIcon($url) {
   if (! empty($url)) {
