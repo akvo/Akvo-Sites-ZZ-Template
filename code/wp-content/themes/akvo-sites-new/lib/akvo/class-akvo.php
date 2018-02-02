@@ -4,6 +4,7 @@
 		
 		public $header_options;
 		public $search_flag = true;
+		public $header_container_class = 'container';
 		
 		public $text_domain = 'sage';
 		
@@ -42,6 +43,10 @@
 				
 				$this->header_options['search_text'] = "Search " . get_bloginfo("name");
 				
+			}
+			
+			if( $this->header_options && isset($this->header_options['header_stretch']) && $this->header_options['header_stretch'] ){
+				$this->header_container_class = 'container-fluid';
 			}
 			
 		}

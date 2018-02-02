@@ -247,14 +247,22 @@
 			);
 			
 			/* TAXONOMY QUERY - CUSTOM TYPES AND TERMS */
-			if( isset( $atts['taxonomy'] ) && isset( $atts['filter_by'] ) ){
-				$query_atts['tax_query'] = array(
-					array(
-						'taxonomy' => $atts['taxonomy'],
-						'field'    => 'slug',
-						'terms'    => $atts['filter_by'],
-					)
-				);
+			if( isset( $atts['filter_by'] ) ){
+				
+				$atts['filter_by'] = explode( ':',  $atts['filter_by'] );
+				
+				if( is_array( $atts['filter_by'] ) && ( count( $atts['filter_by'] ) > 1 ) ){
+					
+					$query_atts['tax_query'] = array(
+						array(
+							'taxonomy' => $atts['filter_by'][0],
+							'field'    => 'slug',
+							'terms'    => $atts['filter_by'][1],
+						)
+					);
+					
+				}
+				
 			}
 			
 			
