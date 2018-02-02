@@ -8,7 +8,7 @@ class TrackingCode {
 
 	private $trackingCode;
 
-	public $is404 = false, $isSearch = false;
+	public $is404 = false, $isSearch = false, $isUsertracking = false;
 
 	public function __construct($wpPiwik) {
 		self::$wpPiwik = $wpPiwik;
@@ -18,16 +18,20 @@ class TrackingCode {
 	}
 
 	public function getTrackingCode() {
+		if ($this->isUsertracking)
+			$this->applyUserTracking ();
 		if ($this->is404)
 			$this->apply404Changes ();
 		if ($this->isSearch)
 			$this->applySearchChanges ();
-		if (is_single ())
+		if (is_single () || is_page())
 			$this->addCustomValues ();
+		$this->trackingCode = apply_filters('wp-piwik_tracking_code', $this->trackingCode);
 		return $this->trackingCode;
 	}
 
 	public static function prepareTrackingCode($code, $settings, $logger) {
+		global $current_user;
 		$logger->log ( 'Apply tracking code changes:' );
 		$settings->setOption ( 'last_tracking_code_update', time () );
 		if ($settings->getGlobalOption ( 'track_mode' ) == 'js')
@@ -58,10 +62,13 @@ class TrackingCode {
 
 		if ($settings->getGlobalOption ( 'track_datacfasync' ))
 			$code = str_replace ( '<script type', '<script data-cfasync="false" type', $code );
+		if ($settings->getGlobalOption ( 'set_download_extensions' ))
+			$code = str_replace ( "_paq.push(['trackPageView']);", "_paq.push(['setDownloadExtensions', '" . ($settings->getGlobalOption ( 'set_download_extensions' )) . "']);\n_paq.push(['trackPageView']);", $code );
 		if ($settings->getGlobalOption ( 'add_download_extensions' ))
 			$code = str_replace ( "_paq.push(['trackPageView']);", "_paq.push(['addDownloadExtensions', '" . ($settings->getGlobalOption ( 'add_download_extensions' )) . "']);\n_paq.push(['trackPageView']);", $code );
 		if ($settings->getGlobalOption ( 'limit_cookies' ))
 			$code = str_replace ( "_paq.push(['trackPageView']);", "_paq.push(['setVisitorCookieTimeout', '" . $settings->getGlobalOption ( 'limit_cookies_visitor' ) . "']);\n_paq.push(['setSessionCookieTimeout', '" . $settings->getGlobalOption ( 'limit_cookies_session' ) . "']);\n_paq.push(['setReferralCookieTimeout', '" . $settings->getGlobalOption ( 'limit_cookies_referral' ) . "']);\n_paq.push(['trackPageView']);", $code );
+
 		if ($settings->getGlobalOption ( 'force_protocol' ) != 'disabled')
 			$code = str_replace ( '"//', '"' . $settings->getGlobalOption ( 'force_protocol' ) . '://', $code );
 		if ($settings->getGlobalOption ( 'track_content' ) == 'all')
@@ -105,6 +112,27 @@ class TrackingCode {
 		$this->trackingCode = str_replace ( "_paq.push(['trackPageView']);", "_paq.push(['trackSiteSearch','" . get_search_query () . "', false, " . $intResultCount . "]);\n_paq.push(['trackPageView']);", $this->trackingCode );
 	}
 
+	private function applyUserTracking() {
+		if (\is_user_logged_in()) {
+			// Get the User ID Admin option, and the current user's data
+			$uidFrom = self::$wpPiwik->getGlobalOption ( 'track_user_id' );
+			$current_user = wp_get_current_user(); // current user
+			// Get the user ID based on the admin setting
+			if ( $uidFrom == 'uid' ) {
+				$pkUserId = $current_user->ID;
+			} elseif ( $uidFrom == 'email' ) {
+				$pkUserId = $current_user->user_email;
+			} elseif ( $uidFrom == 'username' ) {
+				$pkUserId = $current_user->user_login;
+			} elseif ( $uidFrom == 'displayname' ) {
+				$pkUserId = $current_user->display_name;
+			}
+			// Check we got a User ID to track, and track it
+			if ( isset( $pkUserId ) && ! empty( $pkUserId ))
+				$this->trackingCode = str_replace ( "_paq.push(['trackPageView']);", "_paq.push(['setUserId', '" . esc_js( $pkUserId ) . "']);\n_paq.push(['trackPageView']);", $this->trackingCode );
+		}		
+	}
+	
 	private function addCustomValues() {
 		$customVars = '';
 		for($i = 1; $i <= 5; $i ++) {

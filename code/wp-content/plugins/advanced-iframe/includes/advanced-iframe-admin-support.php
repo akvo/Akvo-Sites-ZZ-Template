@@ -1,7 +1,6 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
-<div class="ai-anchor" id="gs"></div>
-<?php } ?>
-<h1><?php _e('Get support', 'advanced-iframe'); ?></h1>
+<?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+?>
 <div>
     <div id="icon-options-general" class="icon_ai">
       <br />

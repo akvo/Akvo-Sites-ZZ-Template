@@ -4,7 +4,7 @@
 
 	abstract class Request {
 		
-		protected static $wpPiwik, $settings, $debug, $requests = array(), $results = array(), $isCacheable = array(), $piwikVersion;
+		protected static $wpPiwik, $settings, $debug, $lastError = '', $requests = array(), $results = array(), $isCacheable = array(), $piwikVersion;
 		
 		public function __construct($wpPiwik, $settings) {
 			self::$wpPiwik = $wpPiwik;
@@ -35,12 +35,12 @@
 				( $parameter['period'] == 'month' && $parameter['date'] == date('Ym') ) ||
 				( $parameter['period'] == 'week' && $parameter['date'] == date( 'Ymd', strtotime( "last Monday" ) ) ) 
 			) self::$isCacheable[$id] = false;
-			else self::$isCacheable[$id] = $method.'-'.$parameter['period'].'-'.$parameter['date'];
+			else self::$isCacheable[$id] = $method.'-'.serialize($parameter);
 			if (!isset(self::$requests[$id]))
 				self::$requests[$id] = array('method' => $method, 'parameter' => $parameter);
 			return $id;
 		}
-		
+
 		private static function parameterToString($parameter) {
 			$return = '';
 			if (is_array($parameter))
@@ -48,7 +48,7 @@
 					$return .= '&'.$key.'='.$value;
 			return $return;
 		}
-		
+
 		public function perform($id) {
 			if ( self::$settings->getGlobalOption('cache') && false !== ( $cached = get_transient( 'wp-piwik_c_'.md5(self::$isCacheable[$id] ) ) ) ) {
 				if (!empty ( $cached ) && !(! empty ( $cached['result'] ) &&  $cached['result'] == 'error') ) { 
@@ -85,6 +85,10 @@
 			self::$wpPiwik->log("Result string: ".$str);
 		    return ($str == json_decode(false, true) || @json_decode($str, true) !== false)?json_decode($str, true):array();
 		}
+
+		public static function getLastError() {
+			return self::$lastError;
+		}			
 		
 		abstract protected function request($id);
 			

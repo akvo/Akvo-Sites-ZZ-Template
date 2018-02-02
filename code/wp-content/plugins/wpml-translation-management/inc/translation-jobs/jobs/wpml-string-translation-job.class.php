@@ -39,9 +39,12 @@ class WPML_String_Translation_Job extends WPML_Translation_Job {
 		return esc_html( $this->basic_data->value );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_id() {
 
-		return 'string|' . $this->job_id;
+		return 'string|' . parent::get_id();
 	}
 
 	public function get_type() {

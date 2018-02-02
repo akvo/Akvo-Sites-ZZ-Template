@@ -1,11 +1,12 @@
 /**
- *  Advanced iframe free/pro functions v6.5 
+ *  Advanced iframe free/pro functions v7.5.x 
 */ 
 var aiEnableCookie=false; 
 var aiId='';
 var aiExtraSpace = 0;
+var accTime = 0;
 
-aiReadyCallbacks = ( typeof aiReadyCallbacks !== 'undefined' && aiReadyCallbacks instanceof Array ) ? aiReadyCallbacks : [];
+var aiReadyCallbacks = ( typeof aiReadyCallbacks !== 'undefined' && aiReadyCallbacks instanceof Array ) ? aiReadyCallbacks : [];
                     
 
 /**
@@ -15,11 +16,11 @@ aiReadyCallbacks = ( typeof aiReadyCallbacks !== 'undefined' && aiReadyCallbacks
  *  The extra space is not stored in the cookie! The height would 
  *  be added every time otherwise and the iframe would grow,  
  */ 
-function aiResizeIframe(obj, resize_width) { 
+function aiResizeIframe(obj, resize_width, resize_min_height) { 
   try {
     if (obj.contentWindow.document.body != null) {
       var oldScrollposition = jQuery(document).scrollTop();     
-      obj.height = 1; // set to 1 because otherwise the iframe does never get smaller.
+      obj.height = Number(resize_min_height); // set to 1 because otherwise the iframe does never get smaller.
       var newheight = aiGetIframeHeight(obj);
       obj.height = newheight + 'px'; 
       
@@ -38,6 +39,10 @@ function aiResizeIframe(obj, resize_width) {
       }
       var fCallback = window["resizeCallback" + obj.id];
       fCallback();
+      // fires the onload event again if iframes are wrapped
+      if (window.frameElement != null) {
+        parent.jQuery("iframe").trigger("onload");
+      }
     } else {
       // body is not loaded yet - we wait 100 ms.
       setTimeout(function() { aiResizeIframe(obj, resize_width); },100); 
@@ -109,6 +114,11 @@ function aiResizeIframeHeightById(id, nHeight) {
     if (aiEnableCookie && aiExtraSpace == 0) {
       aiWriteCookie(height);
     }
+    // send the new height to the parent if it is a wrapped call   
+    var parentResizeCall = window["aiExecuteWorkaround_" + id];
+    if (parentResizeCall != null) { 
+      parentResizeCall();
+    }
   }  catch(e) {
     if (console && console.log) {
       console.log("Advanced iframe configuration error: The id of the parent and the external workaround are different! Check your settings.");
@@ -123,8 +133,13 @@ function aiResizeIframeHeightById(id, nHeight) {
  * This is e.g. wanted when you have a link in the iframe and you want that the 
  * page starts at the top and not that only the iframe changes. 
  */ 
-function aiScrollToTop() {
-  window.scrollTo(0,0); 
+function aiScrollToTop(id, position) {
+  if (position == 'iframe') {
+    var pos = jQuery('#' + id).position();
+    window.scrollTo(0, pos.top);
+  } else {
+    window.scrollTo(0,0);   
+  }
 }
 
 /**
@@ -154,7 +169,6 @@ function aiUseCookie() {
   for(var i=0; i<cookiearray.length; i++){
     name = cookiearray[i].split('=')[0];
     value = cookiearray[i].split('=')[1];
-    // alert("Key is : " + name + " and Value is : " + value);
     // cookie does exist and has a numeric value
     if (name == cookieName && value != null && ai_is_numeric(value)) { 
        var iframe = document.getElementById(aiId);
@@ -257,6 +271,67 @@ function openTab(id) {
     jQuery(id).next().show(); 
 }
 
+
+function aiDisableAiResizeOptions(value) {
+  jQuery('#onload_resize_delay').prop('readonly',value);
+  jQuery('input[id=store_height_in_cookie1]:radio').attr('disabled',value);
+  jQuery('input[id=store_height_in_cookie2]:radio').attr('disabled',value);
+  jQuery('#additional_height').prop('readonly', value);
+  jQuery('input[id=onload_resize_width1]:radio').attr('disabled',value);
+  jQuery('input[id=onload_resize_width2]:radio').attr('disabled',value);
+  jQuery('#resize_on_click').prop('readonly', value);
+  jQuery('#resize_on_click_elements').prop('readonly', value);
+  jQuery('#resize_on_ajax').prop('readonly', value);
+  jQuery('input[id=resize_on_ajax_jquery1]:radio').attr('disabled',value); 
+  jQuery('input[id=resize_on_ajax_jquery2]:radio').attr('disabled',value); 
+}
+
+function aiDisablePartOfIframeOptions(value) {
+  jQuery('#show_part_of_iframe_x').prop('readonly',value);
+  jQuery('#show_part_of_iframe_y').prop('readonly',value);
+  jQuery('#show_part_of_iframe_height').prop('readonly',value);
+  jQuery('#show_part_of_iframe_width').prop('readonly',value);
+  jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal1]:radio').attr('disabled',value);  
+  jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal2]:radio').attr('disabled',value); 
+  jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical1]:radio').attr('disabled',value); 
+  jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical2]:radio').attr('disabled',value);  
+  jQuery('#show_part_of_iframe_next_viewports').prop('readonly',value);
+  jQuery('input[id=show_part_of_iframe_next_viewports_loop1]:radio').attr('disabled',value);
+  jQuery('input[id=show_part_of_iframe_next_viewports_loop2]:radio').attr('disabled',value);
+  jQuery('#show_part_of_iframe_new_window').prop('readonly',value);
+  jQuery('#show_part_of_iframe_new_url').prop('readonly',value);
+  jQuery('input[id=show_part_of_iframe_next_viewports_hide1]:radio').attr('disabled',value); 
+  jQuery('input[id=show_part_of_iframe_next_viewports_hide2]:radio').attr('disabled',value); 
+  jQuery('#show_part_of_iframe_style').prop('readonly',value);
+  jQuery('input[id=show_part_of_iframe_zoom1]:radio').attr('disabled',value); 
+  jQuery('input[id=show_part_of_iframe_zoom2]:radio').attr('disabled',value);
+  jQuery('input[id=show_part_of_iframe_zoom3]:radio').attr('disabled',value);
+}
+
+function aiDisableLazyLoadOptions(value) {
+  jQuery('#enable_lazy_load_threshold').prop('readonly', value);
+  jQuery('#enable_lazy_load_fadetime').prop('readonly', value);
+  jQuery('input[id=enable_lazy_load_reserve_space1]:radio').attr('disabled',value);
+  jQuery('input[id=enable_lazy_load_reserve_space2]:radio').attr('disabled',value);
+  jQuery('input[id=enable_lazy_load_manual1]:radio').attr('disabled',value);
+  jQuery('input[id=enable_lazy_load_manual2]:radio').attr('disabled',value);
+  jQuery('input[id=enable_lazy_load_manual3]:radio').attr('disabled',value);
+}
+
+function aiDisableIframeAsLayerOptions(value) {
+  jQuery('input[id=show_iframe_as_layer_full]:radio').attr('disabled',value);
+  jQuery('#show_iframe_as_layer_header_file').prop('readonly', value);
+  jQuery('#show_iframe_as_layer_header_height').prop('readonly', value); 
+  jQuery('input[id=show_iframe_as_layer_header_position1]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_header_position2]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_full1]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_full2]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_full3]:radio').attr('disabled',value); 
+  jQuery('input[id=show_iframe_as_layer_keep_content1]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_keep_content2]:radio').attr('disabled',value); 
+}
+
+
 var instance;
 
 /**
@@ -267,15 +342,16 @@ function initAdminConfiguration(isPro, acc_type) {
   
     // enable checkbox of onload_resize_delay and if resize is set to true external workaround is set to false
     if (jQuery('input[type=radio][name=onload_resize]:checked').val() == 'false') {
-        jQuery('#onload_resize_delay').prop('readonly',true);
+        aiDisableAiResizeOptions(true);
     }     
     jQuery('input[type=radio][name=onload_resize]').click( function(){
     if (jQuery(this).val() == 'true') {
-           jQuery('#onload_resize_delay').prop('readonly', false);
-           jQuery('input:radio[name=enable_external_height_workaround]')[1].checked = true;
+           jQuery('input:radio[name=enable_external_height_workaround]')[1].checked = true; // set to external!
+           aiDisableAiResizeOptions(false);
         } else {
-           jQuery('#onload_resize_delay').prop('readonly', true);
            jQuery('#onload_resize_delay').val('');
+           aiDisableAiResizeOptions(true);
+           
         }
     });
     
@@ -284,54 +360,32 @@ function initAdminConfiguration(isPro, acc_type) {
     jQuery('input[type=radio][name=enable_external_height_workaround]').click( function(){
     if (jQuery(this).val() == 'true') {
            jQuery('input:radio[name=onload_resize]')[1].checked = true;
-           jQuery('#onload_resize_delay').prop('readonly', true);
-           jQuery('#onload_resize_delay').val('');
+           jQuery('#onload_resize_delay').val(''); 
+           aiDisableAiResizeOptions(true);
         }
     });
  
     // Show only a part of the iframe enable/disable
      if (jQuery('input[type=radio][name=show_part_of_iframe]:checked').val() == 'false') {
-        jQuery('#show_part_of_iframe_x').prop('readonly',true);
-        jQuery('#show_part_of_iframe_y').prop('readonly',true);
-        jQuery('#show_part_of_iframe_height').prop('readonly',true);
-        jQuery('#show_part_of_iframe_width').prop('readonly',true);         
-        jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal]:radio').attr('disabled',true);  
-        jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical]:radio').attr('disabled',true);  
-        jQuery('#show_part_of_iframe_next_viewports').prop('readonly',true);
-        jQuery('input[id=show_part_of_iframe_next_viewports_loop]:radio').attr('disabled',true);
-        jQuery('#show_part_of_iframe_new_window').prop('readonly',true);
-        jQuery('#show_part_of_iframe_new_url').prop('readonly',true);
-        jQuery('input[id=show_part_of_iframe_next_viewports_hide]:radio').attr('disabled',true); 
-        jQuery('#show_part_of_iframe_style').prop('readonly',true);         
+        aiDisablePartOfIframeOptions(true);
      }
       jQuery('input[type=radio][name=show_part_of_iframe]').click( function(){
     if (jQuery(this).val() == 'false') {
-          jQuery('#show_part_of_iframe_x').prop('readonly',true);
-          jQuery('#show_part_of_iframe_y').prop('readonly',true);
-          jQuery('#show_part_of_iframe_height').prop('readonly',true);
-          jQuery('#show_part_of_iframe_width').prop('readonly',true);
-          jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal]:radio').attr('disabled',true);  
-          jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical]:radio').attr('disabled',true);  
-          jQuery('#show_part_of_iframe_next_viewports').prop('readonly',true);
-          jQuery('input[id=show_part_of_iframe_next_viewports_loop]:radio').attr('disabled',true);
-          jQuery('#show_part_of_iframe_new_window').prop('readonly',true);
-          jQuery('#show_part_of_iframe_new_url').prop('readonly',true);
-          jQuery('input[id=show_part_of_iframe_next_viewports_hide]:radio').attr('disabled',true);
-          jQuery('#show_part_of_iframe_style').prop('readonly',true);         
+          aiDisablePartOfIframeOptions(true);
         } else {
-          jQuery('#show_part_of_iframe_x').prop('readonly',false);
-          jQuery('#show_part_of_iframe_y').prop('readonly',false);
-          jQuery('#show_part_of_iframe_height').prop('readonly',false);
-          jQuery('#show_part_of_iframe_width').prop('readonly',false);
-          jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal]:radio').attr('disabled',false);  
-          jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical]:radio').attr('disabled',false);  
-          jQuery('#show_part_of_iframe_next_viewports').prop('readonly',false);
-          jQuery('input[id=show_part_of_iframe_next_viewports_loop]:radio').attr('disabled',false);
-          jQuery('#show_part_of_iframe_new_window').prop('readonly',false);
-          jQuery('#show_part_of_iframe_new_url').prop('readonly',false);
-          jQuery('input[id=show_part_of_iframe_next_viewports_hide]:radio').attr('disabled',false);
-          jQuery('#show_part_of_iframe_style').prop('readonly',false);         
+          aiDisablePartOfIframeOptions(false);
+        }
+    }); 
     
+    // show_iframe_as_layer enable/disable
+     if (jQuery('input[type=radio][name=show_iframe_as_layer]:checked').val() == 'false') {
+        aiDisableIframeAsLayerOptions(true);
+     }
+      jQuery('input[type=radio][name=show_iframe_as_layer]').click( function(){
+    if (jQuery(this).val() == 'false') {
+          aiDisableIframeAsLayerOptions(true);
+        } else {
+          aiDisableIframeAsLayerOptions(false);
         }
     }); 
     
@@ -366,19 +420,18 @@ function initAdminConfiguration(isPro, acc_type) {
     });
 
    
-   if (isPro && (acc_type !== "false")) {
-       jQuery('#accordion').find('h1').click(function(){
-           jQuery(this).next().slideToggle();
-       }).next().hide(); 
-       
-       jQuery('#accordion').find('a').click(function(){
-           var hash = jQuery(this).prop("hash");
-           var hash_only = "#h1-" + hash.substring(1);
-           jQuery(hash_only).next().show(); 
-           location.hash = hash_only;
-       });
-       var hash = jQuery("#" + acc_type).next().show(); 
-   } 
+     jQuery('#accordion').find('h1').click(function(){
+         jQuery(this).next().slideToggle(accTime);
+     }).next().hide(); 
+     
+     jQuery('#accordion').find('a').click(function(){
+         var hash = jQuery(this).prop("hash");
+         var hash_only = "#h1-" + hash.substring(1);
+         jQuery(hash_only).next().show(); 
+         location.hash = hash_only;
+     });
+     var hash = jQuery("#" + acc_type).next().show(); 
+    
    
     // lazy load
     if (jQuery('input[type=radio][name=enable_lazy_load_manual]:checked').val() == 'false') {
@@ -394,28 +447,16 @@ function initAdminConfiguration(isPro, acc_type) {
     });
     
     if (jQuery('input[type=radio][name=enable_lazy_load]:checked').val() == 'false') {
-        jQuery('#enable_lazy_load_threshold').prop('readonly',true);
-        jQuery('#enable_lazy_load_fadetime').prop('readonly',true);
-        jQuery('input[id=enable_lazy_load_manual1]:radio').attr('disabled',true);  
-        jQuery('input[id=enable_lazy_load_manual2]:radio').attr('disabled',true);  
-        jQuery('input[id=enable_lazy_load_manual3]:radio').attr('disabled',true);  
+        aiDisableLazyLoadOptions(true);
         jQuery('#enable_lazy_load_manual_element').prop('readonly',true);
     }  
 
     jQuery('input[type=radio][name=enable_lazy_load]').click( function(){
     if (jQuery(this).val() == 'false') {
-           jQuery('#enable_lazy_load_threshold').prop('readonly', true); 
-           jQuery('#enable_lazy_load_fadetime').prop('readonly', true); 
-           jQuery('input[id=enable_lazy_load_manual1]:radio').attr('disabled',true); 
-           jQuery('input[id=enable_lazy_load_manua12l]:radio').attr('disabled',true);  
-           jQuery('input[id=enable_lazy_load_manual3]:radio').attr('disabled',true);           
+           aiDisableLazyLoadOptions(true);
            jQuery('#enable_lazy_load_manual_element').prop('readonly',true);            
         } else {
-           jQuery('#enable_lazy_load_threshold').prop('readonly', false);
-           jQuery('#enable_lazy_load_fadetime').prop('readonly', false); 
-           jQuery('input[id=enable_lazy_load_manual1]:radio').attr('disabled',false);          
-           jQuery('input[id=enable_lazy_load_manual2]:radio').attr('disabled',false); 
-           jQuery('input[id=enable_lazy_load_manual3]:radio').attr('disabled',false); 
+           aiDisableLazyLoadOptions(false);
            if (jQuery('input[type=radio][name=enable_lazy_load_manual]:checked').val() == 'false' ||
                jQuery('input[type=radio][name=enable_lazy_load_manual]:checked').val() == 'auto' ) {
              jQuery('#enable_lazy_load_manual_element').prop('readonly',true);
@@ -448,20 +489,20 @@ function initAdminConfiguration(isPro, acc_type) {
            
       jQuery(".ai-input-search").keyup(function(e) {
            var searchTerm = jQuery("input.ai-input-search").val().toLowerCase();
-           aiSettingsSearch(searchTerm);
+           aiSettingsSearch(searchTerm, acc_type);
       });
        jQuery(".ai-input-search").on('click', function(e) {
            setTimeout(function() {
            var searchTerm = jQuery("input.ai-input-search").val().toLowerCase();
-           aiSettingsSearch(searchTerm);
+           aiSettingsSearch(searchTerm, acc_type);
            }, 100);
       }); 
       
       jQuery(document).on( 'click', '.nav-tab-wrapper a', function() {
-        var current_tab = jQuery(this).index();
+        var current_tab = jQuery(this).attr('id');
         jQuery('section').hide();
-        jQuery('section').eq(current_tab).show();
-        jQuery('#current_tab').val(current_tab);
+        jQuery('section.' + current_tab ).show();
+        jQuery('#current_tab').val(current_tab.substr(4,1));
         jQuery('.nav-tab').removeClass('nav-tab-active');
         jQuery(this).addClass('nav-tab-active');
         jQuery(this).blur();
@@ -469,7 +510,6 @@ function initAdminConfiguration(isPro, acc_type) {
       }) 
       
       // set the links between tabs and open the right one at the right section.
-      if (acc_type === "false") {
         jQuery(document).on( 'click', 'a#external-workaround-link', function() {
           jQuery('.external-workaround').click();
           jQuery(document).scrollTop(0);
@@ -480,25 +520,39 @@ function initAdminConfiguration(isPro, acc_type) {
           location.hash = 'rt';
           return false;
         })
-        jQuery(document).on( 'click', 'a#modify-content-link', function() {
-          jQuery('.advanced-settings-tab').click();
-          location.hash = 'modifycontent';
-          return false;
-        })
          jQuery(document).on( 'click', 'a.jquery-help-link', function() {
           jQuery('.help-tab').click();
           jQuery('#jquery-help').show();
           location.hash = 'jqh';
+          showHeader();
           return false;
         })
         jQuery(document).on( 'click', 'a#browser-detection-link', function() {
           jQuery('.help-tab').click();
           jQuery('#browser-help').show();
-          location.hash = 'browser-detection';
+          location.hash = 'browser-detection-id';
+          showHeader();
           return false;
         })
-      }
-      
+        jQuery(document).on( 'click', 'a.howto-id-link', function() {
+          jQuery('.help-tab').click();
+          location.hash = 'how-id';
+          showHeader();
+          return false;
+        })
+        jQuery(document).on( 'click', '.modifycontent-link', function() {
+          jQuery('.advanced-settings-tab').click();
+          jQuery('#h1-mi').next().show();
+          location.hash = '#mi-id';
+          showHeader();
+          return false;
+        })
+         jQuery(document).on( 'click', 'a.link-external-domain', function() { 
+          location.hash = '#h-external-domain';
+          showHeader();
+          return false;
+        })
+        
       jQuery(document).on( 'click', 'a#user-help-link', function() {
           jQuery('#user-help').css('display', 'block');
           return false;
@@ -506,29 +560,90 @@ function initAdminConfiguration(isPro, acc_type) {
       jQuery(document).on( 'click', 'a#user-meta-link', function() {
           jQuery('#meta-help').css('display', 'block');
           return false;
-      })                      
+      })
+      
+      jQuery(document).on( 'click', '#ai-selector-help-link', function() {
+          jQuery('#ai-selector-help').slideDown(1000); 
+          return false;
+        })
+      
+      jQuery(document).on( 'click', '.ai-selector-help-link-move', function() {
+          location.hash = '#ai-selector-help-link';
+          showHeader();
+          jQuery('#ai-selector-help').show("slow");  
+          return false;
+        })
+        jQuery(document).on( 'click', 'a.post-message-help-link', function() {
+          jQuery('.help-tab').click();
+          location.hash = 'com-post-message';
+          showHeader();
+          return false;
+        })
+      
+      
+      
+      // check the open accordeon elements and write it to the hidden field
+      jQuery('#ai_form').submit(function() {
+        // go over all divs which are not hidden and get the h1 before and get the id of this
+        var openSections = "";
+        jQuery("#accordion").find("div:visible").each(function() {
+          var $this = jQuery(this);
+          var open = $this.prev('h1').attr('id');
+          if (open !== undefined) {
+            if (openSections != '') {
+              openSections += ',';
+            }
+            openSections += '#' + open;
+          } 
+        });
+        // set the hidden variable
+        jQuery('#current_open_sections').val(openSections);
+        setAiScrollposition();
+      });                  
 }
 
-function aiSettingsSearch(searchTerm) {
+function aiSettingsSearch(searchTerm, acc_type) {
  var found = 0;
  
  if (searchTerm !== '') { 
    jQuery("#ai p").not(".form-table p").hide();
-   jQuery("#ai .ai-anchor").hide();
    jQuery("#ai ul").not(".form-table ul").hide();
    jQuery("#ai ol").not(".form-table ol").hide();
+   if (acc_type != 'false') {
+     jQuery("#ai h1").not(".show-always").hide(); 
+     jQuery("#ai #accordion").attr('id','acc');
+     jQuery("#ai #acc > div").show();
+     jQuery("#ai #spacer-div").show();
+   }
    jQuery("#ai h2,#ai .icon_ai,#ai h3,#ai h4").not(".show-always").hide();  
    jQuery("#ai .form-table").addClass("ai-remove-margin");
-   jQuery("#ai hr, .signup_account_container").hide(); 
+   jQuery("#ai hr, .signup_account_container, .config-file-block").hide();
+   jQuery("#ai .hide-always").hide(); 
+   jQuery("#ai .hide-search").hide(); 
+   
  } else {
    jQuery("#ai p").not(".form-table p").show();
-   jQuery("#ai .ai-anchor").show();
+   jQuery("#ai section .ai-anchor").show();
    jQuery("#ai ul").not(".form-table ul").show();
    jQuery("#ai ol").not(".form-table ol").show();
+   if (acc_type != 'false') {
+     jQuery("#ai h1").not(".show-always").show(); 
+     jQuery("#ai #acc").attr('id','accordion');
+     jQuery("#ai #accordion > div").hide();
+     jQuery("#ai #spacer-div").hide();
+   }
    jQuery("#ai h2,#ai .icon_ai,#ai h3,#ai h4").not(".show-always").show();  
    jQuery("#ai .form-table").removeClass("ai-remove-margin");
-   jQuery("#ai hr, .signup_account_container").show();
+   jQuery("#ai hr, .signup_account_container, .config-file-block").show();
+   jQuery("#ai .sub-domain-container").show();
+    jQuery("#ai .hide-search").show(); 
+   
+   jQuery("#ai .hide-always").hide(); 
  }
+
+ jQuery("#ai .mark-tab-header").removeClass("mark-tab-header");
+
+ var firstHit = '';
 
  // check the search.
   jQuery("#ai tr").each(function() {
@@ -546,22 +661,36 @@ function aiSettingsSearch(searchTerm) {
       $this.closest("table").prevAll("#ai .icon_ai:first").show(); 
       $this.closest("table").nextAll("p.button-submit:first").show(); 
       $this.removeClass("hide-setting"); 
+      $this.closest(".hide-search").show(); 
+      
+      if (searchTerm.length > 2) {
+        var header_id = $this.closest("section").attr('class');
+        if (header_id != undefined) {
+            jQuery("#" + header_id).addClass("mark-tab-header");
+            if (firstHit=='') {
+              firstHit = header_id;   
+            }
+        }
+      } 
       found++;     
     }
   });
   if (found === 0) {
     jQuery("#ai-input-search-result").show();
+    jQuery("#ai .mark-tab-header").removeClass("mark-tab-header");
   } else {
     jQuery("#ai-input-search-result").hide();
     // https://github.com/padolsey/findAndReplaceDOMText
-    instance && instance.revert();
+    instance && instance.revert();     
       if (searchTerm !== '' && searchTerm.length > 2) { 
       var regex = RegExp(searchTerm, 'gi');
-      instance = findAndReplaceDOMText(document.getElementById('ai'), {
+      instance = findAndReplaceDOMText(document.getElementById('tab_wrapper'), {
         find: regex,
         wrap: 'em'  
-      });
+      }); 
     }
+    jQuery("#" + firstHit).click();
+    
   }
 }
 
@@ -589,7 +718,9 @@ function aiGenerateShortcode() {
  
     var include_html_val = jQuery("#include_html").val();
     var include_url_val = jQuery("#include_url").val();
-    if (include_html_val == "" && include_url_val == "")  { 
+    var document_domain_add = jQuery('#document_domain_add').val();
+
+    if (include_html_val === undefined || (include_html_val == "" && include_url_val == ""))  { 
         var src = jQuery("#src").val();
         if (src == "") {
            alert("Required url is missing.");
@@ -599,7 +730,8 @@ function aiGenerateShortcode() {
         
         output += aiGenerateTextShortcode("width");
         output += aiGenerateTextShortcode("height");  
-        output += aiGenerateRadioShortcode("scrolling","auto");      
+        output += aiGenerateRadioShortcode("scrolling","none");
+        output += aiGenerateRadioShortcode("enable_ios_mobile_scolling","false");
         output += aiGenerateTextShortcode("marginwidth");
         output += aiGenerateTextShortcode("marginheight");     
         output += aiGenerateTextShortcode("frameborder");      
@@ -643,11 +775,18 @@ function aiGenerateShortcode() {
        output += aiGenerateTextShortcode("hide_elements");
        output += aiGenerateTextShortcode("content_id");
        output += aiGenerateTextShortcode("content_styles");
+       output += aiGenerateTextShortcode("parent_content_css");
        output += aiGenerateRadioShortcode("add_css_class_parent","false");  
     
        output += aiGenerateTextShortcode("change_parent_links_target");
        output += aiGenerateRadioShortcode("show_iframe_as_layer", "false");
-    
+       output += aiGenerateRadioShortcode("show_iframe_as_layer_full", "false");
+       
+       output += aiGenerateTextShortcode("show_iframe_as_layer_header_file");
+       output += aiGenerateTextShortcodeWithDefault("show_iframe_as_layer_header_height","100");
+       output += aiGenerateRadioShortcode("show_iframe_as_layer_header_position", "top");
+       output += aiGenerateRadioShortcode("show_iframe_as_layer_keep_content", "true");
+       
        // show only a part of the iframe
        var showPartOfIframe = aiGenerateRadioShortcode("show_part_of_iframe","false");  
        output += showPartOfIframe;  
@@ -660,6 +799,7 @@ function aiGenerateShortcode() {
          output += aiGenerateRadioShortcode("show_part_of_iframe_allow_scrollbar_horizontal","false");  
          output += aiGenerateRadioShortcode("show_part_of_iframe_allow_scrollbar_vertical","false");  
          output += aiGenerateTextShortcode("show_part_of_iframe_style");
+         output += aiGenerateRadioShortcode("show_part_of_iframe_zoom","false");
          
          output += aiGenerateTextShortcode("show_part_of_iframe_next_viewports");
          output += aiGenerateRadioShortcode("show_part_of_iframe_next_viewports_loop","false");  
@@ -696,9 +836,16 @@ function aiGenerateShortcode() {
        output += aiGenerateTextShortcode("tab_hidden");
        output += aiGenerateTextShortcode("tab_visible");
        // cross domain ....
-       output += aiGenerateRadioShortcode("enable_external_height_workaround","false");  
+       output += aiGenerateRadioShortcode("add_document_domain","false"); 
+       // 
+       if (document_domain_add == 'true') {
+           output += aiGenerateTextShortcode("document_domain"); 
+       }  
+       output += aiGenerateRadioShortcode("enable_external_height_workaround","external");  
        output += aiGenerateRadioShortcode("hide_page_until_loaded_external","false");  
-       output += aiGenerateTextShortcode("pass_id_by_url");
+       output += aiGenerateTextShortcode("pass_id_by_url");  
+       output += aiGenerateRadioShortcode("multi_domain_enabled","false");  
+       output += aiGenerateRadioShortcode("use_post_message","false");  
        // additional files
        output += aiGenerateTextShortcode("additional_css");
        output += aiGenerateTextShortcode("additional_js");
@@ -868,6 +1015,44 @@ function setZoom(id, zoom) {
   });
 }
 
+function aiAutoZoomViewport(id, full) {
+            
+  var viewport_div = jQuery(id);
+  var outer_div = viewport_div.parent();
+  var counter = 0; 
+  
+  // We only go up and look for divs which are not from ai or p elements which are rendered by mistake.
+  while (outer_div.is("p") || (outer_div.attr('id') !== undefined && outer_div.attr('id').indexOf("ai-") == 0)) {
+     outer_div = outer_div.parent();
+     if (counter++ > 10) {
+        alert("Unexpected div structure. Please disable the zoom.")
+        break;
+     } 
+  }
+ 
+  var viewport_div_width = viewport_div.width();
+  var outer_div_width = outer_div.width(); 
+  var viewport_div_height = viewport_div.height(); 
+  var zoom = outer_div_width / viewport_div_width;
+ 
+  if (full == 'true' && zoom > 1) {
+     zoom = 1;
+  }
+  
+  setZoom(viewport_div.attr('id'), zoom);
+  // set the margin because otherwise it is normally "centered" in the old area
+  var margin_left = -Math.round((viewport_div_width - viewport_div_width * zoom) / 2); 
+  var margin_top = -Math.round((viewport_div_height - viewport_div_height * zoom) / 2) 
+  viewport_div.css({
+    'margin-left':  margin_left + 'px',
+    'margin-right':  margin_left + 'px',
+    'margin-top':  margin_top + 'px',
+    'margin-bottom':  margin_top + 'px'
+  });
+  
+  
+}
+
 function resetAiSettings() {
   jQuery('#action').val("reset");
 }
@@ -885,9 +1070,29 @@ function aiCheckInputNumber(inputField) {
     }
 }
 
+function aiCheckInputNumberOnly(inputField) {
+    inputField.value = inputField.value.split(' ').join('');
+    var f = inputField.value;
+    if (inputField.value == '') { 
+      inputField.value = '0';
+      return;
+    }
+    var match = f.match(/^(\-){0,1}([\d\.])+$/);
+    
+    if (!match) {
+        alert("Please check the value you have entered. Only numbers without a dot or optional px, %, em or pt are allowed.");
+        setTimeout(function(){inputField.focus();}, 10);
+    }
+}
+
+function showHeader() {
+  var y = jQuery(window).scrollTop();  
+  jQuery(window).scrollTop(y-40);
+}
+
 function setAiScrollposition() {
   var scrollposition = jQuery(document).scrollTop();   
-  jQuery("#scrollposition").val(scrollposition);
+  jQuery("#scrollposition").val(scrollposition); // +32
 }
 
 function resetShowPartOfAnIframe(id) {
@@ -895,21 +1100,85 @@ function resetShowPartOfAnIframe(id) {
   jQuery("#ai-div-" + id).css("width","auto").css("height","auto").css("overflow","auto").css("position","static");
 }
 
-function ai_showLayerIframe(id, path) { 
-  jQuery("#ai-zoom-div-" + id).show();
-  jQuery("#" + id).show();
+function ai_showLayerIframe(event, id, path, hide_until_loaded, show_loading_icon, keep, reload) {   
+  keep = (keep === undefined) ? false : keep;
+  reload = (reload === undefined) ? true : reload;
   
+  var layer_id = "#" + id;
+  jQuery("#ai-zoom-div-" + id).show();
+  if  (reload && hide_until_loaded == 'true') {
+      jQuery(layer_id).css("visibility", "hidden");
+  }
+  jQuery(layer_id).show();
+  if ( jQuery( "#ai-layer-div-" + id ).length ) {
+    layer_id = "#ai-layer-div-" + id;
+    jQuery(layer_id).show();
+  }
+ 
   jQuery('body').css("overflow","hidden");
-  jQuery('body').append('<img id="ai_backlink" src="'+path+'close.png" onclick="javascript:ai_hideLayerIframe(\''+id+'\');" style="z-index:100001;position:fixed;top:0;right:0;cursor:pointer" />'); 
-  jQuery('body').append('<div id="ai_backlayer" href="" style="z-index:999;position:fixed;top:0;left:0;width:100%;height:100%;background-color: rgba(50,50,50,0.5);overflow:hidden;"><!-- --></div>');   
+  jQuery('html').css("overflow-y","visible");
+  jQuery('body').append('<img id="ai_backlink" src="'+path+'close.png" style="z-index:100005;position:fixed;top:0;right:0;cursor:pointer" />'); 
+  // was 'body' before
+  
+  var icon = '<!-- -->';
+  if (reload && show_loading_icon=='true') {
+    var icon = '<div id="ai-div-loader-global" style="position: fixed;z-index:100004;margin-left:-33px;left: 50%;top:50%;margin-top:-33px"><img src="' + path + 'loader.gif" width="66" height="66" title="Loading" alt="Loading"></div>';
+  }
+  
+  jQuery(layer_id).parent().append('<div id="ai_backlayer" style="z-index:100001;position:fixed;top:0;left:0;width:100%;height:100%;background-color: rgba(50,50,50,0.5);overflow:hidden;cursor:pointer"><!-- --></div>' + icon); 
+  
+  jQuery( "#ai_backlink, #ai_backlayer" ).click(function() {
+    ai_hideLayerIframe(id, keep);
+  }); 
+  if (!reload) {
+      event.preventDefault();
+      event.stopPropagation();
+  }
 }
 
-function ai_hideLayerIframe(id) {
+function ai_hideLayerIframe(id, keep) {
+
+  var iframe_src =  jQuery("#" + id).attr('src');
   jQuery("#" + id).hide();
-  jQuery("#ai-zoom-div-" + id).show();
+  if (!keep) {
+      jQuery("#" + id).attr('src', "about:blank");
+      ai_layer_iframe_hrefs[id] = "about:blank"; 
+  }
+  jQuery("#ai-zoom-div-" + id).hide();
+  jQuery("#ai-layer-div-" + id).hide();
   jQuery("#ai_backlink").remove();
   jQuery("#ai_backlayer").remove();
+  jQuery("#ai-div-loader-global").remove();
   jQuery('body').css("overflow","auto");
+  jQuery('html').css("overflow-y","scroll");
+}
+
+
+/**
+ * As the src of an iframe cannot be read from a remote domain we remember 
+ * the urls from the links here for each opened iframe.
+ */
+var ai_layer_iframe_hrefs = new Array();
+
+/**
+ * Check if the location of the iframe is already the one of the link.
+ * The iframe is only loaded if it is was not loaded already.
+ * 
+ * true - if src and url of the iframe is different and need to be loaded 
+ * false - if it is already the same; 
+ */
+
+ 
+function ai_checkReload (link, id) {
+    if(typeof ai_layer_iframe_hrefs[id] === 'undefined') {
+         var iframe_src = jQuery("#" + id).attr('src');
+    } else {
+        var iframe_src = ai_layer_iframe_hrefs[id];
+    }
+    var link_href = jQuery(link).attr('href');
+    // alert(link_href + ": iframe:" + iframe_src);
+    ai_layer_iframe_hrefs[id] = link_href;
+    return (iframe_src != link_href);
 }
 
 /**
@@ -963,10 +1232,6 @@ function aigetIframeLocation(id) {
     } 
   } 
 }
-
-
-
-
 
 
 /**
@@ -1085,3 +1350,70 @@ jQuery(document).ready(function() {
       callback(); 
     });
 });
+
+
+function gup( name, url ) {
+    if (!url) url = location.href
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
+}
+
+function aiProcessMessage(event) {
+   var jsObject = JSON.parse(event.data);
+   var type = jsObject['type']; 
+ 
+  // check if the data is of the expected
+  if (type == 'height') {
+    aiProcessHeight(jsObject);
+  } else if (type == 'show') {
+    aiProcessShow(jsObject);
+  }
+  
+  for (var key in jsObject.data) {
+  if (jsObject.data.hasOwnProperty(key)) {
+    jQuery(key).html(jsObject.data[key]);
+  }
+}
+}
+
+function aiProcessHeight(jsObject) {     
+    var nHeight = jsObject['height']; // gup("height",data);
+    var nWidth = jsObject['width']; // gup("width",data);
+    var id = jsObject['id']; // gup("id",data);
+   
+    if (nHeight != null) {
+      try {
+        var loc = jsObject['loc']; // gup("loc",data); 
+        if (loc != null) {
+          aiChangeUrl(loc);
+        }     
+        if (id != null) {
+            var iHeight = parseInt(nHeight);
+            var iWidth = parseInt(nWidth);
+            aiResizeIframeHeightId(iHeight,iWidth, id);
+            aiShowIframeId(id);          
+        } else {
+            alert("Please update the ai_external.js to the current version.");
+        }  
+    	} catch(e) {
+        if (console && console.log) {
+          console.log(e);
+        }
+      }
+    } 
+}
+
+function aiProcessShow(jsObject) {
+  var id = jsObject['id'];
+
+  try {
+     aiShowIframeId(id);
+  } catch(e) {
+    if (console && console.log) {
+      console.log(e);
+    }
+  }
+}

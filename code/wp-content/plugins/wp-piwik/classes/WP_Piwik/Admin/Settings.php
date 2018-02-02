@@ -21,9 +21,9 @@ class Settings extends \WP_Piwik\Admin {
 		if (isset($_GET['clear']) && $_GET['clear']) {
 			$this->clear($_GET['clear'] == 2);
 			self::$wpPiwik->resetRequest();
-			echo '<form method="post" action="?page='.$_GET['page'].'"><input type="submit" value="'.__('Reload', 'wp-piwik').'" /></form>';
+			echo '<form method="post" action="?page='.htmlentities($_GET['page']).'"><input type="submit" value="'.__('Reload', 'wp-piwik').'" /></form>';
 			return;
-		} elseif (isset ( $_POST ) && isset ( $_POST ['wp-piwik'] )) {
+		} elseif (self::$wpPiwik->isConfigSubmitted()) {
 			$this->showBox ( 'updated', 'yes', __ ( 'Changes saved.' ) );
 			self::$wpPiwik->resetRequest();
 			self::$wpPiwik->updateTrackingCode();
@@ -36,7 +36,16 @@ class Settings extends \WP_Piwik\Admin {
 		if (isset($_GET['testscript']) && $_GET['testscript'])
 			$this->runTestscript();
 	?>
-	<form method="post" action="?page=<?php echo $_GET['page']; ?>">
+	<?php
+		if (self::$wpPiwik->isConfigured ()) {
+			$piwikVersion = self::$wpPiwik->request ( 'global.getPiwikVersion' );
+			if (is_array ( $piwikVersion ) && isset( $piwikVersion['value'] ))
+				$piwikVersion = $piwikVersion['value'];
+			if (! empty ( $piwikVersion ) && !is_array( $piwikVersion ))
+				$this->showDonation();
+		}
+	?>
+	<form method="post" action="?page=<?php echo htmlentities($_GET['page']); ?>">
 		<input type="hidden" name="wp-piwik[revision]" value="<?php echo self::$settings->getGlobalOption('revision'); ?>" />
 		<?php wp_nonce_field('wp-piwik_settings'); ?>
 		<table class="wp-piwik-form">
@@ -45,14 +54,14 @@ class Settings extends \WP_Piwik\Admin {
 		$submitButton = '<tr><td colspan="2"><p class="submit"><input name="Submit" type="submit" class="button-primary" value="' . esc_attr__ ( 'Save Changes' ) . '" /></p></td></tr>';
 		printf ( '<tr><td colspan="2">%s</td></tr>', __ ( 'Thanks for using WP-Piwik!', 'wp-piwik' ) );
 		if (self::$wpPiwik->isConfigured ()) {
-			$piwikVersion = self::$wpPiwik->request ( 'global.getPiwikVersion' );
-			if (is_array ( $piwikVersion ) && isset( $piwikVersion['value'] ))
-				$piwikVersion = $piwikVersion['value'];
-			if (! empty ( $piwikVersion ) && !is_array( $piwikVersion )) {				
+			if (! empty ( $piwikVersion ) && !is_array( $piwikVersion )) {
 				$this->showText ( sprintf ( __ ( 'WP-Piwik %s is successfully connected to Piwik %s.', 'wp-piwik' ), self::$wpPiwik->getPluginVersion (), $piwikVersion ) . ' ' . (! self::$wpPiwik->isNetworkMode () ? sprintf ( __ ( 'You are running WordPress %s.', 'wp-piwik' ), get_bloginfo ( 'version' ) ) : sprintf ( __ ( 'You are running a WordPress %s blog network (WPMU). WP-Piwik will handle your sites as different websites.', 'wp-piwik' ), get_bloginfo ( 'version' ) )) );
-				$this->showDonation();
 			} else {
-				$this->showBox ( 'error', 'no', sprintf ( __ ( 'WP-Piwik %s was not able to connect to Piwik using your configuration. Check the &raquo;Connect to Piwik&laquo; section below.', 'wp-piwik' ), self::$wpPiwik->getPluginVersion () ) );
+				$errorMessage = \WP_Piwik\Request::getLastError();
+				if ( empty( $errorMessage ) )
+					$this->showBox ( 'error', 'no', sprintf ( __ ( 'WP-Piwik %s was not able to connect to Piwik using your configuration. Check the &raquo;Connect to Piwik&laquo; section below.', 'wp-piwik' ), self::$wpPiwik->getPluginVersion () ) );
+				else
+					$this->showBox ( 'error', 'no', sprintf ( __ ( 'WP-Piwik %s was not able to connect to Piwik using your configuration. During connection the following error occured: <br /><code>%s</code>', 'wp-piwik' ), self::$wpPiwik->getPluginVersion (), $errorMessage ) );
 			}
 		} else
 			$this->showBox ( 'error', 'no', sprintf ( __ ( 'WP-Piwik %s has to be connected to Piwik first. Check the &raquo;Connect to Piwik&laquo; section below.', 'wp-piwik' ), self::$wpPiwik->getPluginVersion () ) );
@@ -118,20 +127,24 @@ class Settings extends \WP_Piwik\Admin {
 			$this->showCheckbox ( 'auto_site_config', __ ( 'Auto config', 'wp-piwik' ), __ ( 'Check this to automatically choose your blog from your Piwik sites by URL. If your blog is not added to Piwik yet, WP-Piwik will add a new site.', 'wp-piwik' ), false, '$j(\'tr.wp-piwik-auto-option\').toggle(\'hidden\');' . ($piwikSiteId ? '$j(\'#site_id\').val(' . $piwikSiteId . ');' : '') );
 			if (self::$wpPiwik->isConfigured ()) {
 				$piwikSiteList = self::$wpPiwik->getPiwikSiteDetails ();
-				if (is_array($piwikSiteList))
-					foreach ($piwikSiteList as $details)
-						$piwikSiteDetails[$details['idsite']] = $details;
-				unset($piwikSiteList);
-				if ( $piwikSiteId != 'n/a' && isset( $piwikSiteDetails ) && is_array( $piwikSiteDetails ) )
-					$piwikSiteDescription = $piwikSiteDetails [$piwikSiteId] ['name'] . ' (' . $piwikSiteDetails [$piwikSiteId] ['main_url'] . ')';
-				else
-					$piwikSiteDescription = 'n/a';
-				echo '<tr class="wp-piwik-auto-option' . (! self::$settings->getGlobalOption ( 'auto_site_config' ) ? ' hidden' : '') . '"><th scope="row">' . __ ( 'Determined site', 'wp-piwik' ) . ':</th><td>' . $piwikSiteDescription . '</td></tr>';
-				if (isset ( $piwikSiteDetails ) && is_array ( $piwikSiteDetails ))
-					foreach ( $piwikSiteDetails as $key => $siteData )
-						$siteList [$siteData['idsite']] = $siteData ['name'] . ' (' . $siteData ['main_url'] . ')';
+				if (isset($piwikSiteList['result']) && $piwikSiteList['result'] == 'error') {
+					$this->showBox ( 'error', 'no', sprintf ( __ ( 'WP-Piwik %s was not able to get sites with at least view access: <br /><code>%s</code>', 'wp-piwik' ), self::$wpPiwik->getPluginVersion (), $errorMessage ) );
+				} else {
+					if (is_array($piwikSiteList))
+						foreach ($piwikSiteList as $details)
+							$piwikSiteDetails[$details['idsite']] = $details;
+					unset($piwikSiteList);
+					if ($piwikSiteId != 'n/a' && isset($piwikSiteDetails) && is_array($piwikSiteDetails))
+						$piwikSiteDescription = $piwikSiteDetails [$piwikSiteId] ['name'] . ' (' . $piwikSiteDetails [$piwikSiteId] ['main_url'] . ')';
+					else
+						$piwikSiteDescription = 'n/a';
+					echo '<tr class="wp-piwik-auto-option' . (!self::$settings->getGlobalOption('auto_site_config') ? ' hidden' : '') . '"><th scope="row">' . __('Determined site', 'wp-piwik') . ':</th><td>' . $piwikSiteDescription . '</td></tr>';
+					if (isset ($piwikSiteDetails) && is_array($piwikSiteDetails))
+						foreach ($piwikSiteDetails as $key => $siteData)
+							$siteList [$siteData['idsite']] = $siteData ['name'] . ' (' . $siteData ['main_url'] . ')';
 					if (isset($siteList))
-						$this->showSelect ( 'site_id', __ ( 'Select site', 'wp-piwik' ), $siteList, 'Choose the Piwik site corresponding to this blog.', '', self::$settings->getGlobalOption ( 'auto_site_config' ), 'wp-piwik-auto-option', true, false );
+						$this->showSelect('site_id', __('Select site', 'wp-piwik'), $siteList, 'Choose the Piwik site corresponding to this blog.', '', self::$settings->getGlobalOption('auto_site_config'), 'wp-piwik-auto-option', true, false);
+				}
 			}
 		} else echo '<tr class="hidden"><td colspan="2"><input type="hidden" name="wp-piwik[auto_site_config]" value="1" /></td></tr>';
 
@@ -205,11 +218,11 @@ class Settings extends \WP_Piwik\Admin {
 				'header' => __ ( 'Header', 'wp-piwik' )
 		), __ ( 'Choose whether the JavaScript code is added to the footer or the header.', 'wp-piwik' ), '', $isNotTracking, 'wp-piwik-track-option wp-piwik-track-option-default wp-piwik-track-option-js wp-piwik-track-option-proxy wp-piwik-track-option-manually' );
 
-		$this->showTextarea ( 'noscript_code', __ ( 'Noscript code', 'wp-piwik' ), 2, 'This is a preview of your &lt;noscript&gt; code which is part of your tracking code.', $isNotGeneratedTracking || self::$settings->getGlobalOption ( 'track_mode' ) == 'proxy', 'wp-piwik-track-option wp-piwik-track-option-default wp-piwik-track-option-js', true, '', true, false );
+		$this->showTextarea ( 'noscript_code', __ ( 'Noscript code', 'wp-piwik' ), 2, 'This is a preview of your &lt;noscript&gt; code which is part of your tracking code.', self::$settings->getGlobalOption ( 'track_mode' ) == 'proxy', 'wp-piwik-track-option wp-piwik-track-option-default wp-piwik-track-option-js wp-piwik-track-option-manually', true, '', (self::$settings->getGlobalOption ( 'track_mode' ) != 'manually'), false );
 
-		$this->showCheckbox ( 'track_noscript', __ ( 'Add &lt;noscript&gt;', 'wp-piwik' ), __ ( 'Adds the &lt;noscript&gt; code to your footer.', 'wp-piwik' ) . ' ' . __ ( 'Disabled in proxy mode.', 'wp-piwik' ), $isNotGeneratedTracking || self::$settings->getGlobalOption ( 'track_mode' ) == 'proxy', 'wp-piwik-track-option wp-piwik-track-option-default wp-piwik-track-option-js' );
+		$this->showCheckbox ( 'track_noscript', __ ( 'Add &lt;noscript&gt;', 'wp-piwik' ), __ ( 'Adds the &lt;noscript&gt; code to your footer.', 'wp-piwik' ) . ' ' . __ ( 'Disabled in proxy mode.', 'wp-piwik' ), self::$settings->getGlobalOption ( 'track_mode' ) == 'proxy', 'wp-piwik-track-option wp-piwik-track-option-default wp-piwik-track-option-js wp-piwik-track-option-manually' );
 
-		$this->showCheckbox ( 'track_nojavascript', __ ( 'Add rec parameter to noscript code', 'wp-piwik' ), __ ( 'Enable tracking for visitors without JavaScript (not recommended).', 'wp-piwik' ) . ' ' . sprintf ( __ ( 'See %sPiwik FAQ%s.', 'wp-piwik' ), '<a href="http://piwik.org/faq/how-to/#faq_176">', '</a>' ) . ' ' . __ ( 'Disabled in proxy mode.', 'wp-piwik' ), $isNotGeneratedTracking || self::$settings->getGlobalOption ( 'track_mode' ) == 'proxy', 'wp-piwik-track-option wp-piwik-track-option-default wp-piwik-track-option-js' );
+		$this->showCheckbox ( 'track_nojavascript', __ ( 'Add rec parameter to noscript code', 'wp-piwik' ), __ ( 'Enable tracking for visitors without JavaScript (not recommended).', 'wp-piwik' ) . ' ' . sprintf ( __ ( 'See %sPiwik FAQ%s.', 'wp-piwik' ), '<a href="http://piwik.org/faq/how-to/#faq_176">', '</a>' ) . ' ' . __ ( 'Disabled in proxy mode.', 'wp-piwik' ), self::$settings->getGlobalOption ( 'track_mode' ) == 'proxy', 'wp-piwik-track-option wp-piwik-track-option-default wp-piwik-track-option-js wp-piwik-track-option-manually' );
 
 		$this->showSelect ( 'track_content', __ ( 'Enable content tracking', 'wp-piwik' ), array (
 				'disabled' => __ ( 'Disabled', 'wp-piwik' ),
@@ -258,6 +271,14 @@ class Settings extends \WP_Piwik\Admin {
 
 		$this->showInput ( 'track_heartbeat', __ ( 'Enable heartbeat timer', 'wp-piwik' ), __ ( 'Enable a heartbeat timer to get more accurate visit lengths by sending periodical HTTP ping requests as long as the site is opened. Enter the time between the pings in seconds (Piwik default: 15) to enable or 0 to disable this feature. <strong>Note:</strong> This will cause a lot of additional HTTP requests on your site.', 'wp-piwik' ), $isNotGeneratedTracking, $fullGeneratedTrackingGroup );
 
+		$this->showSelect ( 'track_user_id', __ ( 'User ID Tracking', 'wp-piwik' ), array (
+				'disabled' => __ ( 'Disabled', 'wp-piwik' ),
+				'uid' => __ ( 'WP User ID', 'wp-piwik' ),
+				'email' => __ ( 'Email Address', 'wp-piwik' ),
+				'username' => __ ( 'Username', 'wp-piwik' ),
+				'displayname' => __ ( 'Display Name (Not Recommended!)', 'wp-piwik' )
+		), __ ( 'When a user is logged in to WordPress, track their &quot;User ID&quot;. You can select which field from the User\'s profile is tracked as the &quot;User ID&quot;. When enabled, Tracking based on Email Address is recommended.', 'wp-piwik' ), '', $isNotTracking, $fullGeneratedTrackingGroup );
+
 		echo $submitButton;
 		echo '</tbody></table><table id="expert" class="wp-piwik_menu-tab hidden"><tbody>';
 
@@ -281,6 +302,7 @@ class Settings extends \WP_Piwik\Admin {
 		$this->showInput ( 'connection_timeout', __ ( 'Connection timeout', 'wp-piwik' ), 'Define a connection timeout for all HTTP requests done by WP-Piwik in seconds.' );
 
 		$this->showCheckbox ( 'disable_ssl_verify', __ ( 'Disable SSL peer verification', 'wp-piwik' ), '(' . __ ( 'not recommended', 'wp-piwik' ) . ')' );
+		$this->showCheckbox ( 'disable_ssl_verify_host', __ ( 'Disable SSL host verification', 'wp-piwik' ), '(' . __ ( 'not recommended', 'wp-piwik' ) . ')' );
 
 		$this->showSelect ( 'piwik_useragent', __ ( 'User agent', 'wp-piwik' ), array (
 				'php' => __ ( 'Use the PHP default user agent', 'wp-piwik' ) . (ini_get ( 'user_agent' ) ? '(' . ini_get ( 'user_agent' ) . ')' : ' (' . __ ( 'empty', 'wp-piwik' ) . ')'),
@@ -305,6 +327,8 @@ class Settings extends \WP_Piwik\Admin {
 				'script' => __ ( 'Show only if WP-Piwik is updated and settings were changed', 'wp-piwik' ),
 				'disabled' => __ ( 'Disabled', 'wp-piwik' )
 		), __ ( 'Choose if you want to get an update notice if WP-Piwik is updated.', 'wp-piwik' ) );
+
+		$this->showInput ( 'set_download_extensions', __ ( 'Define all file types for download tracking', 'wp-piwik' ), __ ( 'Replace Piwik\'s default file extensions for download tracking, divided by a vertical bar (&#124;). Leave blank to keep Piwik\'s default settings.', 'wp-piwik' ) . ' ' . sprintf ( __ ( 'See %sPiwik documentation%s.', 'wp-piwik' ), '<a href="https://developer.piwik.org/guides/tracking-javascript-guide#file-extensions-for-tracking-downloads">', '</a>' ) );
 
 		echo $submitButton;
 		?>
@@ -399,7 +423,7 @@ class Settings extends \WP_Piwik\Admin {
 	 * @param boolean $wide Create a wide box (default: false)
 	 */
 	private function showInput($id, $name, $description, $isHidden = false, $groupName = '', $rowName = false, $hideDescription = true, $wide = false) {
-		printf ( '<tr class="%s%s"%s><th scope="row"><label for="%5$s">%s:</label></th><td><input '.($wide?'class="wp-piwik-wide" ':'').'name="wp-piwik[%s]" id="%5$s" value="%s" /> %s</td></tr>', $isHidden ? 'hidden ' : '', $groupName ? $groupName : '', $rowName ? ' id="' . $groupName . '-' . $rowName . '"' : '', $name, $id, self::$settings->getGlobalOption ( $id ), !empty($description) ? $this->getDescription ( $id, $description, $hideDescription ) : '' );
+		printf ( '<tr class="%s%s"%s><th scope="row"><label for="%5$s">%s:</label></th><td><input '.($wide?'class="wp-piwik-wide" ':'').'name="wp-piwik[%s]" id="%5$s" value="%s" /> %s</td></tr>', $isHidden ? 'hidden ' : '', $groupName ? $groupName : '', $rowName ? ' id="' . $groupName . '-' . $rowName . '"' : '', $name, $id, htmlentities(self::$settings->getGlobalOption( $id ), ENT_QUOTES, 'UTF-8', false), !empty($description) ? $this->getDescription ( $id, $description, $hideDescription ) : '' );
 	}
 
 	/**
@@ -467,50 +491,42 @@ class Settings extends \WP_Piwik\Admin {
 	<p>
 		<strong><?php _e('Donate','wp-piwik'); ?></strong>
 	</p>
-	<p><?php _e('If you like WP-Piwik, you can support its development by a donation:', 'wp-piwik'); ?></p>
+	<p>
+		<?php _e('If you like WP-Piwik, you can support its development by a donation:', 'wp-piwik'); ?>
+	</p>
 	<script type="text/javascript">
-			/* <![CDATA[ */
-			window.onload = function() {
-        		FlattrLoader.render({
-            		'uid': 'flattr',
-            		'url': 'http://wp.local',
-            		'title': 'Title of the thing',
-            		'description': 'Description of the thing'
-				}, 'element_id', 'replace');
-			};
-			/* ]]> */
-			</script>
+	/* <![CDATA[ */
+	window.onload = function() {
+		FlattrLoader.render({
+        	'uid': 'flattr',
+            'url': 'http://wp.local',
+            'title': 'Title of the thing',
+            'description': 'Description of the thing'
+		}, 'element_id', 'replace');
+	}
+	/* ]]> */
+	</script>
 	<div>
-		<a class="FlattrButton" style="display: none;"
-			title="WordPress Plugin WP-Piwik"
-			rel="flattr;uid:braekling;category:software;tags:wordpress,piwik,plugin,statistics;"
-			href="https://www.braekling.de/wp-piwik-wpmu-piwik-wordpress">This
-			WordPress plugin adds a Piwik stats site to your WordPress dashboard.
-			It's also able to add the Piwik tracking code to your blog using
-			wp_footer. You need a running Piwik installation and at least view
-			access to your stats.</a>
+		<a class="FlattrButton" style="display:none;" title="WordPress Plugin WP-Piwik" rel="flattr;uid:braekling;category:software;tags:wordpress,piwik,plugin,statistics;" href="https://www.braekling.de/wp-piwik-wpmu-piwik-wordpress">This WordPress plugin adds a Piwik stats site to your WordPress dashboard. It's also able to add the Piwik tracking code to your blog using wp_footer. You need a running Piwik installation and at least view access to your stats.</a>
 	</div>
 	<div>
 		Paypal
 		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-			<input type="hidden" name="cmd" value="_s-xclick" /> <input
-				type="hidden" name="hosted_button_id" value="6046779" /> <input
-				type="image"
-				src="https://www.paypal.com/en_GB/i/btn/btn_donateCC_LG.gif"
-				name="submit" alt="PayPal - The safer, easier way to pay online." />
-			<img alt="" border="0"
-				src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1"
-				height="1" />
+			<input type="hidden" name="cmd" value="_s-xclick" />
+			<input type="hidden" name="hosted_button_id" value="6046779" />
+			<input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donateCC_LG.gif" name="submit" alt="PayPal - The safer, easier way to pay online." />
+			<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1" />
 		</form>
 	</div>
 	<div>
-		<a
-			href="http://www.amazon.de/gp/registry/wishlist/111VUJT4HP1RA?reveal=unpurchased&amp;filter=all&amp;sort=priority&amp;layout=standard&amp;x=12&amp;y=14"><?php _e('My Amazon.de wishlist', 'wp-piwik'); ?></a>
+		<a href="bitcoin:32FMBngRne9wQ7XPFP2CfR25tjp3oa4roN">Bitcoin<br />
+		<img style="border:none;" src="<?php echo self::$wpPiwik->getPluginURL(); ?>bitcoin.png" width="100" height="100" alt="Bitcoin Address" title="32FMBngRne9wQ7XPFP2CfR25tjp3oa4roN" /></a>
 	</div>
 	<div>
-				<?php _e('Please don\'t forget to vote the compatibility at the','wp-piwik'); ?> <a
-			href="http://wordpress.org/extend/plugins/wp-piwik/">WordPress.org
-			Plugin Directory</a>.
+		<a href="http://www.amazon.de/gp/registry/wishlist/111VUJT4HP1RA?reveal=unpurchased&amp;filter=all&amp;sort=priority&amp;layout=standard&amp;x=12&amp;y=14"><?php _e('My Amazon.de wishlist', 'wp-piwik'); ?></a>
+	</div>
+	<div>
+		<?php _e('Please don\'t forget to vote the compatibility at the','wp-piwik'); ?> <a href="http://wordpress.org/extend/plugins/wp-piwik/">WordPress.org Plugin Directory</a>.
 	</div>
 </div><?php
 	}
@@ -539,11 +555,9 @@ class Settings extends \WP_Piwik\Admin {
 	 */
 	public function showCredits() {
 		?>
-		<p><strong><?php _e('Thank you very much for your donation', 'wp-piwik'); ?>:</strong> Marco L., Rolf W., Tobias U., Lars K., Donna F., Kevin D., Ramos S., Thomas M., John C., Andreas G., Ben M., Myra R. I., Carlos U. R.-S., Oleg I., M. N., Daniel K., James L., Jochen K., Cyril P., Thomas K., <?php _e('the Piwik team itself','wp-piwik');?><?php _e(', and all people flattering this','wp-piwik'); ?>!</p>
+		<p><strong><?php _e('Thank you very much for your donation', 'wp-piwik'); ?>:</strong> Marco L., Rolf W., Tobias U., Lars K., Donna F., Kevin D., Ramos S., Thomas M., John C., Andreas G., Ben M., Myra R. I., Carlos U. R.-S., Oleg I., M. N., Daniel K., James L., Jochen K., Cyril P., Thomas K., Patrik K., Zach, Sebastian W., Peakkom, Patrik K., Kati K., Helmut O., Valerie S., Jochen D., Atlas R., <?php _e('the Piwik team itself','wp-piwik');?><?php _e(', and all people flattering this','wp-piwik'); ?>!</p>
 		<p><?php _e('Graphs powered by <a href="http://www.jqplot.com/">jqPlot</a> (License: GPL 2.0 and MIT) and <a href="http://omnipotent.net/jquery.sparkline/">jQuery Sparklines</a> (License: New BSD License).','wp-piwik'); ?></p>
-		<p><?php _e('Metabox support inspired by', 'wp-piwik'); echo ' <a href="http://www.code-styling.de/english/how-to-use-wordpress-metaboxes-at-own-plugins">Heiko Rabe\'s metabox demo plugin</a>.';?></p>
-		<p><?php _e('Tabbed settings page suggested by the', 'wp-piwik'); echo' <a href="http://wp.smashingmagazine.com/2011/10/20/create-tabs-wordpress-settings-pages/">Smashing Magazine</a>.';?></p>
-		<p><?php _e('Thank you very much','wp-piwik'); ?>, Besnik Bleta, FatCow, Rene, Fab, EzBizNiz, Gormer, Natalya, AggelioPolis, Web Hosting Geeks, Web Hosting Rating, Nata Strazda (Web Hosting Hub), Hossein (LibreOffice localization team), Ste &amp; Chris <?php _e('for your translation work','wp-piwik'); ?>!</p>
+		<p><?php _e('Thank you very much','wp-piwik'); ?> <a href="https://www.transifex.com/projects/p/wp-piwik/">Transifex Translation Community</a> <?php _e('for your translation work','wp-piwik'); ?>!</p>
 		<p><?php _e('Thank you very much, all users who send me mails containing criticism, commendation, feature requests and bug reports! You help me to make WP-Piwik much better.','wp-piwik'); ?></p>
 		<p><?php _e('Thank <strong>you</strong> for using my plugin. It is the best commendation if my piece of code is really used!','wp-piwik'); ?></p>
 		<?php
@@ -574,7 +588,7 @@ class Settings extends \WP_Piwik\Admin {
 			<?php if (self::$settings->getGlobalOption('piwik_mode') == 'php') { ?><li><?php
 				_e('Determined Piwik base URL is', 'wp-piwik');
 				echo ' <strong>'.(self::$settings->getGlobalOption('proxy_url')).'</strong>';
-			?></li><?php } ?>	
+			?></li><?php } ?>
 		</ol>
 		<p><?php _e('Tools', 'wp-piwik'); ?>:</p>
 		<ol>

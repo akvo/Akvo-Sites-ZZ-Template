@@ -24,13 +24,17 @@
 	padding: 0 !important;
 	border: none !important;
 }
-.prisna-gwt-flag-container a,
-.prisna-gwt-flag-container a img {
+.prisna-gwt-flag-container a {
 	display: inline-block;
 	margin: 0 !important;
 	padding: 0 !important;
 	border: none !important;
+	background-repeat: no-repeat !important;
+	background-image: url({{ flags_image_path }}/all.png) !important;
+	width: 22px !important;
+	height: 16px !important;
 }
+{{ flags_css }}
 {{ has_flags.true:end }}
 {{ hide_banner.true:begin }}
 body {
@@ -53,6 +57,20 @@ body {
 {{ custom_css }}
 -->
 </style>
+{{ exclude_selector.empty.false:begin }}
+<script type="text/javascript">
+/*<![CDATA[*/
+jQuery("{{ exclude_selector }}").addClass("notranslate");
+/*]]>*/
+</script>
+{{ exclude_selector.empty.false:end }}
+{{ on_before_load.empty.false:begin }}
+<script type="text/javascript">
+/*<![CDATA[*/
+{{ on_before_load }}
+/*]]>*/
+</script>
+{{ on_before_load.empty.false:end }}
 {{ has_flags.true:begin }}
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -104,7 +122,8 @@ var PrisnaGWT = {
 /*<![CDATA[*/
 function initializeGoogleTranslateElement() {
 	new google.translate.TranslateElement({
-{{ options_formatted }}	}{{ has_container.true:begin }}, "google_translate_element"{{ has_container.true:end }});
+{{ options_formatted }}	}{{ has_container.true:begin }}, "google_translate_element"{{ has_container.true:end }});{{ on_after_load.empty.false:begin }}
+{{ on_after_load }}{{ on_after_load.empty.false:end }}
 }
 /*]]>*/
 </script>

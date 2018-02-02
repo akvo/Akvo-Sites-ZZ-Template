@@ -1,10 +1,9 @@
 /*global jQuery*/
+/*localization global: wpml_tm_strings*/
 (function () {
 	"use strict";
 
 jQuery(document).ready(function () {
-
-	icl_translations_pickup_box_populate();
 
     var tm_add_user = jQuery('#icl_tm_adduser');
 
@@ -103,7 +102,7 @@ jQuery(document).ready(function () {
 		return false;
 	});
 
-	jQuery('#icl_side_by_site').find('a[href=#cancel]').click(function () {
+	jQuery('#icl_side_by_site').find('a[href="#cancel"]').click(function () {
 		var anchor = jQuery(this);
 		jQuery.ajax({
 			type: "POST", url: ajaxurl, data: 'action=dismiss_icl_side_by_site',
@@ -183,20 +182,13 @@ jQuery(document).ready(function () {
 	jQuery('form[name="icl_custom_tax_sync_options"]').submit(iclSaveForm);
 	jQuery('form[name="icl_custom_posts_sync_options"]').submit(iclSaveForm);
 	jQuery('form[name="icl_cf_translation"]').submit(iclSaveForm);
-
-	if (window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1) {
-		jQuery('#icl_translation_pickup_mode').submit(icl_tm_set_pickup_method);
-	} else {
-		jQuery('#icl_translation_pickup_mode').on('submit', icl_tm_set_pickup_method);
-	}
-
-	jQuery('#icl_tm_get_translations').on('click', icl_tm_pickup_translations);
+	jQuery('form[name="icl_tcf_translation"]').submit(iclSaveForm);
 
 	var icl_translation_jobs_basket = jQuery('#icl-translation-jobs-basket');
 	icl_translation_jobs_basket.find('th :checkbox').change(iclTmSelectAllJobsBasket);
 	icl_translation_jobs_basket.find('td :checkbox').change(iclTmUpdateJobsSelectionBasket);
 	var icl_translation_jobs = jQuery('#icl-translation-jobs');
-	icl_translation_jobs.find('th :checkbox').change(iclTmSelectAllJobsSelection);
+	icl_translation_jobs.find('td.js-check-all :checkbox').change(iclTmSelectAllJobsSelection);
 	icl_translation_jobs.find('td :checkbox').change(update_translation_job_checkboxes);
 
 	jQuery('#icl_tm_jobs_dup_submit').click(function () {
@@ -382,9 +374,11 @@ function icl_tm_assign_translator_request(job_id, translator_id, select, jobType
             dataType: 'json',
             data: 'icl_ajx_action=set_pickup_mode&' + form.serialize(),
             success: function (msg) {
-                if (!msg.error) {
+                if ( msg.success ) {
                     icl_translations_pickup_box_populate();
-                }
+                } else {
+					fadeInAjxResp( '#icl_ajx_response_tpm', msg.data.message, true );
+				}
             },
             complete: function () {
                 ajaxLoader.remove();
@@ -393,57 +387,6 @@ function icl_tm_assign_translator_request(job_id, translator_id, select, jobType
         });
 
         return false;
-    }
-
-    function icl_tm_pickup_translations() {
-        var this_b = jQuery(this);
-        this_b.attr('disabled', 'disabled').after(icl_ajxloaderimg);
-        var nonce = jQuery("#_icl_nonce_pickup_t").val();
-        jQuery.ajax(
-            {
-                type:     "POST",
-                url:      ajaxurl,
-                dataType: 'json',
-                data:     {
-                    action: 'icl_pickup_translations',
-                    _icl_nonce: nonce
-                },
-                success:  function (response) {
-                    var icl_message_div;
-                    /** @namespace response.data.completed */
-                    if (response.data.completed) {
-                        icl_message_div = jQuery("#icl_tm_pickup_wrap_completed");
-                        icl_message_div.text(response.data.completed);
-                        icl_message_div.show();
-                    }
-                    if (response.data.errors) {
-                        icl_message_div = jQuery("#icl_tm_pickup_wrap_errors");
-                        icl_message_div.text(response.data.errors);
-                        icl_message_div.show();
-                    }
-                    /** @namespace response.data.cancelled */
-                    if (response.data.cancelled) {
-                        icl_message_div = jQuery("#icl_tm_pickup_wrap_cancelled");
-                        icl_message_div.text(response.data.cancelled);
-                        icl_message_div.show();
-                    }
-                    /** @namespace response.data.submitting */
-                    if (response.data.submitting) {
-                        icl_message_div = jQuery("#icl_tm_pickup_wrap_submitting");
-                        icl_message_div.text(response.data.submitting);
-                        icl_message_div.show();
-                    }
-                    if(response.data.completed.replace(/[^0-9]/g, '') > 0){
-                        location.reload();
-                    }else{
-                        this_b.removeAttr('disabled').next().remove();
-                    }
-                },
-                error:    function (jqXHR, textStatus) {
-                    this_b.removeAttr('disabled').next().remove();
-                }
-            }
-        );
     }
 
     function iclTmSelectAllJobsBasket(caller) {
@@ -478,7 +421,7 @@ function icl_tm_assign_translator_request(job_id, translator_id, select, jobType
         iclTmSelectAllJobsBasket(this);
         update_job_checkboxes('#icl-translation-jobs-basket');
     }
-	
+
 	function iclTmSelectAllJobsSelection() {
      if (jQuery(this).attr('checked')) {
          jQuery('#icl-translation-jobs').find(':checkbox').attr('checked', 'checked');
@@ -499,55 +442,5 @@ if (typeof String.prototype.endsWith !== 'function') {
   String.prototype.endsWith = function (str){
     return this.slice(-str.length) === str;
   };
-}
-
-function icl_translations_pickup_box_populate() {
-
-	/*
-	 * Before doing anything here, check whether the box, to write
-	 * data about translations ready for pickup , even exists.
-	 */
-	var tmPickupBox = jQuery('#icl_tm_pickup_wrap');
-	if (tmPickupBox.length === 0) {
-		return;
-	}
-	var icl_tm_pickup_wrap_button = jQuery("#icl_tm_get_translations");
-	var pickup_nof_jobs = jQuery("#icl_pickup_nof_jobs");
-	var pickup_last_pickup = jQuery("#icl_pickup_last_pickup");
-	var nonce = jQuery("#_icl_nonce_populate_t").val();
-
-	icl_tm_pickup_wrap_button.val('...Fetching translation job data ...');
-	icl_tm_pickup_wrap_button.attr('disabled', 'disabled');
-	jQuery.ajax(
-		{
-			type:     "POST",
-			url:      ajaxurl,
-			dataType: 'json',
-			data:     {
-				action: 'icl_populate_translations_pickup_box',
-				_icl_nonce: nonce
-			},
-			success:  function (response) {
-				/** @namespace response.data.wait_text */
-				/** @namespace response.data.jobs_in_progress_text */
-				/** @namespace response.data.last_pickup_text */
-				if (!response.data.wait_text) {
-					icl_tm_pickup_wrap_button.removeAttr('disabled');
-					icl_tm_pickup_wrap_button.val(response.data.button_text);
-					pickup_nof_jobs.text(response.data.jobs_in_progress_text);
-					pickup_last_pickup.text(response.data.last_pickup_text);
-				} else {
-					pickup_nof_jobs.html(response.data.wait_text);
-					icl_tm_pickup_wrap_button.hide();
-				}
-			},
-			error: function (response) {
-				if (response.data && response.data.error) {
-					jQuery("#icl_pickup_nof_jobs").text(response.data.error);
-				}
-				icl_tm_pickup_wrap_button.hide();
-			}
-		}
-	);
 }
 }());

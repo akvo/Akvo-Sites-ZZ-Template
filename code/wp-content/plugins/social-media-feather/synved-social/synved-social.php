@@ -3,7 +3,7 @@
 Module Name: Synved Social
 Description: Social sharing and following tools
 Author: Synved
-Version: 1.7.8
+Version: 1.7.16
 Author URI: http://synved.com/
 License: GPLv2
 
@@ -18,8 +18,8 @@ In no event shall Synved Ltd. be liable to you or any third party for any direct
 
 
 define('SYNVED_SOCIAL_LOADED', true);
-define('SYNVED_SOCIAL_VERSION', 100070008);
-define('SYNVED_SOCIAL_VERSION_STRING', '1.7.8');
+define('SYNVED_SOCIAL_VERSION', 100070016);
+define('SYNVED_SOCIAL_VERSION_STRING', '1.7.16');
 
 define('SYNVED_SOCIAL_ADDON_PATH', str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, dirname(__FILE__) . '/addons'));
 
@@ -115,11 +115,11 @@ class SynvedSocialWidget extends WP_Widget
     $instance = wp_parse_args((array) $instance, $defaults);
 ?>
     <p>
-        <label for="<?php echo $this->get_field_id('title'); ?>"><?php echo(__('Title', 'synved-social')) ?>:</label>
+        <label for="<?php echo $this->get_field_id('title'); ?>"><?php echo(__('Title', 'social-media-feather')) ?>:</label>
         <input type="text" class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $instance['title']; ?>" />
     </p>
     <p>
-        <label for="<?php echo $this->get_field_id('icon_skin'); ?>"><?php echo(__('Icon Skin', 'synved-social')) ?>:</label>
+        <label for="<?php echo $this->get_field_id('icon_skin'); ?>"><?php echo(__('Icon Skin', 'social-media-feather')) ?>:</label>
         <?php 
         $params = array(
         	'tip' => '',
@@ -144,7 +144,7 @@ class SynvedSocialWidget extends WP_Widget
         }
         ?>
         <br/>
-        <label for="<?php echo $this->get_field_id('icon_size'); ?>"><?php echo(__('Icon Size', 'synved-social')) ?>:</label>
+        <label for="<?php echo $this->get_field_id('icon_size'); ?>"><?php echo(__('Icon Size', 'social-media-feather')) ?>:</label>
         <?php 
         $params = array(
         	'tip' => '',
@@ -156,7 +156,7 @@ class SynvedSocialWidget extends WP_Widget
         synved_option_render_item('synved_social', 'icon_size', null, true, $params, 'widget'); 
         ?>
         <br/>
-        <label for="<?php echo $this->get_field_id('icon_spacing'); ?>"><?php echo(__('Icon Spacing', 'synved-social')) ?>:</label>
+        <label for="<?php echo $this->get_field_id('icon_spacing'); ?>"><?php echo(__('Icon Spacing', 'social-media-feather')) ?>:</label>
         <input type="text" size="3" class="" id="<?php echo $this->get_field_id('icon_spacing'); ?>" name="<?php echo $this->get_field_name('icon_spacing'); ?>" value="<?php echo $instance['icon_spacing']; ?>" />
     </p>
 <?php
@@ -167,14 +167,14 @@ class SynvedSocialShareWidget extends SynvedSocialWidget
 {
 	function __construct() 
 	{
-		parent::__construct('synved_social_share', __('Social Media Feather: Sharing', 'synved-social'));
+		parent::__construct('synved_social_share', __('Social Media Feather: Sharing', 'social-media-feather'));
 	}
 	
 	function get_defaults()
 	{
 		$defaults = parent::get_defaults();
 		
-		return array_merge($defaults, array('title' => __('Sharing', 'synved-social')));
+		return array_merge($defaults, array('title' => __('Sharing', 'social-media-feather')));
 	}
 	
 	function render_social_markup($params = null)
@@ -187,14 +187,14 @@ class SynvedSocialFollowWidget extends SynvedSocialWidget
 {
 	function __construct() 
 	{
-		parent::__construct('synved_social_follow', __('Social Media Feather: Follow Us', 'synved-social'));
+		parent::__construct('synved_social_follow', __('Social Media Feather: Follow Us', 'social-media-feather'));
 	}
 	
 	function get_defaults()
 	{
 		$defaults = parent::get_defaults();
 		
-		return array_merge($defaults, array('title' => __('Follow Us', 'synved-social')));
+		return array_merge($defaults, array('title' => __('Follow Us', 'social-media-feather')));
 	}
 	
 	function render_social_markup($params = null)
@@ -216,7 +216,7 @@ function synved_social_service_provider_list($context, $raw = false)
 				'title' => __('Share on Facebook')
 			),
 			'twitter' => array(
-				'link' => 'http://twitter.com/share?url=%%url%%&text=%%message%%',
+				'link' => 'https://twitter.com/intent/tweet?url=%%url%%&text=%%message%%',
 				'title' => __('Share on Twitter'),
 			),
 			'google_plus' => array(
@@ -250,11 +250,11 @@ function synved_social_service_provider_list($context, $raw = false)
 	{
 		$provider_list = array(
 			'facebook' => array(
-				'link' => 'http://www.facebook.com/MyAvatarName',
+				'link' => 'https://www.facebook.com/facebook',
 				'title' => __('Follow us on Facebook'),
 			),
 			'twitter' => array(
-				'link' => 'http://twitter.com/MyAvatarName',
+				'link' => 'https://twitter.com/twitter',
 				'title' => __('Follow us on Twitter'),
 			),
 			'google_plus' => array(
@@ -608,7 +608,7 @@ function synved_social_icon_skin_get_image_list($skin, $name_list, $forced_size 
 
 function synved_social_button_list_shortcode($atts, $content = null, $code = '', $context = null)
 {
-	$vars_def = array('url' => null, 'image' => null, 'title' => null);
+	$vars_def = array('url' => null, 'image' => null, 'title' => null, 'message' => null);
 	$params_def = array('skin' => null, 'size' => null, 'spacing' => null, 'container' => null, 'container_type' => null, 'class' => null, 'show' => null, 'hide' => null, 'prompt' => null, 'custom1' => null, 'custom2' => null, 'custom3' => null);
 	$vars = shortcode_atts($vars_def, $atts, 'feather_' . $context);
 	$params = shortcode_atts($params_def, $atts, 'feather_' . $context);
@@ -850,7 +850,7 @@ function synved_social_button_list_markup($context, $vars = null, $buttons = nul
 		
 		if ($message == null)
 		{
-			$message = __('Hey check this out', 'synved-social');
+			$message = __('Hey check this out', 'social-media-feather');
 		}
 		
 		$vars['message'] = $message;
@@ -1199,7 +1199,7 @@ function synved_social_button_list_markup($context, $vars = null, $buttons = nul
 				'child-list' => array(
 					array(
 						'tag' => 'img',
-						'alt' => $button_key,
+						'alt' => $button_key == 'facebook' ? 'Facebook' : $button_key,
 						'title' => $title,
 						'class' => 'synved-share-image synved-social-image synved-social-image-' . $context,
 						'width' => $size,
@@ -1253,7 +1253,7 @@ function synved_social_button_list_markup($context, $vars = null, $buttons = nul
 		
 		if (synved_option_get('synved_social', 'show_credit'))
 		{
-			$out .= '<a class="synved-social-credit" target="_blank" rel="nofollow" title="' . __('WordPress Social Media Feather', 'synved-social') . '" href="http://synved.com/wordpress-social-media-feather/" style="color:#444; text-decoration:none; font-size:8px; margin-left:5px;vertical-align:10px;white-space:nowrap;"><span>' . __('by ', 'synved-social') . '</span><img style="display: inline;margin:0;padding:0;width:16px;height:16px;" width="16" height="16" alt="feather" src="' . $uri . '/image/icon.png" /></a>';
+			$out .= '<a class="synved-social-credit" target="_blank" rel="nofollow" title="' . __('WordPress Social Media Feather', 'social-media-feather') . '" href="http://synved.com/wordpress-social-media-feather/" style="color:#444; text-decoration:none; font-size:8px; margin-left:5px;vertical-align:10px;white-space:nowrap;"><span>' . __('by ', 'social-media-feather') . '</span><img style="display: inline;margin:0;padding:0;width:16px;height:16px;" width="16" height="16" alt="feather" src="' . $uri . '/image/icon.png" /></a>';
 		}
 		
 		if ($container != 'none' && ($container == 'both' || $container == $context))

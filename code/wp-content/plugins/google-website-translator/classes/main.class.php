@@ -94,6 +94,8 @@ class PrisnaGWTOutput extends PrisnaGWTItem {
 	protected static $_rendered;
 
 	public $custom_css;
+	public $flags_css;
+	public $flags_image_path;
 	public $flags_formatted;
 	public $options_formatted;
 	
@@ -104,6 +106,7 @@ class PrisnaGWTOutput extends PrisnaGWTItem {
 		$this->_properties = $_properties;
 		$this->_gen_options();
 		$this->_set_properties();
+		$this->_set_flags_css();
 		self::_set_rendered(false);
 
 	}
@@ -121,6 +124,41 @@ class PrisnaGWTOutput extends PrisnaGWTItem {
 		
 		self::$_rendered = $_state;
 		
+	}
+	
+	protected function _set_flags_css() {
+		
+		if ($this->_has_flags()) {
+			
+			$this->flags_image_path = PRISNA_GWT__IMAGES;
+			
+			$languages = PrisnaGWTConfig::getSettingValue('languages');
+			
+			if (!PrisnaGWTConfig::getSettingValue('all_languages')) {
+				$available_languages = PrisnaGWTConfig::getSettingValue('available_languages');
+				$languages = array_intersect($languages, $available_languages);
+			}
+			
+			$all_languages = PrisnaGWTCommon::getLanguages(false);
+			$flags_css = array();
+
+			foreach ($all_languages as $language => $name) {
+				
+				if (in_array($language, $languages)) {
+					
+					$coordinates = PrisnaGWTCommon::getLanguageCoordinates(strtolower($language));
+					
+					if (!empty($coordinates))
+						$flags_css[] = '.prisna-gwt-language-' . $language . ' a { background-position: ' . $coordinates[0] . 'px ' . $coordinates[1] . 'px !important; }';
+					
+				}
+				
+			}
+			
+			$this->flags_css = implode("\n", $flags_css);
+			
+		}
+
 	}
 	
 	protected static function _get_rendered() {
@@ -171,6 +209,27 @@ class PrisnaGWTOutput extends PrisnaGWTItem {
 			'tag' => 'hide_banner'
 		);
 
+		$on_before_load = PrisnaGWTConfig::getSettingValue('on_before_load');
+
+		$_options['meta_tag_rules'][] = array(
+			'expression' => empty($on_before_load),
+			'tag' => 'on_before_load.empty'
+		);
+
+		$exclude_selector = PrisnaGWTConfig::getSettingValue('exclude_selector');
+
+		$_options['meta_tag_rules'][] = array(
+			'expression' => empty($exclude_selector),
+			'tag' => 'exclude_selector.empty'
+		);
+
+		$on_after_load = PrisnaGWTConfig::getSettingValue('on_after_load');
+
+		$_options['meta_tag_rules'][] = array(
+			'expression' => empty($on_after_load),
+			'tag' => 'on_after_load.empty'
+		);
+
 		self::_set_rendered(true);
 
 		return parent::render($_options, $_html_encode);
@@ -212,6 +271,11 @@ class PrisnaGWTOutput extends PrisnaGWTItem {
 		$flag_template = PrisnaGWTConfig::getSettingValue('flag_template');
 
 		$languages = PrisnaGWTConfig::getSettingValue('languages');
+		
+		if (!PrisnaGWTConfig::getSettingValue('all_languages')) {
+			$available_languages = PrisnaGWTConfig::getSettingValue('available_languages');
+			$languages = array_intersect($languages, $available_languages);
+		}
 
 		$flags_items = array();
 		

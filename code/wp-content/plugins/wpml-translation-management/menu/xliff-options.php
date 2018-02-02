@@ -14,7 +14,7 @@ global $sitepress;
 
 	        <div class="wpml-section-content-inner">
 
-		        <h4><?php echo _e('XLIFF version', 'wpml-translation-management') ?></h4>
+		        <h4><?php _e('XLIFF version', 'wpml-translation-management') ?></h4>
 
 		        <p>
 			        <?php _e('Choose default format for XLIFF file:', 'wpml-translation-management'); ?>
@@ -22,7 +22,8 @@ global $sitepress;
 			        <select name="icl_xliff_version">
 				        <option value="false"><?php echo __("Please choose", "wpml-xliff"); ?></option>
 				        <?php
-				        $available_xliff_versions = WPML_Translation_Management_XLIFF::get_available_xliff_version();
+				        $xliff_instance = setup_xliff_frontend();
+				        $available_xliff_versions = $xliff_instance->get_available_xliff_versions();
 				        foreach ($available_xliff_versions as $value => $version) {
 					        $selected = "";
 					        if ($sitepress->get_setting("tm_xliff_version") == $value) {
@@ -40,7 +41,7 @@ global $sitepress;
 		        <?php
 		        $xliff_newlines = $sitepress->get_setting('xliff_newlines') ? intval($sitepress->get_setting('xliff_newlines')) : WPML_XLIFF_TM_NEWLINES_REPLACE;
 		        ?>
-		        <h4><?php echo _e('New lines character', 'wpml-translation-management') ?></h4>
+		        <h4><?php _e('New lines character', 'wpml-translation-management') ?></h4>
 				<p>
 	                <?php _e('How new lines characters in XLIFF files should be handled?', 'wpml-translation-management'); ?>
 	            </p>

@@ -12,7 +12,7 @@ class WP_Piwik {
 	 *
 	 * @var Runtime environment variables
 	 */
-	private static $revisionId = 2015072101, $version = '1.0.3', $blog_id, $pluginBasename = NULL, $logger, $settings, $request;
+	private static $revisionId = 2016120301, $version = '1.0.14', $blog_id, $pluginBasename = NULL, $logger, $settings, $request, $optionsPageId;
 
 	/**
 	 * Constructor class to configure and register all WP-Piwik components
@@ -106,11 +106,6 @@ class WP_Piwik {
 						$this,
 						'extendWordPressDashboard'
 				) );
-			if (self::$settings->getGlobalOption ( 'add_post_annotations' ))
-				add_action ( 'transition_post_status', array (
-						$this,
-						'onPostStatusTransition'
-				), 10, 3 );
 		}
 		if ($this->isToolbarActive ()) {
 			add_action ( is_admin () ? 'admin_head' : 'wp_head', array (
@@ -138,7 +133,13 @@ class WP_Piwik {
 						$this,
 						'addJavascriptCode'
 				) );
+			if (self::$settings->getGlobalOption ( 'add_post_annotations' ))
+				add_action ( 'transition_post_status', array (
+						$this,
+						'addPiwikAnnotation'
+				), 10, 3 );
 		}
+		
 	}
 
 	/**
@@ -286,6 +287,7 @@ class WP_Piwik {
 		}
 		$trackingCode = new WP_Piwik\TrackingCode ( $this );
 		$trackingCode->is404 = (is_404 () && self::$settings->getGlobalOption ( 'track_404' ));
+		$trackingCode->isUsertracking = self::$settings->getGlobalOption ( 'track_user_id' ) != 'disabled';
 		$trackingCode->isSearch = (is_search () && self::$settings->getGlobalOption ( 'track_search' ));
 		self::$logger->log ( 'Add tracking code. Blog ID: ' . self::$blog_id . ' Site ID: ' . self::$settings->getOption ( 'site_id' ) );
 		if ($this->isNetworkMode () && self::$settings->getGlobalOption ( 'track_mode' ) == 'manually') {
@@ -360,11 +362,11 @@ class WP_Piwik {
 		}
 		if (! self::$settings->checkNetworkActivation ()) {
 			$optionsPage = new WP_Piwik\Admin\Settings ( $this, self::$settings );
-			$optionsPageId = add_options_page ( self::$settings->getGlobalOption ( 'plugin_display_name' ), self::$settings->getGlobalOption ( 'plugin_display_name' ), 'activate_plugins', __FILE__, array (
+			self::$optionsPageId = add_options_page ( self::$settings->getGlobalOption ( 'plugin_display_name' ), self::$settings->getGlobalOption ( 'plugin_display_name' ), 'activate_plugins', __FILE__, array (
 					$optionsPage,
 					'show'
 			) );
-			$this->loadAdminSettingsHeader ( $optionsPageId, $optionsPage );
+			$this->loadAdminSettingsHeader ( self::$optionsPageId, $optionsPage );
 		}
 	}
 
@@ -381,11 +383,11 @@ class WP_Piwik {
 			$this->loadAdminStatsHeader ( $this->statsPageId, $statsPage );
 		}
 		$optionsPage = new WP_Piwik\Admin\Settings ( $this, self::$settings );
-		$optionsPageId = add_submenu_page ( 'settings.php', self::$settings->getGlobalOption ( 'plugin_display_name' ), self::$settings->getGlobalOption ( 'plugin_display_name' ), 'manage_sites', __FILE__, array (
+		self::$optionsPageId = add_submenu_page ( 'settings.php', self::$settings->getGlobalOption ( 'plugin_display_name' ), self::$settings->getGlobalOption ( 'plugin_display_name' ), 'manage_sites', __FILE__, array (
 				$optionsPage,
 				'show'
 		) );
-		$this->loadAdminSettingsHeader ( $optionsPageId, $optionsPage );
+		$this->loadAdminSettingsHeader ( self::$optionsPageId, $optionsPage );
 	}
 
 	/**
@@ -488,7 +490,7 @@ class WP_Piwik {
 	 * @return array complete list of plugin meta data
 	 */
 	public function setPluginMeta($links, $file) {
-		if ($file == 'wp-piwik/wp-piwik.php')
+		if ($file == 'wp-piwik/wp-piwik.php' && (!$this->isNetworkMode () || is_network_admin()) )
 			return array_merge ( $links, array (
 					sprintf ( '<a href="%s">%s</a>', self::getSettingsURL (), __ ( 'Settings', 'wp-piwik' ) )
 			) );
@@ -557,23 +559,6 @@ class WP_Piwik {
 	}
 
 	/**
-	 * Add a new post annotation in Piwik
-	 *
-	 * @param int $postID
-	 *        	The new post's ID
-	 */
-	public function addPiwikAnnotation($postID) {
-		$note = 'Published: ' . get_post ( $postID )->post_title . ' - URL: ' . get_permalink ( $postID );
-		$id = WP_Piwik\Request::register ( 'Annotations.add', array (
-				'idSite' => $this->getPiwikSiteId (),
-				'date' => date ( 'Y-m-d' ),
-				'note' => $note
-		) );
-		$result = $this->request ( $id );
-		self::$logger->log ( 'Add post annotation. ' . $note . ' - ' . serialize ( $result ) );
-	}
-
-	/**
 	 * Apply settings update
 	 *
 	 * @return boolean settings update applied
@@ -629,8 +614,8 @@ class WP_Piwik {
 	 *
 	 * @return boolean Are new settings submitted?
 	 */
-	private function isConfigSubmitted() {
-		return isset ( $_POST ) && isset ( $_POST ['wp-piwik'] );
+	public static function isConfigSubmitted() {
+		return isset ( $_POST ) && isset ( $_POST ['wp-piwik'] ) && self::isValidOptionsPost();
 	}
 
 	/**
@@ -834,6 +819,7 @@ class WP_Piwik {
 
 	/**
 	 * Identify new posts if an annotation is required
+	 * and create Piwik annotation
 	 *
 	 * @param string $newStatus
 	 *        	new post status
@@ -842,12 +828,16 @@ class WP_Piwik {
 	 * @param object $post
 	 *        	current post object
 	 */
-	public function onPostStatusTransition($newStatus, $oldStatus, $post) {
+	public function addPiwikAnnotation($newStatus, $oldStatus, $post) {
 		if ($newStatus == 'publish' && $oldStatus != 'publish') {
-			add_action ( 'publish_post', array (
-					$this,
-					'addPiwikAnnotation'
+			$note = 'Published: ' . $post->post_title . ' - URL: ' . get_permalink ( $post->ID );
+			$id = WP_Piwik\Request::register ( 'Annotations.add', array (
+				'idSite' => $this->getPiwikSiteId (),
+				'date' => date ( 'Y-m-d' ),
+				'note' => $note
 			) );
+			$result = $this->request ( $id );
+			self::$logger->log ( 'Add post annotation. ' . $note . ' - ' . serialize ( $result ) );
 		}
 	}
 
@@ -977,6 +967,7 @@ class WP_Piwik {
 				'limit' => 10,
 				'width' => '100%',
 				'height' => '200px',
+				'idsite' => '',
 				'language' => 'en',
 				'range' => false,
 				'key' => 'sum_daily_nb_uniq_visitors'
@@ -996,7 +987,8 @@ class WP_Piwik {
 		if (! $blogId && $this->isNetworkMode ())
 			$blogId = get_current_blog_id ();
 		$result = self::$settings->getOption ( 'site_id', $blogId );
-		return (! empty ( $result ) ? $result : $this->requestPiwikSiteId ( $blogId ));
+        self::$logger->log ( 'Database result: ' . $result );
+        return (! empty ( $result ) ? $result : $this->requestPiwikSiteId ( $blogId ));
 	}
 
 	/**
@@ -1029,8 +1021,7 @@ class WP_Piwik {
 				$result = $this->addPiwikSite ( $blogId );
 			elseif ( $result != 'n/a' )
 				$result = $result [0] ['idsite'];
-		} else
-			$result = null;
+		} else $result = null;
 		self::$logger->log ( 'Get Piwik ID: WordPress site ' . ($isCurrent ? get_bloginfo ( 'url' ) : get_blog_details ( $blogId )->siteurl) . ' = Piwik ID ' . $result );
 		if ($result !== null) {
 			self::$settings->setOption ( 'site_id', $result, $blogId );
@@ -1059,12 +1050,14 @@ class WP_Piwik {
 				'urls' => $isCurrent ? get_bloginfo ( 'url' ) : get_blog_details ( $blogId )->siteurl,
 				'siteName' => urlencode( $isCurrent ? get_bloginfo ( 'name' ) : get_blog_details ( $blogId )->blogname )
 		) );
-		$result = $this->request ( $id );
-		self::$logger->log ( 'Get Piwik ID: WordPress site ' . ($isCurrent ? get_bloginfo ( 'url' ) : get_blog_details ( $blogId )->siteurl) . ' = Piwik ID ' . ( int ) $result );
-		if (empty ( $result ) || ! isset ( $result [0] ))
+		$result = (int) $this->request ( $id );
+		self::$logger->log ( 'Create Piwik ID: WordPress site ' . ($isCurrent ? get_bloginfo ( 'url' ) : get_blog_details ( $blogId )->siteurl) . ' = Piwik ID ' . $result );
+		if (empty ( $result ))
 			return null;
-		else
-			return $result [0] ['idsite'];
+		else {
+            do_action('wp-piwik_site_created', $result);
+            return $result;
+        }
 	}
 
 	/**
@@ -1128,7 +1121,7 @@ class WP_Piwik {
 	 * @param string $newValue
 	 *        	new blog name
 	 */
-	public function onBlogNameChange($oldValue, $newValue) {
+	public function onBlogNameChange($oldValue, $newValue = null) {
 		$this->updatePiwikSite ( self::$settings->getOption ( 'site_id' ) );
 	}
 
@@ -1140,7 +1133,7 @@ class WP_Piwik {
 	 * @param string $newValue
 	 *        	new blog URL
 	 */
-	public function onSiteUrlChange($oldValue, $newValue) {
+	public function onSiteUrlChange($oldValue, $newValue = null) {
 		$this->updatePiwikSite ( self::$settings->getOption ( 'site_id' ) );
 	}
 
@@ -1176,6 +1169,7 @@ class WP_Piwik {
 		new \WP_Piwik\Widget\Screens ( $this, self::$settings, $this->statsPageId );
 		new \WP_Piwik\Widget\Systems ( $this, self::$settings, $this->statsPageId );
 		new \WP_Piwik\Widget\SystemDetails ( $this, self::$settings, $this->statsPageId );
+		new \WP_Piwik\Widget\Country ( $this, self::$settings, $this->statsPageId );
 	}
 
 	/**
@@ -1189,7 +1183,7 @@ class WP_Piwik {
 		$postUrl = get_permalink ( $post->ID );
 		$this->log ( 'Load per post statistics: ' . $postUrl );
 		array (
-				new \WP_Piwik\Widget\Post ( $this, self::$settings, 'post', 'side', 'default', array (
+				new \WP_Piwik\Widget\Post ( $this, self::$settings, array('post', 'page', 'custom_post_type'), 'side', 'default', array (
 						'url' => $postUrl
 				) ),
 				'show'
@@ -1241,5 +1235,14 @@ class WP_Piwik {
 			update_site_option ( $option, $value );
 		else
 			update_option ( $option, $value );
+	}
+
+	/**
+	 * Check if WP-Piwik options page
+	 * 
+	 * @return boolean True if current page is WP-Piwik's option page
+	 */
+	public static function isValidOptionsPost() {
+		return is_admin() && check_admin_referer( 'wp-piwik_settings' ) && current_user_can( 'manage_options' ) ;
 	}
 }

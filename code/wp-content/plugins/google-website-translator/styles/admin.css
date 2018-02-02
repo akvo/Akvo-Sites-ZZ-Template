@@ -116,13 +116,23 @@
 
 .prisna_gwt_admin_container .reset-button.prisna_gwt_button_hover,
 .prisna_gwt_admin_container .reset-button:hover {
-	background: #ddd !important;
-	color: #333 !important;
+
+}
+
+.prisna_gwt_admin_container input.button,
+.prisna_gwt_admin_container input.button-primary {
+	font-size: 13px !important;
+	text-shadow: none !important;
+	transform: none !important;
+	-webkit-transform: none !important;
+	-moz-transform: none !important;
+	-o-transform: none !important;
+	-ms-transform: none !important;
 }
 
 .prisna_gwt_admin_container .button-primary {
-	border: 1px solid #444 !important;
-	background: #444 !important;
+	border: 1px solid #32373c !important;
+	background: #32373c !important;
 	color: #fff !important;
 }
 
@@ -163,7 +173,7 @@
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 	width: 798px;
-	background: #333;
+	background: #23282d;
 }
 
 .prisna_gwt_header_icon {
@@ -187,6 +197,21 @@
 .prisna_gwt_header_title a:visited,
 .prisna_gwt_header_title a:hover,
 .prisna_gwt_header_title a {
+	color: #fff !important;
+	text-decoration: none !important;
+}
+
+.prisna_gwt_header_version {
+	position: absolute;
+	top: 5px;
+	right: 8px;
+	left: auto;
+	bottom: auto;
+	color: #fff !important;
+	text-decoration: none !important;
+}
+
+.prisna_gwt_header_version a {
 	color: #fff !important;
 	text-decoration: none !important;
 }
@@ -867,7 +892,7 @@ select.prisna_gwt_select {
 
 .prisna_gwt_ui_tab_selected {
 	color: #fff !important;
-	background: #444;
+	background: #32373c;
 	-webkit-border-top-left-radius: 2px;
 	-webkit-border-top-right-radius: 2px;
 	-moz-border-radius-topleft: 2px;
@@ -1069,6 +1094,8 @@ select.prisna_gwt_select {
 	background-position: -47px -155px !important;
 }
 
+#section_prisna_on_before_load .prisna_gwt_icon,
+#section_prisna_on_after_load .prisna_gwt_icon,
 #section_prisna_custom_html .prisna_gwt_icon,
 #section_prisna_flags_container_template .prisna_gwt_icon,
 #section_prisna_flag_template .prisna_gwt_icon {

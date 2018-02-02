@@ -3,8 +3,8 @@ Contributors: webvitaly
 Donate link: http://web-profile.com.ua/donate/
 Tags: page, page-list, pagelist, sitemap, subpages, siblings
 Requires at least: 3.0
-Tested up to: 4.1
-Stable tag: 5.0
+Tested up to: 4.7
+Stable tag: 5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -12,10 +12,11 @@ License URI: http://www.gnu.org/licenses/gpl.html
 
 == Description ==
 
-> **[WordPress Pro plugins](http://codecanyon.net/popular_item/by_category?category=wordpress&ref=webvitaly)** |
+> **[Silver Bullet Pro](http://codecanyon.net/item/silver-bullet-pro/15171769?ref=webvitalii "Speedup and protect WordPress in a smart way")** |
 > **[Page-list](http://web-profile.com.ua/wordpress/plugins/page-list/ "Plugin page")** |
 > **[all Page-list params](http://wordpress.org/plugins/page-list/other_notes/ "Page-list params")** |
-> **[Donate](http://web-profile.com.ua/donate/ "Support the development")**
+> **[Donate](http://web-profile.com.ua/donate/ "Support the development")** |
+> **[GitHub](https://github.com/webvitalii/page-list "Fork")**
 
 = shortcodes: =
 
@@ -31,9 +32,9 @@ License URI: http://www.gnu.org/licenses/gpl.html
 * **[all Page-list params](http://wordpress.org/plugins/page-list/other_notes/ "Page-list params")**
 
 = Useful: =
-* ["Anti-spam" - block spam in comments](http://wordpress.org/plugins/anti-spam/ "no spam, no captcha")
-* ["Iframe" - embed iframe with shortcode](http://wordpress.org/plugins/iframe/ "embed iframe")
-* [WordPress Pro plugins](http://codecanyon.net/popular_item/by_category?category=wordpress&ref=webvitaly)
+* **[Silver Bullet Pro - Speedup and protect WordPress in a smart way](http://codecanyon.net/item/silver-bullet-pro/15171769?ref=webvitalii "Speedup and protect WordPress in a smart way")**
+* **[Anti-spam Pro - Block spam in comments](http://codecanyon.net/item/antispam-pro/6491169?ref=webvitalii "Block spam in comments")**
+
 
 == Other Notes ==
 
@@ -60,6 +61,7 @@ License URI: http://www.gnu.org/licenses/gpl.html
 * **link_before** - sets the text or html that precedes the link text inside link tag: `[pagelist link_before="<span>"]`; you may specify html tags only in the `HTML` tab in your Rich-text editor;
 * **link_after** - sets the text or html that follows the link text inside link tag: `[pagelist link_after="</span>"]`; you may specify html tags only in the `HTML` tab in your Rich-text editor;
 * **class** - the CSS class for list of pages: `[pagelist class="listclass"]`; by default the class is empty (class="");
+* columns - for splitting list of pages into columns: `[pagelist class="page-list-cols-2"]`; available classes: page-list-cols-2, page-list-cols-3, page-list-cols-4, page-list-cols-5; works in all modern browsers and IE10+; columns are responsive and become 1 column at less than 768px;
 
 More [info about params](http://codex.wordpress.org/Function_Reference/wp_list_pages#Parameters) for [pagelist], [subpages], [siblings].
 
@@ -94,6 +96,7 @@ More [info about params](http://codex.wordpress.org/Function_Reference/wp_list_p
 * **child_count_template** - the template of child_count: `[pagelist_ext show_child_count="1" child_count_template="Subpages: %child_count%"]`; by default child_count_template="Subpages: %child_count%";
 * **show_meta_key** - show or hide meta key: `[pagelist_ext show_meta_key="your_meta_key"]`; by default the show_meta_key is empty (show_meta_key=""); If show_meta_key is enabled, but meta_value is empty, than meta_key is not shown;
 * **meta_template** - the template of meta: `[pagelist_ext show_meta_key="your_meta_key" meta_template="Meta: %meta%"]`; by default meta_template="%meta%";
+* columns - for splitting list of pages into columns: `[pagelist_ext class="page-list-cols-2"]`; available classes: page-list-cols-2, page-list-cols-3, page-list-cols-4, page-list-cols-5; works in all modern browsers and IE10+;  columns are responsive and become 1 column at less than 768px;
 
 More [info about params](http://codex.wordpress.org/Function_Reference/get_pages#Parameters) for [pagelist_ext].
 
@@ -131,8 +134,11 @@ When you changed the plugin's code you should also change the plugin's version t
 
 == Changelog ==
 
+= 5.1 - 2015.07.01 =
+* added columns feature
+
 = 5.0 - 2015.01.25 =
-* code refactor
+* code refactoring
 * update docs
 * added 'authors', 'post_type', 'post_status', 'date_format' params to [pagelist], [subpages], [siblings] shortcodes (thanks to Nick Ciske)
 

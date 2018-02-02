@@ -1,30 +1,30 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Prisna GWT\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-25 20:02+0700\n"
+"POT-Creation-Date: 2015-12-10 12:00+0800\n"
 "PO-Revision-Date: \n"
-"Last-Translator: SurStudio\n"
-"Language-Team: \n"
+"Last-Translator: Prisna\n"
+"Language-Team:  <support@prisna.net>\n"
+"Language: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: .\n"
+"X-Poedit-Basepath: /dev/wp-content/plugins/google-website-translator\n"
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-KeywordsList: __\n"
-"X-Poedit-SearchPath-0: /home/fede/http/dev.surstudio.net/wp-new/wp-content/"
-"plugins/google-website-translator\n"
+"X-Poedit-SearchPath-0: .\n"
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:120
+#: classes/config.class.php:120
 msgid "No settings to export. The current settings are the default ones."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:173
+#: classes/config.class.php:173
 msgid "Usage"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:177
+#: classes/config.class.php:177
 #, php-format
 msgid ""
 "\n"
@@ -34,12 +34,13 @@ msgid ""
 "\t\t\t\t\n"
 "\t\t\t\t<code>%s</code><br /><br />\n"
 "\t\t\t\t\n"
-"\t\t\t\t- Copy and paste the following code into pages, posts, etc...<br /"
+"\t\t\t\t- Or copy and paste the following code into pages, posts, etc...<br /"
 "><br />\n"
 "\t\t\t\t\n"
 "\t\t\t\t<code>[prisna-google-website-translator]</code><br /><br />\n"
 "\t\t\t\t\n"
-"\t\t\t\t- Copy and paste the following code into any PHP file<br /><br />\n"
+"\t\t\t\t- Or copy and paste the following code into any page, post or front "
+"end PHP file<br /><br />\n"
 "\t\t\t\t\n"
 "\t\t\t\t<code>&lt;?php echo do_shortcode('[prisna-google-website-"
 "translator]'); ?&gt;</code><br />\n"
@@ -47,7 +48,7 @@ msgid ""
 "\t\t\t\t"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:191
+#: classes/config.class.php:191
 msgid ""
 "\n"
 "\t\t\t\t\n"
@@ -58,43 +59,43 @@ msgid ""
 "\t\t\t\t"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:210
+#: classes/config.class.php:210
 msgid "Website's language"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:211
+#: classes/config.class.php:211
 msgid "Sets the website's source language."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:221
+#: classes/config.class.php:221
 msgid "Translation languages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:222
+#: classes/config.class.php:222
 msgid "Sets the available languages."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:227
+#: classes/config.class.php:227
 msgid "Yes, use all languages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:228
+#: classes/config.class.php:228
 msgid "No, choose languages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:234
+#: classes/config.class.php:234
 msgid "Specific languages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:235
+#: classes/config.class.php:235
 msgid "Specifically sets the available languages."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:248
+#: classes/config.class.php:248
 msgid "Display mode"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:249
+#: classes/config.class.php:249
 msgid ""
 "Sets the display mode. When <code>Automatic</code> is selected, the "
 "translation banner will automatically be displayed when the default browser "
@@ -102,77 +103,75 @@ msgid ""
 "dropdown will be displayed."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:253
+#: classes/config.class.php:253
 msgid "Inline"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:254
+#: classes/config.class.php:254
 msgid "Tabbed"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:255
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/common.class.php:733
+#: classes/config.class.php:255 classes/common.class.php:850
 msgid "Automatic"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:262
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:278
+#: classes/config.class.php:262 classes/config.class.php:278
 msgid "Style mode"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:295
+#: classes/config.class.php:295
 msgid "Align mode"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:296
+#: classes/config.class.php:296
 msgid "Sets the alignment mode of the translator within its container."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:301
+#: classes/config.class.php:301
 msgid "Left"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:302
+#: classes/config.class.php:302
 msgid "Right"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:310
+#: classes/config.class.php:310
 msgid "Show flags over translator"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:311
+#: classes/config.class.php:311
 msgid "Sets whether to display a few flags over the translator, or not."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:316
+#: classes/config.class.php:316
 msgid "Yes, show flags"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:317
+#: classes/config.class.php:317
 msgid "No, don't show flags"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:325
+#: classes/config.class.php:325
 msgid "Select languages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:326
+#: classes/config.class.php:326
 msgid "Sets the available languages to display over the translator."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:327
+#: classes/config.class.php:327
 msgid "Languages order"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:328
+#: classes/config.class.php:328
 msgid "Defines the order to display the languages."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:341
+#: classes/config.class.php:341
 msgid "Test mode"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:342
+#: classes/config.class.php:342
 msgid ""
 "Sets whether the translator is in test mode or not. In \"test mode\", the "
 "translator will be displayed only if the current logged in user has admin "
@@ -180,83 +179,103 @@ msgid ""
 "visitors to see the changes while the plugin is being implemented."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:347
+#: classes/config.class.php:347
 msgid "Yes, enable test mode"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:348
+#: classes/config.class.php:348
 msgid "No, disable test mode"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:354
+#: classes/config.class.php:354
 msgid "Custom CSS"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:355
+#: classes/config.class.php:355
 msgid "Defines custom CSS rules."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:363
+#: classes/config.class.php:363
 msgid "Hide on pages, posts and categories"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:372
+#: classes/config.class.php:372
 msgid "Pages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:373
+#: classes/config.class.php:373
 msgid "Selects the pages where the translator should not be displayed."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:383
+#: classes/config.class.php:383
 msgid "Posts"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:384
+#: classes/config.class.php:384
 msgid "Selects the posts where the translator should not be displayed."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:394
+#: classes/config.class.php:394
 msgid "Categories"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:395
+#: classes/config.class.php:395
 msgid "Selects the categories where the translator should not be displayed."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:405
+#: classes/config.class.php:405
+msgid "Javascript callbacks"
+msgstr ""
+
+#: classes/config.class.php:414 classes/config.class.php:425
+msgid "On before load"
+msgstr ""
+
+#: classes/config.class.php:415 classes/config.class.php:426
+msgid "Defines a javascript routine that runs before the translator is loaded."
+msgstr ""
+
+#: classes/config.class.php:436
+msgid "On after load"
+msgstr ""
+
+#: classes/config.class.php:437
+msgid "Defines a javascript routine that runs after the translator is loaded."
+msgstr ""
+
+#: classes/config.class.php:447
 msgid "Templates"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:414
+#: classes/config.class.php:456
 msgid "Flags container template"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:415
+#: classes/config.class.php:457
 msgid ""
 "Sets the flags' container template. New templates can be created if the "
 "provided one doesn't fit the web page requirements."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:427
+#: classes/config.class.php:469
 msgid "Flag template"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:428
+#: classes/config.class.php:470
 msgid ""
 "Sets the flag's template. New templates can be created if the provided one "
 "doesn't fit the web page requirements."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:440
+#: classes/config.class.php:482
 msgid "Other customizations"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:449
+#: classes/config.class.php:491
 msgid "Translation banner"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:450
+#: classes/config.class.php:492
 msgid ""
 "Sets whether automatically display translation banner to users speaking "
 "languages other than the language of your page, or not. If the <code>Display "
@@ -264,141 +283,140 @@ msgid ""
 "the translation banner</code> option won't be selectable."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:455
+#: classes/config.class.php:497
 msgid "Completely hide the translation banner"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:456
-msgid "Automatically display translation banner"
-msgstr ""
-
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:457
+#: classes/config.class.php:499
 msgid "Don't display translation banner automatically"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:465
+#: classes/config.class.php:507
 msgid "Multiple languages pages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:466
+#: classes/config.class.php:508
 msgid ""
 "Sets whether the pages in this site contain content in multiple languages."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:472
+#: classes/config.class.php:514
 msgid "Yes, pages on this site contain multiple languages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:473
+#: classes/config.class.php:515
 msgid "No, pages on this site don't contain multiple languages"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:481
+#: classes/config.class.php:523
 msgid "Google Analytics"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:482
+#: classes/config.class.php:524
 msgid ""
 "Sets whether to track translation traffic using Google Analytics, or not."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:487
+#: classes/config.class.php:529
 msgid "Yes, track traffic using Google Analytics"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:488
+#: classes/config.class.php:530
 msgid "No, don't track traffic using Google Analytics"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:496
+#: classes/config.class.php:538
 msgid "Google Analytics code"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:497
+#: classes/config.class.php:539
 msgid "Sets the  Analytics Web Property ID. For instance: UA-12345-12"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:507
+#: classes/config.class.php:549
 msgid "Import settings"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:508
+#: classes/config.class.php:550
 msgid ""
 "Imports previously exported settings. Paste the previously exported settings "
 "in the field. If the data's structure is correct, it will overwrite the "
 "current settings."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:516
+#: classes/config.class.php:558
 msgid "Export settings"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/config.class.php:517
+#: classes/config.class.php:559
 msgid ""
 "Exports the current settings to make a backup or to transfer the settings "
 "from the development server to the production server. Triple click on the "
 "field to select all the content."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/common.class.php:719
+#: classes/common.class.php:836
 #, php-format
 msgid "Add the %s."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:162
+#: classes/common.class.php:863
+msgid "Title:"
+msgstr ""
+
+#: classes/admin.class.php:170
 msgid "Google Website Translator"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:163
+#: classes/admin.class.php:171
 msgid "Settings saved."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:164
+#: classes/admin.class.php:172
 msgid "Settings reseted."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:165
+#: classes/admin.class.php:173
 msgid ""
 "All the settings will be reseted and restored to their default values. Do "
 "you want to continue?"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:166
+#: classes/admin.class.php:174
 msgid "Save changes"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:167
+#: classes/admin.class.php:175
 msgid "Reset settings"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:239
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:242
+#: classes/admin.class.php:239 classes/admin.class.php:242
 msgid "General"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:241
+#: classes/admin.class.php:241
 msgid "Advanced"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:243
-msgid "Go Premium"
+#: classes/admin.class.php:243
+msgid "Premium"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:244
+#: classes/admin.class.php:244
 msgid "Import / Export"
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:245
+#: classes/admin.class.php:245
 msgid "Settings succesfully imported."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:246
+#: classes/admin.class.php:246
 msgid ""
 "There was a problem while importing the settings. Please make sure the "
 "exported string is complete. Changes weren't saved."
 msgstr ""
 
-#: /home/fede/http/dev.surstudio.net/wp-new/wp-content/plugins/google-website-translator/classes/admin.class.php:247
+#: classes/admin.class.php:247
 #, php-format
 msgid "Google Website Translator requires WordPress version %s or later."
 msgstr ""

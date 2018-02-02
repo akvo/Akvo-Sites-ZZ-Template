@@ -14,6 +14,8 @@ class AkvopediaGadget {
 
 	private $clazz;
 
+	private static $gadget_loaded = false;
+
 	public function __construct( $title, $title_id, $div_id, $options = array(), $clazz = null )
 	{
 		$this->title = $title;
@@ -26,9 +28,9 @@ class AkvopediaGadget {
 
 	private function javascript() {
 		$script = "//<!--\n" .
-			'(function($, document) {' .
-			'  $(document).ready(function () {' .
-			'    $("#' . $this->div_id . '").akvopedia({';
+			"(function(\$, document) {\n" .
+			"    var init = function() {\n" .
+			'    $("#' . $this->div_id . "\").akvopedia({server:'https://akvopedia.org',\n";
 		$first = true;
 		foreach ($this->options as $key => $value ) {
 			if ($first) {
@@ -53,25 +55,37 @@ class AkvopediaGadget {
 			}
 		}
 		$script .=
-			'    });' .
-			'    $("#' . $this->div_id . '").on("akvopedia:title-updated", function(event, title) {' .
-			'       $("#' . $this->title_id . '").html(title);' .
-			'    });' .
-			'  });' .
-			'})(jQuery, document);' .
+			"    });\n" .
+			'    $("#' . $this->div_id . "\").on('akvopedia:title-updated', function(event, title) {\n" .
+			'       $("#' . $this->title_id . "\").html(title);\n" .
+			"    });\n" .
+			"  };\n" .
+			"  \$(document).ready(function () {\n" .
+            "       if ( typeof(\$.fn['akvopedia']) !== 'function' ) {\n" .
+            "           \$(window).on('akvopedia:gadget-loaded', init);\n" .
+			"       } else {\n" .
+            "          init();\n" .
+            "       }\n" .
+			"  });\n" .
+			"})(jQuery, document);\n" .
 			"\n//-->";
 		return $script;
 	}
 
 	private function html()  {
 		$html = '<div class="' . $this->clazz . '" id="' . $this->div_id . '"><noscript>' .
-			'<iframe style="position: absolute; top: 4em; right:1em; left:1em; bottom:1em; height:90%; width:97%;" src="https://akvopedia.org/contentonly/' . $this->title . '</iframe>' .
+			'<iframe style="position: absolute; top: 4em; right:1em; left:1em; bottom:1em; height:90%; width:97%;" src="https://akvopedia.org/contentonly/' . $this->title . '"></iframe>' .
 			'</noscript></div>';
 		return $html;
 	}
 
 	private function script() {
-		return '<script>' . $this->javascript() . '</script>';
+		$s = '';
+		if ( !self::$gadget_loaded ) {
+			self::$gadget_loaded = true;
+			$s = '<script async="async" defer="defer" src="http://akvopedia.org/resources/akvopedia-gadget/akvopedia-gadget-1.9.js"></script>';
+		}
+		return $s . '<script>' . $this->javascript() . '</script>';
 	}
 
 	public function getRendered() {

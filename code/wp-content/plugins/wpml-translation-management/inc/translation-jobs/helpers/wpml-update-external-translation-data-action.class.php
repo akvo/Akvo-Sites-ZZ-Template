@@ -11,7 +11,10 @@ class WPML_TM_Update_External_Translation_Data_Action extends WPML_TM_Update_Tra
 		/** @var stdClass $prev_job */
 		if ( isset( $prev_job->original_doc_id ) ) {
 			foreach ( $prev_job->elements as $element ) {
-				$prev_translation[ $element->field_type ] = $element->field_data_translated;
+				$prev_translation[ $element->field_type ] = new WPML_TM_Translated_Field( $element->field_type,
+																						  $element->field_data,
+																						  $element->field_data_translated,
+																						  $element->field_finished );
 			}
 		}
 

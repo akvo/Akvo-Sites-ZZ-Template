@@ -1,12 +1,12 @@
 @import "common/_variables";
 
-//enable these for deployment! Also avtivate wp sass plugin!
-// @import "common/_overrides";
-// @import "common/_calculate";
+// Enable these for deployment! Also activate wp sass plugin!
+@import "common/_overrides";
+@import "common/_calculate";
 
 // Automatically injected Bower dependencies via wiredep (never manually edit this block)
 // bower:scss
-@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 // endbower
 
 @import "common/_global";

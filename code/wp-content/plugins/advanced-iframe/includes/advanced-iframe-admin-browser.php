@@ -1,16 +1,15 @@
-<?php if ($devOptions['accordeon_menu'] == 'false') { ?>
-        <div class="ai-anchor" id="browser-detection"></div>
-<?php } ?> 
-<h1 id="h1-browser-detection"><?php _e('Advanced iframe browser detection', 'advanced-iframe') ?></h1>
+<?php
+defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+?>
 <div>
      <div id="icon-options-general" class="icon_ai">
       <br>
-    </div><h2>
+    </div><h2 id="browser-detection-id">
       <?php _e('Advanced iframe browser detection', 'advanced-iframe'); ?></h2>
       <p>
      Pro users can now specify browser specific iframes. This is imporant especially for the "Show only part of the iframe" feature where browser differences of a few pixels can matter. But you can use this for other things as well because mobile, iphone, ipad can also be detected.
       </p>
-     <?php if ($evanto) {  ?>
+     <?php if ($evanto || $isDemo) {  ?>
     <p>
     <a href="#" onclick="jQuery('#browser-help').show(); return false;" > <?php _e('Show me how to configure the browser detection in advanced iframe pro.') ?></a>
     </p>
@@ -54,7 +53,7 @@
            <li>ipod - Selects all versions of ipod.</li>
            <li>iphone - Selects all versions of iphone.</li>
            <li>mobile - Selects all mobile devices.</li>
-           <li>tablets - Selects all tablet devices.</li>
+           <li>tablet - Selects all tablet devices.</li>
            <li>android - Selects all android devices.</li> 
            <li>androidtablet - Selects all android tablet devices.</li> 
            <li>desktop - Selects all desktop browsers.</li> 
@@ -64,13 +63,13 @@
 
       <h3>Credit and update</h3>
       <p>
-        Advanced iFrame Pro uses an integrated browser detection which is based on the wordpress plugin php-browser-detection 2.2.3 and the browser detection file (6005, 7 Jul 2015) from browscap.org.
+        Advanced iFrame Pro uses an integrated browser detection which is based on the wordpress plugin php-browser-detection 3.2.
       </p>
       <p>
-         You can get an updated version of the browsercap.ini lite file here: http://browscap.org/<br />Please use the light version as it conains all settings for the provided settings and the full version is really big! 
+         If the automatich update does not work you can get an updated version of the browsercap.ini lite file here: http://browscap.org/<br />Please use the light version as it conains all settings for the provided settings ! 
       </p>
       <p>
-         If you want to update the browser detection file get the lite_php_browscap.ini from there and rename it to php-browser-detection-browscap.ini.<br />
+         If you want to update the browser detection file get the lite_php_browscap.ini from there and rename it to php-browser-detection/cache/browscap.ini.<br />
          Or always get the latest version of the advanced iframe pro plugin. This file is also updated there!
       </p>
       </div>

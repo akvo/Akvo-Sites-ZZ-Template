@@ -16,12 +16,10 @@ abstract class WPML_Translation_Job extends WPML_Translation_Job_Helper {
 	 * @param WPML_TM_Blog_Translators $blog_translators
 	 */
 	function __construct( $job_id, $batch_id = null, &$blog_translators = null ) {
-		global $wpdb;
-
 		$this->job_id           = $job_id;
 		$batch_id               = $batch_id ? $batch_id : $this->get_batch_id();
 		$this->batch_id         = $batch_id ? $batch_id : TranslationProxy_Batch::update_translation_batch();
-		$this->blog_translators = $blog_translators ? $blog_translators : new WPML_TM_Blog_Translators( $wpdb );
+		$this->blog_translators = $blog_translators ? $blog_translators : wpml_tm_load_blog_translators();
 	}
 
 	public abstract function cancel();
@@ -30,6 +28,9 @@ abstract class WPML_Translation_Job extends WPML_Translation_Job_Helper {
 
 	public abstract function to_array();
 
+	/**
+	 * @return string
+	 */
 	abstract function get_title();
 
 	public function get_status() {
@@ -38,6 +39,12 @@ abstract class WPML_Translation_Job extends WPML_Translation_Job_Helper {
 		}
 
 		return $this->status;
+	}
+	
+	public function get_status_value() {
+		$this->maybe_load_basic_data();
+		
+		return $this->basic_data->status;
 	}
 
 	public function get_id() {
@@ -105,6 +112,9 @@ abstract class WPML_Translation_Job extends WPML_Translation_Job_Helper {
 		return $code && $as_name ? $this->lang_code_to_name( $code ) : $code;
 	}
 
+	/**
+	 * @return string|false
+	 */
 	public function get_translator_name() {
 		$this->maybe_load_basic_data();
 		if ( $this->basic_data->translation_service == TranslationProxy::get_current_service_id() ) {
@@ -206,13 +216,13 @@ abstract class WPML_Translation_Job extends WPML_Translation_Job_Helper {
 		if ( isset( $data_array[ 'post_title' ] ) ) {
 			$data_array[ 'post_title' ] = esc_html( $data_array[ 'post_title' ] );
 		}
-		$data_array[ 'translator_name' ]      = $this->get_translator_name();
-		$data_array[ 'batch_id' ]             = $job_data->batch_id;
-		$data_array[ 'source_language_code' ] = $this->basic_data->source_language_code;
-		$data_array[ 'language_code' ]        = $this->basic_data->language_code;
+		$data_array['translator_name']      = $this->get_translator_name();
+		$data_array['batch_id']             = $job_data->batch_id;
+		$data_array['source_language_code'] = $this->basic_data->source_language_code;
+		$data_array['language_code']        = $this->basic_data->language_code;
 		$data_array[ 'translator_html' ]      = $this->get_translator_html( $this->basic_data );
-		$data_array[ 'type' ]                 = $this->get_type();
-		$data_array[ 'lang_text' ]            = $this->generate_lang_text();
+		$data_array['type']                 = $this->get_type();
+		$data_array['lang_text']            = $this->generate_lang_text();
 
 		return $data_array;
 	}
@@ -224,12 +234,39 @@ abstract class WPML_Translation_Job extends WPML_Translation_Job_Helper {
 		}
 	}
 
+	private function get_inactive_translation_service( $translation_service_id ) {
+		$cache_key   = $translation_service_id;
+		$cache_group = 'get_inactive_translation_service';
+		$cache_found = false;
+
+		$service = wp_cache_get( $cache_key, $cache_group, false, $cache_found );
+
+		if ( ! $cache_found ) {
+			try {
+				$service = TranslationProxy_Service::get_service( $translation_service_id );
+			} catch ( TranslationProxy_Api_Error $ex ) {
+				$service = false;
+			}
+			if ( ! $service ) {
+				$service       = new stdClass();
+				$service->name = __( '(inactive and unknown service)', 'wpml-translation-management' );
+			}
+			wp_cache_set( $cache_key, $service, $cache_group );
+		}
+
+		return $service;
+	}
+
 	protected function get_translator_html( $job ) {
 
 		$job = (object) $job;
 		$current_service_name = TranslationProxy::get_current_service_name();
 		$translation_services = array( 'local', TranslationProxy::get_current_service_id() );
 
+		if ( isset( $job->translation_service ) && ! in_array( $job->translation_service, $translation_services ) ) {
+			$inactive_service     = $this->get_inactive_translation_service( $job->translation_service );
+			$current_service_name = $inactive_service->name;
+		}
 		$translator = '';
 
 		if ( $job->translation_service && $job->translation_service !== 'local' ) {
@@ -286,7 +323,8 @@ abstract class WPML_Translation_Job extends WPML_Translation_Job_Helper {
 				'echo'       => false,
 				'local_only' => $local_only
 			);
-			$translator .= TranslationManagement::translators_dropdown( $args );
+			$translators_dropdown = new WPML_TM_Translators_Dropdown( $this->blog_translators );
+			$translator .= $translators_dropdown->render( $args );
 			$translator .= '<input type="hidden" id="icl_tj_ov_' . $job_id . '" value="' . (int) $job->translator_id . '" />';
 			$translator .= '<input type="hidden" id="icl_tj_ty_' . $job_id . '" value="' . strtolower( $this->get_type() ) . '" />';
 			$translator .= '<span class="icl_tj_select_translator_controls" id="icl_tj_tc_' . ( $job_id ) . '">';

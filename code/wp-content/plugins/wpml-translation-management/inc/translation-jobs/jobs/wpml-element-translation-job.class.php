@@ -23,17 +23,14 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 	function __construct( $job_id, $batch_id = null, &$tm_instance = null, &$job_factory = null ) {
 		parent::__construct( $job_id, $batch_id, $tm_instance );
 		$this->original_del_text = __( "The original has been deleted!", "sitepress" );
-
 		if ( ! $job_factory ) {
 			global $wpml_translation_job_factory;
 			$job_factory = &$wpml_translation_job_factory;
 		}
-
 		$this->job_factory = $job_factory;
 	}
 
-	function get_type(){
-
+	function get_type() {
 		return 'Post';
 	}
 
@@ -45,20 +42,15 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 		$data_array['status']               = $this->get_status();
 		$data_array['translation_edit_url'] = $this->get_url();
 		$data_array['original_url']         = $this->get_url( true );
-		$data_array['post_title']           = $this->get_title();
+		$data_array['post_title']           = esc_html( $this->get_title() );
 
 		return $data_array;
 	}
 
 	function to_xliff_file() {
-		$xliff = new WPML_TM_xliff();
+		$xliff = new WPML_TM_Xliff_Writer( $this->job_factory );
 
 		return $xliff->get_job_xliff_file( $this->get_id() );
-	}
-
-	function get_id() {
-
-		return $this->job_id;
 	}
 
 	function get_original_element_id() {
@@ -83,12 +75,21 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 		return $translation_id;
 	}
 
-	function save_to_element( $complete = false ) {
+	/**
+	 * Saves the job data in this object to the database (e.g. to a post)
+	 *
+	 * @param bool $complete whether or not to set the status
+	 *                       of the target element to complete
+	 */
+	public function save_to_element( $complete = false ) {
+		global $wpdb, $wpml_post_translations, $wpml_term_translations;
+
+		$wpml_tm_records  = new WPML_TM_Records( $wpdb, $wpml_post_translations, $wpml_term_translations );
 		$save_data_action = new WPML_Save_Translation_Data_Action( array(
 			'job_id'   => $this->get_id(),
 			'complete' => $complete,
 			'fields'   => array()
-		) );
+		), $wpml_tm_records );
 		$save_data_action->save_translation();
 	}
 
@@ -96,7 +97,6 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 	 * @return int
 	 */
 	function estimate_word_count() {
-
 		$words           = 0;
 		$lang_code       = $this->get_source_language_code();
 		$is_asian_lang   = in_array( $lang_code, $this->asian_languages, true );
@@ -155,7 +155,6 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 
 	/**
 	 * @param TranslationProxy_Project $project
-	 * @param bool $batch_mode
 	 * @param int $translator_id
 	 * @param WPML_TM_CMS_ID $cms_id_helper
 	 * @param TranslationManagement $tm_instance
@@ -163,7 +162,7 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 	 *
 	 * @return array
 	 */
-	function send_to_tp( $project, $batch_mode, $translator_id, &$cms_id_helper, &$tm_instance, $note = null ) {
+	function send_to_tp( $project, $translator_id, &$cms_id_helper, &$tm_instance, $note = null ) {
 		global $wpdb;
 
 		$this->maybe_load_basic_data();
@@ -179,13 +178,10 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 		$target_language = $this->get_language_code();
 
 		try {
-			if ( $batch_mode ) {
-				$res = $project->send_to_translation_batch_mode( $file, $title, $cms_id, $url, $source_language, $target_language, $word_count, $translator_id, $note, $is_update );
-			} else {
-				$res = $project->send_to_translation( $file, $title, $cms_id, $url, $source_language, $target_language, $word_count, $translator_id, $note, $is_update );
-			}
+			$res = $project->send_to_translation_batch_mode( $file, $title, $cms_id, $url, $source_language, $target_language, $word_count, $translator_id, $note, $is_update );
 		} catch ( Exception $err ) {
 			// The translation entry will be removed
+			$project->errors[] = $err;
 			$res = 0;
 		}
 
@@ -230,8 +226,16 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 		return array( isset( $err ) ? $err : false, $project, $res );
 	}
 
+	/**
+	 * @param bool|false $original
+	 *
+	 * @return string
+	 */
 	abstract function get_url( $original = false );
 
+	/**
+	 * @return WP_Post|WPML_Package|mixed
+	 */
 	abstract function get_original_document();
 
 	protected function load_status() {
@@ -286,6 +290,9 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 		);
 	}
 
+	public function maybe_load_terms_from_post_into_job( $delete ) {
+	}
+	
 	private function get_iclt_field( $field_name, $translation ) {
 		global $wpdb;
 
@@ -308,4 +315,6 @@ abstract class WPML_Element_Translation_Job extends WPML_Translation_Job {
 
 		return $value;
 	}
+	
+
 }

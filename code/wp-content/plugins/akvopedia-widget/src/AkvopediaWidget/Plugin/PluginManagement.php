@@ -32,8 +32,7 @@ class PluginManagement
 
 	public static function wp_enqueue_scripts()
 	{
-		\wp_enqueue_script( 'akvopedia-gadget', 'https://akvopedia.org/resources/akvopedia-gadget/akvopedia-gadget.js', array( 'jquery' ));
-		\wp_enqueue_style( 'akvopedia-gadget', plugins_url( '/css/style.css', AKVOPEDIA_WIDGET_PLUGIN_DIR . '/akvopedia-widget.php'));
+		\wp_enqueue_style( 'akvopedia-gadget', plugins_url( '/css/style.css', AKVOPEDIA_WIDGET_PLUGIN_DIR . '/akvopedia-widget.php'), array(), AKVOPEDIA_WIDGET_VERSION );
 	}
 
 }

@@ -16,7 +16,15 @@ class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 	 */
 	public function get_url( $original = false ) {
 
-		return $original ? apply_filters( 'wpml_external_item_url', '', $this->get_original_element_id() ) : '';
+		$url        = null;
+		$element_id = null;
+
+		if ( $original ) {
+			$element_id = $this->get_original_element_id();
+			$url        = apply_filters( 'wpml_external_item_url', '', $element_id );
+		}
+
+		return apply_filters( 'wpml_element_translation_job_url', $url, $original, $element_id, $this->get_original_document() );
 	}
 
 	/**
@@ -28,6 +36,14 @@ class WPML_External_Translation_Job extends WPML_Element_Translation_Job {
 		return $original_element
 			? apply_filters( 'wpml_tm_external_translation_job_title', $this->title_from_job_fields(), $original_element->ID )
 			: $this->original_del_text;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_type_title() {
+		$original_element = $this->get_original_document();
+		return $original_element->kind;
 	}
 
 	protected function load_resultant_element_id(){

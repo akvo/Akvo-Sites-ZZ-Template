@@ -1,21 +1,21 @@
-=== WP Flexible Map ===
+=== Flexible Map ===
 Contributors: webaware
-Plugin Name: WP Flexible Map
-Plugin URI: http://flexible-map.webaware.net.au/
-Author URI: http://webaware.com.au/
-Donate link: http://shop.webaware.com.au/donations/?donation_for=Flexible+Map
+Plugin Name: Flexible Map
+Plugin URI: https://flexible-map.webaware.net.au/
+Author URI: https://shop.webaware.com.au/
+Donate link: https://shop.webaware.com.au/donations/?donation_for=Flexible+Map
 Tags: google, map, maps, google maps, shortcode, google maps shortcode, kml
-Requires at least: 3.2.1
-Tested up to: 4.3
-Stable tag: 1.10.0
+Requires at least: 4.0
+Tested up to: 4.7
+Stable tag: 1.12.1
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Embed Google Maps in pages and posts, either by centre coordinates or street address, or by URL to a Google Earth KML file.
+Embed Google Maps shortcodes in pages and posts, either by centre coordinates or street address, or by URL to a Google Earth KML file.
 
 == Description ==
 
-Flexible Map allows you to add Google Maps to your WordPress website.
+Flexible Map allows you to add Google Maps to your WordPress website with simple shortcodes.
 
 **Features:**
 
@@ -23,7 +23,6 @@ Flexible Map allows you to add Google Maps to your WordPress website.
  * by centre coordinates
  * by street address
  * by URL to a Google Earth KML file
-* no special Google Maps key is required -- uses the latest stable Google Maps API
 * simple shortcode for adding maps to pages/posts
 * PHP function `flexmap_show_map()` for theme and plugin developers
 * supports multiple maps on a page/post
@@ -34,7 +33,8 @@ Flexible Map allows you to add Google Maps to your WordPress website.
 * directions can be dropped into any div element with an ID
 * minimal dependencies -- just WordPress and the Google Maps API
 
-[Try WP Flexible Map online](http://flexible-map.webaware.net.au/).
+[Get started with Flexible Map](https://flexible-map.webaware.net.au/manual/getting-started/).
+[Read the manual online](https://flexible-map.webaware.net.au/manual/).
 
 = Sponsorships =
 
@@ -47,24 +47,28 @@ Thanks for sponsoring new features on WP Flexible Maps!
 Many thanks to the generous efforts of our translators:
 
 * Czech (cs) -- [caslavak](https://profiles.wordpress.org/caslavak/)
-* Dutch (nl) -- [Ivan Beemster](http://www.lijndiensten.com/)
-* French (fr) -- [mister klucha](https://profiles.wordpress.org/mister-klucha/)
-* German (de) -- [Carib Design](http://www.caribdesign.com/)
+* Dutch (nl) -- [Ivan Beemster](http://www.lijndiensten.com/) and the [Dutch translation team](https://translate.wordpress.org/locale/nl/default/wp-plugins/wp-flexible-map)
+* French (fr) -- [mister klucha](https://profiles.wordpress.org/mister-klucha/) and the [French translation team](https://translate.wordpress.org/locale/fr/default/wp-plugins/wp-flexible-map)
+* German (de) -- [Carib Design](http://www.caribdesign.com/) and the [German translation team](https://translate.wordpress.org/locale/de/default/wp-plugins/wp-flexible-map)
 * Greek (el) -- [Pantelis Orfanos](https://profiles.wordpress.org/ironwiller/)
 * Hungarian (hu) -- Krisztián Vörös
+* Italian (it_IT) -- the [Italian translation team](https://translate.wordpress.org/locale/it/default/wp-plugins/wp-flexible-map)
+* Korean (ko_KR) -- the [Korean translation team](https://translate.wordpress.org/locale/ko/default/wp-plugins/wp-flexible-map)
+* Swedish (sv_SE) -- the [Swedish translation team](https://translate.wordpress.org/locale/sv/default/wp-plugins/wp-flexible-map)
 * Norwegian: Bokmål (nb_NO) -- [neonnero](http://www.neonnero.com/)
 * Norwegian: Nynorsk (nn_NO) -- [neonnero](http://www.neonnero.com/)
 * Portuguese (pt_BR) -- Alexsandro Santos and Paulo Henrique
 * Spanish (es) -- [edurramos](https://profiles.wordpress.org/edurramos/)
 * Welsh (cy) -- [Dylan](https://profiles.wordpress.org/dtom-ct-wp/)
 
-The initial translations for all other languages were made using Google Translate, so it's likely that some will be truly awful! If you'd like to help out by translating this plugin, please [sign up for an account and dig in](https://translate.webaware.com.au/projects/flexible-map).
+The initial translations for all other languages were made using Google Translate, so it's likely that some will be truly awful! If you'd like to help out by translating this plugin, please [sign up for an account and dig in](https://translate.wordpress.org/projects/wp-plugins/wp-flexible-map).
 
 == Installation ==
 
 1. Upload this plugin to your /wp-content/plugins/ directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Add the shortcode `[flexiblemap]` to your pages / posts to embed maps
+3. Get an [API Key from Google](https://developers.google.com/maps/documentation/javascript/) and add it to Settings > Flexible Map
+4. Add the shortcode `[flexiblemap]` to your pages / posts to embed maps
 
 There are two ways to load maps with this plugin:
 
@@ -84,9 +88,9 @@ Either the center or the address paramater is required. If you provide both, the
 * **link**: URL to link from the marker title, e.g. *link="http://example.com/"*
 * **linktarget**: where marker link opens, e.g. *linktarget="_blank"*
 * **linktext**: marker link text, overriding the default text
-* **icon**: URL to icon for the marker, e.g. *icon="http://maps.google.com/mapfiles/kml/pal3/icon29.png"*
+* **icon**: URL to icon for the marker, e.g. *icon="https://maps.google.com/mapfiles/kml/pal3/icon29.png"*
 * **description**: a description of the marker location (can have HTML links), e.g. *description="Lorem ipsum dolor sit amet"*
-* **html**: some simple HTML to add to the info window, e.g. *`<img src='http://example.com/logo.img' />`*
+* **html**: some simple HTML to add to the info window, e.g. *`<img src='https://example.com/logo.img' />`*
 * **showinfo**: show the marker's info window when the map loads, from [true, false], e.g. *showinfo="false"*; default=true
 
 *Samples*:
@@ -161,23 +165,23 @@ There are also some filter hooks that allow you to change the behaviour of the p
 * `flexmap_shortcode_script`: filter the generated JavaScript
 * `flexmap_custom_map_types`: register custom Google Maps map types
 
-For more information and examples, see [the reference website](http://flexible-map.webaware.net.au/).
+For more information and examples, see [the reference website](https://flexible-map.webaware.net.au/).
 
 == Frequently Asked Questions ==
 
-= Why do I get "The Google Maps API server rejected your request"? =
+= Do I need an API key? =
 
-If Google Maps is telling you this:
-
-> The Google Maps API server rejected your request. The "sensor" parameter specified in the request must be set to either "true" or "false".
-
-then something on your website is stripping the query strings on scripts. It's probably a misguided attempt to make your website more secure, and it's a dumb idea. Some so-called "security" plugins do this, and I've heard of a theme doing it too. You need to find out what is doing it and fix it, or remove it. Start by deactivating plugins that pretend to enhance security and retest, then try switching your theme to twentytwelve to see if the theme is the problem.
+All websites using Google Maps for the first time need an API key. Websites that were using Google Maps before 2016-06-22 are permitted to keep using Google Maps without a key -- for now, at least. Read [this Google blog post](https://googlegeodevelopers.blogspot.com.au/2016/06/building-for-scale-updates-to-google.html) for more information.
 
 = Where are the settings? =
 
-There are none! You just need to add some attributes to your shortcode telling the map what to do.
+You can set your [API key](https://developers.google.com/maps/documentation/javascript/) in the WordPress admin:
 
-Of course, in WordPress there is a plugin for everything :) so if you *want* settings, please install the [Flexible Map Options plugin](https://wordpress.org/plugins/wp-flexible-map-options/). That plugin lets you set some defaults so that if you use the same attributes over and over, you can put them all in one place.
+Settings > Flexible Map
+
+For everything else, just add some attributes to your shortcode telling the map what to do.
+
+Of course, in WordPress there is a plugin for everything :) so if you *want* more settings, please install the [Flexible Map Options plugin](https://wordpress.org/plugins/wp-flexible-map-options/). That plugin lets you set some defaults so that if you use the same attributes over and over, you can put them all in one place.
 
 = Can I add multiple markers to a map? =
 
@@ -206,7 +210,7 @@ When you use just centre coordinates for your map, the directions may send peopl
 
 = How do I get the maps to use my language? =
 
-The plugin uses localised messages for things like the Directions link and the default message on links in info windows. If you have your [WordPress installation set to use your language](http://codex.wordpress.org/WordPress_in_Your_Language), the plugin should automatically pick it up. If you need to force it to pick up your language (or want to offer a different language), use the `locale` attribute, e.g. `locale="ru"` or `locale="zh-TW"`.
+The plugin uses localised messages for things like the Directions link and the default message on links in info windows. If you have your [WordPress installation set to use your language](https://codex.wordpress.org/WordPress_in_Your_Language), the plugin should automatically pick it up. If you need to force it to pick up your language (or want to offer a different language), use the `locale` attribute, e.g. `locale="ru"` or `locale="zh-TW"`.
 
 Google Maps will use the locale information from your web browser to help display maps and directions in your language (see your browser's language settings). If you want to force the Google Maps language for every map on a page, you can use a filter hook. For example, here's how to force the Google Maps language to match the language of the page / post its on (e.g. when using WPML translated content):
 
@@ -219,7 +223,7 @@ function force_flexmap_map_language($args) {
 
 = You've translated my language badly / it's missing =
 
-The initial translations were made using Google Translate, so it's likely that some will be truly awful! If you'd like to help out by translating this plugin, please [sign up for an account and dig in](https://translate.webaware.com.au/projects/flexible-map).
+The initial translations were made using Google Translate, so it's likely that some will be truly awful! If you'd like to help out by translating this plugin, please [sign up for an account and dig in](https://translate.wordpress.org/projects/wp-plugins/wp-flexible-map).
 
 = The map is broken in tabs / accordions =
 
@@ -294,7 +298,7 @@ To make it load locale scripts as well, e.g. for French and Chinese language tex
 
 `flexmap_load_scripts(array('fr', 'zh'));`
 
-The plugin will detect when AJAX is being used via the [WordPress standard method](http://codex.wordpress.org/AJAX_in_Plugins), and adjust accordingly (but you still need to load the scripts as above). If another method is used, add `isajax='true'` to the shortcode attributes.
+The plugin will detect when AJAX is being used via the [WordPress standard method](https://codex.wordpress.org/AJAX_in_Plugins), and adjust accordingly (but you still need to load the scripts as above). If another method is used, add `isajax='true'` to the shortcode attributes.
 
 NB: currently, only AJAX methods that parse script tags will work correctly; this includes some [jQuery methods](http://stackoverflow.com/q/2203762/911083) (but [not all](http://stackoverflow.com/a/2699905/911083)). A future version of the plugin will be more AJAX friendly.
 
@@ -304,230 +308,26 @@ Either turn off CloudFlare Rocketscript :) or install the [Flxmap No Rocketscrip
 
 == Screenshots ==
 
-1. `[flexiblemap center="-32.918657,151.797894" title="Nobby's Head" zoom="14" width="500" height="400" directions="true" maptype="satellite"]`
-2. `[flexiblemap address="116 Beaumont Street Hamilton NSW Australia" title="Raj's Corner" description="SWMBO's favourite Indian diner" width="500" height="400" directions="true"]`
-3. `[flexiblemap src="http://webaware.com.au/maps/example-toronto.kml?v=2" width="500" height="400" maptype="satellite"]`
-4. `[flexiblemap center="-34.916721,138.828878" width="500" height="400" title="Adelaide Hills" directions="true" showdirections="true" directionsfrom="Adelaide"]`
+1. `[flexiblemap center="-32.918657,151.797894" title="Nobby's Head" zoom="14" width="100%" height="400px" directions="true" maptype="satellite"]`
+2. `[flexiblemap address="116 Beaumont Street Hamilton NSW Australia" title="Raj's Corner" description="SWMBO's favourite Indian diner" width="100%" height="400px" directions="true"]`
+3. `[flexiblemap src="http://webaware.com.au/maps/example-toronto.kml" width="100%" height="400px" maptype="satellite"]`
+4. `[flexiblemap center="-34.916721,138.828878" width="100%" height="400px" title="Adelaide Hills" directions="true" showdirections="true" directionsfrom="Adelaide" region="au"]`
+5. Setting screen with API key field
+
+== Upgrade Notice ==
+
+= 1.12.1 =
+
+bump version of Google Maps API to 3.26
 
 == Changelog ==
 
-= 1.10.0, 2015-08-23 =
+The full changelog can be found [on GitHub](https://github.com/webaware/flexible-map/blob/master/changelog.md). Recent entries:
 
-* fixed: Brazilian Portuguese translation (thanks, Alexsandro Santos and Paulo Henrique!)
-* fixed: JavaScript error on KML map marker click when marker has no description
-* fixed: can show directions without having a marker title (or infowindow)
-* added: `linktarget` attribute for changing where marker links open, e.g. `linktarget="_blank"`
-* added: `linktext` attribute for changing marker link text
-* added: `dirunitsystem` attribute for forcing directions units to metric or imperial
-* added: `dirtravelmode` attribute for selecting directions by driving, bicycling, walking, or transit
-* changed: bump version of Google Maps API to 3.20
-* changed: always load Google Maps API on HTTPS
+### 1.12.1, 2016-11-18
 
-= 1.9.2, 2015-03-21 =
+* changed: bump version of Google Maps API to 3.26
 
-* fixed: sometimes vertical copyright message on IE8 with some themes
-* changed: bump version of Google Maps API to 3.19 (resolves some Safari styling issues)
+### 1.12.0, 2016-06-27
 
-= 1.9.1, 2014-12-29 =
-
-* fixed: zoom control styling / hiding was broken in v1.9.0
-
-= 1.9.0, 2014-12-24 =
-
-* fixed: maps broken when hidden in tabs / accordions (not for IE 10 and earlier; uses MutationObserver)
-* fixed: strip spaces from map coordinates
-* fixed: suppress border radius on images within map containers
-* added: server-side lookup of address, to reduce the number of Google Maps queries when only an address is given
-* added: support for custom map types (inc. styled maps)
-* added: `maptypes` attribute for selecting which map types can be picked by visitors
-* changed: refactored JavaScript for localised strings
-
-= 1.8.3, 2014-12-17 =
-
-* fixed: CSS for directions in twentyfifteen theme and others that toss table-layout:fixed around willy nilly
-
-= 1.8.2, 2014-12-06 =
-
-* added: Welsh translation (thanks, [Dylan](https://profiles.wordpress.org/dtom-ct-wp/)!)
-
-= 1.8.1, 2014-10-05 =
-
-* fixed: Hungarian translation (thanks, Krisztián Vörös!)
-* changed: bump version of Google Maps API to 3.17
-
-= 1.8.0, 2014-08-31 =
-
-* fixed: Czech translation (thanks, [caslavak](https://profiles.wordpress.org/caslavak/)!)
-* fixed: Norwegian translations (thanks, [neonnero](http://www.neonnero.com/)!)
-* changed: localisation uses standard .mo files now; if you'd like to help translate, please [sign up for an account and dig in](https://translate.webaware.com.au/projects/flexible-map).
-
-= 1.7.3.1, 2014-03-22 =
-
-* fixed: infowindow width on some Webkit browsers, and IE10/11
-
-= 1.7.3, 2014-03-16 =
-
-* fixed: German translation (thanks, [Carib Design](http://www.caribdesign.com/)!)
-* fixed: some themes (e.g. Evolve) mess up Google Maps directions markers
-* fixed: CSS for infowindows with Google Maps Visual Refresh / API v3.15
-* changed: removed instructions page, better handled by new homepage for plugin
-* changed: bump version of Google Maps API to 3.15
-* added: KML cache buster attribute `kmlcache`, for dynamically created KML maps
-* added: WordPress filter `flexmap_shortcode_script`
-* removed: `visualrefresh` attribute doesn't do anything any more (Google Maps API has adopted Visual Refresh as standard)
-
-= 1.7.2, 2014-01-01 =
-
-* fixed: Spanish translation (thanks, [edurramos](https://profiles.wordpress.org/edurramos/)!)
-* fixed: clean up JSHint warnings
-* changed: Slovenian translation refresh from Google Translate (human translators wanted!)
-* changed: plugin homepage, better documentation and examples, will develop as time permits!
-
-= 1.7.1, 2013-10-13 =
-
-* fixed: Google link was showing marker at centre, not at marker location when marker != centre
-
-= 1.7.0, 2013-10-12 =
-
-* fixed: Greek translation (thanks, [Pantelis Orfanos](https://profiles.wordpress.org/ironwiller/)!)
-* fixed: Dutch translation (thanks, [Ivan Beemster](http://www.lijndiensten.com/)!)
-* fixed: KML map zoom sometimes doesn't happen on first page visit
-* fixed: some themes (e.g. twentythirteen) mess up Google Maps directions markers
-* fixed: Google link opens maps without marker (NB: <= IE8 not supported)
-* added: `dirshowsteps` attribute, to allow directions steps (i.e. turn-by-turn steps) to be turned off
-* added: `dirshowssearch` attribute, to allow directions search form to be turned off
-* added: `zoomstyle` attribute, to allow large or small zoom controls
-* added: `visualrefresh` attribute, to enable [visual refresh](https://developers.google.com/maps/documentation/javascript/basics#VisualRefresh) for all maps on the page
-* added: default CSS sets info window text color to #333
-* changed: bump version of Google Maps API to 3.13
-
-= 1.6.5, 2013-07-19 =
-
-* fixed: stop twentythirteen theme stuffing up Google Maps infowindows with its too-promiscuous box-sizing rules
-* added: `dirdraggable` and `dirnomarkers` attributes
-
-= 1.6.4, 2013-06-14 =
-
-* fixed: can set directions=false and showdirections=true
-* fixed: space before colon in fr translation (thanks, [mister klucha](https://wordpress.org/support/profile/mister-klucha)!)
-* added: load unminified script if SCRIPT_DEBUG is defined / true
-* changed: clicking directions link sets focus on From: address again
-* changed: bump version of Google Maps API to 3.12
-
-= 1.6.3, 2013-03-14 =
-
-* fixed: HTML description now works for address-based maps (thanks, [John Sundberg](https://profiles.wordpress.org/bhwebworks/)!)
-
-= 1.6.2, 2013-03-04 =
-
-* fixed: CSS fix for themes that muck up Google Maps images by specifying background colour on images without being selective
-* added: icon attribute to set marker icon on centre / address maps
-
-= 1.6.1, 2013-01-29 =
-
-* fixed: infowindow auto-pans on load, to prevent the top of the bubble being cropped
-* added: WordPress filter `flexmap_google_maps_api_args` for filtering array of arguments before building Google Maps API URL
-* added: function flexmap_show_map() accepts an attribute "echo", and returns a string without output to screen when "echo"=>"false"
-* changed: all scripts now loaded through wp_enqueue_scripts, including language scripts (thanks to a [tip from toscho](http://wordpress.stackexchange.com/a/38335/24260))
-* changed: bump version of Google Maps API to 3.11
-
-= 1.6.0, 2012-12-30 =
-
-* added: themes can call function flexmap_load_scripts() to force load of scripts, e.g. on single-page AJAX websites
-* added: can add HTML block to infowindow, e.g. images
-* fixed: no auto-focus on directions search field, thus no auto-scroll page to last directions search field!
-
-= 1.5.3, 2012-11-30 =
-
-* fixed: when attributes showdirections or directionsfrom were specified, but not directions, the directions panel was not added to page and a JavaScript error was generated
-* changed: bump version of Google Maps API to 3.10
-
-= 1.5.2, 2012-10-12 =
-
-* fixed: KML maps broken; KMLLayer status_changed event unreliable, use defaultviewport_changed event instead (possible Google Maps API change)
-
-= 1.5.1, 2012-09-30 =
-
-* changed: tighten up FlexibleMap API to keep private members private (in case they change later)
-
-= 1.5.0, 2012-09-29 =
-
-* added: new shortcode attribute "id" which will be used for the container div, instead of the random unique div id
-* added: FlexibleMap object is accessible via global variable with name derived from container div id (e.g. if you need to access the Google Maps map object in your own scripts)
-* added: redraw() and redrawOnce() methods, for when the map needs to be redrawn correctly (e.g. when initially hidden then revealed)
-* added: KML maps support directions (sponsored by [Roger Los](http://www.rogerlos.com/) -- thanks!)
-
-= 1.4.1, 2012-09-11 =
-
-* fixed: targetfix was not stopping KML marker links opening in new window/tab since Google Maps API 3.9
-
-= 1.4.0, 2012-08-22 =
-
-* changed: bump version of Google Maps API to 3.9
-* added: allow CSS units in ch, rem, vh, vw, vmin, vmax
-
-= 1.3.1, 2012-07-13 =
-
-* fixed: width/height in digits (no units) defaults to pixels (sorry folks, I thought I tested that, but missed it somehow!)
-
-= 1.3.0, 2012-07-12 =
-
-* fixed: Norwegian translation had incorrect file name
-* fixed: Malaysian translation had incorrect index (was overwriting Macedonian translation)
-* added: filters so that theme and plugin developers can modify the behaviour of this plugin
-* added: width and height can be any valid CSS units, not just pixels
-
-= 1.2.0, 2012-06-29 =
-
-* added: option showdirections, to show the directions search when the map loads
-* added: option directionsfrom, to set the default from: location, and immediately search for directions when showdirections is set
-
-= 1.1.2, 2012-05-20 =
-
-* fixed: some themes set box-shadow on all images, now forceably fixed for Google Maps images
-* added: option to control whether links on KML maps open in new window
-
-= 1.1.1, 2012-04-15 =
-
-* fixed: instructions updated to reflect recent changes
-
-= 1.1.0, 2012-04-15 =
-
-* added: locale-specific messages (using translations from Google Translate) e.g. Directions link
-* wanted: translators to help me add new translations, and clean up the messages I got from Google Translate!
-* fixed: use region to help refine street address searches
-
-= 1.0.6, 2012-04-06 =
-
-* fixed: use plugin_dir_url() to get url base, and protocol-relative url to load Google Maps API (SSL compatible)
-
-= 1.0.5, 2012-03-17 =
-
-* fixed: CSS fixes for themes that muck up Google Maps images (e.g. twentyeleven)
-* added: infowindow styles now in enqueued stylesheet
-
-= 1.0.4, 2012-03-06 =
-
-* fixed: use LatLng methods to access latitude/longitude, instead of (ever changing) Google Maps API private members
-* added: tooltip on markers in non-KML maps
-* added: options to disable pan control, zoom control, drag to pan, double-click to zoom
-
-= 1.0.3, 2012-02-27 =
-
-* fixed: address query updated to work with Google Maps v3.8 (so using address for centre marker works again)
-* fixed: tied Google Maps API to v3.8 so newer versions don't break plugin, and will keep updated as API changes
-
-= 1.0.2, 2012-02-04 =
-
-* added: address attribute as alternative to center coordinates
-* added: use address attribute for directions, if given (so that directions match address)
-* changed: readme improved a little
-* changed: refactored code for DRY (don't repeat yourself)
-
-= 1.0.1, 2012-01-26 =
-
-* fixed: directions bugs in JavaScript for Opera, IE
-
-= 1.0.0, 2012-01-08 =
-
-* final cleanup for public release
+* added: support for [Google Maps API key](https://developers.google.com/maps/documentation/javascript/), required [since 2016-06-22 for new websites](https://googlegeodevelopers.blogspot.com.au/2016/06/building-for-scale-updates-to-google.html).
