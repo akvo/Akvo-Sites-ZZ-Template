@@ -1,68 +1,74 @@
 
-Friday, 2 February 2018 by @lynngre
+Friday, 2 February 2018 @lynngre
 
-## New 
+This release includes some of the backend menu simplification options for website Super Admins, allowing the opportunity to hide menu or dashboard items and settings, which are not required for all users.
 
-This release includes some of the backend menu simplification options for website administrators, allowing the opportunity to hide features which are not required for all users.
+We have also included an update to the Akvo RSR data feed. You can now add feeds for your Akvo RSR projects and updates, filtered by country.
 
-We have also included an update for the Akvo RSR data. You can now create feeds for your Akvo RSR projects and updates, filtered by country.
+The option to add your own selected Google Font via the 'Customize' area has now been included. This means that you can find a Google Font you like and install it directly on your site, rather than choose one of the preselected fonts. 
 
-The option to add your own selected Google Font via the 'Customize' area has now been included. This means that you can find a Google Font you like and install it directly to your site, rather than choose one of the preselected fonts.
 
 ## New Features
 
-### 
+### Install Google Font
+
+Install up to 3 new Google Fonts via 'Customize'.
+To find out how check out the support article http://sitessupport.akvo.org/article/show/48023-install-a-google-font.
 
 
+Github issue: #366  
 
 
-### 
+### Hide backend items 
 
+Ability to allow Super Admins to hide menu or dashboard items and settings from users for whom they are not relevant.
+To find out how check out the support article http://sitessupport.akvo.org/article/show/48024-hide-dashboard-and-menu-items-for-users.
 
+Github issue: #359 & #280 
 
-Github issue: #
+### Add Akvo RSR projects and updates by country
+
+Use the Akvo RSR to pull projects and updates by country via the Data Feed plugin. Change was made to allow proper handling of multiple projects filtered by location.
+
+Github issue: #362 & #132 
 
 
 ## Fixes
 
-### 
+### Akvo cards
 
-Github issue: #
+Shortcuts can now be used for custom post types such as Media Library, Blog posts, etc, to pages or widgets with shortcodes filtered by a chosen taxonomy.
 
-
-### 
-
-Github issue: #
+Example: [akvo-cards type="media" filter_by="media-category:YOURSLUG"] or [akvo-cards type="media" filter_by="types:YOURSLUG"]
 
 
-### 
-
-Github issue: #
+Github issue: #368 & #330 
 
 
-### 
+### Text wrapping for titles on widgets
 
-Github issue: #
+Improved for responsiveness.
+
+Github issue: #344 & #343 
 
 
-###
+### 'Search box' text not translating
 
-Option has been added under 'customise/events' to update the 'Meet' text.
+The default text in the search box was not being translated to the site language.
 
-Github issue: 
+Github issue: #276 
+
+
+### Cleanup of backend
+
+Simplification by removal/hiding various items.
+Simplification of 'Customize'
+
+Github issue: #318 #345 #350 & #339
+
 
 
 ------
-
-
-
-
-
-
-
-
-
-
 
 
 Monday, 18 September 2017 by @lynngre
