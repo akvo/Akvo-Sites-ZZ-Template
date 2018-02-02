@@ -1,4 +1,70 @@
 
+Friday, 2 February 2018 by @lynngre
+
+## New 
+
+This release includes some of the backend menu simplification options for website administrators, allowing the opportunity to hide features which are not required for all users.
+
+We have also included an update for the Akvo RSR data. You can now create feeds for your Akvo RSR projects and updates, filtered by country.
+
+The option to add your own selected Google Font via the 'Customize' area has now been included. This means that you can find a Google Font you like and install it directly to your site, rather than choose one of the preselected fonts.
+
+## New Features
+
+### 
+
+
+
+
+### 
+
+
+
+Github issue: #
+
+
+## Fixes
+
+### 
+
+Github issue: #
+
+
+### 
+
+Github issue: #
+
+
+### 
+
+Github issue: #
+
+
+### 
+
+Github issue: #
+
+
+###
+
+Option has been added under 'customise/events' to update the 'Meet' text.
+
+Github issue: 
+
+
+------
+
+
+
+
+
+
+
+
+
+
+
+
 Monday, 18 September 2017 by @lynngre
 
 ## New 
