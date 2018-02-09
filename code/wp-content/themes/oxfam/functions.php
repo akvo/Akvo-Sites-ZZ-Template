@@ -17,19 +17,19 @@
 		$fonts[] = array(
 			'slug'	=> 'oxfamlight',
 			'name'	=> 'OxfamLight',
-			'url'	=> get_stylesheet_directory_uri().'fonts/TSTARPRO-Light.otf'
+			'url'	=> get_stylesheet_directory_uri().'/fonts/TSTARPRO-Light.otf'
 		);
 		
 		$fonts[] = array(
 			'slug'	=> 'oxfamregular',
 			'name'	=> 'OxfamRegular',
-			'url'	=> get_stylesheet_directory_uri().'fonts/TSTARPRO-Regular.otf'
+			'url'	=> get_stylesheet_directory_uri().'/fonts/TSTARPRO-Regular.otf'
 		);
 		
 		$fonts[] = array(
 			'slug'	=> 'oxfamheadline',
 			'name'	=> 'OxfamHeadline',
-			'url'	=> get_stylesheet_directory_uri().'fonts/OxfamGlobalHeadline.ttf'
+			'url'	=> get_stylesheet_directory_uri().'/fonts/OxfamGlobalHeadline.ttf'
 		);
 		
 		return $fonts;

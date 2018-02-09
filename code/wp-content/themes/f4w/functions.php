@@ -17,19 +17,19 @@
 		$fonts[] = array(
 			'slug'	=> 'klavikalight',
 			'name'	=> 'KLavikaLight',
-			'url'	=> get_stylesheet_directory_uri().'fonts/Klavika-Light.otf'
+			'url'	=> get_stylesheet_directory_uri().'/fonts/Klavika-Light.otf'
 		);
 		
 		$fonts[] = array(
 			'slug'	=> 'klavikaregular',
 			'name'	=> 'KlavikaRegular',
-			'url'	=> get_stylesheet_directory_uri().'fonts/Klavika-Regular.otf'
+			'url'	=> get_stylesheet_directory_uri().'/fonts/Klavika-Regular.otf'
 		);
 		
 		$fonts[] = array(
 			'slug'	=> 'klavikamedium',
 			'name'	=> 'KlavikaMedium',
-			'url'	=> get_stylesheet_directory_uri().'fonts/Klavika-Medium.otf'
+			'url'	=> get_stylesheet_directory_uri().'/fonts/Klavika-Medium.otf'
 		);
 		
 		return $fonts;
