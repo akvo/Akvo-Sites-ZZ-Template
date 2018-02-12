@@ -43,32 +43,36 @@
 	}, 40);
 	
 	
-	add_action( 'wp_head', function(){
+	add_action( 'akvo_sites_css', function(){
 		
 		$header_option = get_option('sage_header_options');
-    
-		if($header_option != NULL):?>
-    		
-    	<style type="text/css">
-      
-      		#menu-main-nav .menu-item .current-menu-item a, #menu-main-nav .menu-item .menu-item a:hover{
-        		<?php if(isset($header_option['bg_child_menu']) && $header_option['bg_child_menu'] != "") echo 'background: '.$header_option['bg_child_menu'].';'?>
-        		<?php if(isset($header_option['color_child_menu']) && $header_option['color_child_menu'] != "") echo 'color: '.$header_option['color_child_menu'].';'?>
-      		}
-      
-      		nav ul.navbar-nav li a{
-        		<?php if(isset($header_option['bg_menu']) && $header_option['bg_menu'] != "") echo 'background: '.$header_option['bg_menu'].';'?>
-        		<?php if(isset($header_option['color_menu']) && $header_option['color_menu'] != "") echo 'color: '.$header_option['color_menu'].';'?>
-      		}
-      
-      		nav ul.navbar-nav li:hover a,nav ul.navbar-nav li a:focus,nav ul.navbar-nav li.current-menu-item a{
-        		<?php if(isset($header_option['bg_parent_menu']) && $header_option['bg_parent_menu'] != "") echo 'background: '.$header_option['bg_parent_menu'].' !important;'?>
-        		<?php if(isset($header_option['color_parent_menu']) && $header_option['color_parent_menu'] != "") echo 'color: '.$header_option['color_parent_menu'].' !important;'?>
-      		}
-      
-    	</style>
-    	<?php endif;
 		
+		$menus = array(
+			array(
+				'selector'	=> '#menu-main-nav .menu-item .current-menu-item a, #menu-main-nav .menu-item .menu-item a:hover',
+				'styles'	=> array(
+					'background'	=> 'bg_child_menu',
+					'color'			=> 'color_child_menu'
+				)
+			),
+			array(
+				'selector'	=> 'nav ul.navbar-nav li a',
+				'styles'	=> array(
+					'background'	=> 'bg_menu',
+					'color'			=> 'color_menu'
+				)
+			),
+			array(
+				'selector'	=> 'nav ul.navbar-nav li:hover a,nav ul.navbar-nav li a:focus,nav ul.navbar-nav li.current-menu-item a',
+				'styles'	=> array(
+					'background'	=> 'bg_parent_menu',
+					'color'			=> 'color_parent_menu'
+				)
+			),
+		);
+		
+		global $akvo;
+		$akvo->print_css( $header_option, $menus );
 		
 	} );
 	

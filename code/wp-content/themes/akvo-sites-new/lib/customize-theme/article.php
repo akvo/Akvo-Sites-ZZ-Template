@@ -33,28 +33,33 @@
 	
 	} );
 	
-	add_action( 'wp_head', function(){
+	add_action( 'akvo_sites_css', function(){
 		
 		$akvo_article = get_option('akvo_article');
 		
-		if( $akvo_article != NULL ){
+		$items = array(
+			array(
+				'selector'	=> 'article header h3',
+				'styles'	=> array(
+					'font-size'	=> 'title_font_size'
+				)
+			),
+			array(
+				'selector'	=> 'article .meta',
+				'styles'	=> array(
+					'font-size'	=> 'meta_font_size'
+				)
+			),
+			array(
+				'selector'	=> 'article .content',
+				'styles'	=> array(
+					'font-size'	=> 'content_font_size'
+				)
+			),
+		);
 		
-			_e("<style type=\"text/css\">");
-			
-			if(isset($akvo_article['title_font_size'])){
-				_e("article header h3{font-size:".$akvo_article['title_font_size']."}");
-			}
-			
-			if(isset($akvo_article['meta_font_size'])){
-				_e("article .meta{font-size:".$akvo_article['meta_font_size']."}");
-			}
-         	
-         	if(isset($akvo_article['content_font_size'])){
-				_e("article .content{font-size:".$akvo_article['content_font_size']."}");
-			}
-         	
-			_e("</style>");
-		}
-		
+		global $akvo;
+		$akvo->print_css( $akvo_article, $items );
+
 	} );
 

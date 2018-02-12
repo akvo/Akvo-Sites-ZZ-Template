@@ -8,7 +8,7 @@
 			
 			add_action( 'customize_register', array( $this, 'customize_register' ) );
 			
-			add_action( 'wp_head', array( $this, 'css' ) );
+			add_action( 'akvo_sites_css', array( $this, 'css' ) );
 			
 		}
 		
@@ -16,28 +16,41 @@
 			
 			$fonts = $this->customize_fonts();
 			
-			_e("<style type=\"text/css\">");
-			
 			/* LIST OF ALL THE FONTS */
 			$all_fonts = $this->fonts();
 			
 			// ADD FONT FACE FOR CUSTOM ONES
 			foreach( $all_fonts as $font ){
-				if( ! ( strpos( $font['url'], 'google' ) !== false ) ) {
+				if( isset( $font['url'] ) && $font['url'] && ! ( strpos( $font['url'], 'google' ) !== false ) ) {
 					_e("@font-face {	font-family: '".$font['name']."'; src: url('".$font['url']."');}");
+					echo "\r\n";
 				}
 			}
 			
-			if( isset($fonts['body']) ){
-				_e("body{ font-family: '".$fonts['body']."'; }");
-			}
-			if( isset($fonts['nav']) ){
-				_e("nav{ font-family: '".$fonts['nav']."'; }");
-			}
-			if( isset($fonts['head']) ){
-				_e("h1,h2,h3,h4,h5,h6{ font-family: '".$fonts['head']."'; }");
-			}
-			_e("</style>");
+			$items = array(
+				array(
+					'selector'	=> 'body',
+					'styles'	=> array(
+						'font-family'	=> 'body'
+					)
+				),
+				array(
+					'selector'	=> 'nav',
+					'styles'	=> array(
+						'font-family'	=> 'nav'
+					)
+				),
+				array(
+					'selector'	=> 'h1,h2,h3,h4,h5,h6',
+					'styles'	=> array(
+						'font-family'	=> 'head'
+					)
+				)
+			);
+			
+			global $akvo;
+			$akvo->print_css( $fonts, $items );
+			
 		}
 		
 		function load_fonts(){

@@ -53,17 +53,51 @@
 	} );
 	
 	
-	add_action( 'wp_head', function(){
+	add_action( 'akvo_sites_css', function(){
 		
 		$header_option = get_option('sage_header_options');
 		
 		/* FOR STICKY HEADER */
 		if($header_option && isset($header_option['header_type']) && 'header2' == $header_option['header_type']){
-			_e("<style type=\"text/css\">");
-			_e(".banner{margin-bottom: 0px;}");
-			_e("#main-page-container{margin-top: 0px;}");
-			_e("@media(min-width: 960px){ #main-page-container{ min-height: 600px;} }");
-			_e("</style>");
+			
+			$options = array(
+				'zero'	=> '0px',
+				'height'=> '600px'
+			);
+			
+			$items = array(
+				array(
+					'selector'	=> '.banner',
+					'styles'	=> array(
+						'margin-bottom'	=> 'zero'
+					)
+				),
+				array(
+					'selector'	=> '#main-page-container',
+					'styles'	=> array(
+						'margin-top'	=> 'zero'
+					)
+				)
+			);
+			
+			global $akvo;
+			
+			$akvo->print_css( $options, $items );
+			
+			$sm_items = array(
+				array(
+					'selector'	=> '#main-page-container',
+					'styles'	=> array(
+						'min-height'	=> 'height'
+					)
+				)
+			);
+			
+			echo("@media(min-width: 960px){\r\n");
+			$akvo->print_css( $options, $sm_items );
+			echo "}\r\n";
+				
+			
 		}
 		
 		

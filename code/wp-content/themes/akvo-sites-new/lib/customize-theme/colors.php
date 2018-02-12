@@ -82,7 +82,7 @@
 
 
 
-	add_action( 'wp_head', function(){
+	add_action( 'akvo_sites_css', function(){
 		
 		
 		$main = get_option('main_color') ? get_option('main_color') : get_theme_mod('main_color');
@@ -139,52 +139,219 @@
 		$info_bar_testimonial = get_option('info_bar_testimonial') ? get_option('info_bar_testimonial') : get_theme_mod('info_bar_testimonial');
 		if (empty( $info_bar_testimonial )) $info_bar_testimonial = '#007ba8';
 	
+		$options = array(
+			'html_bg'		=> $donker,
+			'light_html_bg'	=> $donkergrijs,
+			'body_bg'		=> $background,
+			'item_bg'		=> $licht,
+			'item_bg_imp'	=> $licht." !important",
+			'main_color'	=> $main,
+			'light_bg'		=> $grijs,
+			'lighter_bg'	=> $lichtgrijs,
+			'hover_bg'		=> $hovergrijs,
+			'card-blog'		=> $info_bar_blog,
+			'card-post'		=> $info_bar_news,
+			'card-video'	=> $info_bar_video,
+			'card-rsr'		=> $info_bar_update,
+			'card-page'		=> $info_bar_page,
+			'card-media'	=> $info_bar_media,
+			'card-map'		=> $info_bar_map,
+			'card-project'	=> $info_bar_project,
+			'card-test'		=> $info_bar_testimonial,
+			'card-flow'		=> $info_bar_flow,
+			'card-news'		=> $info_bar_news,
+			
+		);
 		
-	
-    ?>
-         <style type="text/css">
-         	html {background:<?php echo $donker;?>; }
-            body { background: <?php echo $background; ?>;}
-            
-            .carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active { background: <?php echo $licht;?> !important; }
-            nav .lang .fa-circle, nav ul.navbar-nav li i { color: <?php echo $main;?>; }
-            .btn-default, .filters #uwpqsf_id #uwpqsf_btn input, footer .custom { background: <?php echo $main;?>; }
-            nav ul.navbar-nav li .fa-circle, a { color: <?php echo $main;?>; }
-            a:hover {color:<?php echo $donker;?>;}
-            .btn-default:focus, .btn-default:hover, .filters #uwpqsf_id #uwpqsf_btn input:focus, .filters #uwpqsf_id #uwpqsf_btn input:hover, footer .fixed, .comment-form footer .custom input[type=submit], .filters #uwpqsf_id #uwpqsf_btn footer .custom input, footer .custom .btn, footer .custom .comment-form input[type=submit], footer .custom .filters #uwpqsf_id #uwpqsf_btn input { background: <?php echo $donker;?>; }
-         	.card, .article .bg, article .bg, .filters, .breadcrumbs, .search-wrap { background: <?php echo $lichtgrijs;?>;}
-         	
-         	
-         	.card .card-info.blog{ background: <?php echo $info_bar_blog; ?>; }
-         	.card .card-info.post{ background: <?php echo $info_bar_news;?>; }
-         	.card .card-info.video{ background: <?php echo $info_bar_video;?>; }
-         	.card .card-info.rsr-update{ background: <?php echo $info_bar_update;?>; }
-         	.card .card-info.page{ background: <?php echo $info_bar_page;?>; }
-         	.card .card-info.media{ background: <?php echo $info_bar_media;?>; }
-         	.card .card-info.map{ background: <?php echo $info_bar_map;?>; }
-         	.card .card-info.project{ background: <?php echo $info_bar_project;?>; }
-         	.card .card-info.testimonial{ background: <?php echo $info_bar_testimonial;?>; }
-         	.card .card-info.flow{ background: <?php echo $info_bar_flow;?>; }
-         	.card .card-info.news{ background: <?php echo $info_bar_news;?>; }
-         	
-         	nav ul.navbar-nav li {background: <?php echo $grijs;?>;}
-         	nav ul.navbar-nav .dropdown-menu li a {background: <?php echo $grijs;?>; }
-         	.clickable:hover .text {background: <?php echo $main;?>;}
-         	.box-wrap:hover {background: <?php echo $hovergrijs;?>;}
-         	.search-wrap .input-group-btn .btn {color:<?php echo $donkergrijs;?>;}
-         	
-         	
-         	
-         	.nav>li>a:focus, .nav>li>a:hover {background:<?php echo $licht;?>; }
-         	blockquote {border-color: <?php echo $donkergrijs;?>;}
-         	@media (min-width: 768px) {
-         		nav  {background: <?php echo $lichtgrijs;?>;}
-         		nav ul.navbar-nav li a:hover, nav ul.navbar-nav li:hover a { background: <?php echo $licht;?>;}
-         		nav ul.navbar-nav .dropdown-menu li a:hover {background: <?php echo $main;?>; }
-         		nav ul.navbar-nav .dropdown-menu li.current-menu-item a{background: <?php echo $main;?>;}
-         	}
-		</style>
-    <?php
+		$items = array(
+			array(
+				'selector'	=> 'html',
+				'styles'	=> array(
+					'background'	=> 'html_bg'
+				)
+			),
+			array(
+				'selector'	=> 'body',
+				'styles'	=> array(
+					'background'	=> 'body_bg'
+				)
+			),
+			array(
+				'selector'	=> '.carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active',
+				'styles'	=> array(
+					'background'	=> 'item_bg_imp'
+				)
+			),
+			array(
+				'selector'	=> 'nav .lang .fa-circle, nav ul.navbar-nav li i',
+				'styles'	=> array(
+					'color'	=> 'main_color'
+				)
+			),
+			array(
+				'selector'	=> '.btn-default, .filters #uwpqsf_id #uwpqsf_btn input, footer .custom',
+				'styles'	=> array(
+					'background'	=> 'main_color'
+				)
+			),
+			array(
+				'selector'	=> 'nav ul.navbar-nav li .fa-circle, a',
+				'styles'	=> array(
+					'color'	=> 'main_color'
+				)
+			),
+			array(
+				'selector'	=> 'a:hover',
+				'styles'	=> array(
+					'color'	=> 'html_bg'
+				)
+			),
+			array(
+				'selector'	=> '.btn-default:focus, .btn-default:hover, .filters #uwpqsf_id #uwpqsf_btn input:focus, .filters #uwpqsf_id #uwpqsf_btn input:hover, footer .fixed, .comment-form footer .custom input[type=submit], .filters #uwpqsf_id #uwpqsf_btn footer .custom input, footer .custom .btn, footer .custom .comment-form input[type=submit], footer .custom .filters #uwpqsf_id #uwpqsf_btn input',
+				'styles'	=> array(
+					'background'	=> 'html_bg'
+				)
+			),
+			array(
+				'selector'	=> '.card, .article .bg, article .bg, .filters, .breadcrumbs, .search-wrap',
+				'styles'	=> array(
+					'background'	=> 'lighter_bg'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.blog',
+				'styles'	=> array(
+					'background'	=> 'card-blog'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.post',
+				'styles'	=> array(
+					'background'	=> 'card-post'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.video',
+				'styles'	=> array(
+					'background'	=> 'card-video'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.rsr-update',
+				'styles'	=> array(
+					'background'	=> 'card-rsr'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.page',
+				'styles'	=> array(
+					'background'	=> 'card-page'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.media',
+				'styles'	=> array(
+					'background'	=> 'card-media'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.map',
+				'styles'	=> array(
+					'background'	=> 'card-map'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.project',
+				'styles'	=> array(
+					'background'	=> 'card-project'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.testimonial',
+				'styles'	=> array(
+					'background'	=> 'card-test'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.flow',
+				'styles'	=> array(
+					'background'	=> 'card-flow'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info.news',
+				'styles'	=> array(
+					'background'	=> 'card-news'
+				)
+			),
+			array(
+				'selector'	=> 'nav ul.navbar-nav li, nav ul.navbar-nav .dropdown-menu li a',
+				'styles'	=> array(
+					'background'	=> 'light_bg'
+				)
+			),
+			array(
+				'selector'	=> '.clickable:hover .text',
+				'styles'	=> array(
+					'background'	=> 'main_color'
+				)
+			),
+			array(
+				'selector'	=> '.box-wrap:hover',
+				'styles'	=> array(
+					'background'	=> 'hover_bg'
+				)
+			),
+			array(
+				'selector'	=> '.search-wrap .input-group-btn .btn',
+				'styles'	=> array(
+					'color'	=> 'light_html_bg'
+				)
+			),
+			array(
+				'selector'	=> '.nav>li>a:focus, .nav>li>a:hover',
+				'styles'	=> array(
+					'background'	=> 'item_bg'
+				)
+			),
+			array(
+				'selector'	=> 'blockquote',
+				'styles'	=> array(
+					'border-color'	=> 'light_html_bg'
+				)
+			),
+		);
+		
+		global $akvo;
+		$akvo->print_css( $options, $items );
+		
+		$sm_items = array(
+			array(
+				'selector'	=> 'nav',
+				'styles'	=> array(
+					'background'	=> 'lighter_bg'
+				)
+			),
+			array(
+				'selector'	=> 'nav ul.navbar-nav li a:hover, nav ul.navbar-nav li:hover a',
+				'styles'	=> array(
+					'background'	=> 'item_bg'
+				)
+			),
+			array(
+				'selector'	=> 'nav ul.navbar-nav .dropdown-menu li a:hover, nav ul.navbar-nav .dropdown-menu li.current-menu-item a',
+				'styles'	=> array(
+					'background'	=> 'main_color'
+				)
+			),
+			
+		);
+		
+		echo("@media (min-width: 768px) {\r\n");
+		$akvo->print_css( $options, $sm_items );
+		echo("}\r\n");
+		
+    
 		
 		
 	});

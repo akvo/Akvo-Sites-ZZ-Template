@@ -21,6 +21,14 @@
 			
 			add_action( 'excerpt_more', array( $this, 'excerpt_more' ) );
 			
+			add_action( 'wp_head', array( $this, 'css' ) );
+			
+		}
+		
+		function css(){
+			echo "<style type=\"text/css\"><!-- OVERRIDING STYLES FROM CUSTOMIZE -->\r\n";
+			do_action('akvo_sites_css');
+			echo "<!-- OVERRIDING STYLES FROM CUSTOMIZE --></style>\r\n";
 		}
 		
 		function init_header_options(){
@@ -177,6 +185,30 @@
 		
 		function excerpt_more(){
 			return ' &hellip; <a href="' . get_permalink() . '">' . __('Continued', $this->text_domain) . '</a>';
+		}
+		
+		function print_css( $options, $items ){
+			
+			if( $options != NULL ){
+		
+				foreach( $items as $item ){
+					if( isset( $item['selector'] ) && $item['selector'] ){
+						_e( $item['selector']."{" );
+						if( isset( $item['styles'] ) ){
+							foreach( $item['styles'] as $style => $val ){
+								if( isset( $options[ $val ] ) && $options[ $val ] ){
+									_e( $style .":".$options[ $val ].";" );
+								}
+							}
+						}
+						_e( '}' );
+						echo "\r\n";
+					}
+				}
+			
+			}
+			
+			
 		}
 		
 	}
