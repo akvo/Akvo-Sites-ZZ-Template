@@ -11,7 +11,6 @@
   		'plugins/related.php',        		// Related posts
   		'lib/color.php',					// COLOR
   		'lib/customize-theme/main.php',		// Library of theme customisation
-  		//'lib/taxonomies.php',             // Custom categories for eg media library
   		'lib/akvo-cards/main.php',        	// Cards
   		'lib/akvo-carousel/main.php',     	// Carousel
   		'lib/akvo-filters/main.php',      	// Filters for post types
@@ -30,14 +29,19 @@
 	// HIDE ADMIN BAR ON THE FRONT END
 	add_filter('show_admin_bar', '__return_false');
 
-  	function akvo_featured_img($post_id){
-  		$post_type = get_post_type($post_id);
-  		$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));	
+  	function akvo_featured_img( $post_id ){
+		
+		/* GET POST TYPE */
+  		$post_type = get_post_type( $post_id );
+  		
+		/* GET FEATURED IMAGE OF THE POST */
+		$img = wp_get_attachment_url( get_post_thumbnail_id( $post_id ) );	
         			
 		if(!$img && $post_type == 'video'){
     		/* featured image is not selected and the type is video */
         	$img = convertYoutubeImg(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
-		}	
+		}
+		
 		return $img;
   	}
   
@@ -48,31 +52,16 @@
  		</style>';
 	} ); 
 	
-	/* remove unnecessary code */
- 	// Disable REST API link tag
- 	remove_action('wp_head', 'rest_output_link_wp_head', 10);
- 
- 	// Disable oEmbed Discovery Links
- 	remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
- 
- 	// Disable REST API link in HTTP headers
- 	remove_action('template_redirect', 'rest_output_link_header', 11, 0);
- 	
- 	// Diable wp emoji
- 	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	/* REMOVE UNNECESSARY ASSETS -- START */
+ 	remove_action('wp_head', 'rest_output_link_wp_head', 10);				/* Disable REST API link tag */
+	remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);			/* Disable oEmbed Discovery Links */
+	remove_action('template_redirect', 'rest_output_link_header', 11, 0);	/* Disable REST API link in HTTP headers */
+ 	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );			/* Diable wp emoji */
  	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+ 	/* REMOVE UNNECESSARY ASSETS -- END */
  	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
-	
-	// Allow iframe tags within editor
-	add_filter('wp_kses_allowed_html', function($multisite_tags){
+ 	/* ALLOW IFRAME TAGS WITHIN EDITOR */
+	add_filter('wp_kses_allowed_html', function( $multisite_tags ){
 		
 		$multisite_tags['iframe'] = array(
 			'src' => true,

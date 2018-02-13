@@ -84,13 +84,14 @@
 
 	add_action( 'akvo_sites_css', function(){
 		
-		
+		/* MAIN COLOR */
 		$main = get_option('main_color') ? get_option('main_color') : ( get_theme_mod('main_color') ? get_theme_mod('main_color') : '#00a99d' );
-	
+		
 		$main2 = new Color("$main"); 
 		$licht = '#'.$main2->mix('ffffff', 10);
 		$donker = '#'.$main2->darken();
-
+		
+		/* SECONDARY COLOR */
 		$grijs = get_option('grijs') ? get_option('grijs') : ( get_theme_mod('grijs') ? get_theme_mod('grijs') : '#e6e6e6');
 		
 		$grijs2 = new Color("$grijs");
@@ -100,27 +101,27 @@
 		if($grijs == "#ffffff") $hovergrijs = "#e6e6e6";
 		else $hovergrijs = $grijs;
 
-		
+		/* OPTIONS DATA */
 		$options = array(
-			'html_bg'		=> $donker,
-			'light_html_bg'	=> $donkergrijs,
-			'body_bg'		=> get_option('background') ? get_option('background') : ( get_theme_mod('background') ? get_theme_mod('background') : '#ffffff' ),
-			'item_bg'		=> $licht,
-			'item_bg_imp'	=> $licht." !important",
-			'main_color'	=> $main,
-			'light_bg'		=> $grijs,
-			'lighter_bg'	=> $lichtgrijs,
-			'hover_bg'		=> $hovergrijs,
-			'card-blog'		=> get_option('info_bar_blog') ? get_option('info_bar_blog') : ( get_theme_mod('info_bar_blog') ? get_theme_mod('info_bar_blog') : '#a3d165' ),
-			'card-video'	=> get_option('info_bar_video') ? get_option('info_bar_video') : ( get_theme_mod('info_bar_video') ? get_theme_mod('info_bar_video') : '#f47b50' ),
-			'card-rsr'		=> get_option('info_bar_update') ? get_option('info_bar_update') : ( get_theme_mod('info_bar_update') ? get_theme_mod('info_bar_update') : '#54bce8' ),
-			'card-page'		=> get_option('info_bar_page') ? get_option('info_bar_page') : ( get_theme_mod('info_bar_page') ? get_theme_mod('info_bar_page') : '#6d3a7d' ),
-			'card-media'	=> get_option('info_bar_media') ? get_option('info_bar_media') : ( get_theme_mod('info_bar_media') ? get_theme_mod('info_bar_media') : '#9d897b' ),
-			'card-map'		=> get_option('info_bar_map') ? get_option('info_bar_map') : ( get_theme_mod('info_bar_map') ? get_theme_mod('info_bar_map') : '#ad1c3c' ),
-			'card-project'	=> get_option('info_bar_project') ? get_option('info_bar_project') : ( get_theme_mod('info_bar_project') ? get_theme_mod('info_bar_project') : '#7381fa' ),
-			'card-test'		=> get_option('info_bar_testimonial') ? get_option('info_bar_testimonial') : ( get_theme_mod('info_bar_testimonial') ? get_theme_mod('info_bar_testimonial') : '#007ba8' ),
-			'card-flow'		=> get_option('info_bar_flow') ? get_option('info_bar_flow') : ( get_theme_mod('info_bar_flow') ? get_theme_mod('info_bar_flow') : '#54bce8' ),
-			'card-news'		=> get_option('info_bar_news') ? get_option('info_bar_news') : ( get_theme_mod('info_bar_news') ? get_theme_mod('info_bar_news') : '#f9ba41' ),
+			'html_bg'			=> $donker,
+			'light_html_bg'		=> $donkergrijs,
+			'body_bg'			=> get_option('background') ? get_option('background') : ( get_theme_mod('background') ? get_theme_mod('background') : '#ffffff' ),
+			'item_bg'			=> $licht,
+			'item_bg_imp'		=> $licht." !important",
+			'main_color'		=> $main,
+			'light_bg'			=> $grijs,
+			'lighter_bg'		=> $lichtgrijs,
+			'hover_bg'			=> $hovergrijs,
+			'card-blog'			=> get_option('info_bar_blog') ? get_option('info_bar_blog') : ( get_theme_mod('info_bar_blog') ? get_theme_mod('info_bar_blog') : '#a3d165' ),
+			'card-video'		=> get_option('info_bar_video') ? get_option('info_bar_video') : ( get_theme_mod('info_bar_video') ? get_theme_mod('info_bar_video') : '#f47b50' ),
+			'card-rsr-project'	=> get_option('info_bar_update') ? get_option('info_bar_update') : ( get_theme_mod('info_bar_update') ? get_theme_mod('info_bar_update') : '#54bce8' ),
+			'card-page'			=> get_option('info_bar_page') ? get_option('info_bar_page') : ( get_theme_mod('info_bar_page') ? get_theme_mod('info_bar_page') : '#6d3a7d' ),
+			'card-media'		=> get_option('info_bar_media') ? get_option('info_bar_media') : ( get_theme_mod('info_bar_media') ? get_theme_mod('info_bar_media') : '#9d897b' ),
+			'card-map'			=> get_option('info_bar_map') ? get_option('info_bar_map') : ( get_theme_mod('info_bar_map') ? get_theme_mod('info_bar_map') : '#ad1c3c' ),
+			'card-project'		=> get_option('info_bar_project') ? get_option('info_bar_project') : ( get_theme_mod('info_bar_project') ? get_theme_mod('info_bar_project') : '#7381fa' ),
+			'card-testimonial'	=> get_option('info_bar_testimonial') ? get_option('info_bar_testimonial') : ( get_theme_mod('info_bar_testimonial') ? get_theme_mod('info_bar_testimonial') : '#007ba8' ),
+			'card-flow'			=> get_option('info_bar_flow') ? get_option('info_bar_flow') : ( get_theme_mod('info_bar_flow') ? get_theme_mod('info_bar_flow') : '#54bce8' ),
+			'card-news'			=> get_option('info_bar_news') ? get_option('info_bar_news') : ( get_theme_mod('info_bar_news') ? get_theme_mod('info_bar_news') : '#f9ba41' ),
 			
 		);
 		
@@ -180,72 +181,6 @@
 				)
 			),
 			array(
-				'selector'	=> '.card .card-info.blog',
-				'styles'	=> array(
-					'background'	=> 'card-blog'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.post',
-				'styles'	=> array(
-					'background'	=> 'card-news'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.video',
-				'styles'	=> array(
-					'background'	=> 'card-video'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.rsr-update',
-				'styles'	=> array(
-					'background'	=> 'card-rsr'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.page',
-				'styles'	=> array(
-					'background'	=> 'card-page'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.media',
-				'styles'	=> array(
-					'background'	=> 'card-media'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.map',
-				'styles'	=> array(
-					'background'	=> 'card-map'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.project',
-				'styles'	=> array(
-					'background'	=> 'card-project'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.testimonial',
-				'styles'	=> array(
-					'background'	=> 'card-test'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.flow',
-				'styles'	=> array(
-					'background'	=> 'card-flow'
-				)
-			),
-			array(
-				'selector'	=> '.card .card-info.news',
-				'styles'	=> array(
-					'background'	=> 'card-news'
-				)
-			),
-			array(
 				'selector'	=> 'nav ul.navbar-nav li, nav ul.navbar-nav .dropdown-menu li a',
 				'styles'	=> array(
 					'background'	=> 'light_bg'
@@ -283,9 +218,28 @@
 			),
 		);
 		
+		/* CARD TYPES - BACKGROUND */
+		$akvo_card_obj = new Akvo_Card;
+		$types = $akvo_card_obj->get_types(); 
+		
+		foreach($types as $type=>$label){ 
+			
+			$temp = array(
+				'selector'	=> '.card.' . $type . ' .card-info',
+				'styles'	=> array(
+					'background'	=> 'card-'.$type
+				)
+			);
+			
+			array_push( $items, $temp );
+			
+		}
+		
+		
 		global $akvo;
 		$akvo->print_css( $options, $items );
 		
+		/* SMALL SCREEN CSS SELECTORS */
 		$sm_items = array(
 			array(
 				'selector'	=> 'nav',
