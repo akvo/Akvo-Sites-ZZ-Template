@@ -187,10 +187,17 @@
 			return ' &hellip; <a href="' . get_permalink() . '">' . __('Continued', $this->text_domain) . '</a>';
 		}
 		
-		function print_css( $options, $items ){
+		function print_css( $options, $items, $media_query = false ){
 			
+			/* CHECK IF OPTIONS EXIST */
 			if( $options != NULL ){
-		
+				
+				/* PRINT THE MEDIA QUERY */
+				if( $media_query ){
+					_e( $media_query. "{" );
+				}
+				
+				/* ITERATE THROUGH EACH SELECTOR */
 				foreach( $items as $item ){
 					if( isset( $item['selector'] ) && $item['selector'] ){
 						_e( $item['selector']."{" );
@@ -202,8 +209,16 @@
 							}
 						}
 						_e( '}' );
-						//echo "\r\n";
+						if( ! $media_query ){
+							echo "\r\n";
+						}
 					}
+				}
+				
+				/* CLOSE THE MEDIA QUERY */
+				if( $media_query ){
+					_e( "}" );
+					echo "\r\n";
 				}
 			
 			}
