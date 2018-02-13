@@ -127,58 +127,85 @@
 
 	
 	/** ADD CUSTOMISE CSS */
-	add_action( 'wp_head', function(){
+	add_action( 'akvo_sites_css', function(){
 		
 		$akvo_card = get_option('akvo_card');
 		
 		//print_r($akvo_card);
-	?>
-		<style type="text/css">
-				
-		<?php if( $akvo_card ):?>
-         	.card{
-         		<?php if(isset($akvo_card['bg'])):?>background: <?php _e($akvo_card['bg']);?>;<?php endif;?>
-         		<?php if(isset($akvo_card['border_radius'])):?>border-radius: <?php _e($akvo_card['border_radius']);?><?php endif;?>
-         	}
-         	
-         	<?php if(isset($akvo_card['bg_img'])):?>
-         	.card .card-image{
-         		background-image: url("<?php _e($akvo_card['bg_img']);?>");
-         	}
-			<?php endif;?>
-         	
-         	.card .card-info{
-         		<?php if(isset($akvo_card['infobar_bg'])):?>background: <?php _e($akvo_card['infobar_bg']);?>;<?php endif;?>
-         		<?php if(isset($akvo_card['infobar_color'])):?>color: <?php _e($akvo_card['infobar_color']);?>;<?php endif;?>
-         		<?php if($akvo_card['hide_infobar']):?>display: none;<?php endif;?>
-         		<?php if(isset($akvo_card['infobar_font_size'])):?>font-size: <?php _e($akvo_card['infobar_font_size']);?>;<?php endif;?>
-         	}
-         	
-         	.card .card-content{
-         		<?php if($akvo_card['hide_content']):?>display: none;<?php endif;?>
-				<?php if(isset($akvo_card['content_color'])):?>color: <?php _e($akvo_card['content_color']);?>;<?php endif;?>
-         		<?php if(isset($akvo_card['content_font_size'])):?>font-size: <?php _e($akvo_card['content_font_size']);?>;<?php endif;?>
-         	}
+		
+		if( isset( $akvo_card['hide_infobar'] ) && $akvo_card['hide_infobar'] ){
+			$akvo_card['infobar_display'] = 'none';
+		}
+		
+		if( isset( $akvo_card['hide_content'] ) && $akvo_card['hide_content'] ){
+			$akvo_card['content_display'] = 'none';
+		}
+		
+		if( isset( $akvo_card['hide_card_title'] ) && $akvo_card['hide_card_title'] ){
+			$akvo_card['title_display'] = 'none';
+		}
+		
+		$items = array(
+			array(
+				'selector'	=> '.card',
+				'styles'	=> array(
+					'background'	=> 'bg',
+					'border-radius'	=> 'border_radius'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-image',
+				'styles'	=> array(
+					'background-image'	=> 'bg_img',
+				)
+			),
+			array(
+				'selector'	=> '.card .card-info',
+				'styles'	=> array(
+					'background'	=> 'infobar_bg',
+					'color'			=> 'infobar_color',
+					'display'		=> 'infobar_display',
+					'font-size'		=> 'infobar_font_size'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-content',
+				'styles'	=> array(
+					'color'			=> 'content_color',
+					'display'		=> 'content_display',
+					'font-size'		=> 'content_font_size'
+				)
+			),
+			array(
+				'selector'	=> '.card .card-title',
+				'styles'	=> array(
+					'color'			=> 'title_color',
+					'display'		=> 'title_display',
+					'font-size'		=> 'title_font_size'
+				)
+			),
+		);
+		
+		$akvo_card_obj = new Akvo_Card;
+		$types = $akvo_card_obj->get_types(); 
+		
+		foreach($types as $type=>$label){ 
 			
-         	.card .card-title{
-         		<?php if($akvo_card['hide_card_title']):?>display: none;<?php endif;?>
-         		<?php if(isset($akvo_card['title_font_size'])):?>font-size: <?php _e($akvo_card['title_font_size']);?>;<?php endif;?>
-         		<?php if(isset($akvo_card['title_color'])):?>color: <?php _e($akvo_card['title_color']);?>;<?php endif;?>
-         	}
-         	
-         	<?php 
-         		$akvo_card_obj = new Akvo_Card;
-         		$types = $akvo_card_obj->get_types(); 
-         		foreach($types as $type=>$label): $bg_setting = 'bg_'.$type.'_height';if(isset($akvo_card[$bg_setting])):
-         	?>
-         		.card.<?php _e($type)?> .card-image{
-         			height: <?php _e($akvo_card[$bg_setting]);?>
-         		}
-         	<?php endif;endforeach;?>	
-         	
-		<?php endif;?>
-		</style>
-    <?php
+			$temp = array(
+				'selector'	=> '.card.' . $type . ' .card-image',
+				'styles'	=> array(
+					'height'	=> 'bg_'.$type.'_height'
+				)
+			);
+			
+			array_push( $items, $temp );
+			
+		}
+		
+		
+		global $akvo;
+		$akvo->print_css( $akvo_card, $items );
+		
 		
 		
 	});
