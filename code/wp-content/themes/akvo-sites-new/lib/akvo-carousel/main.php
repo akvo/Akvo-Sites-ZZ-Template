@@ -53,24 +53,27 @@
 	}, 40);
 
   	
-  	add_action( 'wp_head', function(){
+  	add_action( 'akvo_sites_css', function(){
   		
   		$carousel_option = get_option('sage_carousel_options');
     	
-		?>
-    	<?php if($carousel_option):?>
-    	<style type="text/css">
-      		.carousel .text{
-        		<?php if(isset($carousel_option['bg_carousel'])) echo 'background: '.$carousel_option['bg_carousel'].';'?>
-        		<?php if(isset($carousel_option['color_content_carousel'])) echo 'color: '.$carousel_option['color_content_carousel'].';'?>
-      		}
-      		<?php if(isset($carousel_option['color_title_carousel'])):?>
-      		.carousel .text h1{
-        		color: <?php echo $carousel_option['color_title_carousel']?>;
-      		}
-      		<?php endif; ?>
-    	</style>
-    	<?php endif;
-  		
-  		
-  	} );
+		$items = array(
+			array(
+				'selector'	=> '.carousel .text',
+				'styles'	=> array(
+					'background'	=> 'bg_carousel',
+					'color'			=> 'color_content_carousel'
+				)
+			),
+			array(
+				'selector'	=> '.carousel .text h1',
+				'styles'	=> array(
+					'color'			=> 'color_title_carousel'
+				)
+			)
+		);
+		
+		global $akvo;
+		$akvo->print_css( $carousel_option, $items );
+		
+	} );
