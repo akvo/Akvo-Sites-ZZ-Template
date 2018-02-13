@@ -10,7 +10,7 @@
 		
 		for( $i = 1; $i <= 3; $i++ ){
 			
-			$akvo_customize->text( $wp_customize, 'akvo_fonts_section', 'akvo_fonts[font'.$i.'][label]', 'Label for font '.$i, '');
+			// $akvo_customize->text( $wp_customize, 'akvo_fonts_section', 'akvo_fonts[font'.$i.'][label]', 'Label for font '.$i, '');
 			$akvo_customize->text( $wp_customize, 'akvo_fonts_section', 'akvo_fonts[font'.$i.'][url]', 'URL for font '.$i, '');
 		}
 		
@@ -25,6 +25,12 @@
 		if( is_array( $akvo_fonts ) ){
 			foreach( $akvo_fonts as $font ){
 				
+				/* EXTRACT LABEL FROM URL */
+				$parts = explode('family=', $font['url']);
+				if( count( $parts ) > 1 ){
+					$font['label'] = str_replace('+', ' ', $parts[1]);
+				}
+				
 				if( isset( $font['label'] ) && isset( $font['url'] ) ){
 				
 					$fonts[] = array(
@@ -33,10 +39,9 @@
 						'url'	=> $font['url']
 					);
 				}
-				
+					
 			}
 		}
-		//print_r( $fonts ); wp_die();
 		
 		return $fonts;
 		
