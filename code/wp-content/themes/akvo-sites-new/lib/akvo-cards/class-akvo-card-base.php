@@ -161,7 +161,12 @@
 			}
 			
 			if($rsr_obj->photo){
-				$akvo_card['img'] = self::get_base_url().$rsr_obj->photo;
+				if( isset($rsr_obj->photo->original) ){
+					$akvo_card['img'] = self::get_base_url().$rsr_obj->photo->original;
+				}
+				else{
+					$akvo_card['img'] = self::get_base_url().$rsr_obj->photo;	
+				}
 			}
 			
 			
