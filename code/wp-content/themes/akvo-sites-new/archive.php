@@ -10,7 +10,23 @@
 			<div id="archives-container" class="<?php if(is_akvo_filter_form($post_type)):?>col-md-9<?php else:?>col-md-12<?php endif;?>">
 				<?php if(have_posts()):?>
 					<div id="archives-list" class="row" data-target="#archives-list .col-md-4.eq">
-         			<?php while ( have_posts() ) : the_post();?>
+         			<?php 
+						while ( have_posts() ) : 
+							the_post();
+							
+							/* UPDATE STICKY OPTION TO OFF THAT DOES NOT HAVE THE POST META YET */
+							global $post;
+							if( 'blog' == $post->post_type ){
+								
+								$sticky = get_post_meta( $post->ID, '_post_extra_boxes_checkbox', true );
+								if( !$sticky ){
+									update_post_meta( $post->ID, '_post_extra_boxes_checkbox', 'off' );
+								}
+								
+							}
+							/* UPDATE STICKY OPTION TO OFF THAT DOES NOT HAVE THE POST META YET */
+							
+					?>
          				<div class="col-md-4 eq">
          					<?php 
          						global $post_id;

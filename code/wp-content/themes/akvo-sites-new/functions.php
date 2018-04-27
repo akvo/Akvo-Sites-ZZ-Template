@@ -60,6 +60,19 @@
  	remove_action( 'wp_print_styles', 'print_emoji_styles' );
  	/* REMOVE UNNECESSARY ASSETS -- END */
  	
+	/* HOOK TO PRE GET POSTS TO ORDERBY STICKY POSTS */
+	add_action( 'pre_get_posts', function( $wp_query ){
+		
+		if( $wp_query->is_main_query() && isset( $wp_query->query ) && isset( $wp_query->query['post_type'] ) && ('blog' == $wp_query->query['post_type']) ){
+			
+			$wp_query->set('orderby', 'meta_value');	
+			$wp_query->set('meta_key', '_post_extra_boxes_checkbox');	 
+			$wp_query->set('order', 'DESC'); 
+			
+		}
+		
+	} );
+	
  	/* ALLOW IFRAME TAGS WITHIN EDITOR */
 	add_filter('wp_kses_allowed_html', function( $multisite_tags ){
 		
