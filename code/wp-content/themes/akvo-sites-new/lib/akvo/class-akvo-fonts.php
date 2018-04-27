@@ -29,6 +29,12 @@
 			
 			$items = array(
 				array(
+					'selector'	=> 'h1,h2,h3,h4,h5,h6',
+					'styles'	=> array(
+						'font-family'	=> 'head'
+					)
+				),
+				array(
 					'selector'	=> 'body',
 					'styles'	=> array(
 						'font-family'	=> 'body'
@@ -40,12 +46,7 @@
 						'font-family'	=> 'nav'
 					)
 				),
-				array(
-					'selector'	=> 'h1,h2,h3,h4,h5,h6',
-					'styles'	=> array(
-						'font-family'	=> 'head'
-					)
-				)
+				
 			);
 			
 			global $akvo;

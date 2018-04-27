@@ -93,9 +93,8 @@
 				)
 			);
 			
-			echo("@media(min-width: 960px){");
-			$akvo->print_css( $options, $sm_items );
-			echo "}\r\n";
+			$akvo->print_css( $options, $sm_items, '@media(min-width: 960px)' );
+			
 				
 			
 		}

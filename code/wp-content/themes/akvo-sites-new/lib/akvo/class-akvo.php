@@ -26,9 +26,9 @@
 		}
 		
 		function css(){
-			echo "<style type=\"text/css\"><!-- OVERRIDING STYLES FROM CUSTOMIZE -->\r\n";
+			echo "<style type=\"text/css\">\r\n";
 			do_action('akvo_sites_css');
-			echo "<!-- OVERRIDING STYLES FROM CUSTOMIZE --></style>\r\n";
+			echo "<!-- OVERRIDING STYLES FROM CUSTOMIZE -->\r\n</style>\r\n";
 		}
 		
 		function init_header_options(){
@@ -187,23 +187,60 @@
 			return ' &hellip; <a href="' . get_permalink() . '">' . __('Continued', $this->text_domain) . '</a>';
 		}
 		
-		function print_css( $options, $items ){
-			
-			if( $options != NULL ){
-		
-				foreach( $items as $item ){
-					if( isset( $item['selector'] ) && $item['selector'] ){
-						_e( $item['selector']."{" );
-						if( isset( $item['styles'] ) ){
-							foreach( $item['styles'] as $style => $val ){
-								if( isset( $options[ $val ] ) && $options[ $val ] ){
-									_e( $style .":".$options[ $val ].";" );
-								}
-							}
+		/* PRINT STYLES FOR EACH TIME */
+		function print_css_item( $item, $options ){
+			$css = '';
+			if( isset( $item['styles'] ) ){
+				
+				foreach( $item['styles'] as $style => $val ){
+					if( isset( $options[ $val ] ) && $options[ $val ] ){
+						
+						$css .= $style .":"; //.$options[ $val ].";";
+						
+						if( 'font-family' == $style ){
+							$css .= "'".$options[ $val ]."'";
 						}
-						_e( '}' );
-						//echo "\r\n";
+						else{
+							$css .= $options[ $val ];
+						}
+						
+						$css .= ";";
+						
 					}
+				}
+			}
+			
+			return $css;
+		}
+		
+		/* PRINT CSS FOR SELECTORS */
+		function print_css( $options, $items, $media_query = false ){
+			
+			/* CHECK IF OPTIONS EXIST */
+			if( $options != NULL ){
+				
+				/* PRINT THE MEDIA QUERY */
+				if( $media_query ){
+					_e( $media_query. "{" );
+				}
+				
+				/* ITERATE THROUGH EACH SELECTOR */
+				foreach( $items as $item ){
+					
+					$css_item = $this->print_css_item( $item, $options );
+					
+					if( isset( $item['selector'] ) && $item['selector'] && $css_item ){
+						
+						_e( $item['selector'] . "{" . $css_item . "}" );
+						
+						if( ! $media_query ){ echo "\r\n"; }
+					}
+				}
+				
+				/* CLOSE THE MEDIA QUERY */
+				if( $media_query ){
+					_e( "}" );
+					echo "\r\n";
 				}
 			
 			}
