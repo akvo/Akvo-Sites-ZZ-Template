@@ -64,18 +64,19 @@
 	add_filter('wp_kses_allowed_html', function( $multisite_tags ){
 		
 		$multisite_tags['iframe'] = array(
-			'src' => true,
-			'width' => true,
-			'height' => true,
-			'align' => true,
-			'class' => true,
-			'name' => true,
-			'id' => true,
-			'frameborder' => true,
-			'seamless' => true,
-			'srcdoc' => true,
-			'sandbox' => true,
-			'allowfullscreen' => true
+			'src' 				=> true,
+			'width' 			=> true,
+			'height' 			=> true,
+			'align' 			=> true,
+			'class' 			=> true,
+			'name' 				=> true,
+			'id' 				=> true,
+			'frameborder' 		=> true,
+			'seamless' 			=> true,
+			'srcdoc' 			=> true,
+			'sandbox' 			=> true,
+			'allowfullscreen' 	=> true,
+			'scrolling'			=> true
 		);
 		return $multisite_tags;
 	
