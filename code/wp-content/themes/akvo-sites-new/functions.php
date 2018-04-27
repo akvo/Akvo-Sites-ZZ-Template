@@ -65,7 +65,7 @@
 		
 		if( $wp_query->is_main_query() && isset( $wp_query->query ) && isset( $wp_query->query['post_type'] ) && ('blog' == $wp_query->query['post_type']) ){
 			
-			$wp_query->set('orderby', 'meta_value');	
+			$wp_query->set('orderby', 'meta_value date');	
 			$wp_query->set('meta_key', '_post_extra_boxes_checkbox');	 
 			$wp_query->set('order', 'DESC'); 
 			
