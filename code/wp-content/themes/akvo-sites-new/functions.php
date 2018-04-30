@@ -62,7 +62,7 @@
  	
 	/* HOOK TO PRE GET POSTS TO ORDERBY STICKY POSTS */
 	add_action( 'pre_get_posts', function( $wp_query ){
-		
+		/*
 		if( $wp_query->is_main_query() && isset( $wp_query->query ) && isset( $wp_query->query['post_type'] ) && ('blog' == $wp_query->query['post_type']) ){
 			
 			$wp_query->set('orderby', 'meta_value date');	
@@ -70,7 +70,7 @@
 			$wp_query->set('order', 'DESC'); 
 			
 		}
-		
+		*/
 	} );
 	
  	/* ALLOW IFRAME TAGS WITHIN EDITOR */

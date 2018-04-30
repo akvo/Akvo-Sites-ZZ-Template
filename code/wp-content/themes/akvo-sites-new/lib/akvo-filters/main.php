@@ -3,7 +3,8 @@
 	
 	include "customize-theme.php";
 	
-	
+	global $akvo_filters_sort; 
+	$akvo_filters_sort = array('Latest', 'Alphabetically');
 	
 
 	function akvo_dropdown_filters($arr){	
@@ -98,6 +99,12 @@
 				);
 				array_push($args, $temp_args);	
 			}
+		}
+		
+		/* SORT ALPHABETICALLY WHEN ASKED FOR, OTHERWISE DEFAULT IS BY LAST DATE */
+		if( isset( $_REQUEST['akvo_sort'] ) && ( $_REQUEST['akvo_sort'] == '1' ) ){
+			$query->set('orderby', 'post_title');
+			$query->set('order', 'ASC'); 	
 		}
 		
 		$query->set('tax_query', $args);
