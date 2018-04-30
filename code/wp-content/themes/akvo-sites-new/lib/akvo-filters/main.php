@@ -83,10 +83,21 @@
 			$akvo_filters[$post_type] = akvo_search_init($akvo_filters[$post_type]);
 		}
 		
+		/* DEFAULT SORT BY STICKY POSTS, CAN BE OVERRIDEEN LATER */
+		if( $query->is_main_query() && isset( $query->query ) && isset( $query->query['post_type'] ) && ('blog' == $query->query['post_type']) ){
+			$query->set('orderby', 'meta_value date');	
+			$query->set('meta_key', '_post_extra_boxes_checkbox');	 
+			$query->set('order', 'DESC'); 
+		}
+		
 		/* check if filtering is even required */
 		if(!$post_type || !isset($akvo_filters[$post_type]) || !isset($_REQUEST['akvo-search'])){
+			
+			
+			
 			return $query;
 		}
+		
 		
 		$args = array();
 		
