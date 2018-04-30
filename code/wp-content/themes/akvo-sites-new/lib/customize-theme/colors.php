@@ -24,6 +24,10 @@
 				'default'		=> '#ffffff',
 				'label'			=> 'Background'
 			),
+			'footer_cols_bg'	=> array(
+				'default'		=> '#ffffff',
+				'label'			=> 'Background for Footer Columns'
+			),
 			'grijs'				=> array(
 				'default'		=> '#e6e6e6',
 				'label'			=> 'Shades of grey'
@@ -106,6 +110,7 @@
 			'html_bg'			=> $donker,
 			'light_html_bg'		=> $donkergrijs,
 			'body_bg'			=> get_option('background') ? get_option('background') : ( get_theme_mod('background') ? get_theme_mod('background') : '#ffffff' ),
+			'footer_cols_bg'	=> get_option('footer_cols_bg') ? get_option('footer_cols_bg') : '#ffffff',
 			'item_bg'			=> $licht,
 			'item_bg_imp'		=> $licht." !important",
 			'main_color'		=> $main,
@@ -139,7 +144,13 @@
 				)
 			),
 			array(
-				'selector'	=> '.carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active',
+				'selector'	=> 'footer .twitter',
+				'styles'	=> array(
+					'background'	=> 'footer_cols_bg'
+				)
+			),
+			array(
+				'selector'	=> '.carousel .text, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active',
 				'styles'	=> array(
 					'background'	=> 'item_bg_imp'
 				)
