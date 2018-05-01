@@ -1,7 +1,11 @@
 <form method="GET" data-behaviour='ajax-form' data-target="#archives-container">
 	<?php 
 		foreach($akvo_filters[$post_type] as $slug => $arr){
-			akvo_dropdown_filters($arr);
+			
+			if( $this->is_term_slug( $slug ) ){
+				$this->terms_dropdown( $arr );	
+			}
+			
 		}
 		
 		$btn_text = 'Apply Filters';
@@ -11,15 +15,13 @@
 			$btn_text = $custom_btn_text;
 		}
 		
-		global $akvo_filters_sort;
-		
 	?>
 	
 	<div class='form-group'>
 		<label>Sort by</label>
 		<select name="akvo_sort" class='form-control'>
-			<?php for( $i = 0; $i < count( $akvo_filters_sort ) ; $i++ ):?>
-			<option <?php if( isset( $_REQUEST['akvo_sort'] ) && ( $i == $_REQUEST['akvo_sort'] ) ){ _e("selected='selected'"); }?> value='<?php _e( $i );?>'><?php _e( $akvo_filters_sort[ $i ] );?></option>
+			<?php for( $i = 0; $i < count( $this->sorting_by ) ; $i++ ):?>
+			<option <?php if( isset( $_REQUEST['akvo_sort'] ) && ( $i == $_REQUEST['akvo_sort'] ) ){ _e("selected='selected'"); }?> value='<?php _e( $i );?>'><?php _e( $this->sorting_by[ $i ] );?></option>
 			<?php endfor;?>
 		</select>
 	</div>

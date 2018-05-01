@@ -4,12 +4,11 @@
 		
 		function __construct(){
 			
-			/* HANDLE AJAX */
-			add_action("wp_ajax_akvo_card", array( $this, "ajax" ) );
-			add_action("wp_ajax_nopriv_akvo_card", array( $this, "ajax" ) );
+			$this->shortcode_str = 'akvo-card';
+			$this->shortcode_slug = 'akvo_card';
+			$this->template = 'card';
 			
-			/* HANDLE SHORTCODE */
-			add_shortcode( 'akvo-card', array( $this, 'shortcode' ) );
+			parent::__construct();
 		}
 		
 		function ajax(){
@@ -58,7 +57,8 @@
 		
 		
 		/* main shortcode function that displays the card */
-		function display($atts){
+		function shortcode( $atts ){
+			ob_start();
 			$atts = shortcode_atts(array(
 					'title' 		=> 'Untitled',
 					'content' 		=> '',
@@ -70,8 +70,6 @@
 					'read_more_text'=> 'Read more'
 				), $atts, 'akvo_card');
 			
-			//print_r($atts);
-			
 			/* get options from customise */
 			$akvo_card_options = get_option('akvo_card');
 			
@@ -80,12 +78,7 @@
 				$atts['read_more_text'] = $akvo_card_options['read_more_text'];
 			}
 			
-			include "templates/card.php";
-		}
-		
-		function shortcode( $atts ){
-			ob_start();
-			$this->display( $atts );
+			include "templates/".$this->template.".php";
 			return ob_get_clean();
 		}
 		
