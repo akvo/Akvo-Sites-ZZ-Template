@@ -6682,9 +6682,7 @@ footer {
     background: #004d48;
     padding: 10px 0; }
     footer .fixed a {
-      display: block;
       color: rgba(230, 230, 230, 0.6);
-      font-size: 2em;
       text-decoration: none; }
     footer .fixed .small {
       color: rgba(230, 230, 230, 0.6); }

@@ -26,9 +26,8 @@
 		</div>
 		<div class="fixed">
 			<div class="container">
-				Powered by
-				<a href="http://www.akvo.org" target="_blank">akvo.org</a>
-				<span class="small">some rights reserved</span>
+				Powered by <a href="http://www.akvo.org" target="_blank">akvo.org</a>
+				<p class="small">some rights reserved</p>
 			</div>
 		</div>
 	</footer>
