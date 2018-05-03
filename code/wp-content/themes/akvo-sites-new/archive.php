@@ -59,8 +59,34 @@
         						$shortcode .= 'date="'.get_the_date().'" ';
         						$shortcode .= 'content="'.get_the_excerpt().'" ';
         						$shortcode .= 'link="'.get_the_permalink().'" ';
-        						$shortcode .= 'type="'.$post_type.'"]';
-        			
+        						
+								
+								if( $template == 'list' ){
+									$types = array();
+									$term_types = array();
+									
+									if( 'media' == $post_type ){
+										$term_types = get_the_terms( $post, 'types' );
+									}
+									
+									if( is_array( $term_types ) && count( $term_types ) ){
+										foreach( $term_types as $term_type ){
+											array_push( $types, $term_type->name );
+										}
+									}
+									
+									$shortcode .= 'type="'.implode( ',', $types ).'"]';
+									
+								}
+								else{
+									$shortcode .= 'type="'.$post_type.'"]';
+								}
+								
+								
+								
+								
+								
+								
         						echo do_shortcode($shortcode);
          					?>
          				</div>

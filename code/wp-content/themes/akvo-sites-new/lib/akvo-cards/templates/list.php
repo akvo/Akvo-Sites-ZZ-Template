@@ -1,13 +1,25 @@
 <div class='card-list <?php _e(self::slugify($atts['type']));?>' style="width: 100%;border: #CCC solid 1px;padding: 20px;">
-	<div class='card-header'>
-		<h3 class='card-title'><a href="<?php _e($atts['link']);?>"><?php _e($atts['title']);?></a></h3>
-		<ul class="small list-inline">
-			<li><i class="fa fa-calendar"></i>&nbsp;&nbsp;<?php _e($atts['date']);?></li>
-			<li><span class='badge'><?php if($atts['type-text']){_e($atts['type-text']);} else{_e($atts['type']);}?></span></li>
-		</ul>
-	</div>
-	<div class='card-content'>
-		<?php echo truncate($atts['content'], 130);?>
-	</div>
+	<div class="row">
+		<div class='col-sm-6'>
+			<h3 class='card-title' style="margin-top: 0;"><a href="<?php _e($atts['link']);?>"><?php _e($atts['title']);?></a></h3>
+			<p class="small"><i class="fa fa-calendar"></i>&nbsp;&nbsp;<?php _e($atts['date']);?></p>
+		</div>
+		<div class='col-sm-6'>
+			<div class='card-content' style="min-height: 50px;"><?php echo truncate($atts['content'], 130);?></div>
+			<?php
+				$types = array();
+				if( isset( $atts['type'] ) ){
+					$types = explode( ',', $atts['type'] );
+				}
+			?>
+			<?php if( count( $types ) ):?>
+			<ul class="small list-inline">
+				<?php foreach( $types as $type ): ?>
+				<li><span class='badge'><?php _e( $type );?></span></li>
+				<?php endforeach;?>
+			</ul>
+			<?php endif; ?>
+		</div>
+	</div>	
 </div>	
 
