@@ -5,7 +5,7 @@
 		global $akvo_customize;
 		
 		// ADD PANEL
-		$akvo_customize->panel( $wp_customize, 'akvo_filter_panel', 'Filter Widget' );
+		$akvo_customize->panel( $wp_customize, 'akvo_filter_panel', 'Akvo Custom Post Types' );
 		
 		/* LABELS SECTION */
 		$akvo_customize->section( $wp_customize, 'akvo_filter_panel', 'akvo_filter_section', 'Labels', '');
@@ -49,6 +49,11 @@
       		'list'	=> 'List (Vertical)'
       	);
 		
+		$sorting_arr = array(
+			'latest' 	=> 'Latest',
+			'alpha' 	=> 'Alphabetically',
+		);
+		
 		foreach($post_types as $post_type => $slugs){
 			
 			$section_id = 'akvo_filter_'.$post_type.'section';
@@ -62,7 +67,9 @@
 				$akvo_customize->checkbox( $wp_customize, $section_id, 'akvo_filter['.$post_type.']['.$slug.']', "Enable ".$slug." for ".$post_type );
 			}
 			
-			$akvo_customize->dropdown( $wp_customize, $section_id, 'akvo_filter['.$post_type.'][template]', 'Select Template', 'card', $template_arr);
+			$akvo_customize->dropdown( $wp_customize, $section_id, 'akvo_filter['.$post_type.'][template]', 'Select Template', 'card', $template_arr );
+			
+			$akvo_customize->dropdown( $wp_customize, $section_id, 'akvo_filter['.$post_type.'][sorting]', 'Select Sorting', 'latest', $sorting_arr );
 			
 		}
 		

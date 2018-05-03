@@ -6,11 +6,7 @@
 	
 	class AKVO_FILTERS{
 		
-		var $sorting_by;
-		
 		function __construct(){
-			
-			$this->sorting_by = array('Latest', 'Alphabetically');
 			
 			add_action('pre_get_posts', array( $this, 'query' ), 1 );
 		}
@@ -111,18 +107,20 @@
 		function query( $query ){
 			$akvo_filters = $this->get_option();
 			
-			$post_type = '';
+			
 			
 			/* IF ARRAY FILTERS ARE NOT SELECTED OR THE QUERY IS BEING EXECUTED IN THE BACKEND */
 			if( ( ! is_array( $akvo_filters ) ) || ( is_admin() ) ){
 				return $query;
 			}
 			
-			/* init the request values into the array */
-			if( isset($query->query['post_type']) && !is_array( $query->query['post_type'] ) && isset($akvo_filters[$query->query['post_type']])){
+			/* SET POST TYPE */
+			$post_type = '';
+			if( isset($query->query['post_type']) && !is_array( $query->query['post_type'] ) ){
 				$post_type = $query->query['post_type'];
-				$akvo_filters[$post_type] = $this->init($akvo_filters[$post_type]);
 			}
+			
+			/* SORTING STARTS */ 
 			
 			/* DEFAULT SORT BY STICKY POSTS, CAN BE OVERRIDEEN LATER */
 			if( $query->is_main_query() && isset( $query->query ) && isset( $query->query['post_type'] ) && ('blog' == $query->query['post_type']) ){
@@ -131,11 +129,21 @@
 				$query->set('order', 'DESC'); 
 			}
 			
+			/* SORT ALPHABETICALLY WHEN ASKED FOR, OTHERWISE DEFAULT IS BY LAST DATE */
+			if( $post_type && isset( $akvo_filters[ $post_type ] ) && isset( $akvo_filters[ $post_type ]['sorting'] ) && ( 'alpha' == $akvo_filters[ $post_type ]['sorting'] ) ){
+				$query->set('orderby', 'post_title');
+				$query->set('order', 'ASC'); 	
+			}
+			
+			/* SORTING GETS OVER */
+			
+			/* init the request values into the array */
+			if( $post_type && isset( $akvo_filters[ $post_type ] ) ){
+				$akvo_filters[$post_type] = $this->init($akvo_filters[$post_type]);
+			}
+			
 			/* check if filtering is even required */
 			if(!$post_type || !isset($akvo_filters[$post_type]) || !isset($_REQUEST['akvo-search'])){
-				
-				
-				
 				return $query;
 			}
 			
@@ -153,11 +161,8 @@
 				}
 			}
 			
-			/* SORT ALPHABETICALLY WHEN ASKED FOR, OTHERWISE DEFAULT IS BY LAST DATE */
-			if( isset( $_REQUEST['akvo_sort'] ) && ( $_REQUEST['akvo_sort'] == '1' ) ){
-				$query->set('orderby', 'post_title');
-				$query->set('order', 'ASC'); 	
-			}
+			
+			
 			
 			$query->set('tax_query', $args);
 			return $query;
