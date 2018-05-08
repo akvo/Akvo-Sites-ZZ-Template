@@ -9,7 +9,8 @@
 		'search.php',
 		'external-assets.php',		// HEADER AND FOOTER SECTION
 		'fonts.php',
-		'carousel.php'
+		'carousel.php',
+		'footer.php'
 	);
 	
 	foreach($inc_files as $inc_file){

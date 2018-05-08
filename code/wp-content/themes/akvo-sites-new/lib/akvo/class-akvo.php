@@ -8,10 +8,13 @@
 		
 		public $text_domain = 'sage';
 		
+		public $options = array();
 		
 		function __construct(){
 		
 			$this->init_header_options();
+			
+			$this->options = get_option('akvo');
 			
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ), 100 );
 			
@@ -23,6 +26,10 @@
 			
 			add_action( 'wp_head', array( $this, 'css' ) );
 			
+		}
+		
+		function get_option(){
+			return $this->options;
 		}
 		
 		function css(){

@@ -16,27 +16,27 @@
 		$akvo_customize->section( $wp_customize, $panel, 'akvo_list_section', 'General Theme', 'Customize background and foreground color for list widget');
 		
 		$colors = array(
-			'akvo_list[bg]' 			=> array(
+			'akvo[list][bg]' 			=> array(
 				'default' 				=> '#EEEEEE',
 				'label'					=> 'Background'
 			),
-			'akvo_list[title_color]' 	=> array(
+			'akvo[list][title_color]' 	=> array(
 				'default' 				=> '#333333',
 				'label'					=> 'Title Color'
 			),
-			'akvo_list[content_color]' 	=> array(
+			'akvo[list][content_color]' 	=> array(
 				'default' 				=> '#333333',
 				'label'					=> 'Content Color'
 			),
-			'akvo_list[border_color]' 	=> array(
+			'akvo[list][border_color]' 	=> array(
 				'default' 				=> '#CCCCCC',
 				'label'					=> 'Border Color'
 			),
-			'akvo_list[badge_bg]' 		=> array(
+			'akvo[list][badge_bg]' 		=> array(
 				'default' 				=> '#CCCCCC',
 				'label'					=> 'Background of Badge'
 			),
-			'akvo_list[badge_color]' 	=> array(
+			'akvo[list][badge_color]' 	=> array(
 				'default' 				=> '#FFF',
 				'label'					=> 'Color of Badge'
 			),
@@ -52,15 +52,15 @@
 		$akvo_customize->section( $wp_customize, $panel, 'akvo_list_font_section', 'Font Sizes', 'Customize font sizes for list widget');
 		
 		$text_el = array(
-			'akvo_list[title_font_size]' => array(
+			'akvo[list][title_font_size]' => array(
 				'default' 	=> '24px',
 				'label' 	=> 'Font size of title:',
 			),
-			'akvo_list[content_font_size]' => array(
+			'akvo[list][content_font_size]' => array(
 				'default' 	=> '14px',
 				'label' 	=> 'Font size of content:',
 			),
-			'akvo_list[meta_font_size]' => array(
+			'akvo[list][meta_font_size]' => array(
 				'default' 	=> '10px',
 				'label' 	=> 'Font size of meta:',
 			),	
@@ -75,19 +75,19 @@
 		$akvo_customize->section( $wp_customize, $panel, 'akvo_list_extras_section', 'Extras', '');
 		
 		$text_el = array(
-			'akvo_list[margin_bottom]' => array(
+			'akvo[list][margin_bottom]' => array(
 				'default' 	=> '0px',
 				'label' 	=> 'Margin Bottom:',
 			),
-			'akvo_list[border_radius]' => array(
+			'akvo[list][border_radius]' => array(
 				'default' 	=> '0px',
 				'label' 	=> 'Border radius of list:',
 			),
-			'akvo_list[padding]' => array(
+			'akvo[list][padding]' => array(
 				'default' 	=> '20px',
 				'label' 	=> 'Padding of list:',
 			),
-			'akvo_list[border_radius_badge]' => array(
+			'akvo[list][border_radius_badge]' => array(
 				'default' 	=> '10px',
 				'label' 	=> 'Border radius of badge:',
 			),			
@@ -106,50 +106,53 @@
 	/** ADD CUSTOMISE CSS */
 	add_action( 'akvo_sites_css', function(){
 		
-		$akvo_list = get_option( 'akvo_list' );
-		
-		//print_r( $akvo_list );
-		
-		
-		
-		$items = array(
-			array(
-				'selector'	=> '.list-widget',
-				'styles'	=> array(
-					'background'	=> 'bg',
-					'border-radius'	=> 'border_radius',
-					'color'			=> 'content_color',
-					'border-color'	=> 'border_color',
-					'font-size'		=> 'content_font_size',
-					'margin-bottom'	=> 'margin_bottom',
-					'padding'		=> 'padding'
-				)
-			),
-			array(
-				'selector'	=> '.list-widget .small',
-				'styles'	=> array(
-					'font-size'		=> 'meta_font_size'
-				)
-			),
-			array(
-				'selector'	=> '.list-widget .badge',
-				'styles'	=> array(
-					'background'	=> 'badge_bg',
-					'color'			=> 'badge_color',
-					'border-radius'	=> 'border_radius_badge'
-				)
-			),
-			array(
-				'selector'	=> '.list-widget .list-title a[href]',
-				'styles'	=> array(
-					'color'			=> 'title_color',
-					'font-size'		=> 'title_font_size'
-				)
-			),
-		);
-		
 		global $akvo;
-		$akvo->print_css( $akvo_list, $items );
+		$akvo_options = $akvo->get_option();
+		
+		if( isset( $akvo_options['list'] ) ){
+			
+			$akvo_list = $akvo_options['list'];
+			
+			$items = array(
+				array(
+					'selector'	=> '.list-widget',
+					'styles'	=> array(
+						'background'	=> 'bg',
+						'border-radius'	=> 'border_radius',
+						'color'			=> 'content_color',
+						'border-color'	=> 'border_color',
+						'font-size'		=> 'content_font_size',
+						'margin-bottom'	=> 'margin_bottom',
+						'padding'		=> 'padding'
+					)
+				),
+				array(
+					'selector'	=> '.list-widget .small',
+					'styles'	=> array(
+						'font-size'		=> 'meta_font_size'
+					)
+				),
+				array(
+					'selector'	=> '.list-widget .badge',
+					'styles'	=> array(
+						'background'	=> 'badge_bg',
+						'color'			=> 'badge_color',
+						'border-radius'	=> 'border_radius_badge'
+					)
+				),
+				array(
+					'selector'	=> '.list-widget .list-title a[href]',
+					'styles'	=> array(
+						'color'			=> 'title_color',
+						'font-size'		=> 'title_font_size'
+					)
+				),
+			);
+			
+			
+			$akvo->print_css( $akvo_list, $items );
+			
+		}
 		
 	});
 

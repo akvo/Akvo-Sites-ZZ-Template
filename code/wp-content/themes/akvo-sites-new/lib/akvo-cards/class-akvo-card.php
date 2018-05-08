@@ -71,7 +71,14 @@
 				), $atts, 'akvo_card');
 			
 			/* get options from customise */
-			$akvo_card_options = get_option('akvo_card');
+			global $akvo;
+			$akvo_options = $akvo->get_option();
+			if( isset( $akvo_options['card'] ) ){
+				$akvo_card_options = $akvo_options['card'];
+			}
+			else{
+				$akvo_card_options = get_option('akvo_card');
+			}
 			
 			/* INCASE THE READ MORE TEXT HAS BEEN ADDED BY THE USER */
 			if($akvo_card_options && array_key_exists('read_more_text', $akvo_card_options)){
