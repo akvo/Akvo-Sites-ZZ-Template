@@ -19,6 +19,14 @@
 				'default'		=> '#000000',
 				'label'			=> 'Color for Footer Columns'
 			),
+			'akvo[footer][fixed_bg]'		=> array(
+				'default'		=> '#004d48',
+				'label'			=> 'Background for Copyright'
+			),
+			'akvo[footer][fixed_color]'	=> array(
+				'default'		=> '#BBBBBB',
+				'label'			=> 'Color for Copyright'
+			),
 		);
 		
 		foreach( $colors as $color_id => $color ){
@@ -51,6 +59,13 @@
 					'styles'	=> array(
 						'background'	=> 'cols_bg',
 						'color'			=> 'cols_color',
+					)
+				),
+				array(
+					'selector'	=> 'footer .fixed',
+					'styles'	=> array(
+						'background'	=> 'fixed_bg',
+						'color'			=> 'fixed_color',
 					)
 				),
 			);

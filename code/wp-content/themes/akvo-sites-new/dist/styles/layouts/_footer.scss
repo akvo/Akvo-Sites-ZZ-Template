@@ -104,11 +104,11 @@ footer {
 	}
 	.fixed {
 		background: $primary-dark;
+		color: $footertxt;
 		padding:10px 0;
 		a {
-			color: $footertxt;
+			color: inherit;
 			text-decoration: none;
 		}
-		.small { color: $footertxt; }
 	}
 }
