@@ -6706,12 +6706,11 @@ footer {
       color: #ffffff; }
   footer .fixed {
     background: #004d48;
+    color: rgba(230, 230, 230, 0.6);
     padding: 10px 0; }
     footer .fixed a {
-      color: rgba(230, 230, 230, 0.6);
+      color: inherit;
       text-decoration: none; }
-    footer .fixed .small {
-      color: rgba(230, 230, 230, 0.6); }
 
 .btn-default, #uwpqsf_id #uwpqsf_btn input {
   background: #00a99d;

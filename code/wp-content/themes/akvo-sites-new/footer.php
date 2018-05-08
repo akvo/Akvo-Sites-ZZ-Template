@@ -27,6 +27,7 @@
 				</div>
 			</div>
 		</div>
+		<!--
 		<div class="custom">
 			<div class="container">
 				<div class="row">
@@ -36,9 +37,10 @@
 				</div>
 			</div>
 		</div>
+		-->
 		<div class="fixed">
 			<div class="container">
-				Powered by <a href="http://www.akvo.org" target="_blank">akvo.org</a>
+				<a href="http://www.akvo.org" target="_blank">Powered by akvo.org</a>
 				<p class="small">some rights reserved</p>
 			</div>
 		</div>
