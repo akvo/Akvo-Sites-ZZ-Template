@@ -1,13 +1,23 @@
 <?php get_header();?>
+
+<?php 
+	
+	global $post, $akvo_filters;
+	
+	$post_type = get_post_type( $post );
+	
+	$template = $akvo_filters->get_template( $post_type );
+
+?>
+
 	<div class="container" id="main-page-container">
 		<div class="row">
-			<?php global $post;?>
-			<?php if(is_akvo_filter_form($post_type)):?>
+			<?php if( $akvo_filters->is_active( $post_type ) ) :?>
 			<div class="col-md-3">
-				<?php akvo_filter_form(get_post_type($post));?>
+				<?php $akvo_filters->form( $post_type );?>
 			</div>
 			<?php endif;?>
-			<div id="archives-container" class="<?php if(is_akvo_filter_form($post_type)):?>col-md-9<?php else:?>col-md-12<?php endif;?>">
+			<div id="archives-container" class="<?php if( $akvo_filters->is_active( $post_type ) ):?>col-md-9<?php else:?>col-md-12<?php endif;?>">
 				<?php if(have_posts()):?>
 					<div id="archives-list" class="row" data-target="#archives-list .col-md-4.eq">
          			<?php 
@@ -27,11 +37,18 @@
 							/* UPDATE STICKY OPTION TO OFF THAT DOES NOT HAVE THE POST META YET */
 							
 					?>
-         				<div class="col-md-4 eq">
+         				<div class="<?php if( $template == 'list' ){_e('col-md-12');}else{_e('col-md-4');}?> eq">
          					<?php 
          						global $post_id;
          						
-         						$shortcode = '[akvo-card ';
+								if( $template == 'list' ){
+									$shortcode = '[akvo-list ';
+								}
+								else{
+									$shortcode = '[akvo-card ';
+								}
+								
+         						
         						
         						$img = akvo_featured_img($post_id);
         						if($img){
@@ -42,8 +59,34 @@
         						$shortcode .= 'date="'.get_the_date().'" ';
         						$shortcode .= 'content="'.get_the_excerpt().'" ';
         						$shortcode .= 'link="'.get_the_permalink().'" ';
-        						$shortcode .= 'type="'.get_post_type($post).'"]';
-        			
+        						
+								
+								if( $template == 'list' ){
+									$types = array();
+									$term_types = array();
+									
+									if( 'media' == $post_type ){
+										$term_types = get_the_terms( $post, 'types' );
+									}
+									
+									if( is_array( $term_types ) && count( $term_types ) ){
+										foreach( $term_types as $term_type ){
+											array_push( $types, $term_type->name );
+										}
+									}
+									
+									$shortcode .= 'type="'.implode( ',', $types ).'"]';
+									
+								}
+								else{
+									$shortcode .= 'type="'.$post_type.'"]';
+								}
+								
+								
+								
+								
+								
+								
         						echo do_shortcode($shortcode);
          					?>
          				</div>

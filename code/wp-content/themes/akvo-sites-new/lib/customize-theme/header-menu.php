@@ -4,8 +4,10 @@
 		
 		global $akvo_customize;
 		
+		$section = 'sage_header_scheme';
+		
 		/* MAIN MENU */
-		$akvo_customize->section( $wp_customize, 'akvo_theme_panel', 'sage_header_scheme', 'Main Menu', '');
+		$akvo_customize->section( $wp_customize, 'akvo_theme_panel', $section, 'Main Menu', '');
 		
 		
 		
@@ -37,8 +39,10 @@
 		);
 		
 		foreach( $colors as $id => $color ){
-			$akvo_customize->color( $wp_customize, 'sage_header_scheme', $id, $color['label'], $color['default'] );
+			$akvo_customize->color( $wp_customize, $section, $id, $color['label'], $color['default'] );
 		}
+		
+		$akvo_customize->text( $wp_customize, $section, 'sage_header_options[menu_font_size]', 'Font Size', '14px' );
 		
 	}, 40);
 	
@@ -59,7 +63,8 @@
 				'selector'	=> 'nav ul.navbar-nav li a',
 				'styles'	=> array(
 					'background'	=> 'bg_menu',
-					'color'			=> 'color_menu'
+					'color'			=> 'color_menu',
+					'font-size'		=> 'menu_font_size',
 				)
 			),
 			array(

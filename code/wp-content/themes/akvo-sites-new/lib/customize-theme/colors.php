@@ -24,6 +24,7 @@
 				'default'		=> '#ffffff',
 				'label'			=> 'Background'
 			),
+			
 			'grijs'				=> array(
 				'default'		=> '#e6e6e6',
 				'label'			=> 'Shades of grey'
@@ -139,7 +140,7 @@
 				)
 			),
 			array(
-				'selector'	=> '.carousel .text, footer .twitter, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active',
+				'selector'	=> '.carousel .text, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active',
 				'styles'	=> array(
 					'background'	=> 'item_bg_imp'
 				)

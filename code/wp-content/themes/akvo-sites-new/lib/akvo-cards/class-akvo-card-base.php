@@ -2,6 +2,33 @@
 	
 	class AKVO_CARD_BASE{
 		
+		var $shortcode_str;
+		var $shortcode_slug;
+		var $template;
+		
+		function __construct(){
+			
+			/* HANDLE AJAX */
+			add_action( "wp_ajax_".$this->shortcode_slug, array( $this, "ajax" ) );
+			add_action( "wp_ajax_nopriv_".$this->shortcode_slug, array( $this, "ajax" ) );
+			
+			/* HANDLE SHORTCODE */
+			add_shortcode( $this->shortcode_str, array( $this, 'shortcode' ) );
+			
+		}
+		
+		
+		
+		/* SHORTCODE FUNCTIONALITY */
+		function shortcode( $atts ){
+			
+		}
+		
+		/* FUNCTION THAT HANDLES YOUR AJAX */
+		function ajax(){
+			
+		}
+		
 		function get_ajax_url($action, $atts, $dont_inc = array()){
 			$url = admin_url('admin-ajax.php')."?action=".$action;
 			foreach($atts as $key => $val){

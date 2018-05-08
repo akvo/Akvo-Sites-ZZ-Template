@@ -106,10 +106,12 @@ function post_extra_boxes() {
 	) );
 
 	$cmb_posts->add_field( array(
-		'name' => __( 'Featured', 'cmb2' ),
-		'desc' => __( 'Make this a featured item, displayed full width on the overview page. Be sure to have only one featured item at any time.', 'cmb2' ),
-		'id'   => $prefix . 'checkbox',
-		'type' => 'checkbox',
+		'name' 		=> __( 'Featured', 'cmb2' ),
+		'desc' 		=> __( 'Make this a sticky item, displayed first on the archives page.', 'cmb2' ),
+		'id'   		=> $prefix . 'checkbox',
+		'type' 		=> 'select',
+		'default'	=> 'off',
+		'options'	=> array( 'on'	=> 'On', 'off'	=> 'Off' )
 	) );
 }
 
