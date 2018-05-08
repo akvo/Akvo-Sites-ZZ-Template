@@ -24,6 +24,12 @@
 	}
 	unset($file, $filepath);
 	
+	/* ALLOW TO UPLOAD CSV FILES */
+	add_filter( 'mime_types', function( $mimes ){
+		$mimes['csv'] = 'text/csv';
+		return $mimes;
+		
+	} );
 	
 	
 	// HIDE ADMIN BAR ON THE FRONT END
