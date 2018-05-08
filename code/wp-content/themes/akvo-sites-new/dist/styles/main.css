@@ -7131,6 +7131,11 @@ article .intro, .article .intro {
 
   .card .card-title, .card .card-content {
     height: auto; } }
+.list-widget {
+  width: 100%;
+  border: #ccc solid 1px;
+  padding: 20px; }
+
 #tribe-events-pg-template {
   max-width: 1140px; }
 

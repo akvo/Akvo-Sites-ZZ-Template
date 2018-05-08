@@ -4,7 +4,7 @@
 		
 		global $akvo_customize;
 		
-		$akvo_customize->panel( $wp_customize, 'akvo_card_panel', 'Card Widget' );
+		$akvo_customize->panel( $wp_customize, 'akvo_card_panel', 'Akvo Card Widget' );
 
 		
 		/* GENERAL THEME SECTION */
