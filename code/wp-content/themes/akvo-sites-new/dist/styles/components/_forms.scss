@@ -24,29 +24,35 @@
 		}
 	}
 	
-	
-	&.icon-only{
-		background: none;
+	@media(min-width: 769px){
 		
-		input.search-field.form-control{
-			background-image: url('../images/search-icon.png');
-			background-size: contain;
-			background-repeat: no-repeat;
-			background-position: right;
-			cursor:pointer;
-			width: 10px;
-			float: right;
-			box-shadow:none;
+		&.icon-only{
+			background: none;
+			
+			input.search-field.form-control{
+				background-image	: url('../images/search-icon.png');
+				background-size		: contain;
+				background-repeat	: no-repeat;
+				background-position	: right;
+				cursor				: pointer;
+				width				: 10px;
+				float				: right;
+				box-shadow			: none;
+			}
+			input.search-field.form-control:focus{
+				background-image	: none;
+				width				: 100%;
+				float				: none;
+				background-color	: #f2f2f2;
+				cursor				: text;
+			}
+			
 		}
-		input.search-field.form-control:focus{
-			background-image: none;
-			width: 100%;
-			float: none;
-			background-color: #f2f2f2;
-			cursor:text;
-		}
+		
 		
 	}
+	
+	
 	
 }
 

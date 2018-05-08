@@ -6213,31 +6213,32 @@ blockquote {
       background: none;
       font-size: 18px;
       padding-top: 4px; }
-  .search-wrap.icon-only {
-    background: none; }
-    .search-wrap.icon-only input.search-field.form-control, .search-wrap.icon-only .comment-form input.search-field[type="text"], .comment-form .search-wrap.icon-only input.search-field[type="text"],
-    .search-wrap.icon-only .comment-form input.search-field[type="email"],
-    .comment-form .search-wrap.icon-only input.search-field[type="email"],
-    .search-wrap.icon-only .comment-form input.search-field[type="url"],
-    .comment-form .search-wrap.icon-only input.search-field[type="url"] {
-      background-image: url("../images/search-icon.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: right;
-      cursor: pointer;
-      width: 10px;
-      float: right;
-      box-shadow: none; }
-    .search-wrap.icon-only input.search-field.form-control:focus, .search-wrap.icon-only .comment-form input.search-field[type="text"]:focus, .comment-form .search-wrap.icon-only input.search-field[type="text"]:focus,
-    .search-wrap.icon-only .comment-form input.search-field[type="email"]:focus,
-    .comment-form .search-wrap.icon-only input.search-field[type="email"]:focus,
-    .search-wrap.icon-only .comment-form input.search-field[type="url"]:focus,
-    .comment-form .search-wrap.icon-only input.search-field[type="url"]:focus {
-      background-image: none;
-      width: 100%;
-      float: none;
-      background-color: #f2f2f2;
-      cursor: text; }
+  @media (min-width: 769px) {
+    .search-wrap.icon-only {
+      background: none; }
+      .search-wrap.icon-only input.search-field.form-control, .search-wrap.icon-only .comment-form input.search-field[type="text"], .comment-form .search-wrap.icon-only input.search-field[type="text"],
+      .search-wrap.icon-only .comment-form input.search-field[type="email"],
+      .comment-form .search-wrap.icon-only input.search-field[type="email"],
+      .search-wrap.icon-only .comment-form input.search-field[type="url"],
+      .comment-form .search-wrap.icon-only input.search-field[type="url"] {
+        background-image: url("../images/search-icon.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
+        cursor: pointer;
+        width: 10px;
+        float: right;
+        box-shadow: none; }
+      .search-wrap.icon-only input.search-field.form-control:focus, .search-wrap.icon-only .comment-form input.search-field[type="text"]:focus, .comment-form .search-wrap.icon-only input.search-field[type="text"]:focus,
+      .search-wrap.icon-only .comment-form input.search-field[type="email"]:focus,
+      .comment-form .search-wrap.icon-only input.search-field[type="email"]:focus,
+      .search-wrap.icon-only .comment-form input.search-field[type="url"]:focus,
+      .comment-form .search-wrap.icon-only input.search-field[type="url"]:focus {
+        background-image: none;
+        width: 100%;
+        float: none;
+        background-color: #f2f2f2;
+        cursor: text; } }
 
 .form .bg {
   padding: 10px 15px; }
