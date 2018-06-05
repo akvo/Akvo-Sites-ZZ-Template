@@ -79,6 +79,20 @@
 		global $akvo;
 		$akvo->print_css( $header_option, $menus );
 		
+		/* SMALL SCREEN CSS SELECTORS */
+		$sm_items = array(
+			array(
+				'selector'	=> 'nav ul.navbar-nav .dropdown-menu li a:hover, nav ul.navbar-nav .dropdown-menu li.current-menu-item a',
+				'styles'	=> array(
+					'background'	=> 'bg_parent_menu',
+					'color'			=> 'color_parent_menu'
+				)
+			),
+			
+		);
+		
+		$akvo->print_css( $header_option, $sm_items, '@media (min-width: 768px)' );
+		
 	} );
 	
 
