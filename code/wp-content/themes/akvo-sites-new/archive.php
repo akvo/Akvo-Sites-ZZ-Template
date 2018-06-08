@@ -61,7 +61,7 @@
         						$shortcode .= 'link="'.get_the_permalink().'" ';
         						
 								
-								if( $template == 'list' ){
+								if( $template == 'list' && $post_type == 'media' ){
 									
 									$shortcode .= 'type="'.$akvo_card->get_media_term_types( $post_id ).'"';
 									
