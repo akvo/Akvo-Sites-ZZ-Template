@@ -1,10 +1,23 @@
-<div id="cards-list" data-target=".col-md-4.eq" class="row" data-url="<?php _e($url);?>" data-paged="akvo-paged">
+<div id="cards-list" data-target="<?php if( $atts['template'] == 'list' ){_e('col-md-12');}else{_e('col-md-4');}?>.eq" class="row" data-url="<?php _e($url);?>" data-paged="akvo-paged">
 	<?php foreach($data as $item):?>
-		<div class="col-md-4 eq">
+		<div class="<?php if( $atts['template'] == 'list' ){_e('col-md-12');}else{_e('col-md-4');}?> eq">
 		<?php
-			$shortcode = '[akvo-card';
+			
+			if( $atts['template'] == 'list' ){
+				$shortcode = '[akvo-list';
+			}
+			else{
+				$shortcode = '[akvo-card';
+			}
+								
 			foreach($item as $key=>$val){
+				
+				if( $key == 'type' && $atts['template'] == 'list' && $atts['type'] == 'media' ){
+					
+				}
+				
 				$shortcode .= ' '.$key.'="'.$val.'"';	
+				
 			}
 			$shortcode .= ']';
 			echo do_shortcode($shortcode);

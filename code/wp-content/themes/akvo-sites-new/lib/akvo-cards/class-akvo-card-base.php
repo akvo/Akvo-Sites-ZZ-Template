@@ -118,8 +118,10 @@
 				'content'	=> '',
 				'date'		=> '',
 				'img'		=> '',
-				'link'		=> ''
+				'link'		=> '',
+				'post_id'	=> '0'
 			);
+			$akvo_card['post_id'] = $post->ID;
 			$akvo_card['img'] = akvo_featured_img($post->ID);
 			$akvo_card['title'] = get_the_title($post->ID);
 			$akvo_card['date'] = get_the_date(self::get_date_format(), $post->ID);
@@ -258,8 +260,28 @@
 			return $text;
 		}
 		
+		/* FOR MEDIA TYPE, ADD EXTRA TYPES FROM TAXONOMY */
+		function get_media_term_types( $post_id ){
+			$types = array();
+			$term_types = get_the_terms( $post_id, 'types' );
+			
+			if( is_array( $term_types ) && count( $term_types ) ){
+				foreach( $term_types as $term_type ){
+					array_push( $types, $term_type->name );
+				}
+			}
+			
+			return !empty ( implode( ',', $types ) ) ? implode( ',', $types ) : 'media';
+		}
+		
 		/* add extra params from one array to another */
 		function add_extra_params($data, $atts, $extras = array('type-text', 'type')){
+			
+			/* ONLY FOR MEDIA POSTS, GET EXTRA TYPES FROM TAXONOMY */
+			if( $atts['template'] == 'list' && $atts['type'] == 'media' ){
+				$atts['type'] = self::get_media_term_types( $data['post_id'] );	
+			}
+			
 			foreach($extras as $extra){
 				if($atts[$extra]){
 					$data[$extra] = $atts[$extra];

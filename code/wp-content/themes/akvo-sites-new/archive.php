@@ -2,7 +2,7 @@
 
 <?php 
 	
-	global $post, $akvo_filters;
+	global $post, $akvo_filters, $akvo_card;
 	
 	$post_type = get_post_type( $post );
 	
@@ -19,7 +19,7 @@
 			<?php endif;?>
 			<div id="archives-container" class="<?php if( $akvo_filters->is_active( $post_type ) ):?>col-md-9<?php else:?>col-md-12<?php endif;?>">
 				<?php if(have_posts()):?>
-					<div id="archives-list" class="row" data-target="#archives-list .col-md-4.eq">
+					<div id="archives-list" class="row" data-target="#archives-list <?php if( $template == 'list' ){_e('col-md-12');}else{_e('col-md-4');}?>.eq">
          			<?php 
 						while ( have_posts() ) : 
 							the_post();
@@ -62,29 +62,17 @@
         						
 								
 								if( $template == 'list' ){
-									$types = array();
-									$term_types = array();
 									
-									if( 'media' == $post_type ){
-										$term_types = get_the_terms( $post, 'types' );
-									}
-									
-									if( is_array( $term_types ) && count( $term_types ) ){
-										foreach( $term_types as $term_type ){
-											array_push( $types, $term_type->name );
-										}
-									}
-									
-									$shortcode .= 'type="'.implode( ',', $types ).'"]';
+									$shortcode .= 'type="'.$akvo_card->get_media_term_types( $post_id ).'"';
 									
 								}
 								else{
-									$shortcode .= 'type="'.$post_type.'"]';
+									$shortcode .= 'type="'.$post_type.'"';
 								}
 								
 								
 								
-								
+								$shortcode .= "]"; 
 								
 								
         						echo do_shortcode($shortcode);

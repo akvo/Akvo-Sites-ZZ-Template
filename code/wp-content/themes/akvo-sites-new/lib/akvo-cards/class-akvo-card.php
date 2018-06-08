@@ -91,4 +91,6 @@
 		
 	}
 	
-	new Akvo_Card;
+	global $akvo_card;
+	
+	$akvo_card = new Akvo_Card;

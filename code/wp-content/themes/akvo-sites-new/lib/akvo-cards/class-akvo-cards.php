@@ -14,6 +14,7 @@
 		
 		function get_default_atts(){
 			return array( 
+				'template'			=> 'card',
 				'type' 				=> 'post', 
 				'posts_per_page' 	=> 3,
 				'rsr-id' 			=> 'rsr', 
