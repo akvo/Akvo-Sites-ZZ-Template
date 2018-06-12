@@ -63,7 +63,12 @@ class Tribe__Events__List_Widget extends WP_Widget {
 	 * @param string $pluginPath    The pluginpath so we can locate the template stuff.
 	 */
 	public function widget_output( $args, $instance, $template_name = 'widgets/list-widget' ) {
-		global $wp_query, $tribe_ecp, $post;
+		global $tribe_ecp;
+		global $post;
+
+		if ( ! $wp_query = tribe_get_global_query_object() ) {
+			return;
+		}
 
 		$instance = wp_parse_args(
 			$instance, array(
@@ -83,6 +88,10 @@ class Tribe__Events__List_Widget extends WP_Widget {
 		 */
 		extract( $args, EXTR_SKIP );
 		extract( $instance, EXTR_SKIP );
+
+		if ( ! isset( $no_upcoming_events ) ) {
+			$no_upcoming_events = true;
+		}
 
 		// Temporarily unset the tribe bar params so they don't apply
 		$hold_tribe_bar_args = array();
@@ -106,7 +115,9 @@ class Tribe__Events__List_Widget extends WP_Widget {
 				'tribe_events_list_widget_query_args', array(
 					'eventDisplay'   => 'list',
 					'posts_per_page' => self::$limit,
+					'is_tribe_widget' => true,
 					'tribe_render_context' => 'widget',
+					'featured' => empty( $instance['featured_events_only'] ) ? false : (bool) $instance['featured_events_only'],
 				)
 			)
 		);
@@ -174,9 +185,10 @@ class Tribe__Events__List_Widget extends WP_Widget {
 		$new_instance = $this->default_instance_args( $new_instance );
 
 		/* Strip tags (if needed) and update the widget settings. */
-		$instance['title']              = strip_tags( $new_instance['title'] );
-		$instance['limit']              = $new_instance['limit'];
-		$instance['no_upcoming_events'] = $new_instance['no_upcoming_events'];
+		$instance['title']                = strip_tags( $new_instance['title'] );
+		$instance['limit']                = $new_instance['limit'];
+		$instance['no_upcoming_events']   = $new_instance['no_upcoming_events'];
+		$instance['featured_events_only'] = $new_instance['featured_events_only'];
 
 		if ( isset( $new_instance['jsonld_enable'] ) && $new_instance['jsonld_enable'] == true ) {
 			$instance['jsonld_enable'] = 1;
@@ -210,9 +222,10 @@ class Tribe__Events__List_Widget extends WP_Widget {
 	 */
 	protected function default_instance_args( array $instance ) {
 		return wp_parse_args( $instance, array(
-			'title'              => esc_html__( 'Upcoming Events', 'the-events-calendar' ),
-			'limit'              => '5',
-			'no_upcoming_events' => false,
+			'title'                => esc_html__( 'Upcoming Events', 'the-events-calendar' ),
+			'limit'                => '5',
+			'no_upcoming_events'   => false,
+			'featured_events_only' => false,
 		) );
 	}
 }

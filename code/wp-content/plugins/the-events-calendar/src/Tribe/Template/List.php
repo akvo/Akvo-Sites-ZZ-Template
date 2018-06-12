@@ -77,6 +77,7 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 				'post_type'    => Tribe__Events__Main::POSTTYPE,
 				'post_status'  => $post_status,
 				'paged'        => $tribe_paged,
+				'featured'     => tribe( 'tec.featured_events' )->featured_events_requested(),
 			);
 
 			// check & set display
@@ -110,7 +111,7 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 			if ( ! empty( $_POST['hash'] ) && $hash_str !== $_POST['hash'] ) {
 				$tribe_paged   = 1;
 				$args['paged'] = 1;
-				$query         = Tribe__Events__Query::getEvents( $args, true );
+				$query         = tribe_get_events( $args, true );
 			}
 
 
@@ -124,8 +125,12 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 				'view'        => 'list',
 			);
 
-			global $wp_query, $post, $paged;
+			global $post;
+			global $paged;
+			global $wp_query;
+
 			$wp_query = $query;
+
 			if ( ! empty( $query->posts ) ) {
 				$post = $query->posts[0];
 			}

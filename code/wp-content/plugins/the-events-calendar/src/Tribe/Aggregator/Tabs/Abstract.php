@@ -2,13 +2,8 @@
 // Don't load directly
 defined( 'WPINC' ) or die;
 
-abstract class Tribe__Events__Aggregator__Tabs__Abstract {
+abstract class Tribe__Events__Aggregator__Tabs__Abstract extends Tribe__Tabbed_View__Tab {
 
-	/**
-	 * To Order the Tabs on the UI you need to change the priority
-	 * @var integer
-	 */
-	public $priority = 50;
 
 	/**
 	 * Creates a way to include the this tab HTML easily
@@ -29,27 +24,6 @@ abstract class Tribe__Events__Aggregator__Tabs__Abstract {
 	 */
 	public function __construct() {
 	}
-
-	/**
-	 * Enforces a method to display the tab or not
-	 *
-	 * @return boolean
-	 */
-	abstract public function is_visible();
-
-	/**
-	 * Enforces a method to return the Tab Slug
-	 *
-	 * @return string
-	 */
-	abstract public function get_slug();
-
-	/**
-	 * Enforces a method to return the Label of the Tab
-	 *
-	 * @return string
-	 */
-	abstract public function get_label();
 
 	/**
 	 * Fetches the link to this tab
@@ -110,43 +84,75 @@ abstract class Tribe__Events__Aggregator__Tabs__Abstract {
 
 		$data = $post_data[ $post_data['origin'] ];
 
-		$record = Tribe__Events__Aggregator__Records::instance()->get_by_origin( $post_data['origin'] );
+		// If we are dealing with Other URL made
+		if ( 'url' === $post_data['origin'] ) {
+			$new_origin = tribe( 'events-aggregator.settings' )->match_source_origin( $data['source'] );
 
-		$meta = array(
-			'origin'       => $post_data['origin'],
-			'type'         => empty( $data['import_type'] )      ? 'manual' : $data['import_type'],
-			'frequency'    => empty( $data['import_frequency'] ) ? null     : $data['import_frequency'],
-			'file'         => empty( $data['file'] )             ? null     : $data['file'],
-			'keywords'     => empty( $data['keywords'] )         ? null     : $data['keywords'],
-			'location'     => empty( $data['location'] )         ? null     : $data['location'],
-			'start'        => empty( $data['start'] )            ? null     : $data['start'],
-			'radius'       => empty( $data['radius'] )           ? null     : $data['radius'],
-			'source'       => empty( $data['source'] )           ? null     : $data['source'],
-			'content_type' => empty( $data['content_type'] )     ? null     : $data['content_type'],
-		);
-
-		// make sure there's data
-		if ( empty( $meta['file'] ) && empty( $meta['source'] ) ) {
-			if ( 'csv' === $meta['origin'] || 'ics' === $meta['origin'] ) {
-				wp_send_json_error( array(
-					'message' => __( 'Please provide the file that you wish to import.', 'the-events-calendar' ),
-				) );
-			} else {
-				wp_send_json_error( array(
-					'message' => __( 'Please provide the URL that you wish to import.', 'the-events-calendar' ),
-				) );
+			// If we found a valid new origin we overwrite
+			if ( false !== $new_origin ) {
+				$post_data['origin'] = $new_origin;
 			}
 		}
 
-		// validate that the URLs are accurate for the relevant origin
-		if ( 'facebook' === $meta['origin'] && ! preg_match( '!(https?://)?(www\.)?facebook\.com!', $meta['source'] ) ) {
-			wp_send_json_error( array(
-				'message' => __( 'Please provide a Facebook URL when importing from Facebook.', 'the-events-calendar' ),
+		$record = Tribe__Events__Aggregator__Records::instance()->get_by_origin( $post_data['origin'] );
+
+		$meta = array(
+			'origin'        => $post_data['origin'],
+			'type'          => empty( $data['import_type'] ) ? 'manual' : $data['import_type'],
+			'frequency'     => empty( $data['import_frequency'] ) ? null : $data['import_frequency'],
+			'file'          => empty( $data['file'] ) ? null : $data['file'],
+			'keywords'      => ! isset( $data['keywords'] ) ? null : trim( $data['keywords'] ),
+			'location'      => ! isset( $data['location'] ) ? null : trim( $data['location'] ),
+			'start'         => ! isset( $data['start'] ) ? null : trim( $data['start'] ),
+			'end'           => ! isset( $data['end'] ) ? null : trim( $data['end'] ),
+			'radius'        => empty( $data['radius'] ) ? null : $data['radius'],
+			'source'        => empty( $data['source'] ) ? null : $data['source'],
+			'source_type'   => empty( $data['source_type'] ) ? null : $data['source_type'],
+			'content_type'  => empty( $data['content_type'] ) ? null : $data['content_type'],
+			'schedule_day'  => empty( $data['schedule_day'] ) ? null : $data['schedule_day'],
+			'schedule_time' => empty( $data['schedule_time'] ) ? null : $data['schedule_time'],
+		);
+
+		// Special source types can override source (Eventbrite current profile URL)
+		if ( ! empty( $meta['source_type'] ) ) {
+			$meta['source'] = $meta['source_type'];
+		}
+
+		// Only apply this verification when dealing with Creating new items
+		if ( ! empty( $post_data['action'] ) && 'new' === $post_data['action'] ) {
+			$hash = array_filter( $meta );
+
+			// remove non-needed data from the Hash of the Record
+			unset( $hash['schedule_day'], $hash['schedule_time'] );
+			ksort( $hash );
+			$hash = maybe_serialize( $hash );
+			$hash = md5( $hash );
+
+			$matches = Tribe__Events__Aggregator__Records::instance()->query( array(
+				'post_status' => Tribe__Events__Aggregator__Records::instance()->get_status( 'schedule' )->name,
+				'meta_query' => array(
+					Tribe__Events__Aggregator__Records::instance()->prefix_meta( 'source' ) => $meta['source'],
+				),
+				'fields' => 'ids',
 			) );
-		} elseif ( 'meetup' === $meta['origin'] && ! preg_match( '!(https?://)?(www\.)?meetup\.com!', $meta['source'] ) ) {
-			wp_send_json_error( array(
-				'message' => __( 'Please provide a Meetup URL when importing from Meetup.', 'the-events-calendar' ),
-			) );
+
+			foreach ( $matches->posts as $post_id ) {
+				$matching_hash = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $post_id )->get_data_hash();
+
+				if ( $matching_hash == $hash ) {
+					$url = get_edit_post_link( $post_id );
+					$anchor = '<a href="' . esc_url( $url ) . '">' . esc_attr__( 'click here to edit it', 'the-events-calendar' ) .  '</a>';
+					$message = sprintf( __( 'A record already exists with these settings, %1$s.', 'the-events-calendar' ), $anchor );
+					wp_send_json_error( array( 'message' => $message ) );
+				}
+			}
+		}
+
+		$meta = $this->validate_meta_by_origin( $meta['origin'], $meta );
+
+		if ( is_wp_error( $meta ) ) {
+			/** @var WP_Error $validated */
+			wp_send_json_error( $meta->get_error_message() );
 		}
 
 		return array(
@@ -154,5 +160,101 @@ abstract class Tribe__Events__Aggregator__Tabs__Abstract {
 			'post_data' => $post_data,
 			'meta' => $meta,
 		);
+	}
+
+	/**
+	 * Validates the meta in relation to the origin.
+	 *
+	 * @param string $origin
+	 * @param array  $meta
+	 *
+	 * @return array|WP_Error The updated/validated meta array or A `WP_Error` if the validation failed.
+	 */
+	protected function validate_meta_by_origin( $origin, $meta ) {
+		$result = $meta;
+
+		switch ( $origin ) {
+			case 'csv':
+			case 'ics':
+				if ( empty( $meta['file'] ) ) {
+					$result = new WP_Error( 'missing-file', __( 'Please provide the file that you wish to import.', 'the-events-calendar' ) );
+				}
+				break;
+			case 'facebook':
+				if ( empty( $meta['source'] ) || ! preg_match( '/' . Tribe__Events__Aggregator__Record__Facebook::get_source_regexp() . '/', $meta['source'] ) ) {
+					$result = new WP_Error( 'not-facebook-url', __( 'Please provide a Facebook URL when importing from Facebook.', 'the-events-calendar' ) );
+				}
+				break;
+			case 'eventbrite':
+				if ( empty( $meta['source'] ) || ! preg_match( '/' . Tribe__Events__Aggregator__Record__Eventbrite::get_source_regexp() . '/', $meta['source'] ) ) {
+					$result = new WP_Error( 'not-eventbrite-url', __( 'Please provide a Eventbrite URL when importing from Eventbrite.', 'the-events-calendar' ) );
+				}
+				break;
+			case 'meetup':
+				if ( empty( $meta['source'] ) || ! preg_match( '/' . Tribe__Events__Aggregator__Record__Meetup::get_source_regexp() . '/', $meta['source'] ) ) {
+					$result = new WP_Error( 'not-meetup-url', __( 'Please provide a Meetup URL when importing from Meetup.', 'the-events-calendar' ) );
+				}
+				break;
+			case 'url':
+				$now = time();
+				$range = tribe_get_option( 'tribe_aggregator_default_url_import_range', 30 * DAY_IN_SECONDS );
+				$start = ! empty( $meta['start'] ) ? $this->to_timestamp( $meta['start'], $now ) : $now;
+				$end = ! empty( $meta['end'] ) ? $this->to_timestamp( $meta['end'], $start + $range ) : $start + $range;
+
+				/**
+				 * Filters the URL import range cap.
+				 *
+				 * @param int   $max_range The duration in seconds of the cap.
+				 * @param array $meta      The meta for this import request.
+				 */
+				$max_range = apply_filters( 'tribe_aggregator_url_import_range_cap', 3 * 30 * DAY_IN_SECONDS, $meta );
+
+				// but soft-cap the range to start + cap at the most
+				$end = min( $end, $start + $max_range );
+
+				/**
+				 * Filters the URL import range start date after the cap has been applied.
+				 *
+				 * @param int   $start The start date UNIX timestamp.
+				 * @param int   $end   The end date UNIX timestamp.
+				 * @param array $meta  The meta for this import request.
+				 */
+				$start = apply_filters( 'tribe_aggregator_url_import_range_start', $start, $end, $meta );
+
+				/**
+				 * Filters the URL import range end date after the cap has been applied.
+				 *
+				 * @param int   $end   The end date UNIX timestamp.
+				 * @param int   $start The start date UNIX timestamp.
+				 * @param array $meta  The meta for this import request.
+				 */
+				$end = apply_filters( 'tribe_aggregator_url_import_range_end', $end, $start, $meta );
+
+				$result['start'] = $start;
+				$result['end'] = $end;
+
+				break;
+			default:
+				if ( empty( $meta['source'] ) ) {
+					$result = new WP_Error( 'missing-url', __( 'Please provide the URL that you wish to import.', 'the-events-calendar' ) );
+				}
+				break;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Casts a string or int to a timestamp.
+	 *
+	 * @param int|string $time
+	 * @param int        $default The default time that should be used if the conversion of `$time` fails
+	 *
+	 * @return int
+	 */
+	protected function to_timestamp( $time, $default = '' ) {
+		$time = Tribe__Date_Utils::is_timestamp( $time ) ? $time : strtotime( $time );
+
+		return false !== $time ? $time : $default;
 	}
 }

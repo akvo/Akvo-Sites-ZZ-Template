@@ -14,6 +14,16 @@
 			tr {
 				position: relative;
 			}
+
+			.eb-url-row {
+				th[scope="row"] {
+					padding: 0;
+				}
+
+				td {
+					padding: 0 10px;
+				}
+			}
 		}
 
 		.subsubsub {
@@ -80,6 +90,10 @@
 		font-weight: 600;
 	}
 
+	.tribe-ea-size-tiny {
+		width: 75px;
+	}
+
 	.tribe-ea-size-small {
 		width: 100px;
 	}
@@ -114,6 +128,10 @@
 
 	.tribe-ea-field-readonly + .tribe-ea-field {
 		margin-left: 10px;
+	}
+
+	.tribe-ea-field.tribe-field-inline-dropdown {
+		margin-left: 0;
 	}
 
 	.tribe-credential-row {
@@ -188,6 +206,14 @@
 	.tribe-ea-tab-scheduled {
 		td.column-source {
 			padding-left: 10px;
+			:not(.row-actions) a:first-of-type {
+				overflow : hidden;
+				white-space : nowrap;
+				text-overflow : ellipsis;
+				display : inline-block;
+				max-width : 100%;
+				vertical-align: bottom;
+			}
 		}
 	}
 
@@ -258,6 +284,10 @@
 
 	.tribe-date-helper {
 		color: gray;
+	}
+
+	.tribe-ea-inline-label {
+		padding-top: 7px;
 	}
 
 	.tribe-notice-tribe-missing-aggregator-license {
@@ -366,7 +396,8 @@
 		margin-bottom: .25em;
 	}
 
-	.tribe-ea-facebook-button {
+	.tribe-ea-facebook-button,
+	.tribe-ea-eventbrite-button {
 		margin-left: 2rem;
 		margin-top: 1rem;
 	}
@@ -541,12 +572,6 @@
 }
 
 .tribe-ea-form {
-	&[data-origin="eventbrite"] {
-		.tribe-finalize-container {
-			display: block;
-		}
-	}
-
 	&[data-origin="csv"] {
 		.dataTables_length,
 		.dataTables_info,
@@ -585,6 +610,11 @@
 	.tribe-timezone-message {
 		font-style: italic;
 		padding-top: .5rem;
+	}
+	.tribe-limits-message {
+		font-style: italic;
+		padding: 0;
+		margin: 1em 0 -1.5em;
 	}
 }
 
@@ -665,12 +695,12 @@
 	cursor: default;
 }
 
-.tribe-upsell-subtitle {
+.tribe-dropdown-subtitle {
 	font-size: 11px;
 	color: gray;
 }
 
-.select2-highlighted .tribe-upsell-subtitle {
+.select2-highlighted .tribe-dropdown-subtitle {
 	color: white;
 }
 

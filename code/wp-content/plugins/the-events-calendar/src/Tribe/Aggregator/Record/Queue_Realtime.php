@@ -6,7 +6,7 @@
  */
 class Tribe__Events__Aggregator__Record__Queue_Realtime {
 
-	/** @var Tribe__Events__Aggregator__Record__Queue */
+	/** @var Tribe__Events__Aggregator__Record__Queue_Interface */
 	protected $queue;
 
 	/** @var int */
@@ -24,12 +24,12 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 	/**
 	 * The Queue_Realtime constructor method.
 	 *
-	 * @param Tribe__Events__Aggregator__Record__Queue|null           $queue An optional Queue instance.
+	 * @param Tribe__Events__Aggregator__Record__Queue_Interface|null           $queue An optional Queue instance.
 	 * @param Tribe__Events__Ajax__Operations|null                    $ajax_operations An optional Ajax Operations instance.
 	 * @param Tribe__Events__Aggregator__Record__Queue_Processor|null $queue_processor An optional Queue_Processor instance.
 	 */
 	public function __construct(
-		Tribe__Events__Aggregator__Record__Queue $queue = null,
+		Tribe__Events__Aggregator__Record__Queue_Interface $queue = null,
 		Tribe__Events__Ajax__Operations $ajax_operations = null,
 		Tribe__Events__Aggregator__Record__Queue_Processor $queue_processor = null
 	) {
@@ -38,7 +38,7 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 		add_action( 'wp_ajax_tribe_aggregator_realtime_update', array( $this, 'ajax' ) );
 		$this->queue           = $queue;
 		$this->ajax_operations = $ajax_operations ? $ajax_operations : new Tribe__Events__Ajax__Operations;
-		$this->queue_processor = $queue_processor ? $queue_processor : Tribe__Events__Aggregator::instance()->queue_processor;
+		$this->queue_processor = $queue_processor ? $queue_processor : tribe( 'events-aggregator.main' )->queue_processor;
 	}
 
 	/**
@@ -66,12 +66,15 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 			return;
 		}
 
-		$processor = Tribe__Events__Aggregator::instance()->queue_processor;
+		/** @var Tribe__Events__Aggregator__Record__Queue_Processor $processor */
+		$processor = tribe( 'events-aggregator.main' )->queue_processor;
 		if ( ! $this->record_id = $processor->next_waiting_record( true ) ) {
 			return false;
 		}
 
-		$this->queue = $this->queue ? $this->queue : new Tribe__Events__Aggregator__Record__Queue( $this->record_id );
+		$this->queue = $this->queue
+			? $this->queue
+			: Tribe__Events__Aggregator__Record__Queue_Processor::build_queue( $this->record_id );
 
 		if ( $this->queue->is_empty() ) {
 			return false;
@@ -116,17 +119,22 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 		$this->ajax_operations->verify_or_exit( $_POST['check'], $this->get_ajax_nonce_action(), $this->get_unable_to_continue_processing_data() );
 
 		// Load the queue
-		$queue = $this->queue ? $this->queue : new Tribe__Events__Aggregator__Record__Queue( $this->record_id );
+		$queue = $this->queue ? $this->queue : Tribe__Events__Aggregator__Record__Queue_Processor::build_queue( $this->record_id );
 
+		// We always need to setup the Current Queue
+		$this->queue_processor->set_current_queue( $queue );
+
+		// Only if it's not empty that we care about proccesing.
 		if ( ! $queue->is_empty() ) {
-			$this->queue_processor->set_current_queue( $queue );
 			$this->queue_processor->process_batch( $this->record_id );
 		}
 
-		$done       = $this->queue_processor->current_queue->is_empty();
-		$percentage = $this->queue_processor->current_queue->progress_percentage();
+		/** @var \Tribe__Events__Aggregator__Record__Queue_Interface $current_queue */
+		$current_queue = $this->queue_processor->current_queue;
+		$done          = $current_queue->is_empty();
+		$percentage    = $current_queue->progress_percentage();
 
-		$this->ajax_operations->exit_data( $this->get_progress_message_data( $this->queue_processor->current_queue, $percentage, $done ) );
+		$this->ajax_operations->exit_data( $this->get_progress_message_data( $current_queue, $percentage, $done ) );
 	}
 
 	/**
@@ -175,8 +183,11 @@ class Tribe__Events__Aggregator__Record__Queue_Realtime {
 	}
 
 	/**
-	 * @param $percentage
-	 * @param $done
+	 * Returns the progress message data.
+	 *
+	 * @param Tribe__Events__Aggregator__Record__Queue_Interface $queue
+	 * @param int $percentage
+	 * @param bool $done
 	 *
 	 * @return mixed|string|void
 	 */

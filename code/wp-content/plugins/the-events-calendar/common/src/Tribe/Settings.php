@@ -13,7 +13,6 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 	 *
 	 */
 	class Tribe__Settings {
-
 		/**
 		 * Slug of the parent menu slug
 		 * @var string
@@ -45,7 +44,7 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		public $allTabs;
 
 		/**
-		 * multidimentional array of the fields that will be generated
+		 * multidimensional array of the fields that will be generated
 		 * for the entire settings panel, tabs are represented in the array keys
 		 * @var array
 		 */
@@ -71,10 +70,17 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		public $noSaveTabs;
 
 		/**
-		 * the slug used in the admin to generate the settings page
+		 * The slug used in the admin to generate the settings page
 		 * @var string
 		 */
 		public $adminSlug;
+
+		/**
+		 * The slug used in the admin to generate the help page
+		 * @var string
+		 */
+		protected $help_slug;
+
 
 		/**
 		 * the menu name used for the settings page
@@ -125,16 +131,39 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		private static $instance;
 
 		/**
+		 * The settings page URL.
+		 * @var string
+		 */
+		protected $url;
+
+		/**
+		 * An array defining the suite root plugins.
+		 * @var array
+		 */
+		protected $root_plugins = array(
+			'the-events-calendar/the-events-calendar.php',
+			'event-tickets/event-ticket.php',
+		);
+
+		/**
+		 * An associative array in the form [ <tab-slug> => array(...<fields>) ]
+		 * @var array
+		 */
+		protected $fields_for_save = array();
+
+		/**
+		 * An array that contains the fields that are currently being validated.
+		 * @var array
+		 */
+		protected $current_fields = array();
+
+		/**
 		 * Static Singleton Factory Method
 		 *
 		 * @return Tribe__Settings
 		 */
 		public static function instance() {
-			if ( empty( self::$instance ) ) {
-				self::$instance = new self();
-			}
-
-			return self::$instance;
+			return tribe( 'settings' );
 		}
 
 		/**
@@ -148,6 +177,7 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 			$this->menuName    = apply_filters( 'tribe_settings_menu_name', esc_html__( 'Events', 'tribe-common' ) );
 			$this->requiredCap = apply_filters( 'tribe_settings_req_cap', 'manage_options' );
 			$this->adminSlug   = apply_filters( 'tribe_settings_admin_slug', 'tribe-common' );
+			$this->help_slug   = apply_filters( 'tribe_settings_help_slug', 'tribe-common-help' );
 			$this->errors      = get_option( 'tribe_settings_errors', array() );
 			$this->major_error = get_option( 'tribe_settings_major_error', false );
 			$this->sent_data   = get_option( 'tribe_settings_sent_data', array() );
@@ -155,6 +185,13 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 			$this->defaultTab  = null;
 			$this->currentTab  = null;
 
+			$this->hook();
+		}
+
+		/**
+		 * Hooks the actions and filters required for the class to work.
+		 */
+		public function hook() {
 			// run actions & filters
 			add_action( 'admin_menu', array( $this, 'addPage' ) );
 			add_action( 'network_admin_menu', array( $this, 'addNetworkPage' ) );
@@ -228,7 +265,7 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		 * @return void
 		 */
 		public function addNetworkPage() {
-			if ( ! $this->should_setup_pages() ) {
+			if ( ! $this->should_setup_network_pages() ) {
 				return;
 			}
 
@@ -236,6 +273,18 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 				'settings.php', esc_html__( 'Events Settings', 'tribe-common' ), esc_html__( 'Events Settings', 'tribe-common' ), $this->requiredCap, $this->adminSlug, array(
 					$this,
 					'generatePage',
+				)
+			);
+
+			$this->admin_page = add_submenu_page(
+				'settings.php',
+				esc_html__( 'Events Help', 'tribe-common' ),
+				esc_html__( 'Events Help', 'tribe-common' ),
+				$this->requiredCap,
+				$this->help_slug,
+				array(
+					tribe( 'settings.manager' ),
+					'do_help_tab',
 				)
 			);
 		}
@@ -248,7 +297,7 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		public function initTabs() {
 			if ( isset( $_GET['page'] ) && $_GET['page'] == $this->adminSlug ) {
 				// Load settings tab-specific helpers and enhancements
-				$this->live_date_preview = new Tribe__Admin__Live_Date_Preview;
+				Tribe__Admin__Live_Date_Preview::instance();
 
 				do_action( 'tribe_settings_do_tabs' ); // this is the hook to use to add new tabs
 				$this->tabs       = (array) apply_filters( 'tribe_settings_tabs', array() );
@@ -296,7 +345,6 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		public function generatePage() {
 			do_action( 'tribe_settings_top' );
 			echo '<div class="tribe_settings wrap">';
-			screen_icon();
 			echo '<h1>';
 			printf( esc_html__( '%s Settings', 'tribe-common' ), $this->menuName );
 			echo '</h1>';
@@ -399,7 +447,7 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 
 				// set the current tab and current fields
 				$tab    = $this->currentTab;
-				$fields = $this->fields_for_save[ $tab ];
+				$fields = $this->current_fields = $this->fields_for_save[ $tab ];
 
 				if ( is_array( $fields ) ) {
 					// loop through the fields and validate them
@@ -409,12 +457,15 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 						$value = apply_filters( 'tribe_settings_validate_field_value', $value, $field_id, $field );
 
 						// make sure it has validation set up for it, else do nothing
-						if ( ( ! isset( $field['conditional'] ) || $field['conditional'] ) && ( ! empty( $field['validation_type'] ) || ! empty( $field['validation_callback'] ) ) ) {
+						if (
+							( ! isset( $field['conditional'] ) || $field['conditional'] )
+							&& ( ! empty( $field['validation_type'] ) || ! empty( $field['validation_callback'] ) )
+						) {
 							// some hooks
 							do_action( 'tribe_settings_validate_field', $field_id, $value, $field );
 							do_action( 'tribe_settings_validate_field_' . $field_id, $value, $field );
 
-							// validate this sucka
+							// validate this field
 							$validate = new Tribe__Validate( $field_id, $field, $value );
 
 							if ( isset( $validate->result->error ) ) {
@@ -427,6 +478,15 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 								$this->validated[ $field_id ]->value = $validate->value;
 							}
 						}
+					}
+
+					// do not generate errors for dependent fields that should not show
+					if ( ! empty( $this->errors ) ) {
+						$keep         = array_filter( array_keys( $this->errors ), array( $this, 'dependency_checks' ) );
+						$this->errors = array_intersect_key(
+							$this->errors,
+							array_combine( $keep, $keep )
+						);
 					}
 
 					// run the saving method
@@ -498,10 +558,10 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 			 */
 			foreach ( $parent_options as $option_id => $new_options ) {
 				// get the old options
-				if ( $option_id == Tribe__Main::OPTIONNAME ) {
-					$old_options = (array) get_option( $option_id );
-				} else {
+				if ( is_network_admin() ) {
 					$old_options = (array) get_site_option( $option_id );
+				} else {
+					$old_options = (array) get_option( $option_id );
 				}
 
 				// set the options by parsing old + new and filter that
@@ -636,6 +696,89 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 			}
 
 			return $slug;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function get_help_slug() {
+			return $this->help_slug;
+		}
+
+		/**
+		 * Determines whether or not the network admin pages should be initialized.
+		 *
+		 * When running in parallel with TEC 3.12.4, TEC should be relied on to handle the admin screens
+		 * that version of TEC (and lower) is tribe-common ignorant. Therefore, tribe-common has to be
+		 * the smarter, more lenient codebase.
+		 * Beyond this at least one of the two "root" plugins (The Events Calendar and Event Tickets)
+		 * should be network activated to add the page.
+		 *
+		 * @return boolean
+		 */
+		public function should_setup_network_pages() {
+			$root_plugin_is_mu_activated = array_sum( array_map( 'is_plugin_active_for_network', $this->root_plugins ) ) >= 1;
+
+			if ( ! $root_plugin_is_mu_activated ) {
+				return false;
+			}
+
+			if ( ! class_exists( 'Tribe__Events__Main' ) ) {
+				return true;
+			}
+
+			if ( version_compare( Tribe__Events__Main::VERSION, '4.0beta', '>=' ) ) {
+				return true;
+			}
+
+			return false;
+
+		}
+
+		/**
+		 * Sets what `common` should consider root plugins.
+		 *
+		 * @param array $root_plugins An array of plugins in the `<folder>/<file.php>` format.
+		 */
+		public function set_root_plugins( array $root_plugins ) {
+			$this->root_plugins = $root_plugins;
+		}
+
+		/**
+		 * Whether the specified field dependency condition is valid or not depending on
+		 * its parent field value.
+		 *
+		 * @since 4.7.7
+		 *
+		 * @param string $field_id The id of the field that might be removed.
+		 *
+		 * @return bool `true` if the field dependency condition is valid, `false` if the field
+		 *              dependency condition is not valid.
+		 */
+		protected function dependency_checks( $field_id ) {
+			$does_not_exist = ! array_key_exists( $field_id, $this->current_fields );
+
+			if ( $does_not_exist ) {
+				return false;
+			}
+
+			$has_no_dependency = ! isset( $this->current_fields[ $field_id ]['validate_if'] );
+
+			if ( $has_no_dependency ) {
+				return true;
+			}
+
+			$condition = $this->current_fields[ $field_id ]['validate_if'];
+
+			if ( $condition instanceof Tribe__Field_Conditional ) {
+				$parent_field = Tribe__Utils__Array::get( $this->validated, $condition->depends_on(), null );
+
+				return $condition->check( $parent_field->value, $this->current_fields );
+			}
+
+			return is_callable( $condition )
+				? call_user_func( $condition, $this->current_fields )
+				: true == $condition;
 		}
 	} // end class
 } // endif class_exists

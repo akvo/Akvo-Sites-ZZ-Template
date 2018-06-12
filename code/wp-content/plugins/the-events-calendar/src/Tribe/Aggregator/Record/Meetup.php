@@ -21,6 +21,17 @@ class Tribe__Events__Aggregator__Record__Meetup extends Tribe__Events__Aggregato
 	}
 
 	/**
+	 * Gets the Regular Expression string to match a source URL
+	 *
+	 * @since 4.6.18
+	 *
+	 * @return string
+	 */
+	public static function get_source_regexp() {
+		return '^(https?:\/\/)?(www\.)?meetup\.com(\.[a-z]{2})?\/';
+	}
+
+	/**
 	 * Public facing Label for this Origin
 	 *
 	 * @return string
@@ -49,5 +60,21 @@ class Tribe__Events__Aggregator__Record__Meetup extends Tribe__Events__Aggregato
 		$event['EventURL'] = $record->meta['source'];
 
 		return $event;
+	}
+
+	/**
+	 * Filters the event to ensure that fields are preserved that are not otherwise supported by Meetup
+	 *
+	 * @param array $event Event data
+	 * @param Tribe__Events__Aggregator__Record__Abstract $record Aggregator Import Record
+	 *
+	 * @return array
+	 */
+	public static function filter_event_to_preserve_fields( $event, $record ) {
+		if ( 'meetup' !== $record->origin ) {
+			return $event;
+		}
+
+		return self::preserve_event_option_fields( $event );
 	}
 }
