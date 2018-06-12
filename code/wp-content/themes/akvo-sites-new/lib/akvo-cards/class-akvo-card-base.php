@@ -218,7 +218,7 @@
 		}
 		
 		function form_shortcode($data){
-			$shortcode = '[akvo-card ';
+			$shortcode = '['.$this->shortcode_str.' ';
         		
         	foreach($data as $key=>$val){
         		

@@ -1,14 +1,14 @@
 <?php
 /*
-	Widget Name: Akvo Card
-	Description: Akvo Card Single Widget to pull RSR updates, projects or WP Post Types
+	Widget Name: Akvo Cards
+	Description: Akvo Cards Multiple Widget to pull RSR updates, projects or WP Post Types
 	Author: Samuel Thomas, Akvo
 	Author URI: 
 	Widget URI: 
 	Video URI: 
 */
 
-class Akvo_Card_Widget extends SiteOrigin_Widget {
+class Akvo_Cards_Widget extends SiteOrigin_Widget {
 	
 	function __construct() {
 		//Here you can do any preparation required before calling the parent constructor, such as including additional files or initializing variables.
@@ -16,15 +16,15 @@ class Akvo_Card_Widget extends SiteOrigin_Widget {
 		//Call the parent constructor with the required arguments.
 		parent::__construct(
 			// The unique id for your widget.
-			'akvo-card',
+			'akvo-cards',
 
 			// The name of the widget for display purposes.
-			__('Akvo Card Single', 'siteorigin-widgets'),
+			__('Akvo Cards Multiple', 'siteorigin-widgets'),
 
 			// The $widget_options array, which is passed through to WP_Widget.
 			// It has a couple of extras like the optional help URL, which should link to your sites help or support page.
 			array(
-				'description' => __('Akvo Card Single Widget to pull RSR updates, projects or WP Post Types', 'siteorigin-widgets'),
+				'description' => __('Akvo Cards Multiple Widget to pull RSR updates, projects or WP Post Types', 'siteorigin-widgets'),
 				'help'        => '',
 			),
 
@@ -33,9 +33,18 @@ class Akvo_Card_Widget extends SiteOrigin_Widget {
 
 			//The $form_options array, which describes the form fields used to configure SiteOrigin widgets. We'll explain these in more detail later.
 			array(
+				'template' => array(
+					'type' => 'select',
+					'label' => __( 'Choose Template', 'siteorigin-widgets' ),
+					'default' => 'news',
+					'options' => array(
+						'card'	=> 'Card',
+						'list'	=> 'List'
+					)
+				),
 				'type' => array(
 					'type' => 'select',
-					'label' => __( 'Type', 'siteorigin-widgets' ),
+					'label' => __( 'Select Type', 'siteorigin-widgets' ),
 					'default' => 'news',
 					'options' => $this->get_types()
 				),
@@ -52,7 +61,7 @@ class Akvo_Card_Widget extends SiteOrigin_Widget {
 			),
 
 			//The $base_folder path string.
-			get_template_directory()."/so-widgets/akvo-card"
+			get_template_directory()."/so-widgets/akvo-cards"
 		);
 	}
 	
@@ -73,4 +82,4 @@ class Akvo_Card_Widget extends SiteOrigin_Widget {
         return '';
     }
 }
-siteorigin_widget_register('akvo-card', __FILE__, 'Akvo_Card_Widget');
+siteorigin_widget_register('akvo-cards', __FILE__, 'Akvo_Cards_Widget');
