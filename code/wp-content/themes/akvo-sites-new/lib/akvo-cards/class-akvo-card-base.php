@@ -6,6 +6,8 @@
 		var $shortcode_slug;
 		var $template;
 		
+		var $counters;
+		
 		function __construct(){
 			
 			/* HANDLE AJAX */
@@ -15,9 +17,15 @@
 			/* HANDLE SHORTCODE */
 			add_shortcode( $this->shortcode_str, array( $this, 'shortcode' ) );
 			
+			$this->counters = array();
+			
 		}
 		
-		
+		function get_counter( $label ){
+			if( !isset($this->counters[$label]) ) { $this->counters[$label] = -1; }	/* reset offset counter if rsr-id or type has changed */
+      		$this->counters[$label]++;
+			return $this->counters[$label];
+		}
 		
 		/* SHORTCODE FUNCTIONALITY */
 		function shortcode( $atts ){}
@@ -326,4 +334,11 @@
 			return (((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
 		}
 		
+		function slugify( $text ){
+			
+			global $akvo;
+			return $akvo->slugify( $text );
+			
+			
+		}
 	}

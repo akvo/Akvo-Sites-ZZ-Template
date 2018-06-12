@@ -23,8 +23,6 @@
 				'page'				=> 1
 			)); 
 			
-			
-			
 			$akvo_card = array();
 			$data = array();
 			
@@ -47,6 +45,8 @@
 			
 			/* FORM THE SHORTCODE */
 			$shortcode = $this->form_shortcode($akvo_card);
+			
+			
 			
 			/* PRINT THE SHORTCODE */			
 			echo do_shortcode($shortcode);
