@@ -2,7 +2,10 @@
 defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 
 class AdvancedIframeHelper {
-
+      static function replace_brackets($str_input) {
+               $str_output = str_replace('{{', "[", $str_input);
+               return str_replace('}}', "]", $str_output);
+      }
       static function scale_value($value, $iframe_zoom)
         {
             if (strpos($value, '%') === false) {

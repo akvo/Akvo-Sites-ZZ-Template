@@ -12,12 +12,21 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-functions.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-quickstart.php';
 
-$version = '7.5.1';
+$version = '7.5.7';
 $updated = false;
 $evanto = (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php"));
 if (is_user_logged_in() && is_admin()) {
     $scrollposition = 0;
     $devOptions = $this->getAiAdminOptions();
+    if ($devOptions['admin_was_loaded'] == false) {
+        // we disable the check of the src.
+        $devOptions['check_iframe_url_when_load'] = 'false';
+        echo '<div class="error"><p><strong>';
+        _e('The administration was not loaded until the end last time. It seems the integrated check of the "Url" field failed and therefore "Check Url on load" and "Check iframes on save" are now disabled. You can enable this again on the "Options" tab. Check the description of this options what maybe caused this problem.', 'advanced-iframe');  
+        echo '</strong></p></div>';      
+    } 
+    $devOptions['admin_was_loaded'] = false;    
+    update_option($this->adminOptionsName, $devOptions);
     
     if ($evanto) {
       $devOptions['demo'] = 'false';
@@ -114,7 +123,12 @@ if (is_user_logged_in() && is_admin()) {
             'use_post_message', 'element_to_measure_offset',
             'data_post_message', 'element_to_measure',
             'show_iframe_as_layer_keep_content','roles',
-            'parent_content_css'  
+            'parent_content_css', 'debug_js',
+            'check_iframe_cronjob','check_iframe_cronjob_email',
+            'enable_content_filter', 'add_ai_external_local', 'title', 
+            'check_iframes_when_save','admin_was_loaded',
+            'check_iframe_url_when_load','modify_iframe_if_cookie',
+            'allow'
             );  
         if (!wp_verify_nonce($_POST['twg-options'], 'twg-options')) die('Sorry, your nonce did not verify.');
         
@@ -137,10 +151,12 @@ if (is_user_logged_in() && is_admin()) {
                        || $item == 'auto_zoom' || $item == 'show_part_of_iframe_zoom'
                        || $item == 'demo' ||  $item == 'enable_ios_mobile_scolling'
                        || $item == 'store_height_in_cookie' || $item == 'show_iframe_as_layer_full'
-                       || $item == 'use_post_message' || $item == 'multi_domain_enabled') {
+                       || $item == 'use_post_message' || $item == 'multi_domain_enabled'
+                       || $item == 'enable_content_filter' || $item == 'add_ai_external_local' 
+                       || $item == 'check_iframe_cronjob' ||  $item == 'modify_iframe_if_cookie') {
                           $text = 'false';
                      } else if ($item == 'show_menu_link' || $item == 'resize_on_ajax_jquery' 
-                       || $item == 'show_iframe_as_layer_keep_content') {
+                       || $item == 'show_iframe_as_layer_keep_content' ||  $item == 'admin_was_loaded' ) {
                          $text = 'true';
                      } else if ($item == 'resize_on_element_resize_delay') {
                          $text = '250';
@@ -295,9 +311,9 @@ if ($isDemo) { ?>
            echo ' <small class="hide-print"><small><small>' . __('(<a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">view history</a>)', 'advanced-iframe') . '</small></small></small>';  
         }
         if (!$evanto && !$isDemo) {  
-            echo '<div class="pro-hint">' . __('Test the pro administration:<br />Enable it on the introduction tab', 'advanced-iframe') . '</div>';
+            echo '<div class="pro-hint">' . __('Test the pro administration:<br />Enable it on the options tab', 'advanced-iframe') . '</div>';
         }
-        echo '<div class="header-help">' . __('If you start using advanced iframe please read the quickstart guide on the introduction tab first. After that continue with an iframe like described on the basic tab. Only if the iframe appears add additional features. Go to the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0" target="_blank">free</a> and the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo" target="_blank">pro demos</a> page for running examples.', 'advanced-iframe') . '</div>';     
+        echo '<div class="header-help">' . __('If you start using advanced iframe please read the quickstart guide on the options tab first. After that continue with an iframe like described on the basic tab. Only if the iframe appears add additional features. Go to the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0" target="_blank">free</a> and the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo" target="_blank">pro demos</a> page for running examples.', 'advanced-iframe') . '</div>';     
         
         ?><span id="help-header">&nbsp;<?php __('attribute help', 'advanced-iframe'); ?></span></h1>
 <?php if (!$isDemo) { ?>
@@ -315,7 +331,7 @@ The search does look for the search term in the label and the description of eac
 
 _e('<h2 class="nav-tab-wrapper show-always">', 'advanced-iframe');
 if ($devOptions['donation_bottom'] === 'false') {
-  _e('<a id="tab_0" class="nav-tab nav-tab-active" href="#introduction"><span>Introduction</span></a>
+  _e('<a id="tab_0" class="nav-tab nav-tab-active" href="#introduction"><span>Options</span></a>
       <a id="tab_1" class="nav-tab" href="#basic"><span>Basic Settings</span></a>
       <a id="tab_2" class="nav-tab advanced-settings-tab" href="#advanced"><span>Advanced Settings</span></a>
       <a id="tab_3" class="nav-tab external-workaround" href="#external-workaround"><span>External workaround</span></a>
@@ -327,7 +343,7 @@ if ($devOptions['donation_bottom'] === 'false') {
     <a id="tab_3" class="nav-tab external-workaround" href="#external-workaround"><span>External workaround</span></a>
     <a id="tab_4" class="nav-tab" href="#add-files"><span>Add/Include files</span></a>
     <a id="tab_5" class="nav-tab help-tab" href="#help"><span>Help / FAQ</span></a>
-    <a id="tab_0" class="nav-tab" href="#introduction"><span>Introduction</span></a>', 'advanced-iframe');
+    <a id="tab_0" class="nav-tab" href="#introduction"><span>Options</span></a>', 'advanced-iframe');
 }
 _e('
 </h2>
@@ -436,4 +452,8 @@ jQuery(function() {
   }, 100);
 });
 </script>
-<?php } ?>
+<?php 
+  $devOptions['admin_was_loaded'] = true;    
+  update_option($this->adminOptionsName, $devOptions);
+} 
+?>

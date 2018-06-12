@@ -3,6 +3,10 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  In this file the dynamic css is created
  */
+ 
+   $fix_chrome_65 = true; 
+    
+   $this->ai_createCustomFolder();
    // currently this is only use for "show only a part of an iframe" without any options 
    // because this avoids that global width styles for the iframe will kill this feature!
    $css_important = ' !important';
@@ -42,7 +46,7 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
         }
         $html .= '
         }
-        #'.$id.' {
+        #'. (($fix_chrome_65) ? 'ai-div-inner-' : '') .$id.' {
             position : absolute;
             top      : -'.esc_html($this->addPx($show_part_of_iframe_y)). ($spoi_css_important).';
             left     : -'.esc_html($this->addPx($show_part_of_iframe_x)). ($spoi_css_important).';
@@ -162,6 +166,59 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
        $html .= '#wrapper-div-'.$id.' { visibility:hidden; } ';
     }   
   }
-  
-  $html .= '</style>';
+
+if ($debug_js != 'false') {  
+  $html .= '
+  #aiDebugDivHeader {
+    padding: 5px;  
+    padding-bottom: 2px;
+    padding-top: 2px;
+    border-radius: 5px 5px 0px 0px; 
+    margin: 5px;
+    margin-bottom: 0px; 
+    background: #f00;
+    border: 1px solid #F00;
+    background: -moz-linear-gradient(top, #f00, #ff7f7f);    
+    background: -webkit-linear-gradient(top, #f00, #ff7f7f);
+    background: -ms-linear-gradient(top, #f00, #ff7f7f);
+    background: -o-linear-gradient(top, #f00, #ff7f7f);
+    box-shadow: 1px 2px 4px rgba(0,0,0, .2);
+    color: #fff
+  }
+  #aiDebugDiv {
+    border-radius: 0px 0px 5px 5px; 
+    height: 50px;
+    overflow-y: scroll;
+    background: #eee;
+    border: 1px solid #DDD;
+    background: -moz-linear-gradient(top, #EEE, #FFF);    
+    background: -webkit-linear-gradient(top, #eee, #fff);
+    background: -ms-linear-gradient(top, #eee, #fff);
+    background: -o-linear-gradient(top, #eee, #fff);
+    box-shadow: 1px 2px 4px rgba(0,0,0, .2);
+    padding: 5px;
+    margin: 5px;
+    margin-top: 0px;
+    margin-bottom: 0px; 
+    resize: vertical;
+    overflow: auto; 
+  }
+  #aiDebugDiv p {
+     margin: 5px 0px 5px 0px;     
+   }  
+   #aiDebugDiv .ai-debug-error {
+     color: red;
+   }';
+if ($debug_js == 'bottom') {
+  $html .= '#aiDebugDivTotal {
+    position:fixed;
+    bottom: 0px;
+    width: 100%;
+    left: 0px;
+    line-height: 1.2;
+    font-size: 90%;
+    z-index:999999; }';
+    }
+}
+$html .= '</style>';
 ?>

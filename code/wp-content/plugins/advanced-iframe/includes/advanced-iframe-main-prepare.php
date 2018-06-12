@@ -2,15 +2,13 @@
 defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  Prepares Javascript and values for the iframe
- */
- 
+ */ 
 if ($include_scripts_in_content == 'true') {
     $html .= '<script type="text/javascript" src="' . plugins_url() . $aiPath . '/js/ai.js" ></script>';
 }  
- 
 $html .= '<script type="text/javascript">';
-$html .= '   var ai_iframe_width_'.$id.' = 0;';
-$html .= '   var ai_iframe_height_'.$id.' = 0;';
+$html .= '  var ai_iframe_width_'.$id.' = 0;';
+$html .= '  var ai_iframe_height_'.$id.' = 0;';
 
 if ($add_document_domain == 'true') {
    $html .= 'document.domain="'.esc_html($document_domain).'";'; 
@@ -33,7 +31,7 @@ if ($use_post_message != 'false') {
     if ($use_post_message == 'debug') {
       $html .= '    if (console && console.log) {';
       $html .= '        console.log("postMessage received: " + event.data + " - origin: " + event.origin);';
-      $html .= '    }';  
+      $html .= '    }';
     }
     
     if ($multi_domain_enabled == 'false') {
@@ -43,23 +41,23 @@ if ($use_post_message != 'false') {
     // this is a special file that can be included to convert postMessage events 
     // from non ai pages. 
     $filenamedir  = dirname(__FILE__) . '/../../advanced-iframe-custom';
-    $post_js_filename = $filenamedir . '/ai_post_message_converter.js';
+    $post_js_filename = $filenamedir . '/ai_post_message_converter_'.$id.'.js';
+    $post_js_filename_old = $filenamedir . '/ai_post_message_converter.js';
     if (file_exists($post_js_filename)) {
       $html .=  trim(file_get_contents($post_js_filename));
-      $html .= 'aiConvertPostMessage(event);';
+      $html .= 'event = aiConvertPostMessage(event);';
+    } else  if (file_exists($post_js_filename_old)) {
+      $html .=  trim(file_get_contents($post_js_filename_old));
+      $html .= 'event = aiConvertPostMessage(event);';
     }
-    // we only execute this if the id matches
-    $html .= '  if(event.data["id"] = "'.$id.'") {'; 
-    $html .= '    aiProcessMessage(event);';
-    $html .= '  }';
+    $html .= '  aiProcessMessage(event,"'.$id.'", "'.$use_post_message.'");';
     $html .= '}';
     $html .= 'if (window.addEventListener) {';
     $html .= '  window.addEventListener("message", receiveMessage'.$id.');'; 
     $html .= '} else if (el.attachEvent)  {';
     $html .= '  el.attachEvent("message", receiveMessage'.$id.');';
-    $html .= '}';
-        
-    $html .= 'window.addEventListener("message", receiveMessage'.$id.');';
+    $html .= '}';      
+    // $html .= 'window.addEventListener("message", receiveMessage'.$id.');';
 }
 
 if (version_compare(PHP_VERSION, '5.3.0') >= 0 && (!empty($iframe_zoom) || !empty($show_part_of_iframe_zoom) )) { 
@@ -252,11 +250,12 @@ if ($this->ai_endsWith($src, '.pdf')) {
     if (!empty($change_parent_links_target) && $show_iframe_as_layer !== 'external') {
       $elementArray = explode("|", $change_parent_links_target);
       for ($x = 0; $x < count($elementArray); ++$x) {
-          $aiReady .= 'jQuery("'. trim($elementArray[$x]) .'").attr("target", "'.$id.'");';
+          $el = AdvancedIframeHelper::replace_brackets($elementArray[$x]);
+          $aiReady .= 'jQuery("'. trim($el) .'").attr("target", "'.$id.'");';
       }
      
       if ($show_iframe_as_layer == 'true') {
-        $aiReady .=  'jQuery("'.$change_parent_links_target.'").on( "click", function(event) { var reload=ai_checkReload(this, "' . $id . '"); ai_showLayerIframe(event,"' . $id . '","'.plugins_url() . $aiPath.'/img/","'.$hide_page_sum.'","'.$show_iframe_loader_layer.'", '.$show_iframe_as_layer_keep_content.', reload); });'; 
+        $aiReady .=  'jQuery("'.AdvancedIframeHelper::replace_brackets($change_parent_links_target).'").on( "click", function(event) { var reload=ai_checkReload(this, "' . $id . '"); ai_showLayerIframe(event,"' . $id . '","'.plugins_url() . $aiPath.'/img/","'.$hide_page_sum.'","'.$show_iframe_loader_layer.'", '.$show_iframe_as_layer_keep_content.', reload); });'; 
       }      
     }
     if ($show_iframe_as_layer == 'external') {   
@@ -366,7 +365,8 @@ if ($this->ai_endsWith($src, '.pdf')) {
 
     // change_iframe_links
     if (!empty($change_iframe_links)) {
-        $links = esc_html($change_iframe_links); // this field should not have a problem if they are encoded.
+        $links = esc_html(AdvancedIframeHelper::replace_brackets($change_iframe_links)); // this field should not have a problem if they are encoded.
+        $links = str_replace('&#039;',"'", $links);
         $targets = esc_html($change_iframe_links_target); // this field style should not have a problem if they are encoded.
         $linksArray = explode("|", $links);
         $targetArray = explode("|", $targets);
@@ -374,8 +374,8 @@ if ($this->ai_endsWith($src, '.pdf')) {
             return $error_css . '<div class="errordiv">' . __('Configuration error: The attributes change_iframe_links and change_iframe_links_target have to have the amount of value sets separated by |.', 'advanced-iframe') . '</div>';
         } else {
             for ($x = 0; $x < count($linksArray); ++$x) {
-                $hideiframehtml .= "jQuery('#".$id."').contents().find('" . trim($linksArray[$x])
-                      . "').attr('target', '".trim($targetArray[$x])."');";
+                $hideiframehtml .= "jQuery('#".$id."').contents().find(\"" . trim($linksArray[$x])
+                      . "\").attr('target', '".trim($targetArray[$x])."');";
             }
         }
     }

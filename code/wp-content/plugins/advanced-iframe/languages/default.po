@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced iframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-20 13:21+0200\n"
-"PO-Revision-Date: 2017-07-20 13:21+0200\n"
+"POT-Creation-Date: 2018-05-04 22:54+0200\n"
+"PO-Revision-Date: 2018-05-04 22:54+0200\n"
 "Last-Translator: TinyWebGallery <tinywebgallery@mdempfle.de>\n"
 "Language-Team: \n"
 "Language: en\n"
@@ -16,69 +16,73 @@ msgstr ""
 "X-Generator: Poedit 1.8.8\n"
 "X-Poedit-SearchPath-0: advanced-iframe\n"
 
-#: advanced-iframe/advanced-iframe-admin-page.php:38
+#: advanced-iframe/advanced-iframe-admin-page.php:26
+msgid "The administration was not loaded until the end last time. It seems the integrated check of the \"Url\" field failed and therefore \"Check Url on load\" and \"Check iframes on save\" are now disabled. You can enable this again on the \"Options\" tab. Check the description of this options what maybe caused this problem."
+msgstr ""
+
+#: advanced-iframe/advanced-iframe-admin-page.php:49
 msgid "Version "
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:38
+#: advanced-iframe/advanced-iframe-admin-page.php:49
 msgid " of Advanced iFrame Pro is available. See the <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history\" target=\"_blank\">history</a> for details.<br /><br />Please download the latest version from your download page of codecanyon. The easiest way to update is to overwrite all files with FTP."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:206
+#: advanced-iframe/advanced-iframe-admin-page.php:225
 msgid "You have set \"Allow shortcode attributes\" to \"No\" and \"Use shortcode attributes only\" to \"Yes\". This combination is not valid. \"Allow shortcode attributes\" was set to \"Yes\". Please check if this is what you  want. \"Allow shortcode attributes\" overrules \"Use shortcode attributes only\" if you set \"Use shortcode attributes only\" directly in the shortcode with use_shortcode_attributes_only=\"true\"."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:233
-#: advanced-iframe/advanced-iframe-admin-page.php:403
+#: advanced-iframe/advanced-iframe-admin-page.php:249
+#: advanced-iframe/advanced-iframe-admin-page.php:419
 msgid "Settings updated."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:235
-#: advanced-iframe/advanced-iframe-admin-page.php:405
+#: advanced-iframe/advanced-iframe-admin-page.php:251
+#: advanced-iframe/advanced-iframe-admin-page.php:421
 msgid "Settings resetted."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:257
+#: advanced-iframe/advanced-iframe-admin-page.php:273
 msgid "The administration is running in the pro modus. Please note that the blue settings of the pro version are not working. They only show what is possible!"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:264
+#: advanced-iframe/advanced-iframe-admin-page.php:280
 msgid "Yo"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:281
+#: advanced-iframe/advanced-iframe-admin-page.php:297
 msgid "Advanced iFrame "
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:283
+#: advanced-iframe/advanced-iframe-admin-page.php:299
 msgid "Pro"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:288
+#: advanced-iframe/advanced-iframe-admin-page.php:304
 msgid "(Your installation is up to date - <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history\" target=\"_blank\">view history</a>)"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:290
+#: advanced-iframe/advanced-iframe-admin-page.php:306
 msgid "(<a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history\" target=\"_blank\">Version "
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:293
+#: advanced-iframe/advanced-iframe-admin-page.php:309
 msgid "(<a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history\" target=\"_blank\">view history</a>)"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:296
-msgid "Test the pro administration:<br />Enable it on the introduction tab"
+#: advanced-iframe/advanced-iframe-admin-page.php:312
+msgid "Test the pro administration:<br />Enable it on the options tab"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:298
-msgid "If you start using advanced iframe please read the quickstart guide on the introduction tab first. After that continue with an iframe like described on the basic tab. Only if the iframe appears add additional features. Go to the <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0\" target=\"_blank\">free</a> and the <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo\" target=\"_blank\">pro demos</a> page for running examples."
+#: advanced-iframe/advanced-iframe-admin-page.php:314
+msgid "If you start using advanced iframe please read the quickstart guide on the options tab first. After that continue with an iframe like described on the basic tab. Only if the iframe appears add additional features. Go to the <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0\" target=\"_blank\">free</a> and the <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo\" target=\"_blank\">pro demos</a> page for running examples."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:300
+#: advanced-iframe/advanced-iframe-admin-page.php:316
 msgid "attribute help"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:305
+#: advanced-iframe/advanced-iframe-admin-page.php:321
 msgid ""
 "<input type=\"search\" class=\"ai-input-search\" placeholder=\"Search for settings\" />\n"
 "<div id=\"ai-input-search-result\">\n"
@@ -90,13 +94,13 @@ msgid ""
 "</div>"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:314
+#: advanced-iframe/advanced-iframe-admin-page.php:330
 msgid "<h2 class=\"nav-tab-wrapper show-always\">"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:316
+#: advanced-iframe/advanced-iframe-admin-page.php:332
 msgid ""
-"<a id=\"tab_0\" class=\"nav-tab nav-tab-active\" href=\"#introduction\"><span>Introduction</span></a>\n"
+"<a id=\"tab_0\" class=\"nav-tab nav-tab-active\" href=\"#introduction\"><span>Options</span></a>\n"
 "      <a id=\"tab_1\" class=\"nav-tab\" href=\"#basic\"><span>Basic Settings</span></a>\n"
 "      <a id=\"tab_2\" class=\"nav-tab advanced-settings-tab\" href=\"#advanced\"><span>Advanced Settings</span></a>\n"
 "      <a id=\"tab_3\" class=\"nav-tab external-workaround\" href=\"#external-workaround\"><span>External workaround</span></a>\n"
@@ -104,31 +108,31 @@ msgid ""
 "      <a id=\"tab_5\" class=\"nav-tab help-tab\" href=\"#help\"><span>Help / FAQ</span></a>"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:323
+#: advanced-iframe/advanced-iframe-admin-page.php:339
 msgid ""
 "<a id=\"tab_1\" class=\"nav-tab nav-tab-active\" href=\"#basic\"><span>Basic Settings</span></a>\n"
 "    <a id=\"tab_2\" class=\"nav-tab advanced-settings-tab\" href=\"#advanced\"><span>Advanced Settings</span></a>\n"
 "    <a id=\"tab_3\" class=\"nav-tab external-workaround\" href=\"#external-workaround\"><span>External workaround</span></a>\n"
 "    <a id=\"tab_4\" class=\"nav-tab\" href=\"#add-files\"><span>Add/Include files</span></a>\n"
 "    <a id=\"tab_5\" class=\"nav-tab help-tab\" href=\"#help\"><span>Help / FAQ</span></a>\n"
-"    <a id=\"tab_0\" class=\"nav-tab\" href=\"#introduction\"><span>Introduction</span></a>"
+"    <a id=\"tab_0\" class=\"nav-tab\" href=\"#introduction\"><span>Options</span></a>"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:330
+#: advanced-iframe/advanced-iframe-admin-page.php:346
 msgid ""
 "\n"
 "</h2>\n"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:352
+#: advanced-iframe/advanced-iframe-admin-page.php:368
 msgid "<p>Please open the section where you want to change a default setting. Please note that some of the advanced features require basic html/css knowhow! You can open several sections at once for easier navigation.</p>"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:409
+#: advanced-iframe/advanced-iframe-admin-page.php:425
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:81
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:89
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:108
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:182
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:88
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:110
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:184
 #: advanced-iframe/includes/advanced-iframe-admin-include-directly.php:29
 #: advanced-iframe/includes/advanced-iframe-admin-lazy-load.php:36
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:56
@@ -137,39 +141,83 @@ msgstr ""
 #: advanced-iframe/includes/advanced-iframe-admin-modify-parent.php:36
 #: advanced-iframe/includes/advanced-iframe-admin-modify-parent.php:112
 #: advanced-iframe/includes/advanced-iframe-admin-parameters.php:27
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:87
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:195
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:81
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:212
 #: advanced-iframe/includes/advanced-iframe-admin-resize.php:67
 #: advanced-iframe/includes/advanced-iframe-admin-zoom.php:27
 msgid "Update Settings"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe-admin-page.php:409
+#: advanced-iframe/advanced-iframe-admin-page.php:425
 msgid "Reset Settings"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe.php:318
-msgid "No valid security key found. Please use at least the following shortcode:<br>&#91;advanced_iframe securitykey=\"&lt;your security key - see settings&gt;\"&#93;<br /> Please also check in the html mode that your shortcode does only contain normal spaces and not a &amp;nbsp; instead.  It is also possible that you use wrong quotes like &#8220; or &#8221;. Only &#34; is valid!"
+#: advanced-iframe/advanced-iframe.php:84
+msgid "Hello advanced iframe pro user,"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe.php:320
+#: advanced-iframe/advanced-iframe.php:87
+msgid "At least one of your iframes failed!"
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:88
+msgid "At least one of the iframes you have configured has a src which does not work properly.<br>Because checking all pages takes quite a while the test was only performed to the first error.<br>Please go to the administration of advanced iframe pro to get more details."
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:90
+msgid "At least one of your iframes is not optimal configured!"
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:91
+msgid "At least one of the iframes you have configured has most likely an src which is redirected.<br>Because checking all pages takes quite a while the test was only performed to the first warning.<br>Please go to the administration of advanced iframe pro to get more details."
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:93
+msgid "All your iframes look good."
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:94
+msgid "All your iframes look good.<br>Please go to the administration of advanced iframe pro to get more details."
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:97
+msgid "The test took "
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:97
+msgid " sec."
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:99
+msgid "Best regards,<br>Your advanced iframe plugin"
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:397
+msgid "No valid security key found. Please use at least the following shortcode:<br>&#91;advanced_iframe securitykey=\"&lt;your security key - see settings&gt;\"&#93;<br /> Please also check in the html mode that your shortcode does only contain normal spaces and not a &amp;nbsp; instead. It is also possible that you use wrong quotes like &#8220; or &#8221;. Only &#34; is valid!"
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:399
 msgid "You have set \"Use shortcode attributes only\" (use_shortcode_attributes_only) to \"true\" which means that you have to specify all parameters as shortcode attributes. Please specify at least \"securitykey\" and \"src\". Examples are available in the administration."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe.php:420
+#: advanced-iframe/advanced-iframe.php:510
 msgid "The file \"advanced-iframe/js/ai_external.js\" can not be removed before saving. Please check the permissions of the js folder and the ai_external.js and save the settings again. This file is needed for the external workaround! If you don't use the external workaround please create a empty file with the name ai_external.js in the js folder of the plugin."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe.php:431
+#: advanced-iframe/advanced-iframe.php:521
 msgid "The file \"advanced-iframe/js/ai_external.js\" can not be saved. Please check the permissions of the js folder and save the settings again. This file is needed for the external workaround! If you don't use the external workaround please create a empty file with the name ai_external.js in the js folder of the plugin."
 msgstr ""
 
-#: advanced-iframe/advanced-iframe.php:485
+#: advanced-iframe/advanced-iframe.php:583
 msgid "Settings"
 msgstr ""
 
-#: advanced-iframe/advanced-iframe.php:494
+#: advanced-iframe/advanced-iframe.php:592
 msgid "This page/post contains an advanced iframe shortcode but you don't have the needed role to use this plugin. Please contact your system administrator to get the needed role."
+msgstr ""
+
+#: advanced-iframe/advanced-iframe.php:721
+msgid "The integrated check of iframes on save failed. \"Check iframes on save\" is now disabled. You can enable this again on the \"Options\" tab. Check the description of this options what maybe caused this problem."
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:9
@@ -197,14 +245,14 @@ msgid "No custom additional files found."
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:38
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:327
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:330
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:120
 #: advanced-iframe/includes/advanced-iframe-admin-modify-parent.php:91
 msgid "Edit/View"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:42
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:331
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:334
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:124
 #: advanced-iframe/includes/advanced-iframe-admin-modify-parent.php:95
 msgid "Remove"
@@ -243,6 +291,7 @@ msgid "If you want to include an additional Javascript into the parent page plea
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:68
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:511
 msgid "Iframe"
 msgstr ""
 
@@ -255,7 +304,7 @@ msgid "Additional css in iframe"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:74
-msgid "You can also include a css file directly into the iframe page. The css file will be added at the bottom of the body to overwrite also all inline styles. The styles are added after the page is loaded. Make sure you take \"<a href=\"https://designshack.net/articles/css/what-the-heck-is-css-specificity/\" target=\"blank\">CSS specificity\"</a> into account if you want to overwrite styles! You can specify a full or relative url. If you specify a relative one /style.css means that the style.css is located in the main directory of the iframe page. Shortcode attribute: additional_css_file_iframe=\"\""
+msgid "You can also include a css file directly into the iframe page. The css file will be added at the bottom of the body to overwrite also all inline styles. The styles are added after the page is loaded. Make sure you take \"<a href=\"https://designshack.net/articles/css/what-the-heck-is-css-specificity/\" target=\"blank\">CSS specificity\"</a> into account if you want to overwrite styles! You can specify a full or relative url. If you specify a relative one /style.css means that the style.css is located in the main directory of the iframe page. In the external workaround the file is added after the ai_external.js. Shortcode attribute: additional_css_file_iframe=\"\""
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:75
@@ -263,7 +312,7 @@ msgid "Additional Javascript in iframe"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-add-files.php:75
-msgid "For the same domain you can also include a css file directly into the iframe page. The css file will be added at the bottom of the body to overwrite also all inline styles. The styles are added after the page is loaded. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of the iframe page. Shortcode attribute: additional_js_file_iframe=\"\""
+msgid "You can also include a js file directly into the iframe page. The js file will be added at the bottom of the body. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of the iframe page. In the external workaround the file is added after the ai_external.js. Shortcode attribute: additional_js_file_iframe=\"\""
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-advanced.php:8
@@ -324,67 +373,67 @@ msgid ""
 "</div>\n"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:65
-msgid "Scrolls the parent window to the top"
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:64
+msgid "Scrolls the parent window/iframe to the top"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:65
-msgid "If you like that if you click on a link in the iframe the parent page should scroll to the top you should set this to 'Yes'. Please note that this is done by Javascript! So if a user has Javascript deactivated no scrolling is done.   This setting generates the code onload=\"aiScrollToTop();\" to the iframe. If you select the resize iframe as well then onload=\"aiResizeIframe(this);aiScrollToTop();\" is generated. If you like a different order please enter the javascript functions directly in the onload parameter in the order you like. Shortcode attribute: onload_scroll_top=\"true\" or onload_scroll_top=\"false\" "
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:64
+msgid "If you like that if you click on a link in the iframe the parent page should scroll to the top of the whole page you should set this to 'Yes'. Please note that this is done by Javascript! So if a user has Javascript deactivated no scrolling is done. This setting generates the code onload=\"aiScrollToTop(\"id\",\"true\");\" to the iframe. If you select the resize iframe as well then onload=\"aiResizeIframe(this);aiScrollToTop(\"your_id\",\"true\");\" is generated. If you like a different order please enter the javascript functions directly in the onload parameter in the order you like. You can also scroll to the top of the iframe by selecting 'Iframe'. Then this setting generates the code onload=\"aiScrollToTop(\"your_id\",\"iframe\");\". Shortcode attribute: onload_scroll_top=\"true\", onload_scroll_top=\"iframe\" or onload_scroll_top=\"false\" "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:67
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:66
 msgid "Hide the iframe until it is loaded"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:67
-msgid "This setting hides the iframe until it is loaded. This prevents the iframe white flash issue while loading. When you use the external workaround please check the setting for the \"<a id=\"external-workaround-link\" href=\"#xss\">External workaround</a>\". The setting there overwrites this setting because otherwise the iframe is maybe shown too early! Shortcode attribute: hide_page_until_loaded=\"true\" or hide_page_until_loaded=\"false\" "
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:66
+msgid "This setting hides the iframe until it is loaded. This prevents the iframe white flash issue while loading and also if you modify the iframe only the final result is visible. Since 7.5.6. this also works for following pages in the iframe as the iframe is hidden again when the url changes. When you use the external workaround please check the setting for the \"<a id=\"external-workaround-link\" href=\"#xss\">External workaround</a>\". The setting there overwrites this setting because otherwise the iframe is maybe shown too early! Shortcode attribute: hide_page_until_loaded=\"true\" or hide_page_until_loaded=\"false\" "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:69
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:68
 msgid "Show loading icon"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:69
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:68
 msgid "You can show a loading icon until the page in the iframe is fully loaded. You can use your own image with the size of 66 x 66 px by replacing the file img/loader.gif. Shortcode attribute: show_iframe_loader=\"true\" or show_iframe_loader=\"false\" "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:70
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:69
 msgid "Hide the content until iframe is loaded"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:70
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:69
 msgid "If you define a color here (e.g. #ffffff) the content of the main page is hidden until the iframe is loaded. Especially if the iframe does cover most of your page the iframe looks more integrated. If you use fullscreen iframes sometimes it is better to keep this additional layer as the fullscreen iframe is on top of this. Add |keep to your color then. E.g. #ffffff|keep. Shortcode attribute: hide_content_until_iframe_color=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:72
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:71
 msgid "Enable responsive iframe"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:72
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:71
 msgid "You can enable that the width of iframe is responsive. This features adds a max-width:100% to the iframe. So the defined  width is the maximum width of the iframe. If the surrounding element gets smaller than this, the iframe is responsive and does shrink! When you enable this feature <strong>AND also the resize the iframe to the content height (direct or by external workaround)</strong>, the height does get responsive too! And this is the big difference to any other pure css solution which only work for iframes with a certain ratio e.g. for videos. Please read <a href=\"http://www.tinywebgallery.com/blog/responsive-iframes-with-advanced-iframe-pro\" target=\"_blank\">this post</a> for details and take a look <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/responsive-iframes\" target=\"_blank\">pro demo</a>. Please note that this feature does NOT work together with \"Show only a part of an iframe\" and \"Hidden tabs\". Shortcode attribute: enable_responsive_iframe=\"true\" or enable_responsive_iframe=\"false\" "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:73
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:72
 msgid "Set Iframe height by ratio"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:73
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:72
 msgid "This setting enables you to set the height of an iframe depending on the width of an iframe with a given ratio. If you have a static site you know the width of an iframe and you can set the height to a fix value. But if you e.g. have an iframe width of 100% and responsive layout you do not know the height. Using auto height does solve this most of the time but sometimes the content inside the iframe is fully dynamic too (like a video which does scale). If this is the case you can define a ratio here. e.g. 0.5 means that if you have a width of 1000 you have a height of 500. If the width changes to 800 the height changes to 400. Please use a . as decimal char. This setting does also work together with \"Enable responsive iframe\". Scalling the browser does change the height also if you enable the setting above. If you enable this setting the local resize settings are disabled! Shortcode attribute: iframe_height_ratio=\"\" "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:75
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:74
 msgid "Reload interval"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:75
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:74
 msgid "You can reload the iframe in a given interval. Enter the intervall im ms or leave the field blank for no reload. Shortcode attribute: reload_interval=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:81
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:80
 msgid "Browser detection"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:83
+#: advanced-iframe/includes/advanced-iframe-admin-advanced.php:82
 msgid "You can specify browser specific iframes. This is imporant especially for the \"Show only part of the iframe\" feature where browser differences of a few pixels can matter. But you can use this for other things as well because mobile, iphone, ipad can also be detected. Please read the <a id=\"browser-detection-link\" href=\"#\">browser detection</a> section for details. Shortcode: browser=\"\""
 msgstr ""
 
@@ -392,11 +441,11 @@ msgstr ""
 msgid "Advanced iframe browser detection"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-browser.php:14
+#: advanced-iframe/includes/advanced-iframe-admin-browser.php:16
 msgid "Show me how to configure the browser detection in advanced iframe pro."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-browser.php:17
+#: advanced-iframe/includes/advanced-iframe-admin-browser.php:19
 msgid ""
 "<div id=\"browser-help\">\n"
 "         <p>\n"
@@ -408,56 +457,7 @@ msgid ""
 "         </p>\n"
 "         <h4>Example 1 - Special settings for IE 10 and IE 11</h4>\n"
 "         <p>\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example1\" show_part_of_iframe_x=\"25\" browser=\"ie(10),ie(11)\"]<br />\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example1\" show_part_of_iframe_x=\"20\" browser=\"default\"]\n"
-"         </p>\n"
-"         <h4>Example 2 - Special settings for IE, Firefox and Chrome</h4>\n"
-"         <p>\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example2\" show_part_of_iframe_x=\"25\" browser=\"ie\"]<br />\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example2\" show_part_of_iframe_x=\"23\" browser=\"firefox,chrome\"]<br />\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example2\" show_part_of_iframe_x=\"20\" browser=\"default\"]\n"
-"         </p>\n"
-"          <h4>Example 3 - Show a different iframe on iframe on apple devices and mobile devices</h4>\n"
-"         <p>\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example3\" src=\"apple iframe\" browser=\"iphone,ipad,ipod\"]<br />\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example3\" src=\"other mobile devices iframe\" browser=\"mobile\"]<br />\n"
-"            [advanced_iframe securitykey=\"xxx\" id=\"example3\" src=\"normal iframe\" browser=\"default\"]\n"
-"         </p>\n"
-"\n"
-"         <h3 id=\"config-options\">Configuration options</h3>\n"
-"         \n"
-"         The following options for most common browsers can be used:\n"
-"         <ul id=\"browser-list\">\n"
-"           <li>ie - Selects all versions of Internet Explorer. Also a version is supported. ie(10) selects IE10, ie(11) selects IE11</li>\n"
-"           <li>safari - Selects all versions of Safari. Also a version is supported. Add the version in (). e.g. safari(5)</li>\n"
-"           <li>firefox - Selects all versions of Firefox. Also a version is supported. Add the version in (). e.g. firefox(20)</li>\n"
-"           <li>chrome - Selects all versions of Chrome. Also a version is supported. Add the version in (). e.g. chrome(25)</li>\n"
-"           <li>opera - Selects all versions of Opera. Also a version is supported. Add the version in (). e.g. opera(20)</li>\n"
-"           <li>ipad - Selects all versions of ipad.</li>\n"
-"           <li>ipod - Selects all versions of ipod.</li>\n"
-"           <li>iphone - Selects all versions of iphone.</li>\n"
-"           <li>mobile - Selects all mobile devices.</li>\n"
-"           <li>tablet - Selects all tablet devices.</li>\n"
-"           <li>android - Selects all android devices.</li> \n"
-"           <li>androidtablet - Selects all android tablet devices.</li> \n"
-"           <li>desktop - Selects all desktop browsers.</li> \n"
-"           <li>browser - Selects all browsers. Desktop, tablet and mobile. Can be used to show something only for browsers and e.g for crawlers you can use the default and show nothing.</li> \n"
-"           <li>default - Is used if no other advanced iframe pro with the same id was selected before.</li>\n"
-"         </ul>\n"
-"\n"
-"      <h3>Credit and update</h3>\n"
-"      <p>\n"
-"        Advanced iFrame Pro uses an integrated browser detection which is based on the wordpress plugin php-browser-detection 3.2.\n"
-"      </p>\n"
-"      <p>\n"
-"         If the automatich update does not work you can get an updated version of the browsercap.ini lite file here: http://browscap.org/<br />Please use the light version as it conains all settings for the provided settings ! \n"
-"      </p>\n"
-"      <p>\n"
-"         If you want to update the browser detection file get the lite_php_browscap.ini from there and rename it to php-browser-detection/cache/browscap.ini.<br />\n"
-"         Or always get the latest version of the advanced iframe pro plugin. This file is also updated there!\n"
-"      </p>\n"
-"      </div>\n"
-"    "
+"            [advanced_iframe "
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-default.php:10
@@ -468,168 +468,176 @@ msgstr ""
 msgid "Please use the following shortcode to add an iframe to your page: "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:17
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:18
 msgid "<br/>Specify at least an url and the size. <strong>You can overwrite all of the default administration settings by specifying the attribute in the shortcode to create iframes with different settings!</strong>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:21
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:22
 msgid "You can also generate a shortcode which does include all settings as shortcode attributes. This shortcode does not use any of the defaults."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:25
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:26
 msgid "Copy the following shortcode to your page:"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:33
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:34
 msgid "Examples if you want to use several iframes with different settings. Also read the"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:44
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:45
 msgid "Security key"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:44
-msgid "This is the security key which has to be used in the shorttag. This is mandatory because otherwise anyone who can create an article can insert an iframe.  The default security key was randomly generated during installation. Please change the key if you like. You should use this in combination with e.g. Page security to make sure that only the users you define can modify pages."
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:45
+msgid "This is the security key which can be used in the shorttag. This is optional since version 7.5.4. If you set this only users who know the security key can insert an advanced iframe. Also they need to have the minimum user role defined in the options to access a page with an advenced iframe. The key was made optional because many user have not the need of a security key and without the configuration is easier. Because of compability reasons security key in a shortcode are ignoered if you don't define a key here! Shortcode attribute: securitykey=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:49
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:50
 msgid "Click <a href=\"#\" id=\"user-help-link\">here</a> for all values of the current user <span id=\"user-help\">"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:60
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:61
 msgid "Click <a href=\"#\" id=\"user-meta-link\">here</a> for all values of the current user."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:69
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:70
 msgid "Enter the full URL to your page. e.g. http://www.tinywebgallery.com. <strong>Please do not use a different protocol for the iframe: Do not mix http and https if possible! Http pages are NOT shown in https pages.</strong> Please read <a href=\"http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https\" target=\"_blank\">this post</a> for details. If you cannot save the full url because of mod_security don't specify the protocoll (e.g. //www.tinywebgallery.com) or leave this field empty and define the src in the shortcode. Also use the free url checker below to make sure that you can include the page. You can also add parameters to this url like http://www.tinywebgallery.com/test.php?iframe=true. Then you can check this variable and use it to e.g. hide some elements in the iframe.<br>The pro version also has some placeholders (the standalone version has only host and port available) which are replaced on the fly: <span><strong>{site}</strong>: the url to the wordpress root</span><span><strong>{host}</strong>: the current host from the request</span><span><strong>{port}</strong>: the current port from the request</span><span><strong>{userid [,defaultvalue]}</strong>: the id of the current user. The optional defaultvalue is used if no user is logged in.</span><span><strong>{username [,defaultvalue]}</strong>: the username of the current user. The optional defaultvalue is used if no user is logged in.</span><span><strong>{useremail [,defaultvalue]}</strong>: the e-mail of the current user. The optional defaultvalue is used if no user is logged in.</span><span><strong>{adminmail}</strong>: the e-mail of the wordpress admin</span><span><strong>{userinfo-X [,defaultvalue]}</strong>: extract attribute X from get_currentuserinfo. E.g. {userinfo-display_name}. The optional defaultvalue is used if the attribute is not found or set. See <a href=\"https://codex.wordpress.org/Function_Reference/wp_get_current_user\" target=\"_blank\">here</a> for details. "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:71
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:72
 msgid "Enter the full URL to your page. e.g. http://www.tinywebgallery.com. <strong>Please do not use a different protocol for the iframe: Do not mix http and https if possible! Http pages are NOT shown in https pages.</strong> Please read <a href=\"http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https\" target=\"_blank\">this post</a> for details. If you cannot save the full url because of mod_security don't specify the protocoll (e.g. //www.tinywebgallery.com) or leave this field empty and define the src in the shortcode. Also use the free url checker below to make sure that you can include the page. You can also add parameters to this url like http://www.tinywebgallery.com/test.php?iframe=true. Then you can check this variable and use it to e.g. hide some elements in the iframe."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:74
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:75
 msgid "<b>Url</b>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:77
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:78
 msgid "Free url checker"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:79
-msgid "<strong>Not all pages</strong> can be included in an iframe because they have a header flag this does not allow this. Please use the free iframe checker to find out if the page you want to include does work on all browsers: <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker/\">Free iframe checker</a>."
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:80
+msgid "<strong>Not all pages</strong> can be included in an iframe because they have a header flag this does not allow this. The free iframe checker is already included now in the administration. The <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker/\">Free iframe checker</a> page has a 2nd step where you also can see if iframe killer scripts are running!"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:82
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:83
 msgid "Width"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:82
-msgid "The width of the iframe. You can specify the value in px or in %. If you don't specify anything px is assumed. Pro user can also do basic calculations here if you have e.g. a fix left navigation on a page. e.g. 100%-200px. See <a target=\"_blank\" href=\"http://caniuse.com/#feat=calc\">http://caniuse.com/#feat=calc</a> for supported browsers! Shortcode attribute: width=\"\""
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:83
+msgid "The width of the iframe. You can specify the value in px or in %. If you don't specify anything px is assumed. Pro user can also do basic calculations here if you have e.g. a fix left navigation on a page. e.g. 100%-200px. Also vw is now supported. vw is viewport width. This is more important for the height with vh! See <a target=\"_blank\" href=\"http://caniuse.com/#feat=calc\">http://caniuse.com/#feat=calc</a> for supported browsers! Shortcode attribute: width=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:83
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:84
 msgid "Height"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:83
-msgid "The height of the iframe. You can specify the value in px or in %. If you don't specify anything px is assumed. Please note that % does most of the time does NOT give the expected result (e.g. 100% is only 150px) because the % are not from the iframe page but from the parent element. If you like that the iframe is resized to the content please go to '<a id=\"resize-same-link\" href=\"#rt\">Resize the iframe to the content height/width</a>' if you are one hte same domain or the \"<a id=\"external-workaround-link\" href=\"#xss\">External workaround</a>\" if the iframe is on a diffent domain. Pro user can also do basic calculations here if you have e.g. a fix header or footer on a page. e.g. 100%-200px. See <a target=\"_blank\" href=\"http://caniuse.com/#feat=calc\">http://caniuse.com/#feat=calc</a> for supported browsers! Shortcode attribute: height=\"\""
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:84
+msgid "The height of the iframe. You can specify the value in px or in %. If you don't specify anything px is assumed. Please note that % does most of the time does NOT give the expected result (e.g. 100% is only 150px) because the % are not from the iframe page but from the parent element. If you like that the iframe is resized to the content please go to '<a id=\"resize-same-link\" href=\"#rt\">Resize the iframe to the content height/width</a>' if you are one hte same domain or the \"<a id=\"external-workaround-link\" href=\"#xss\">External workaround</a>\" if the iframe is on a diffent domain. Also vh is now supported! e.g. 100vh means 100% of the viewport height. This is the \"fullscreen\" many users look after. This is now supported by all major browsers. See <a href=\"https://caniuse.com/#feat=viewport-units\" target=\"blank\">here</a>. Pro user can also do basic calculations here if you have e.g. a fix header or footer on a page. e.g. 100%-200px. See <a target=\"_blank\" href=\"http://caniuse.com/#feat=calc\">http://caniuse.com/#feat=calc</a> for supported browsers! Shortcode attribute: height=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:84
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:85
 msgid "Scrolling"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:84
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:85
 msgid "Defines if scrollbars are shown if the page is too big for your iframe. Please note: If you select 'Yes' IE does always show scrollbars on many pages! So only use this if needed. Scrolling \"none\" means that the attribute is not rendered at all and can be set by css to enable the scrollbars responsive.  Shortcode attribute: scrolling=\"auto\" or scrolling=\"no\" or scrolling=\"none\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:86
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:87
 msgid "i-20-Enable scrolling on ipad and iphone "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:86
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:87
 msgid "Currently mobile ios devices like ipad and iphone do not support scrolling inside an iframe properly. This changes from version to version. By enabling this parameter an additional div with additional ios css styles is wrapped around the iframe which does the scrolling. This feature is currently supported for simple iframes, show iframe as layer and show only a part of an iframe when scrolling is enabled. Please test this feature with all the ios devices you want to support! This feature does use the internal browser detection. So the additional div is only rendered for mobile ios devices! Zoom is currenly only supported in the \"show only a part of the iframe\" mode! For all features where auto height is enabled the additional div is also not rendered as there no scrolling does exist. Currently the default is set to false. As soon as many users also report that this is working on many devices the default will be set to true. So please report if this features does/doesn't work for you! Shortcode attribute: enable_ios_mobile_scolling=\"true\" or enable_ios_mobile_scolling=\"false\" "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:88
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:89
 msgid "Margin width"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:88
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:89
 msgid "The margin width of the iframe. You can specify the value in px. If you don't specify anything px is assumed.  Shortcode attribute: marginwidth=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:89
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:90
 msgid "Margin height"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:89
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:90
 msgid "The margin height of the iframe. You can specify the value in px. If you don't specify anything px is assumed.  Shortcode attribute: marginheight=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:90
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:91
 msgid "Frame border"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:90
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:91
 msgid "The frame border of the iframe. You can specify the value in px. If you don't specify anything px is assumed.  Shortcode attribute: frameborder=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:91
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:92
 msgid "Transparency"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:91
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:92
 msgid "If you like that the iframe is transparent and your background is shown you should set this to 'Yes'. If this value is not set then the iframe is transparent in IE but transparent in e.g. Firefox. So by default you should leave this to 'Yes'. Shortcode attribute: transparency=\"true\" or transparency=\"false\" "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:92
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:93
 msgid "Class"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:92
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:93
 msgid "You can define a class for the iframe if you like. Shortcode attribute: class=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:99
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:100
 msgid "Style"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:99
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:100
 msgid "You can define styles for the iframe if you like. The recommended way is to put the styles in a css file and use the class option. With the button below the width, height, content_id, content_styles, hide_content_until_iframe_color and the needed styles above for a fullscreen iframe are set. Also check the settings at the height where you can do calculations to add fixed headers/footers. Shortcode attribute: style=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:100
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:101
 msgid "Id"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:100
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:101
 msgid "Enter the 'id' attribute of the iframe. Allowed values are only a-zA-Z0-9_. Ids cannot start with a number!!! Do NOT use any other characters because the id is also used to generate unique javascript functions! Other characters will be removed when you save! If a src directly in a shortcode is set and no id than an id is generated automatically if several iframes are on one page to avoid configuration problems. Shortcode attribute: id=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:101
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:102
 msgid "Name"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:101
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:102
 msgid "Enter the 'name' attribute of the iframe. Shortcode attribute: name=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:102
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:103
 msgid "Allow full screen"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:102
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:103
 msgid "allowfullscreen is an HTML attribute that enables videos to be displayed in fullscreen mode. Currently this is a new html attribute not supported by all browsers. So please check  all of the browsers you want to support. Shortcode attribute: allowfullscreen=\"true\" or allowfullscreen=\"false\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:103
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:104
 msgid "Sandbox"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-default.php:103
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:104
 msgid "Enter the 'sandbox' attribute of the iframe. See <a href=\"http://www.w3.org/TR/2011/WD-html5-20110525/the-iframe-element.html#attr-iframe-sandbox\" target=\"_blank\">w3c</a> or <a href=\"http://www.w3schools.com/tags/att_iframe_sandbox.asp\" target=\"_blank\">w3schools</a> for details. To render sandbox without a value for all restrictions please enter \"sandbox\". Shortcode attribute: sandbox=\"\""
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:105
+msgid "Title"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-default.php:105
+msgid "The html title attribute of an iframe. Shortcode attribute: title=\"\""
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:9
@@ -782,117 +790,126 @@ msgid ""
 "           <li>If you have enabled \"<a href=\"#upm\">Use postMessage for communication</a>\" set it to \"Debug\" and check the output in the Javascript console.</li>\n"
 "           <li>If you use iframe communication check the network tab (F12), filter for doc/html and look for height.html. There you should see the measured height as parameter. If this does not show switch to <a href=\"#upm\">postMessage communication</a> as this way has less restrictions.</li>\n"
 "           <li>If you mix http and https you need to enable \"<a href=\"#upm\">Use postMessage for communication</a>\" and \"Support WP multisite\"</li>      \n"
+"           <li>Enable the internal debug console (Options -> Debug Javascript) if you have only problems on mobile devices.</li>\n"
 "           <li>Go to the Help/ FAQ tab. There you find additional infos and links to the FAQ and the forum</li>      \n"
 "        \n"
 "         </ol>\n"
 "          "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:149
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:150
 msgid "Resize remote iframe to content height"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:149
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:150
 msgid "Enable the auto height workaround by enabling it in the generated Javascript file ai_external.js. This settings only works if you have included the Javascript to the remote page.<br><strong>Important</strong>:<br />\"Yes\" does disable all settings with a "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:151
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:152
 msgid "Element to measure"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:151
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:152
 msgid "This parameter defines the element that is measured on the remote page. \"default\" tries to measure the first element of the body or the wrapper div. But sometimes this does not work if e.g. the element does return a wrong height because of css styles or dynamically added elements. You can use the id directly here or you can also a valid <a class=\"jquery-help-link\" href=\"#\">jQuery selector pattern</a> here that start with # or .!  Please read the section \"<a class=\"howto-id-link\" href=\"#\">How to find the id and the attributes</a>\" to find the right id or class. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:152
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:153
 msgid "Additional height"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:152
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:153
 msgid "If you like that the iframe is higher than the calculated value you can add some extra height here. This number is then added to the calculated one. This is e.g. needed if one of your tested browsers displays a scrollbar because of 1 or 2 pixel. Or if there is an additional margin around the body. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:153
-msgid "Resize delay"
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:154
+msgid "Resize/ css modification delay"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:153
-msgid "Sometimes the external page does not have its full height after loading because e.g. parts of the page are build by Javascript. If this is the case you can define a timeout in millisecounds until the resize is called. Otherwise leave this field empty. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:154
+msgid "Sometimes the external page does not have its full height and all elements after loading because e.g. parts of the page are build by Javascript. If this is the case you can define a timeout in millisecounds until the resize and the modification of elements are called. Otherwise set a 0 to disable the delay. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:156
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:157
 msgid "Keep overflow:hidden after resize"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:156
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:157
 msgid "By default overflow:hidden (removes any scrollbars inside the iframe) is set during the resize to avoid scrollbars and is removed afterwards to allow scrollbars if e.g. the content changes because of dynamic elements. If you set this setting to true the overflow:hidden is not removed and any scrollbars are not shown. This is e.g. helpful if the page is still to wide! If you want to use several iframes please use the description below for configuration. These settings only works if you have included the Javascript to the remote page. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:157
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:158
 msgid "Hide the iframe until it is completely modified."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:157
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:158
 msgid "This setting hides the iframe until the external workaround is completely done. This prevents that you see the original site before any modifications. You need to enable this AND in the shortcode. The normal \"Hide the iframe until it is loaded\" shows the iframe after all modifications are done which are all done by a local script. This way cannot be used for the external workaround because the exact time when the external modifications are done is unknown. Therefore the setting in the shortcode does hide in iframe until the external workaround does call iaShowIframe after all modifications are done. Shortcode attribute: hide_page_until_loaded_external=\"true\" or hide_page_until_loaded_external=\"false\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:159
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:160
 msgid "Write css directly"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:159
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:160
 msgid "By default changes off the iframe are made by jQuery after the page is loaded. This is the only way this is possible if you do this directly. But with the external workaround it is now also possible that the style is written directly to the page. It is written where the ai_external.js is included. So if you use this option you need to include the ai_external.js as last element in the header. This setting has the advantage that the changes are not done after the page is loaded but when the browser renders the page initially. Also the page is not hidden until the page is fully modified. The settings \"Hide elements in iframe\" and \"Modify content in iframe\" are supported! This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:160
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:161
 msgid "Iframe redirect url"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:160
-msgid "If you like that the page you want to include can only be viewed in your iframe you can define the parent url here. If someone tries to open the url directly he will be redirected to this url. Existing parameters from the original url are added to the new url IF no ? is found in the  iframe_redirect_url. You need to add the possible parameters to the \"URL forward parameters\" that they will be passed to the iframe again. This setting does use Javascript for the redirect. If Javascript is turned off the user can still access the site. If you also want to avoid this add \"html {visibility:hidden;}\" to the style sheet of your iframe page. Than the page is simply white. The Javascript does set the page visible after it is loaded! Please see the additional option below you have if you define this parameter before the ai_external.js. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:161
+msgid "If you like that the page you want to include can only be viewed in your iframe you can define the parent url here. If someone tries to open the url directly he will be redirected to this url. Existing parameters from the original url are added to the new url IF no ? is found in the  iframe_redirect_url. You need to add the possible parameters to the \"URL forward parameters\" that they will be passed to the iframe again. This setting does use Javascript for the redirect. If Javascript is turned off the user can still access the site. If you also want to avoid this add \"html {visibility:hidden;}\" to the style sheet of your iframe page. Than the page is simply white. The Javascript does set the page visible after it is loaded! iframe_redirect_url does now also check if the page is included by the domain specified. Otherwise it is redirected to the iframe_redirect_url. This way you can make sure that the iframe page can only be included by a page on your domain. Please see the additional option below you have if you define this parameter before the ai_external.js. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:161
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:162
 msgid "Add the id to the url of the iframe"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:161
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:162
 msgid "This feature adds the id of the iframe to the iframe url. The id is than extracted on the iframe and used as value for the callback to find the right iframe on the parent side. The static way is to set iframe_id (Please see below). The dynamic solution has to be used if you want to include the same page several times to the parent page (e.g. the page you include is called with different parameters and shows different content). You specify the parameter that is added to the url. So e.g. ai_id can be used. Allowed values are only a-zA-Z0-9_. Do NOT use any other characters. You need to set the parameter here or by setting iframe_url_id before you include ai_external.js. Please note the if you specify it here ALL shortcodes with use_shortcode_parameters_only=\"true\" need pass_id_by_url to be set. See example 27 for a working setup. Shortcode: pass_id_by_url=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:162
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:163
+msgid "Keep iframe modifications outside iframe"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:163
+msgid "Please note: This is a really advanced feature! Please ask in the forum if you plan to use this! Normally the page in the iframe is only modified if it is in the iframe. But sometimes the page in the iframe does not work properly in the iframe in a workflow. So you need to jump out out of the iframe. But you maybe still want to hide/modify the content of this page even outside the iframe. This feature does enable this by setting a session cookie. If you enable this feature a cookie is set if you do modifications in the iframe and even if you jump out of the iframe the modifications are still done. This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:164
 msgid "Support WP multisite"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:162
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:164
 msgid "By default the callback url is rendered to the ai_external.js. For WP multi sites the default setting does than only work for one of the domains. \"Yes\" does enable that the Javascript compares the default url with the one from the referrer. Than the default domain will be exchanged with the one from the referrer. This only works if the domain is the only difference between the multi sites. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly. If you only enable this in ai_external.js directly you need to use multi_domain_enabled=\"true\" in the shortcode! If you use postMessage for communication please read the documenation there how to use this setting!"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:170
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:172
 msgid "Use postMessage for communication"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:170
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:172
 msgid "From version 7.4, this is the default communication way between the iframe and the parent for new installations of the pro version. See <a class=\"post-message-help-link\" href=\"#\">here</a> for the two different communication ways and what is the best one for you. If you have any problems with windows.postMessage select \"Debug\" and additional log information about the transfered data is printed to the browser console. Use F12 at your browser to open the developer tools. The administration does save the current url as targetOrigin into the ai_external.js. If have a multi site or you include your page into differnt parents than you need the pro version and select \"Support WP multisite\" to \"Yes\" as than * is used as targetOrigin. Also use post communication if you have a https page in the iframe and your page is http. Please see <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e51\" target=\"_blank\">example 53</a> for this advanced setup! <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly. If you only enable this in ai_external.js directly you need to use use_post_message=\"true\"/\"debug\" in the shortcode!"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:172
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:174
 msgid "i-20-Include content directly from the iframe"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:172
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:174
 msgid "When you enable post communication you can read elements from the iframe and transfer it to the parent and include it there. This is like the feature \"Include content directly\" from the \"Add files/content\" from the next tab  but more powerful. You can define here as many elements you like and insert it to the parent page. To enable this setting you need to specify ther element of the parent and the element of the iframe seperated by a |. Several settings are seperatd by , e.g. #c-id|#content,#s-id|#some-images,#p-id|#iframe-right p:nth-child(2). You can use any valid <a class=\"jquery-help-link\" href=\"#\">jQuery selector pattern</a> here! Currently the iframe is NOT hidden by default. After the setup you need to set display:none; on the basic tab at \"Style\". Currently there are no additional settings like for the same domain. So make sure that e.g. the divs you want to add the content have e.g. the correct height for optimal display! This setting cannot be set by a shortcode. <a href=\"#mirp\">Please see below</a> how to configure ai_external.js directly."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:177
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:179
 msgid "<strong>Please note:</strong> If you change the settings above I recommend to reload the iframe page in a different tab because otherwise the page is cached by many browsers!"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:186
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:188
 msgid "Please test with <strong>all</strong> browsers! If the wrapper div is needed (It has a transparent border of 1px!) and it causes layout problems you have to remove the wrapper div in the Javascript file and you have to measure the body. The alternative solution is stored as comment in the Javascript file. The Javascript file is regenerated each time you save the settings on this page."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:190
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:192
 msgid ""
 "\n"
 "    <h3 id=\"mirp\">How to configure the \"Modifies the remote iframe page\" options</h3>\n"
@@ -901,7 +918,7 @@ msgid ""
 "    </p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:196
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:198
 msgid ""
 "\n"
 "    <h3 id=\"mirp\">How to configure the workaround file ai_external.js directly to work with different settings.</h3>\n"
@@ -914,7 +931,7 @@ msgid ""
 "    <strong>Please note:</strong> All parameters can be set in the administration. This are the settings where a "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:206
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:208
 msgid ""
 " is shown! You only need to define variables before the script or a configuration file if you need to include the SAME ai_external.js with DIFFERENT configurations. See the <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-faq#config\" target=\"_blank\">FAQ</a> for more details.\n"
 "    </div>\n"
@@ -922,11 +939,11 @@ msgid ""
 "    "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:212
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:214
 msgid "Show me the parameters."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:215
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:217
 msgid ""
 "<div id=\"all-parameters\" class=\"hide-always\">\n"
 "       <ul class=\"ulli\">\n"
@@ -937,7 +954,7 @@ msgid ""
 "      "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:223
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:225
 msgid ""
 "\n"
 "          <li>iframe_hide_elements - See <a class=\"modifycontent-link\" href=\"#\">Hide elements in iframe</a>.</li>\n"
@@ -957,7 +974,8 @@ msgid ""
 "          <li>iframe_url_id - See \"Add the id to the url of the iframe\"</li> \n"
 "          <li>element_to_measure - You can define the element you want to measure + a offset for fix content. This is sometimes needed for some themes where e.g. chrome returns 0 as height. You need to specify a id. So no # is allowed here.</li> \n"
 "          <li>element_to_measure - The element you want to measure. See \"element to measure\" above</li> \n"
-"          <li>element_to_measure_offset - The offset for a fix content </li> \n"
+"          <li>element_to_measure_offset - The additional height for a the measured content. See \"Additional height\"</li> \n"
+"          <li>modify_iframe_if_cookie - Enable/disable that the modifications of an iframe is done even outside an iframe. See \"Keep iframe modifications outside iframe\". Valid values are \"true\", \"false\".</li>\n"
 "          <li>add_iframe_url_as_param - See \"Add iframe url as param\"</li>\n"
 "          <li>additional_styles_wrapper_div - Adds additional styles to the wrapper div. Depending on the html/css this is sometimes needed that the element can be measured correctly. overflow:auto; is sometimes needed!</li>\n"
 "          <li>domainMultisite - Enable/disable multi site settings. See above. Valid values are \"true\", \"false\".</li>\n"
@@ -967,7 +985,7 @@ msgid ""
 "          "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:251
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:254
 msgid ""
 "\n"
 "      </ul>\n"
@@ -982,70 +1000,70 @@ msgid ""
 "      "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:266
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:269
 msgid "Config files for the external workaround"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:269
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:272
 msgid "Defining the variables before the script has the disadvantage that you need to modify the html of the remote domain for every change and also the code there can get really big. Therefore it is now possible to use config files which are located on the parent server and loaded dynamically from the external_ai.js. Config files have to be placed in the folder \"advanced-iframe-custom\" in the plugin directory (This directory does not exist by default and is created if you use the create input filed below) and need to follow this naming convention: ai_external_config_&lt;config_id&gt;.js. This file does contain exactly the variables described before. Then you need to add the config_id as parameter to the external_ai.js like this:  ..../ai_external.js?config_id=&lt;config_id&gt;. The config_id can only contain alphanumeric characters, - and _."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:272
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:275
 msgid "You can also include the config file directly before the ai_external.js script. This gives you the same flexibility but you have to include 2 scripts. The performance including this directly is a little bit better because no internal loading has to be done!"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:275
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:278
 msgid "<strong>Please note</strong>: The folder \"advanced-iframe-custom\" is used because Wordpress does delete the whole plugin folder at an update and all your settings would be lost! If you delete the plugin completely you need to remove the folder \"advanced-iframe-custom\" manually if you don't want to keep this settings!"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:280
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:283
 msgid "Show me the example above with a config file"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:283
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:286
 msgid "In this example the config_id \"example\" is used."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:286
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:289
 msgid ""
 "First create a file called \"ai_external_config_example.js\" in the folder \"advanced-iframe-custom\" of the plugin directoy (or create the file below) and save the following lines there:<br />\n"
 "        &nbsp;&nbsp;&nbsp;var updateIframeHeight = \"true\";<br />\n"
 "        &nbsp;&nbsp;&nbsp;var keepOverflowHidden = \"false\";"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:291
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:294
 msgid "a. Add the parameter ?config_id=example to the external_ai.js"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:301
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:304
 msgid "Done. Make sure that you refresh the browser cache if you make changes to your config file. <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications#e7\" target=\"_blank\">Example 7</a> shows a working setup."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:308
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:311
 msgid "Existing config files"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:309
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:312
 msgid "The following configuration files do currently exist. Please note that you can view/edit this files with the plugin editor of Wordpress by clicking on the \"Edit/View\" link. Hover over the script you want to include and click 3 times fast to select it. Than add the line before your ai_external.js if you use the 2nd way to include the configuration."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:322
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:325
 msgid "No custom configuration files found."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:339
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:342
 msgid "Create a config file with the following id:"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:341
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:344
 msgid "Create empty config file"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:346
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:349
 msgid "Load different configurations depending on an url parameter"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:347
+#: advanced-iframe/includes/advanced-iframe-admin-external-workaround.php:350
 msgid "Important: If you want to include one external page into more than one iframe only one configuration for the external page is possible by default. An advanced topic is to switch configurations depending on an url parameter. This requires to create a custom version of the config switcher template that is included in the js folder of the plugin and called ai_config_switcher_template.js.</p><p>Please make a copy of this file and copy it to the folder advanced-iframe-custom. If you want to have this config file listed above please use  the following naming ai_external_config_&lt;config_id&gt;.js. Please follow the documenation inside the config switcher file. If you need more complex configurations like this I recommend to get the professional support offered for this plugin because then an indivitual solution has to be designed and a custom version of the plugin would be needed."
 msgstr ""
 
@@ -1074,93 +1092,288 @@ msgid "Forum"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-forum.php:10
-msgid "Please use the forum for support. Make sure to enable the \"Check shortcode\" on the introduction tab first as this maybe already show you which setting is not valid!"
+msgid "Please use the forum for support. Make sure to enable the \"Check shortcode\" on the options tab first as this maybe already show you which setting is not valid!"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-forum.php:11
 msgid "Go to the forum"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:35
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:77
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:153
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:237
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:277
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:322
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:356
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:498
-msgid "Yes"
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:19
+msgid "Site"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:39
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:85
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:157
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:204
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:245
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:326
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:360
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:502
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:25
+msgid "Admin"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:31
+msgid "All"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:38
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:84
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:130
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:202
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:249
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:290
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:371
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:433
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:658
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:814
 msgid "No"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:81
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:241
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:80
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:122
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:198
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:282
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:322
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:367
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:429
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:507
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:810
+msgid "Yes"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:126
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:286
 msgid "External"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:123
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:168
 msgid "Top"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:127
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:172
 msgid "Bottom"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:161
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:206
 msgid "Not rendered"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:196
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:241
 msgid "Same domain"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:200
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:245
 msgid "Remote domain"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:281
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:326
 msgid "Debug"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:285
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:330
 msgid "No (iframe)"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:330
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:375
 msgid "Full"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:364
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:395
+msgid "Check for errors only"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:399
+msgid "Check for errors and warnings"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:403
+msgid "Do not check iframes on save"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:437
 msgid "Original"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:400
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:473
 msgid "Default (Scroll)"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:404
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:477
 msgid "Auto"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:408
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:481
 msgid "Manually"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:588
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:515
+msgid "False"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:587
+msgid "Check all iframes"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:590
+msgid "Status: "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:595
+msgid "The check of the url above is disabled. Enable the automatic check on the options tag."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:615
+msgid "Page"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:617
+msgid "Result"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:619
+msgid "Links"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:662
+msgid "Bottom of page"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:676
+msgid "Header X-Frame-Options found. "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:678
+msgid "The header is set to SAMEORIGIN. You are on a different domain and therefore this page can NOT be included."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:680
+msgid "The header ist set to DENY. This means the page cannot be included into an iframe."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:682
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:684
+msgid "The header ist set to "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:682
+msgid ". This means the page most likely cannot be included into an iframe because the ALLOW-FROM header is not supported by all major browsers."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:684
+msgid ". This means that the page most likely cannot be included into an iframe."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:688
+msgid " The url you try to include is HTTP and your page is HTTPS. This is not supported by most modern browsers. See <a href=\"http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https\" target=\"_blank\">this blog</a> for details."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:691
+msgid " The test cannot be performed properly. Check the url in the browser for more details"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:693
+msgid " The url you entered does not exist (http error: "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:693
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:695
+msgid "). Please check if the url is correct."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:695
+msgid " The url does return an error (http error: "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:697
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:707
+msgid " The url is redirected to "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:697
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:707
+msgid " (http status: "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:697
+msgid ")!"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:707
+msgid "). It is recommended to include the url directly!"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:716
+msgid "The page does exist and an X-Frame-Options header with SAMEORIGIN was found which is o.k. because your iframe is on the same domain."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:718
+msgid "The page does exist and no X-Frame-Options header was found. "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:721
+msgid "A redirect to the same url was found. Redirecting to the same URL is occasionally used to set cookies and test to see that they are set."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:724
+msgid " But there can still be a iframe blocker script on this page. Go <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker\" target=\"_blank\">here</a> for a full check."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:735
+msgid " The check returned an error where no valid headers where returned. Please try the iframe manually."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:736
+msgid " Details about the error: Error code: "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:736
+msgid ". Error message: "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:737
+msgid " If you like more details about the error please see <a target=\"_blank\" href=\"https://curl.haxx.se/libcurl/c/libcurl-errors.html\">here</a>."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:746
+msgid "This url cannot be checked as it does contain a placeholder or this is no real url"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:864
+msgid "No Accordeon menu on the advanced tab"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:865
+msgid "Accordeon menu on the advanced tab. No section is open by default."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:866
+msgid "Section 'Advanced settings' is open by default"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:867
+msgid "Section 'Show only a part of the iframe' is open by default"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:868
+msgid "Section 'Resize the iframe to the content height/width' is open by default"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:869
+msgid "Section 'Modify the parent page' is open by default"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:870
+msgid "Section 'Open iframe in layer' is open by default"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:900
 msgid "Default restrictions"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-functions.php:739
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:913
+msgid "Show a working example"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:921
+msgid "Saved to ai_external.js"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-functions.php:1051
 msgid "Id is valid."
 msgstr ""
 
@@ -1408,6 +1621,7 @@ msgid ""
 "\t\t\t\t<li>$(\"#testButton\") selects the element with the id value of testButton</li>\n"
 "\t\t\t\t<li>$(\"img[alt]\") selects all &lt;img&gt; elements that possess an alt attribute</li>\n"
 "\t\t\t\t<li>$(\"a[href$=.pdf]\") selects all &lt;a&gt; elements that possess an href attribute that ends in .pdf</li>\n"
+"        <li>$(\"a[href='example.html']\") selects all &lt;a&gt; elements that has the href example.html</li>\n"
 "\t\t\t\t<li>$(\"button[id*=test]\") selects all buttons whose id attributes contain test</li>\n"
 "        <li>$(\"tr:not(.keep)\") selects all table row that don't have the class \"keep\"</li>\n"
 "        <li>$(\"table:nth-child(1)\") selects the 2nd row of a table</li>\n"
@@ -1417,7 +1631,7 @@ msgid ""
 "      </div>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-jquery.php:146
+#: advanced-iframe/includes/advanced-iframe-admin-jquery.php:147
 msgid ""
 "<p>Please go to the jQuery API <a target=\"_blank\" href=\"http://api.jquery.com/category/selectors/\">http://api.jquery.com/category/selectors/</a> for the official documentation.\n"
 "          </p>\n"
@@ -1642,7 +1856,7 @@ msgid "Hide/cover parts of the iframe. Make an iframe read only"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:90
-msgid "A rectangle is defined the following way: left,top,width,height,color,z-index e.g. 10,20,200,50,#ffffff,10. This defines a rectangle in white with the z-index of 10. z-index means the layer the rectangle is placed. If you don't see your rectangle please use a higher z-index. You can also define a background image here! use e.g. 10,20,200,50,#ffffff;background-image:url(your-logo.gif);background-repeat:no-repeat;,10 for a white rectangle with the given background image. Use the area selector to get the coordinates very easy. You can specify several rectangles by separating them by |. Please see the <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e8\">pro demo</a> for a cool example where a logo is exchanged.<p class=\"description\">You can also create read only iframes with this feature. Use hide_part_of_iframe=\"0,0,100%,100%,transparent,10\". For a working example please see example 21 of the pro demo.</p><p class=\"description\">It is also possible to define an optional link and an optional target for this area. Parameter 7 is the url and parameter 8 the target. So a working example would be: hide_part_of_iframe=\"0,0,100%,100%,transparent,10,http://www.tinywebgallery.com,_blank\".</p><p class=\"description\">The divs can also be right and bottom aligned. You need to specify the prefix r for right instead of left and b for bottom instead of top. An example would look like this: r10,b20,200,50,#ffffff,10.</p><p class=\"description\">Also media queries are supported! This enables you to hides areas depending on the browser width. Please see <a  target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e50\">example 50</a> for a working demo.</p><p class=\"description\">The div does also support the usage of an external html files even with shortcodes. Below you see the existing external files, how to use them and you can also create/edit/delete them. </p><p class=\"description\">Shortcode attribute: hide_part_of_iframe=\"\"</p>"
+msgid "A rectangle is defined the following way: left,top,width,height,color,z-index e.g. 10,20,200,50,#ffffff,10. This defines a rectangle in white with the z-index of 10. z-index means the layer the rectangle is placed. If you don't see your rectangle please use a higher z-index. You can also define a background image here! use e.g. 10,20,200,50,#ffffff;background-image:url(your-logo.gif);background-repeat:no-repeat;,10 for a white rectangle with the given background image. Use the area selector to get the coordinates very easy. You can specify several rectangles by separating them by |. Please see the <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e8\">pro demo</a> for a cool example where a logo is exchanged.<p class=\"description\">You can also create read only iframes with this feature. Use hide_part_of_iframe=\"0,0,100%,100%,transparent,10\". For a working example please see example 21 of the pro demo.</p><p class=\"description\">It is also possible to define an optional link and an optional target for this area. Parameter 7 is the url and parameter 8 the target. So a working example would be: hide_part_of_iframe=\"0,0,100%,100%,transparent,10,http://www.tinywebgallery.com,_blank\".</p><p class=\"description\">The divs can also be right and bottom aligned. You need to specify the prefix r for right instead of left and b for bottom instead of top. An example would look like this: r10,b20,200,50,#ffffff,10.</p><p class=\"description\">Also media queries are supported! This enables you to hides areas depending on the browser width. Please see <a  target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/hide-a-part-of-the-iframe#e50\">example 50</a> for a working demo.</p><p class=\"description\">The div does also support the usage of an external html files even with shortcodes. Below you see the existing external files, how to use them and you can also create/edit/delete them.</p><p class=\"description\">Also you can hide the divs by click or hide them after a given time of ms. Add $hide or $hideXXXX where XXXX is the time in ms. So $hide3000 hides the div after 3 seconds. You can add this like an additional file or even together with it. e.g. #ffffff$hide or #ffffff$file$hide3000 is possible. For this feature it also makes sense to use semi transpartent backrounds. rgba is therefore supported now. The only thing which is important is that , needs to replaced by ;. So rgba(1;1;1;0.5) has to be used here.</p><p class=\"description\">Shortcode attribute: hide_part_of_iframe=\"\"</p>"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:97
@@ -1743,15 +1957,15 @@ msgid "<p>With the next 2 options you can modify the target of links in your ifr
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:203
-msgid "Change iframe links"
+msgid "Change iframe links/forms target"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:203
-msgid "Change links of the iframe page to open the url at a different target. This option does add the attribute target=\"your target\" to the links you define. The targets are defined in the next setting. You can use any valid <a class=\"jquery-help-link\" href=\"#\">jQuery selector pattern</a> here! So if your link e.g. has an id=\"link1\" you have to use \"a#link1\". If you want to change all links e.g. in the div with the id=\"menu-div\" you have to use \"#menu-div a\". If you e.g. only want to change all links of pdfs you can use \"a[href$=.pdf]\"). You can also define more than one element. Please separate them with |. Shortcode attribute: change_iframe_links=\"\""
+msgid "Change links of the iframe page to open the url at a different target. This option does add the attribute target=\"your target\" to the links you define. The targets are defined in the next setting. You can use any valid <a class=\"jquery-help-link\" href=\"#\">jQuery selector pattern</a> here! So if your link e.g. has an id=\"link1\" you have to use \"a#link1\". If you want to change all links e.g. in the div with the id=\"menu-div\" you have to use \"#menu-div a\". If you e.g. only want to change all links of pdfs you can use \"a[href$=.pdf]\". Because [] is replaced in the short code by Wordpress it has to be written there like this: \"a{{href$=.pdf}}\". Also the target of a form can be changed. So using \"form\" will change the target of all forms. You can also define more than one element. Please separate them with |. Shortcode attribute: change_iframe_links=\"\""
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:204
-msgid "Change iframe links target"
+msgid "Change iframe links/forms target value"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-iframe.php:204
@@ -1825,7 +2039,7 @@ msgid "Change parent links target"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-parent.php:60
-msgid "Change links of the parent page to open the url inside the iframe. This option does add the attribute target=\"your id\" to the links you define. You can use any valid <a class=\"jquery-help-link\" href=\"#\">jQuery selector pattern</a> here! So if your link e.g. has an id=\"link1\" you have to use \"a#link1\". If you want to change all links e.g. in the div with the id=\"menu-div\" you have to use \"#menu-div a\". You can also define more than one element. Please separate them with ,. Shortcode attribute: change_parent_links_target=\"\""
+msgid "Change links of the parent page to open the url inside the iframe. This option does add the attribute target=\"your id\" to the links you define. You can use any valid <a class=\"jquery-help-link\" href=\"#\">jQuery selector pattern</a> here! So if your link e.g. has an id=\"link1\" you have to use \"a#link1\". If you want to change all links e.g. in the div with the id=\"menu-div\" you have to use \"#menu-div a\". You can also define more than one element. Please separate them with ,. If you e.g. only want to change all links of pdfs you can use \"a[href$=.pdf]\". Because [] is replaced by Wordpress it has to be written like this: \"a{{href$=.pdf}}\". Shortcode attribute: change_parent_links_target=\"\""
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-modify-parent.php:61
@@ -1927,7 +2141,7 @@ msgid "i-20-Add iframe url as param"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-parameters.php:19
-msgid "With this setting the url of the iframe is added as parameter to the current url. The parameter is defined in the setting before. This feature is only enabled if you also enable auto height for remote domains because the url of the iframe is sent with the same request. This enables bookmarkable urls where you go directly to the last page in the iframe. The history api which enables the change of the url is only supported by modern browsers. For older browsers the url is simply not changed. See http://caniuse.com/#search=pushstate. Shortcode attribute: add_iframe_url_as_param=\"same\", add_iframe_url_as_param=\"remote\" or add_iframe_url_as_param=\"false\" "
+msgid "With this setting the url of the iframe is added as parameter to the current url. The parameter can be defined in the setting before. If this is not set the default \"page\" is used. This feature is only enabled for the remote domain if you also enable auto height for remote domains because the url of the iframe is sent with the same request. This enables bookmarkable urls where you go directly to the last page in the iframe. The history api which enables the change of the url is only supported by modern browsers. For older browsers the url is simply not changed. See http://caniuse.com/#search=pushstate. Shortcode attribute: add_iframe_url_as_param=\"same\", add_iframe_url_as_param=\"remote\" or add_iframe_url_as_param=\"false\" "
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-parameters.php:20
@@ -1972,10 +2186,199 @@ msgid "If you mix http and https read <a href=\"http://www.tinywebgallery.com/bl
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:41
-msgid "Advanced iFrame Pro - Quickstart guide, widget, plugin options, vote for the plugin on codecanyon"
+msgid "Advanced iFrame Pro - Quickstart guide, plugin options, widget, vote for the plugin on codecanyon"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:44
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:48
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:192
+msgid "<h3 class=\"hide-print\">Plugin options</h3>"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:50
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:194
+msgid "Show this section as last tab"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:50
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:194
+msgid "<strong class=\"move-bottom\">You can show this tab as last tab after you have read it. Then the basic tab is shown first.</strong>"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:51
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:195
+msgid "Check shortcode"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:51
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:195
+msgid "<strong class=\"move-bottom\">If you enable this the plugin does check if the shortcode attributes are known. You will find typos, wrong quotes and missing spaces. It does not check the values! The only reason this is not enabled by default is to make sure that old shortcodes don't show a warning after an update! I stongly recommend to enable this setting!</strong>"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:52
+msgid "Enable expert mode"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:52
+msgid "If you enable the expert mode the description is only shown if you click on the label of the setting. You see more settings at once but only one description at once. Also the padding between the table rows are reduced a lot. So you see a lot of more settings on one screen. Use this if you are common with the settings."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:53
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:197
+msgid "Use footer save button"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:53
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:197
+msgid "The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:54
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:198
+msgid "Use accordeon menu on the advanced tab"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:54
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:198
+msgid "The accordeon menu on the advanced tab does not show the different sections in one big page but does only show the sections you open. You can define the default section which is open by default here also. Sections do not close if you open another one because sometimes is is useful to open several sections at once. Also the quick jump links at the top are removed because they do not make sense then anymore. The menu is used after you saved this setting. Only important sections are offered in the dropdown."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:55
+msgid "Alternative shortcode"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:55
+msgid "You can define an alternative shortcode the plugin should evaluate. This is e.g. useful if you chance/upgrade from iframe to advanced iframe (pro). Simply insert \"iframe\" in the text field. Most if the parameters do already match! Make sure to deactivate the other plugin that used the shortcode. With using iframe also the BBCode [iframe]url[/iframe] is supported. IMPORTANT: If you use this, security codes are NOT checked anymore. So anyone who can e.g. write a post can also insert an iframe!"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:56
+msgid "Show plugin in main menu"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:56
+msgid "Show the \"Advanced iFrame Pro\" Menu link also in the main menu. If set to \"False\" it is only shown in the settings menu."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:58
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:199
+msgid "Allow shortcode attributes"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:58
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:199
+msgid "Allow to set attributes in the shortcode. All of the attributes can be overwritten in the shortcode if you set 'Yes'. Otherwise the settings you specify here are used."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:59
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:200
+msgid "Use shortcode attributes only"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:59
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:200
+msgid "All iframes you use in your pages use the administration. With shortcode attributes you can overwrite these settings. When you use several iframes with different settings this can lead to strange behavior because you do not see the whole configuration in the shortcode. By setting this option to true only the parameters defined as attributes are used. You can set this for a single iframe as well with the shortcode attribute use_shortcode_attributes_only=\"true\". Shortcode attribute: use_shortcode_attributes_only=\"true\" or use_shortcode_attributes_only=\"false\""
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:60
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:201
+msgid "Include ai.js in the footer"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:60
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:201
+msgid "By default the needed Javascripts are included at the footer. So you can include jQuery also at the footer if you like. If you like/need it in the header set this value to false. Before Wordpress 3.3 jQuery is needed in the header if you want to use lazy-loading! The ai.js has also to be in the footer if it should only be loaded when the shortcode is on the page. This setting cannot be set as shortcode! There is an additional shortcode attribute called include_scripts_in_content=\"true\". This is only needed in the special case if you use the page with content only (like using the plugin \"Show Content Only\" with \"Content + Styles\" mode). Then ai.js is directly rendered before the iframe. See demo <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0/same-domain-wrapped-auto-height\">wrapped auto height</a>."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:61
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:202
+msgid "Load jQuery as dependency"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:61
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:202
+msgid "By default jQuery is loaded as dependeny. If you have a theme or another plugin that does not stick to the Wordpress way to load the scripts you might have to disable the dependeny. This avoids that jQuery is loaded again and other plugins do maybe not work anymore."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:62
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:204
+msgid "Editor button"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:62
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:204
+msgid "With this setting you can add an \"advanced iframe\" button to the text editor of Wordpress. The button does add the shortcode with the current security code if set + the settings you define. You can use any setting from the administration. By default src,width,height is used. The securitykey is additionally rendered if you specify one. If you leave this setting empty the button is not shown."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:64
+msgid "Enable content filter"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:64
+msgid "This feature does not render an iframe. It gives you the option to filter the content of your page by an id. So you can offer parts of your page that then can be included into any iframe. You only need to specify the id of the element you want to show with the parameter ?ai-show-id-only=id. If you only specify this parameter the whole page is loaded and then with Javascript all other elements are hidden. If you add ai-server-side=1 to the url the content is filtered on the server side but this only works for elements which are in the content area because everything else depends on the template. By default overflow (scrolling) is hidden inside the iframe. If you like that scrollbars are shown if needed add &ai-show-overflow=1 to the url. Also check \"Add ai_external.js local\" as this actually the even more powerfull solution but more complicated to setup. So try what fits best to your needs! Also the height of the content is sent to the parent by a post message. Please see the <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/share-content-from-your-domain-content-filter\">demo</a> how you can use this and code you need to include to use this the optimal way."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:65
+msgid "Add ai_external.js local"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:65
+msgid "The setting does add the ai_external.js to your own site. This enables you to provide parts of your site into an external iframe or use the external workaround for the same domain. This is simelar to \"enable_content_filter\" where you can filter parts of your page. The advantage of this solution is that you can use all css modifications and auto height of this solution. Also resize of element resize does work here. Also this works on included links if they still stay on the page. The disadvantage is that it is more complecated to setup then \"enable_content_filter\" and only one configuration is supported automatically. Also the height of the content is sent to the parent by a post message. If you like to include the script only to a single page use the shortcode [ai_advanced_js_local] to your page. Then the script will be included to your footer. You can even add custom settings like described on the external workaround page by adding a script to the content. You can enable this for the site, the admin pages or both. Please see the <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/share-content-from-your-domain-add-ai_external-js-local\">demo</a> how you can use this and code you need to include to use this the optimal way."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:67
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:205
+msgid "Debug Javascript"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:67
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:205
+msgid "You can enable that most messages from the Javascript console are shown in a debug div which shown at the bottom of the page. This is very useful if you have problems on Android or IOS because there it is quite hard to get on the infos displayed in the Javascript log. Important: You need to use the external workaround with postMessage set to debug(!) (see the external workaround tab) if you also want to get the messages from the page in the iframe! Also the current user agent, the headers and a basic iframe check of the first found iframe are printed into the debug log. Click on the debug area to enlage and shrink it. Shortcode attribute: debug_js=\"no/bottom\"  "
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:69
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:206
+msgid "Check Url on load"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:69
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:206
+msgid "By default the url on the basic tab is checked if it can be included into an iframe. Some servers do block this feature and the administration does fail then. If this is the case the plugin does disable this check and \"Check iframes on save\" automatically. You can enable this feature again if you allow curl calls on your server."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:70
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:207
+msgid "Check iframes on save"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:70
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:207
+msgid "You can define if you show errors only, errors and warnings or if iframes are not checked at all at save. Some servers do block this feature and you get a blank page on save once. If this is the case the plugin does disable this check automatically. You can enable this feature again if you allow curl calls on your server."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:71
+msgid "Check all iframes once a day"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:71
+msgid "You can automatically check all iframes of your site once a day. IF you upgrade from an older version please deactive and active the plugin once to get the cronjob setup properly! The same function like  on the \"Basic\" tab -> Url -> \"Check all iframes\" is triggered here. Be aware that default wordpress cronjobs are triggered by the user that hits the next execution time and therefore this user has to wait until this checkis done! In the status e-mail you find also how long the check needed. Because of this performance impact the cron job check only checks until an error happens. So please go to the administration if you get an e-mail for a full check! If the checks of your iframes takes longer than 5 sec. I recommend to switch to a native cronjob if possible. Google for \"wordpress cronjob replace\" and also add your hoster! Because native cronjobs can not be created everywhere and also often depends on your package. To test cronjobs you can e.g. use the plugin \"WP Crontrol\" where you can simply execute this cronjob."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:72
+msgid "i-20-Check iframe cronjob email"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:72
+msgid "You can define an alternative e-mail the iframe status check is sent to. If you leave this field empty the admin e-mail from \"Settings -> Email Address\" is used. You can define several e-mails seperating them by \",\"."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:76
+msgid "Minimum user role"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:76
+msgid "You can define the minimum user role a user needs to use the advanced iframe plugin. This limits the access to the administration, the editor button and if a user can edit a page with a advanced iframe shortcode. If a page with an advanced iframe is detected and the rights are not sufficient an error message is displayed and the user can not edit the page! A user with insufficient rights still can add the shortcode if he has the security code! This settings only works optimal for the 5 default user roles as it depends on the order of roles! So please check if this settings works for you if you have additional roles! Default restrictions means that the administration is only shown for administrators and the editor button for everyone who can edit a post/page. This setting can only be changed by an administrator!"
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:85
 msgid ""
 "\n"
 "   <h3>Warning: Illegal copies of Advanced iFrame Pro</h3>\n"
@@ -1989,228 +2392,96 @@ msgid ""
 "   </p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:58
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:97
 msgid "<h3 class=\"hide-print\">Advanced iFrame Pro Widget</h3><p class=\"hide-print\">The pro version also does offer a widget where you can include the iframe. The usage is really simple. Go to Appearance -> Widgets and insert the shortcode you would normally put into a page into the text field of the \"Advanced iFrame Pro Widget\" .</p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:60
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:99
 msgid "<h3>Vote for the plugin</h3><p>Thank you for getting Advanced iFrame Pro at Codecanyon.<br/>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:61
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:100
 msgid "Please feel free to leave an item rating from your items download page if you haven't already done so.</p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:62
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:101
 msgid "<p>Please get in contact with me if you have problems because most of the issues are easy to solve. But at least tell me what you did not like so I can improve this. Also make sure that you took a look at the quick start guide to make sure the feature you like can be used!</p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:64
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:176
-msgid "<h3 class=\"hide-print\">Plugin options</h3>"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:66
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:178
-msgid "Show this section as last tab"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:66
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:178
-msgid "<strong class=\"move-bottom\">You can show this tab as last tab after you have read it. Then the basic tab is shown first.</strong>"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:67
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:179
-msgid "Check shortcode"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:67
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:179
-msgid "<strong class=\"move-bottom\">If you enable this the plugin does check if the shortcode attributes are known. You will find typos, wrong quotes and missing spaces. It does not check the values! The only reason this is not enabled by default is to make sure that old shortcodes don't show a warning after an update! I stongly recommend to enable this setting!</strong>"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:68
-msgid "Enable expert mode"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:68
-msgid "If you enable the expert mode the description is only shown if you click on the label of the setting. You see more settings at once but only one description at once. Also the padding between the table rows are reduced a lot. So you see a lot of more settings on one screen. Use this if you are common with the settings."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:69
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:181
-msgid "Use footer save button"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:69
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:181
-msgid "The new default is that the save button is in a sticky footer. I was testing this for all major browsers but not for all worpress versions. So if this does not work for your version set this to false to get one save button for each section."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:70
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:182
-msgid "Use accordeon menu on the advanced tab"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:70
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:182
-msgid "The accordeon menu on the advanced tab does not show the different sections in one big page but does only show the sections you open. You can define the default section which is open by default here also. Sections do not close if you open another one because sometimes is is useful to open several sections at once. Also the quick jump links at the top are removed because they do not make sense then anymore. The menu is used after you saved this setting. Only important sections are offered in the dropdown."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:71
-msgid "Alternative shortcode"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:71
-msgid "You can define an alternative shortcode the plugin should evaluate. This is e.g. useful if you chance/upgrade from iframe to advanced iframe (pro). Simply insert \"iframe\" in the text field. Most if the parameters do already match! Make sure to deactivate the other plugin that used the shortcode. With using iframe also the BBCode [iframe]url[/iframe] is supported. IMPORTANT: If you use this, security codes are NOT checked anymore. So anyone who can e.g. write a post can also insert an iframe!"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:72
-msgid "Show plugin in main menu"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:72
-msgid "Show the \"Advanced iFrame Pro\" Menu link also in the main menu. If set to \"False\" it is only shown in the settings menu."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:74
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:183
-msgid "Allow shortcode attributes"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:74
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:183
-msgid "Allow to set attributes in the shortcode. All of the attributes can be overwritten in the shortcode if you set 'Yes'. Otherwise the settings you specify here are used."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:75
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:184
-msgid "Use shortcode attributes only"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:75
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:184
-msgid "All iframes you use in your pages use the settings below. With shortcode attributes you can overwrite these settings. When you use several iframes with different settings this can lead to strange behavior because you do not see the whole configuration in the shortcode. By setting this option to true only the parameters defined as attributes are used. So the minimum you need to define is: securitykey and src of the iframe. You can set this for a single iframe as well with the shortcode attribute use_shortcode_attributes_only=\"true\". A minimal shortcode would then look like this: [advanced_iframe securitykey=\""
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:75
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:184
-msgid "\" use_shortcode_attributes_only=\"true\" src=\"http://www.tinywebgallery.com\"].  Shortcode attribute: use_shortcode_attributes_only=\"true\" or use_shortcode_attributes_only=\"false\""
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:76
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:185
-msgid "Include ai.js in the footer"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:76
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:185
-msgid "By default the needed Javascripts are included at the footer. So you can include jQuery also at the footer if you like. If you like/need it in the header set this value to false. Before Wordpress 3.3 jQuery is needed in the header if you want to use lazy-loading! The ai.js has also to be in the footer if it should only be loaded when the shortcode is on the page. This setting cannot be set as shortcode! There is an additional shortcode attribute called include_scripts_in_content=\"true\". This is only needed in the special case if you use the page with content only (like using the plugin \"Show Content Only\" with \"Content + Styles\" mode). Then ai.js is directly rendered before the iframe. See demo <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0/same-domain-wrapped-auto-height\">wrapped auto height</a>."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:77
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:186
-msgid "Load jQuery as dependency"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:77
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:186
-msgid "By default jQuery is loaded as dependeny. If you have a theme or another plugin that does not stick to the Wordpress way to load the scripts you might have to disable the dependeny. This avoids that jQuery is loaded again and other plugins do maybe not work anymore."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:78
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:187
-msgid "Editor button"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:78
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:187
-msgid "With this setting you can add a \"advanced iframe\" button to the text editor of Wordpress. The button does add the shortcode with the current security code + the settings you define. You can use any setting from the administration. Be default securitykey,src,width,height is used. The securitykey is always rendered. If you leave this setting empty the button is not shown."
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:82
-msgid "Minimum user role"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:82
-msgid "You can define the minimum user role a user needs to use the advanced iframe plugin. This limits the access to the administration, the editor button and if a user can edit a page with a advanced iframe shortcode. If a page with an advanced iframe is detected and the rights are not sufficient an error message is displayed and the user can not edit the page! A user with insufficient rights still can add the shortcode if he has the security code! This settings only works optimal for the 5 default user roles as it depends on the order of roles! So please check if this settings works for you if you have additional roles! Default restrictions means that the administration is only shown for administrators and the editor button for everyone who can edit a post/page. This setting can only be changed by an administrator!"
-msgstr ""
-
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:97
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:113
 msgid "Advanced iFrame - Upgrading to Advanced iFrame Pro"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:100
-msgid "<p>Advanced iframe is <strong>free for personal use</strong> and the Pro version a bargain for your business. The personal version does already contain many of the cool features of the Pro version. It has a limit of 10.000 views a month which should normaly not been hit by a personal website.</p>"
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:116
+msgid "<p>Advanced iframe is <strong>free for personal use</strong> and the Pro version a bargain for your business. The personal version does already contain many of the cool features of the Pro version. It has a limit of 10.000 views a month without a notice text which should normaly not been hit by a personal website.</p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:103
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:119
 msgid "Free - For personal and non-commercial sites"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:107
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:132
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:123
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:148
 msgid " "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:111
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:127
 msgid "FREE"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:115
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:131
 msgid "For personal and non-commercial sites"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:118
-msgid "10.000 views/month limit"
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:134
+msgid "10.000 views/month without notice*"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:121
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:137
 msgid "Donate with Paypal"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:128
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:144
 msgid "Pro - For commercial, business and professional sites"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:138
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:154
 msgid "For commercial, business and professional sites"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:141
-msgid "+ <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-comparison-chart\" target=\"_blank\">Many additional features!</a>"
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:157
+msgid "+ <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-comparison-chart\" target=\"_blank\">Many additional features!</a><br />&nbsp;"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:144
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:160
 msgid "Get pro at Codecanyon"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:153
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:169
 msgid "Pro Version Benefits"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:158
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:174
 msgid "<a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/show-only-a-part-of-the-iframe\" target=\"_blank\">Show/Hide specific areas of the iframe</a> if the iframe is on a different domain<br /><a target=\"_blank\" href=\"http://examples.tinywebgallery.com/configurator/advanced-iframe-area-selector.html\">Show the graphical selector</a></li><li><a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/widgets\" target=\"_blank\">Widget support</a>, <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/change-links-targets\" target=\"_blank\">change link targets</a></li><li>External workaround supports <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications\" target=\"_blank\">iframe modifications</a> and <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/responsive-iframes\" target=\"_blank\">responsive iframes</a></li><li><a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/browser-detection\" target=\"_blank\">Browser dependant settings</a>, <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/lazy-loading\" target=\"_blank\">lazy load</a></li><li>No view limit, <a href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/zoom-iframe-content\" target=\"_blank\">zoom</a>, <a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-standalone\">standalone version!</a></li><li><a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo\">See the pro demo</a><li><a target=\"_blank\" href=\"http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-comparison-chart\">Compare versions for all features</a>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:167
-msgid "<p>So if you use the Advanced iFrame on a non personal website please first test the plugin carefully before buying. After that it is quick and painless to get Advanced iFrame Pro. Simply get <strong><a target=\"_blank\" href=\"http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle\">Advanced iFrame Pro on CodeCanyon</a></strong> and be pro in a few minutes!</p>"
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:183
+msgid "<p>* After 10.000 views/month the iframe is still working but below the iframe a small \"powered by\" notice with a link to the pro version is shown. If you hit this limit and you qualify for the free license please contact <a href=\"http://www.tinywebgallery.com/en/about.php\" target=\"_blank\">me</a> to get a version with a higher limit.<br/>If you use the Advanced iFrame on a non personal website please first test the plugin carefully before buying. After that it is quick and painless to get Advanced iFrame Pro. Simply get <strong><a target=\"_blank\" href=\"http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle\">Advanced iFrame Pro on CodeCanyon</a></strong> and be pro in a few minutes!</p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:169
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:185
 msgid "<p><strong>Current status</strong>: "
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:171
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:187
 msgid "</p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:180
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:196
 msgid "Show the administration of the pro version"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:180
+#: advanced-iframe/includes/advanced-iframe-admin-quickstart.php:196
 msgid "<strong class=\"move-bottom\">You can enable the administration of the pro version to see the available features there. Everything except the additional buttons are shown there. NONE of this settings do work if you enable them. It is only for demonstration. All pro features have a blue label or differences are described in the documentation!</strong>"
 msgstr ""
 
@@ -2240,8 +2511,7 @@ msgid "Resize iframe to content height"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-resize.php:24
-#, php-format
-msgid "If you like that the iframe is resized to the height of the content you should set this to 'Yes'. Please note that this is done by Javascript! So if a user has Javascript deactivated or a not supported browser the iframe does not get resized. Please set the height of the iframe to the minimum pixels the iframe should have! Some web pages use 100% of the height. Specifying a too big value as height does not gives you the expected result. This setting generates the code onload=\"aiResizeIframe(this);\" to the iframe. Shortcode attribute: onload_resize=\"true\" or onload_resize=\"false\" "
+msgid "If you like that the iframe is resized to the height of the content you should set this to 'Yes'. Please note that this is done by Javascript! So if a user has Javascript deactivated the iframe does not get resized. Please set the default height of the iframe to the minimum pixels the iframe should have! In the shortcode you can also specify resize_min_height=\"\". By default this is set to 1. The content is resized to this given minimum. Sometimes this does not work properly. Try bigger values then. If this still does not wok please look at some of the pro features like \"Auto zoom iframe with a fix ratio\" or \"Responsive videos\". This setting generates the code onload=\"aiResizeIframe(this);\" to the iframe. Shortcode attribute: onload_resize=\"true\" or onload_resize=\"false\" "
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-resize.php:25
@@ -2273,7 +2543,7 @@ msgid "i-20-Resize iframe to content width"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-resize.php:29
-msgid "If you like that the iframe is resized to the width of the content you should set this to 'Yes'. Please note that this is done by Javascript and only in combination with resizing the content height! So if a user has Javascript deactivated or a not supported browser the iframe does not get resized. This setting generates the code onload=\"aiResizeIframe(this, 'true');\" to the iframe. Shortcode attribute: onload_resize_width=\"true\" or onload_resize_width=\"false\" "
+msgid "If you like that the iframe is resized to the width of the content you should set this to 'Yes'. PLEASE NOTE: Normally this is NOT what you want. Most people like a width of 100%! If you have a responsive layout this setting should be false. If your iframe has only a width of 1px disable the feature! Please note that this is done by Javascript and only in combination with resizing the content height! So if a user has Javascript deactivated or a not supported browser the iframe does not get resized. This setting generates the code onload=\"aiResizeIframe(this, 'true');\" to the iframe. Shortcode attribute: onload_resize_width=\"true\" or onload_resize_width=\"false\" "
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-admin-resize.php:30
@@ -2465,31 +2735,35 @@ msgstr ""
 msgid "This setting can be used on the SAME domain if the height of the page cannot be mesured but the ratio of the page is known. And if the width also cannot be measured automatically but is known because the iframe page has a fixed width, you can specify this width by adding with a pipe like ratio|width. E.g. 0.80|800. If you know the the ratio and the width, this setting does also work on REMOTE domains. You don't even need access to the remote domain! For remote domains also select SAME in the setting before as remote means that the height/width information is sent from the remote domain which is not the case here. Shortcode attribute: auto_zoom_by_ratio=\"\""
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-after-iframe.php:226
-msgid "You reached the view limit for this month.<br />Please get the advanced iframe pro version.<br />Go to the administration for details."
+#: advanced-iframe/includes/advanced-iframe-main-after-iframe.php:240
+msgid "<p><small>powered by Advanced iFrame free. Get the <a target=\"_blank\" href=\"http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle\">Pro version on CodeCanyon</a>.</small></p>"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-css.php:62
+#: advanced-iframe/includes/advanced-iframe-main-css.php:66
 msgid "Configration error: Zoom does need a specified width."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-css.php:67
+#: advanced-iframe/includes/advanced-iframe-main-css.php:71
 msgid "Configration error: Zoom does need a specified height."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-iframe.php:88
+#: advanced-iframe/includes/advanced-iframe-main-iframe.php:154
+msgid "ERROR: hide part of iframe ony supports $hide or $hideXXX as last parameter."
+msgstr ""
+
+#: advanced-iframe/includes/advanced-iframe-main-iframe.php:169
 msgid "ERROR: hide part of iframe does not have the required 6 parameters"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-prepare.php:183
+#: advanced-iframe/includes/advanced-iframe-main-prepare.php:181
 msgid "ERROR: map_parameter_to_url does not have the required 1 or 3 parameters"
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-prepare.php:220
+#: advanced-iframe/includes/advanced-iframe-main-prepare.php:218
 msgid "Configuration error: The attributes content_id and content_styles have to have the amount of value sets separated by |."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-prepare.php:354
+#: advanced-iframe/includes/advanced-iframe-main-prepare.php:353
 msgid "Configuration error: The attributes iframe_content_id and iframe_content_styles have to have the amount of value sets separated by |."
 msgstr ""
 
@@ -2497,8 +2771,8 @@ msgstr ""
 msgid "Configuration error: The attributes change_iframe_links and change_iframe_links_target have to have the amount of value sets separated by |."
 msgstr ""
 
-#: advanced-iframe/includes/advanced-iframe-main-read-config.php:217
-msgid "<strong>The following [advanced_iframe] attributes are unknown or cannot be read properly. Please fix or remove this attributes. You can disable this message in the administration on the \"Introduction\" tab:</strong>"
+#: advanced-iframe/includes/advanced-iframe-main-read-config.php:222
+msgid "<strong>The following [advanced_iframe] attributes are unknown or cannot be read properly. Please fix or remove this attributes. You can disable this message in the administration on the \"Options\" tab:</strong>"
 msgstr ""
 
 #: advanced-iframe/includes/advanced-iframe-widget.php:10

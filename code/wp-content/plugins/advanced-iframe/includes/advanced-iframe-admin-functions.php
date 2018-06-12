@@ -1,5 +1,50 @@
 <?php
 defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+
+
+function printAiExternalLocal($isPro,$options, $label, $id, $description, $default = 'false', $url='') {
+    if (!isset($options[$id]) || empty($options[$id])) {
+      $options[$id] = $default;
+    }
+
+    echo '
+      <tr>
+      <th scope="row">' . $label . renderExampleIcon($url) . '</th>
+      <td><span class="hide-print">
+      ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
+    if ($options[$id] == "true") {
+        echo 'checked="checked"';
+    }
+    echo ' /> ' . __('Site', 'advanced-iframe');
+    
+    echo '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="admin" ';
+    if ($options[$id] == "admin") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('Admin', 'advanced-iframe') ;
+    
+     echo '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '3" name="' . $id . '" value="all" ';
+    if ($options[$id] == "all") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('All', 'advanced-iframe') ;
+    
+    
+    echo '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '4" name="' . $id . '" value="false" ';
+    if ($options[$id] == "false") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('No', 'advanced-iframe') ;
+    
+    
+    echo '<br>
+    </span><p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+}
+
+
 /**
  *  Prints a simple true/false radio selection
  */
@@ -70,7 +115,7 @@ function printTrueFalseHeight($isPro,$options, $label, $id, $description, $defau
       <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url) . renderExternalWorkaroundIcon($showSave). '</th>
       <td><span class="hide-print">
       ';
-    echo '<input type="radio" id="' . $id . '" name="' . $id . '1" value="true" ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="true" ';
     if ($options[$id] == "true") {
         echo 'checked="checked"';
     }
@@ -333,6 +378,34 @@ function printTrueFalseFull($options, $label, $id, $description, $url='') {
     ';
 }
 
+function printAllWarningFalse($options, $label, $id, $description) {
+    if ($options[$id] == '') {
+        $options[$id] = 'false';
+    }
+
+    echo '
+      <tr>
+      <th scope="row">' . $label . '</th>
+      <td><span class="hide-print">
+      ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="error" ';
+    if ($options[$id] == "error") {
+        echo 'checked="checked"';
+    }
+    echo ' /> ' . __('Check for errors only', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="warning" ';
+    if ($options[$id] == "warning") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('Check for errors and warnings', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '3" name="' . $id . '" value="false" ';
+    if ($options[$id] == "false") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('Do not check iframes on save', 'advanced-iframe') . '<br></span>
+    <p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+}
+
 function printTrueOriginalFalse($options, $label, $id, $description) {
     $offset = '';
     if (ai_startsWith($label, 'i-')) {
@@ -476,6 +549,211 @@ function printTextInput($isPro,$options, $label, $id, $description, $type = 'tex
       </tr>
       ';
 }
+
+/**
+ *  Prints a default input field that acepts only numbers and does a validation
+ */
+function printTextInputSrc($isPro,$options, $label, $id, $description, $type = 'text', $url='', $showSave = false) {
+    if (empty($options[$id])) {
+        $options[$id] = '';
+    }
+    
+    $isCheckEnabled = $options['check_iframe_url_when_load'] == 'true';
+   
+    $offset = '';
+    if (ai_startsWith($label, 'i-')) {
+        $offset = 'class="'.substr($label,0, 5).'" ';
+        $label = substr($label, 5);
+    }
+    if (!isset($options['demo']) || $options['demo'] == 'false') {
+      $isPro = false;
+    }
+    $pro_class = $isPro ? ' class="ai-pro"':'';
+
+    if ($isPro) {
+      $label = '<span alt="Pro feature" title="Pro feature">'.$label.'</span>';
+    }
+     if ($isCheckEnabled) {
+         $result =  ai_checkUrlStatus($options[$id]);
+     }
+
+    echo '
+      <tr'.$pro_class.'>
+      <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url)  . renderExternalWorkaroundIcon($showSave). '</th>
+      <td><span class="hide-print">
+      <input name="' . $id . '" type="' . $type . '" id="' . $id . '" value="' . esc_attr($options[$id]) . '"  /><br></span>
+      <div class="manage-menus nounderline sub-domain-container hide-search ai-input-width">';     
+      echo '<button style="float:right;" name="checkIframes" class="button-secondary" id="checkIframes" type="submit"><i class="ai-spinner"></i><span class="checkIframes-text">';
+      echo __('Check all iframes', 'advanced-iframe'); 
+      echo '<span></button>';
+      echo '<strong>';
+      echo __('Status: ', 'advanced-iframe'); 
+      echo '</strong>';
+      if ($isCheckEnabled) {
+          echo ai_print_result($result);
+      } else {
+          echo __('The check of the url above is disabled. Enable the automatic check on the options tag.', 'advanced-iframe'); 
+      }
+     
+      if (isset($_POST['checkIframes'])) { //check all iframes
+         echo "<br>"; 
+         $all_iframes = ai_check_all_iframes($options['src'], false);
+         echo ai_print_result_all($all_iframes);
+       
+      }    
+      echo '</div>
+      <p class="description">' . $description . '</p></td>
+      </tr>
+      ';
+}
+
+function ai_print_result_all($all_iframes) {
+         $html = '';
+         $num = 0;
+         $html .= '<p style="margin-bottom:-20px;">Please hover over the result icon for more information.</p>';
+         $html .= '<table class="scan-results"><tr><th class="ai-row-page">'; 
+         $html .=  __('Page', 'advanced-iframe'); 
+         $html .=  '</th><th class="ai-row-results">';
+         $html .=  __('Result', 'advanced-iframe');
+         $html .=  '</th><th class="ai-row-links">';
+         $html .=  __('Links', 'advanced-iframe');
+         $html .=  '</th></tr>';
+         foreach( $all_iframes['links'] as $iframes) {
+                  $count = 0;
+                  $html .=  '<tbody>';
+                  foreach(  $iframes['links'] as $link => $result) { 
+                  $html .=  '<tr>';
+                  if ($count++ == 0) {
+                      $html .=  '<td class="ai-check-iframes-left-td" rowspan="'.count($iframes['links'] ).'"><a target="_blank" href="' . esc_attr($iframes['link']) . '">' . esc_html($iframes['link']) . '</a></td>';
+                  }
+                    $html .= '<td class="center ai-check-iframes-middle-td">';
+                    $html .= ai_print_result($result, true); 
+                    $html .=   '</td><td class="ai-check-iframes-right-td"><a target="_blank" href="' . esc_attr($link) . '">' . esc_html($link) . '</a></td></tr>';
+                  }
+                   $html .=  '</tbody>';
+         }      
+      $html .=  '
+          </table>';
+          
+      return $html;    
+}
+
+/**
+ *  Prints the input field for the auto zoom settings
+ */
+function printDebug($options, $label, $id, $description) {
+    $offset = '';
+   
+    $url = 'http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/debug-javascript-example';
+   
+    echo '
+      <tr>
+       <th scope="row">' . $label .   renderExampleIcon($url)  .  '</th>
+      <td><span class="hide-print">
+      ';
+    echo '<input type="radio" id="' . $id . '1" name="' . $id . '" value="false" ';
+    if ($options[$id] == "false") {
+        echo 'checked="checked"';
+    }
+    echo ' /> ' . __('No', 'advanced-iframe') . '&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="' . $id . '2" name="' . $id . '" value="bottom" ';
+    if ($options[$id] == "bottom") {
+        echo 'checked="checked"';
+    }
+    echo '/> ' . __('Bottom of page', 'advanced-iframe') . '<br></span>
+    <p class="description">' . $description . '</p></td>
+    </tr>
+    ';
+}
+
+
+
+function ai_print_result($result, $tooltip = false) {
+      $html = '';
+      $text = '';
+      if ($result['status'] == 'red') {
+          // if  ($hasXHeader || $result_array['statuscode'] >= 400 || $result_array['statuscode'] == 0 || $result_array['http_downgrade']) {
+          if  (isset($result['X-Frame-Options'])) {
+               $text .=   __('Header X-Frame-Options found. ', 'advanced-iframe');
+            if (strtoupper($result['X-Frame-Options']) === 'SAMEORIGIN') {
+               $text .=   __('The header is set to SAMEORIGIN. You are on a different domain and therefore this page can NOT be included.', 'advanced-iframe');
+            } else if (strtoupper($result['X-Frame-Options']) === 'DENY') {
+               $text .=  __('The header ist set to DENY. This means the page cannot be included into an iframe.', 'advanced-iframe'); 
+            } else if (stristr($result['X-Frame-Options'], 'ALLOW-FROM') !== FALSE) {
+               $text .=  __('The header ist set to ', 'advanced-iframe') . strtoupper($result['X-Frame-Options']). __('. This means the page most likely cannot be included into an iframe because the ALLOW-FROM header is not supported by all major browsers.', 'advanced-iframe'); 
+            } else {
+               $text .= __('The header ist set to ', 'advanced-iframe') . strtoupper($result['X-Frame-Options']). __('. This means that the page most likely cannot be included into an iframe.', 'advanced-iframe');  
+            }
+          }       
+          if  ($result['http_downgrade'] == true) {
+               $text .=  __(' The url you try to include is HTTP and your page is HTTPS. This is not supported by most modern browsers. See <a href="http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https" target="_blank">this blog</a> for details.', 'advanced-iframe');     
+          } 
+          if ($result['statuscode'] == 0) {
+             $text .=  __(' The test cannot be performed properly. Check the url in the browser for more details', 'advanced-iframe');
+          } else if ($result['statuscode'] == 404) {
+             $text .=  __(' The url you entered does not exist (http error: ', 'advanced-iframe').$result['statuscode'].__('). Please check if the url is correct.', 'advanced-iframe');
+          } else if ($result['statuscode'] >= 400) {
+             $text .=  __(' The url does return an error (http error: ', 'advanced-iframe').$result['statuscode'].__('). Please check if the url is correct.', 'advanced-iframe');
+          } else if ($result['statuscode'] >= 300 || $result['redirect']) {
+             $text .=  __(' The url is redirected to ', 'advanced-iframe') .$result['url']. __(' (http status: ', 'advanced-iframe').$result['statuscode'].__(')!', 'advanced-iframe');
+          } 
+          
+          if ($tooltip) {
+             $html .= '<span style="padding-top: 0px; color: #f15123;" title=\''.$text. '\' class="dashicons dashicons-no"></span>';
+          } else {
+            $html .= '<span style="padding-top: 0px; color: #f15123;" class="dashicons dashicons-no"></span>';
+            $html .= $text;
+          }              
+      } else if ($result['status'] == 'orange') {            
+           $text .=  __(' The url is redirected to ', 'advanced-iframe') .$result['url']. __(' (http status: ', 'advanced-iframe').$result['statuscode'].__('). It is recommended to include the url directly!', 'advanced-iframe');
+            if ($tooltip) {
+                $html .=  '<span style="padding-top: 0px; color: orange;"  title=\''.$text. '\' class="dashicons dashicons-no-alt"></span>';  
+            } else {
+                $html .=  '<span style="padding-top: 0px; color: orange;" class="dashicons dashicons-no-alt"></span>';
+                $html .= $text;
+            }           
+      } else if ($result['status'] == 'green') {
+           if ($result['same_origin']) {
+               $text .= __('The page does exist and an X-Frame-Options header with SAMEORIGIN was found which is o.k. because your iframe is on the same domain.', 'advanced-iframe'); 
+           } else {
+              $text .= __('The page does exist and no X-Frame-Options header was found. ', 'advanced-iframe'); 
+           } 
+           if ($result['redirect']) {
+              $text .= __('A redirect to the same url was found. Redirecting to the same URL is occasionally used to set cookies and test to see that they are set.', 'advanced-iframe');   
+           }
+   
+           $text .= __(' But there can still be a iframe blocker script on this page. Go <a href="http://www.tinywebgallery.com/blog/advanced-iframe/free-iframe-checker" target="_blank">here</a> for a full check.', 'advanced-iframe');  
+           if ($tooltip) {
+                $html .=  '<span style="padding-top: 0px; color: green;" title=\''.$text. '\'  class="dashicons dashicons-yes"></span>';  
+            } else {
+                $html .= '<span style="padding-top: 0px; color: green;" class="dashicons dashicons-yes"></span>';
+                $html .= $text;
+            }    
+      }  else if ($result['status'] == 'curlerror') {   
+            if ($result['curl_errno'] == 6) {
+                $text .= $result['curl_error'];
+            } else {
+                $text .= __(' The check returned an error where no valid headers where returned. Please try the iframe manually.', 'advanced-iframe');
+                $text .= __(' Details about the error: Error code: ', 'advanced-iframe') .  $result['curl_errno']. __('. Error message: ', 'advanced-iframe') . $result['curl_error'] . '.'; 
+                $text .= __(' If you like more details about the error please see <a target="_blank" href="https://curl.haxx.se/libcurl/c/libcurl-errors.html">here</a>.', 'advanced-iframe');
+            }         
+            if ($tooltip) {
+                $html .= '<span style="padding-top: 0px; color: grey;" title=\''.$text. '\' class="dashicons dashicons-warning"></span>';  
+            } else {
+                $html .= '<span style="padding-top: 0px; color: grey;" class="dashicons dashicons-warning"></span>';
+                $html .= $text;                        
+            }     
+      } else {
+          $text .= __('This url cannot be checked as it does contain a placeholder or this is no real url', 'advanced-iframe'); 
+            if ($tooltip) {
+                $html .= '<span style="padding-top: 0px; color: grey;" title=\''.$text. '\' class="dashicons dashicons-warning"></span>';  
+            } else {
+                $html .= '<span style="padding-top: 0px; color: grey;" class="dashicons dashicons-warning"></span>';
+                $html .= $text;
+            }     
+      }
+      return $html;    
+}
+
 /**
  *  Prints an input field that acepts only numbers and does a validation
  */
@@ -583,13 +861,13 @@ function printAccordeon($options, $label, $id, $description, $default = 'false')
       $options[$id] = $default;
     }
     
-    $values = array ("false" => "No Accordeon menu on the advanced tab", 
-                     "no" => "Accordeon menu on the advanced tab. No section is open by default.",
-                     "h1-as" => "Section 'Advanced settings' is open by default", 
-                     "h1-so" => "Section 'Show only a part of the iframe' is open by default",
-                     "h1-rt" => "Section 'Resize the iframe to the content height/width' is open by default",
-                     "h1-mp" => "Section 'Modify the parent page' is open by default",
-                     "h1-ol" => "Section 'Open iframe in layer' is open by default");
+    $values = array ("false" => __('No Accordeon menu on the advanced tab', 'advanced-iframe') , 
+                     "no" => __('Accordeon menu on the advanced tab. No section is open by default.', 'advanced-iframe') ,
+                     "h1-as" => __("Section 'Advanced settings' is open by default", 'advanced-iframe') , 
+                     "h1-so" => __("Section 'Show only a part of the iframe' is open by default", 'advanced-iframe') ,
+                     "h1-rt" => __("Section 'Resize the iframe to the content height/width' is open by default", 'advanced-iframe') ,
+                     "h1-mp" => __("Section 'Modify the parent page' is open by default", 'advanced-iframe') ,
+                     "h1-ol" => __("Section 'Open iframe in layer' is open by default", 'advanced-iframe') );
     $sel_options = '';
     foreach ($values as $value => $text) {
         $is_selected = ($value == $options[$id]) ? ' selected="selected" ' : ' '; 
@@ -632,7 +910,7 @@ function printRoles($options, $label, $id, $description, $default = 'false') {
 
 function renderExampleIcon($url) {
   if (! empty($url)) {
-     return '<a target="new" href="' .$url .'" class="ai-eye" alt="Show a working example" title="Show a working example">Show a working example</a>'; 
+     return '<a target="new" href="' .$url .'" class="ai-eye" alt="'.  __('Show a working example', 'advanced-iframe') .'" title="Show a working example">'.  __('Show a working example', 'advanced-iframe') .'</a>'; 
   } else {
      return '';
   }
@@ -640,7 +918,7 @@ function renderExampleIcon($url) {
 
 function renderExternalWorkaroundIcon($show) {
   if ($show) {
-     return '<span class="ai-file" alt="Saved to ai_external.js" title="Saved to ai_external.js"></span>'; 
+     return '<span class="ai-file" alt="'.  __('Saved to ai_external.js', 'advanced-iframe') .'" title="'.  __('Saved to ai_external.js', 'advanced-iframe') .'"></span>'; 
   } else {
      return '';
   }
@@ -729,7 +1007,7 @@ function aiCreateFile ($config_id, $filenamedir, $prefix, $postfix, $type = 'con
           printError('The directory "advanced-iframe-custom" could not be created in the plugin folder. Custom files are stored in this directory because Wordpress does delete the normal plugin folder during an update. Please create the folder manually.'); 
           return; 
        }
-    }  
+    } 
     $filename = $filenamedir . '/'.$prefix.'_'.$config_id . $postfix;
     if (file_exists($filename)) {
        printError($prefix .'_'.$config_id.' exists. Please select a different name');   
@@ -854,6 +1132,191 @@ function aiGet2ndLvlDomainName($url) {
  }
 
  return 'unknown domain';
+}
+
+function ai_checkUrlStatus($url, $agent = '') {
+
+$start = time();
+$result_array = array();
+
+$pos = strpos($url, "{");
+$pos_query = strpos($url, '?');
+if ($url == 'about:blank' || ($pos !== false && ($pos_query === false || ($pos_query !== false && $pos < $pos_query)))) {
+    $result_array['status'] = "notest";  
+    return $result_array; 
+}
+
+$s = $_SERVER;
+$ssl      = ( ! empty( $s['HTTPS'] ) && $s['HTTPS'] == 'on' );
+$sp       = strtolower( $s['SERVER_PROTOCOL'] );
+$protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
+
+if (ai_startsWith($url, '//')) {
+   $url = $protocol . ':' . $url; 
+}
+
+$curl = curl_init();
+
+if ($agent == '') {
+  $agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36';
+}
+
+curl_setopt_array( $curl, array(
+    CURLOPT_HEADER => true,
+    CURLOPT_NOBODY => true,
+    CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_SSL_VERIFYHOST => false,
+    CURLOPT_VERBOSE => true,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_USERAGENT =>  $agent,
+    CURLOPT_URL => $url ) );   
+    $headers = explode( "\n", curl_exec( $curl ) );
+
+if(curl_errno($curl)){
+    $result_array['status'] = "curlerror";  
+    $result_array['curl_error'] = curl_error($curl);
+    $result_array['curl_errno'] = curl_errno($curl);
+    return $result_array; 
+}
+
+$result_array['header'] = $headers;  
+// the real check.
+$hasXHeader = false;
+$XHeader = '';
+foreach ($headers as $line) {
+// the real check.
+ if(stristr($line, 'X-Frame-Options') !== FALSE) {
+    $hasXHeader = true;  
+    $header_array = explode(':' , $line);
+    $XHeader =  trim($header_array[1]);
+    $result_array['X-Frame-Options'] = $XHeader;
+    break;
+  }
+}
+
+// we check if we are on the same domain 
+$parent_domain = strtoupper($protocol . "://" . $_SERVER['SERVER_NAME']);
+$iframe_domain = strtoupper(parse_url($url, PHP_URL_SCHEME) . "://" . parse_url($url, PHP_URL_HOST)); 
+$sameorigin = $hasXHeader && ($parent_domain == $iframe_domain) && $result_array['X-Frame-Options'] == 'SAMEORIGIN';
+
+$info = curl_getinfo($curl); 
+
+
+$return_url = strtolower ($info['url']); 
+$real_redirect =  $url != $return_url; 
+ 
+// if we have a redirect we check the new domain. $result_array['url'] = $return_url;
+  $result_array['url_orig'] =  $url ; 
+  $result_array['url'] =  $return_url ;
+  $result_array['statuscode'] = intval(curl_getinfo($curl, CURLINFO_HTTP_CODE));
+  //check if we redirect
+  $result_array['redirect'] = $info['redirect_count'] > 0;
+  $result_array['http_downgrade'] =  ai_startsWith($return_url, 'http:') &&  $protocol == 'https';
+  $result_array['same_origin'] = $sameorigin;
+  
+  if  (($hasXHeader && !$sameorigin) || $result_array['statuscode'] >= 400 || $result_array['statuscode'] == 0 || $result_array['http_downgrade']) {
+      $result_array['status'] = "red";  
+  } else if ($result_array['redirect'] && $real_redirect) {
+      $result_array['status'] = "orange";  
+  } else {
+      $result_array['status'] = "green";   
+  }
+  
+  $result_array['time'] =  time() - $start;
+    
+  curl_close( $curl ); 
+  return $result_array;
+}
+
+function ai_check_all_iframes($additional, $isCronjob) {
+
+ $result_array = array();
+ $result_array['overall_status'] = 'green';
+ $result_array['links'] = array();
+ $all_links = array();
+ 
+ $args = array(
+	'sort_order' => 'asc',
+	'sort_column' => 'post_title',
+	'hierarchical' => 1,
+	'child_of' => 0,
+	'parent' => -1,
+	'exclude_tree' => '',
+	'number' => '',
+	'offset' => 0
+); 
+
+
+$pages = get_pages($args); 
+                 
+ foreach ( $pages as $page ) {
+   // The limit is reseted each time as we want to loop through all pages! 
+   // Not expecting the for one page we need more then 30 secounds.
+   set_time_limit(30);
+   $link = get_page_link( $page->ID );
+	 $title = $page->post_title;
+   $content =  $page->post_content;
+   $result_array = evaluatePageLinks($result_array, $content, $link, $title, $isCronjob, $all_links, $additional);
+} // for each
+return $result_array;
+}
+
+
+function evaluatePageLinks(&$result_array, $content, $link, $title, $isCronjob, &$all_links, $additional) {
+    $pattern = get_shortcode_regex();
+    $page_links = array();
+    
+    // we save the results of all links to avoid duplicate checks at one run.
+   
+    if (preg_match_all( '/'. $pattern .'/s', $content, $matches )) {
+			 $src_found = false;
+       foreach ( $matches as $hit ) {
+          foreach ( $hit as $h ) {
+               $s = explode('src=',$h);
+               if (isset($s[1])) {
+                  $t = explode(' ',$s[1]);
+                  $page_links[trim($t[0], "\"'[]")] = true; 
+                  $src_found = true;                  
+               }
+             }
+          }
+           if ($src_found == false) {
+                // default src
+                $page_links[$additional] = true;    
+             }     
+		 }    
+    
+     if (!empty($page_links)) {
+        $result = array();
+        $result['link'] =  $link;
+        $result['title'] = $title;
+        $problem_found = false;        
+         foreach ( $page_links as $link => $value ) {   
+             if (isset($all_links[$link])) {
+                 $res = $all_links[$link]; 
+             } else {
+                 $res = ai_checkUrlStatus($link);
+                 if ($res['status'] == 'red') {
+                     $result_array['overall_status'] = 'red';
+                     $problem_found = true; 
+                 } else if ($res['status'] == 'orange' &&  $result_array['overall_status'] != 'red') {
+                     $result_array['overall_status'] = 'orange';
+                     $problem_found = true; 
+                 } 
+                 $all_links[$link] = $res;
+            }
+            $page_links[$link] = $res;  
+         }
+         
+       $result['links'] = $page_links;
+       $result_array['links'][] = $result; 
+       // we only test to the first problem if we run the test in a cronjob.
+       if ($problem_found && $isCronjob) {
+           return $result_array;    
+       } 
+     } 
+return $result_array;                                                 
 }
 
 ?>

@@ -16,25 +16,25 @@ if (isset($aip_standalone)) {
  extract($iframeStandaloneDefaultOptions);
  // load standalone settings
  extract($iframeStandaloneOptions);
- 
+
  // check id
                  // autovalue if no id is set but a src
   if (!isset($iframeStandaloneOptions['id'])) {
      global $instance_counter;
-      
+
      if (isset($instance_counter)) {
          $autoid =  $id . "_" . $instance_counter++;
          $id = $autoid;
      } else {
          $instance_counter = 2;
      }
-     
+
      if (!isset($iframeStandaloneOptions['name'])) {
          // check if we have name - if not we first use the id if given - if not - autoname!
          $name = $id;
      }
   }
-  
+
 } else {
 
 $aiPath="/advanced-iframe";
@@ -51,18 +51,19 @@ if (!isset ($options[$key])) { $options[$key] = $option; }
 extract(shortcode_atts(array('use_shortcode_attributes_only' => 'not set'), $atts));
 // if not set in shortcode we look in the config
 if ($use_shortcode_attributes_only == 'not set') {
- $use_shortcode_attributes_only = $options['use_shortcode_attributes_only'];   
+ $use_shortcode_attributes_only = $options['use_shortcode_attributes_only'];
 }
 
 // version is always read.
 $version_counter = $options['version_counter'];
 $alternative_shortcode = $options['alternative_shortcode'];
-$check_shortcode = $options['check_shortcode']; 
+$check_shortcode = $options['check_shortcode'];
 $use_post_message = $options['use_post_message'];
 $multi_domain_enabled = $options['multi_domain_enabled'];
+$debug_js = $options['debug_js'];
 
 // defaults from main config
-if ($use_shortcode_attributes_only == 'false' || $options['shortcode_attributes'] == 'false') {  // 
+if ($use_shortcode_attributes_only == 'false' || $options['shortcode_attributes'] == 'false') {  //
 extract(array('securitykey' => 'not set',
   'src' => $options['src'], 'height' => $options['height'], 'width' => $options['width'],
   'frameborder' => $options['frameborder'], 'scrolling' => $options['scrolling'],
@@ -136,13 +137,13 @@ extract(array('securitykey' => 'not set',
   'show_iframe_as_layer'  => $options['show_iframe_as_layer'],
   'add_iframe_url_as_param'  => $options['add_iframe_url_as_param'],
   'add_iframe_url_as_param_prefix'  => $options['add_iframe_url_as_param_prefix'],
-  'auto_zoom_by_ratio'  => $options['auto_zoom_by_ratio'],  
-  'reload_interval'  => $options['reload_interval'], 
-  'iframe_content_css'  => $options['iframe_content_css'], 
-  'additional_css_file_iframe'  => $options['additional_css_file_iframe'], 
-  'additional_js_file_iframe'  => $options['additional_js_file_iframe'],        
-  'add_css_class_iframe'  => $options['add_css_class_iframe'],  
-  'iframe_zoom_ie8'  => $options['iframe_zoom_ie8'],  
+  'auto_zoom_by_ratio'  => $options['auto_zoom_by_ratio'],
+  'reload_interval'  => $options['reload_interval'],
+  'iframe_content_css'  => $options['iframe_content_css'],
+  'additional_css_file_iframe'  => $options['additional_css_file_iframe'],
+  'additional_js_file_iframe'  => $options['additional_js_file_iframe'],
+  'add_css_class_iframe'  => $options['add_css_class_iframe'],
+  'iframe_zoom_ie8'  => $options['iframe_zoom_ie8'],
   'enable_lazy_load_reserve_space'  => $options['enable_lazy_load_reserve_space'],
   'hide_content_until_iframe_color'  => $options['hide_content_until_iframe_color'],
   'use_zoom_absolute_fix'  => $options['use_zoom_absolute_fix'],
@@ -155,11 +156,13 @@ extract(array('securitykey' => 'not set',
   'show_iframe_as_layer_full'  => $options['show_iframe_as_layer_full'],
   'show_part_of_iframe_zoom'  => $options['show_part_of_iframe_zoom'],
   'add_document_domain'  => $options['add_document_domain'],
-  'document_domain'  => $options['document_domain'], 
+  'document_domain'  => $options['document_domain'],
   'sandbox'  => $options['sandbox'],
   'show_iframe_as_layer_keep_content', $options['show_iframe_as_layer_keep_content'],
-  'parent_content_css'  => $options['parent_content_css'], 
+  'parent_content_css'  => $options['parent_content_css'],
   'include_scripts_in_content'  => $options['include_scripts_in_content'],
+  'title' => $options['title'],
+  'allow' => $options['allow'],
    $atts));
 }
 
@@ -191,30 +194,33 @@ if ($options['shortcode_attributes'] == 'true') {
        $options['height'] = "not set";
        $options['width'] = "not set";
   }
-  
-  if ($check_shortcode == 'true') { 
+
+  if ($check_shortcode == 'true') {
     $error_array = array();
     // we go through all parameters and theck if they are valid.
      foreach ($atts as $key => $option) {
         if ($key == 'id') {
             $id_new =  preg_replace("/\W/", "_", $option);
-            $id_new = preg_replace('/^[0-9]+/', '', $id_new);   
+            $id_new = preg_replace('/^[0-9]+/', '', $id_new);
             if ($id_new != $option) {
-               $error_array[] = 'Id "' . esc_html($option) . '" is not valid. Please check the documentation.';                
+               $error_array[] = 'Id "' . esc_html($option) . '" is not valid. Please check the documentation.';
             }
         }
-        
+
+        // we add the typo of enable_ios_mobile_scolling -> enable_ios_mobile_scrolling
+        $defaults['enable_ios_mobile_scrolling'] = 'true';
+
         if (!array_key_exists ( $key , $defaults )) {
           if (strlen($key) == 1 ) {
-            $error_array[] = $option;    
+            $error_array[] = $option;
           } else {
-             $error_array[] =  $key . '="' . $option . '"';  
+             $error_array[] =  $key . '="' . $option . '"';
           }
-        } 
+        }
      }
-     
+
      if (!empty($error_array)) {
-     echo $error_css . '<div class="errordiv">' . __('<strong>The following [advanced_iframe] attributes are unknown or cannot be read properly. Please fix or remove this attributes. You can disable this message in the administration on the "Introduction" tab:</strong>', 'advanced-iframe');
+     echo $error_css . '<div class="errordiv">' . __('<strong>The following [advanced_iframe] attributes are unknown or cannot be read properly. Please fix or remove this attributes. You can disable this message in the administration on the "Options" tab:</strong>', 'advanced-iframe');
         echo '<ul>';
         foreach ($error_array as $error_string ) {
           echo '<li>' . $error_string . '</li>';
@@ -222,7 +228,7 @@ if ($options['shortcode_attributes'] == 'true') {
         echo '</ul></div>';
      }
    }
-        
+
   extract(shortcode_atts(array('securitykey' => 'not set',
       'src' => $options['src'], 'height' => $options['height'], 'width' => $options['width'],
       'frameborder' => $options['frameborder'], 'scrolling' => $options['scrolling'],
@@ -299,8 +305,8 @@ if ($options['shortcode_attributes'] == 'true') {
       'auto_zoom_by_ratio'  => $options['auto_zoom_by_ratio'],
       'reload_interval'  => $options['reload_interval'],
       'iframe_content_css'  => $options['iframe_content_css'],
-      'additional_js_file_iframe'  => $options['additional_js_file_iframe'], 
-      'additional_css_file_iframe'  => $options['additional_css_file_iframe'], 
+      'additional_js_file_iframe'  => $options['additional_js_file_iframe'],
+      'additional_css_file_iframe'  => $options['additional_css_file_iframe'],
       'add_css_class_iframe'  => $options['add_css_class_iframe'],
       'iframe_zoom_ie8'  => $options['iframe_zoom_ie8'],
       'enable_lazy_load_reserve_space'  => $options['enable_lazy_load_reserve_space'],
@@ -308,6 +314,7 @@ if ($options['shortcode_attributes'] == 'true') {
       'use_zoom_absolute_fix'  => $options['use_zoom_absolute_fix'],
       'include_html'  => $options['include_html'],
       'enable_ios_mobile_scolling'  => $options['enable_ios_mobile_scolling'],
+      'enable_ios_mobile_scrolling'  => 'not_set',
       'show_iframe_as_layer_header_file'  => $options['show_iframe_as_layer_header_file'],
       'show_iframe_as_layer_header_height'  => $options['show_iframe_as_layer_header_height'],
       'show_iframe_as_layer_header_position'  => $options['show_iframe_as_layer_header_position'],
@@ -320,11 +327,19 @@ if ($options['shortcode_attributes'] == 'true') {
       'use_post_message'  => $use_post_message,
       'multi_domain_enabled' => $multi_domain_enabled,
       'show_iframe_as_layer_keep_content' => $options['show_iframe_as_layer_keep_content'],
-      'parent_content_css'  => $options['parent_content_css'],      
+      'parent_content_css'  => $options['parent_content_css'],
       // this setting is only available in the shortcode as it is only needed in the special case if no footer is rendered.
-      'include_scripts_in_content'  => $options['include_scripts_in_content']  
+      'include_scripts_in_content'  => $options['include_scripts_in_content'],
+      'debug_js'  => $debug_js,
+      'title' => $options['title'],
+      'allow' => $options['allow']
        )
       , $atts));
+
+      // fix of typo in $enable_ios_mobile_scolling - the shortcode can now handle both
+      if ($enable_ios_mobile_scrolling  != 'not_set') {
+          $enable_ios_mobile_scolling = $enable_ios_mobile_scrolling;
+      }
 
   $id_check = shortcode_atts( array('src' => 'no_src','id' => 'no_id', 'name' => 'no_name'), $atts);
 
@@ -334,7 +349,7 @@ if ($options['shortcode_attributes'] == 'true') {
   // autovalue if no id is set but a src
   if ($id_check['src'] != 'no_src' &&  ($id_check['id'] == 'no_id' || $id_check['name'] == 'no_name')) {
       global $instance_counter;
-      
+
       if (isset($instance_counter)) {
            $autoid =  $id . "_" . $instance_counter++;
        } else {
@@ -353,9 +368,9 @@ if ($options['shortcode_attributes'] == 'true') {
              $name = $autoid;
          }
       }
-  } 
- 
-   
+  }
+
+
 } else {
   // only the secrity key is read.
   extract(shortcode_atts(array('securitykey' => 'not set'), $atts));
@@ -363,13 +378,16 @@ if ($options['shortcode_attributes'] == 'true') {
 
 if (!empty( $content )) {
  $src = $content;
-} 
+}
 }
 // settings when you include an url which causes errors otherwise.
 if (!empty($include_url)) {
 $resize_on_element_resize = '';
 $enable_lazy_load = false;
 }
+
+// TODO - check if the remote is really remote and set $enable_external_height_workaround!
+// ignore for placeholders and sub domains.
 
 // disable stuff that causes javascript errors when used used on an external domain!
 if ($enable_external_height_workaround == "true") {
@@ -383,14 +401,14 @@ if ($enable_external_height_workaround == "true") {
   $iframe_content_id = '';
   $onload_show_element_only = '';
   $change_iframe_links = '';
-  $change_iframe_links_target = ''; 
+  $change_iframe_links_target = '';
   $iframe_content_css = '';
   $additional_js_file_iframe = '';
   $additional_css_file_iframe = '';
   $add_css_class_iframe = 'false';
 }
 
-// check if the iframe is called inside wp-admin. if this is the case we 
+// check if the iframe is called inside wp-admin. if this is the case we
 // disable the hide_unit_loaded stuff that is is shown there properly.
 if (false !== strpos($_SERVER['REQUEST_URI'], 'wp-admin')) {
    $hide_page_until_loaded='false';
@@ -400,7 +418,7 @@ if (false !== strpos($_SERVER['REQUEST_URI'], 'wp-admin')) {
 
 
 // Settings defaults
-// Invalid user input is replaced as good as possible 
+// Invalid user input is replaced as good as possible
 $enable_replace = true;
 
 if (!empty($iframe_height_ratio)) {
@@ -416,13 +434,15 @@ if (!empty($add_iframe_url_as_param_prefix)) {
   $add_iframe_url_as_param_prefix = urlencode($add_iframe_url_as_param_prefix);
 }
 
+if ($add_iframe_url_as_param != 'false' && empty($map_parameter_to_url)) {
+  $map_parameter_to_url = 'page';
+}
 
 $default_options = isset($aip_standalone) ? 1 : get_option('default_a_options');
 $pro = true;
 if (!file_exists(dirname(__FILE__) . "/class-cw-envato-api.php")) {
   if (empty($default_options) || (date('j') < 3)) { $default_options = 1; }
   update_option("default_a_options", ++$default_options);
-  if ($default_options >= 10001) {  $src=""; }
   $pro = $enable_replace = false;
   $show_part_of_iframe = 'false';
   $hide_part_of_iframe = $change_parent_links_target = '';
@@ -430,8 +450,8 @@ if (!file_exists(dirname(__FILE__) . "/class-cw-envato-api.php")) {
   $url_forward_parameter = str_replace('|',',',$url_forward_parameter);
   $browser = $map_parameter_to_url = $iframe_zoom = '';
   $show_iframe_loader = $enable_lazy_load = 'false';
-  $tab_visible = $tab_hidden = ''; 
-  $enable_responsive_iframe = $allowfullscreen = 'false'; 
+  $tab_visible = $tab_hidden = '';
+  $enable_responsive_iframe = 'false';
   $iframe_height_ratio = $pass_id_by_url = $resize_on_element_resize = '';
   $add_css_class_parent = $auto_zoom = 'false';
   $reload_interval = $iframe_content_css = '';
@@ -443,7 +463,7 @@ if (!file_exists(dirname(__FILE__) . "/class-cw-envato-api.php")) {
 } else { $default_options = 0; }
 
 if (!empty($iframe_zoom)) {
-  $iframe_zoom = str_replace(',','.',$iframe_zoom);   
+  $iframe_zoom = str_replace(',','.',$iframe_zoom);
 }
 
 // check ratio
@@ -473,22 +493,22 @@ if (file_exists(dirname(__FILE__) . '/advanced-iframe-browser-detection.php')) {
 }
 }
 
-// calculates dynamic width and height for + and -   
+// calculates dynamic width and height for + and -
 if ($pro) {
 if (strpos($width, '-') !== false || strpos($width, '+') !== false ) {
    // + and - needs a space before and after the + and -. Otherwise is does not work in Firefox
    $width = str_replace("-", " - ", $width);
    $width = str_replace("+", " + ", $width);
    $style .= ';width: calc('.esc_html(trim($width)).');';
-   $width = '';   
+   $width = '';
 }
 if (strpos($height, '-') !== false || strpos($height, '+') !== false ) {
    $height = str_replace("-", " - ", $height);
    $height = str_replace("+", " + ", $height);
-   $style .= ';height: calc('.esc_html(trim($height)).');'; 
+   $style .= ';height: calc('.esc_html(trim($height)).');';
    $height = '';
-} 
-} 
+}
+}
 
 $show_iframe_as_layer_div = false;
 $show_iframe_as_layer_div_header = false;
@@ -499,20 +519,22 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
    if ($ios_scroll || !empty($show_iframe_as_layer_header_file)) {
      $show_iframe_as_layer_div = true;
    }
-   
+   $layer_width = $layer_height = '100%';
    if ($show_iframe_as_layer_full == 'true') {
      $layer_div_base = 'top:0;left:0;width:100%;height:100%;border: none';
    } else {
      $layer_div_base = 'top:2%;left:1.9%;width:96%;height:96%;border:solid 2px #eee';
+     $layer_width = $layer_height = '96%';
      if ($show_iframe_as_layer_full == 'original') {
        $esc_width = esc_html($this->addPx($width));
-       $esc_height = esc_html($this->addPx($height));     
+       $esc_height = esc_html($this->addPx($height));
+       $layer_width = $esc_width;
+       $layer_height = $esc_height;
        $layer_div_base .= ';left:50%;top:50%;transform: translate(-50%,-50%);max-width:' . $esc_width . ';max-height:' . $esc_height;
      }
    }
-    
+
    $layer_div_base .= ';background-color:#fff;display:none;position:fixed;z-index:100003;margin:0px !important;padding:0px !important;';
-   
    if ($ios_scroll) {
      $width='100%';
      $height='100%';
@@ -533,10 +555,9 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
      $width='100%';
      $style .= ";display:none;margin:0px !important;padding:0px !important;height:calc(100% - ". $adHeight .")";
    } else {
-     $layer_div_style = ""; 
-     $width='100%';
-     $height='100%';
-     $style .= $layer_div_base;
+     $width=$layer_width;
+     $height=$layer_height;
+     $style .= $layer_div_base;    
    }
    $src="about:blank";
    $show_part_of_iframe = 'false';
@@ -545,16 +566,16 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
    $show_iframe_loader = 'false';
 } else {
    // we only make the ios fix for features where it is not implemented directly.
-   // show_iframe_as_layer and show_part_of_iframe. Also it is not enabled if we have 
+   // show_iframe_as_layer and show_part_of_iframe. Also it is not enabled if we have
    // auto height. Zoom is not supported in the first iteration as it is more complicated!
-   $use_ios_fix =  $enable_ios_mobile_scolling == 'true' && $scrolling != 'no' && empty($iframe_zoom) && 
-     $show_part_of_iframe == 'false' && $onload_resize == 'false' && 
+   $use_ios_fix =  $enable_ios_mobile_scolling == 'true' && $scrolling != 'no' && empty($iframe_zoom) &&
+     $show_part_of_iframe == 'false' && $onload_resize == 'false' &&
      ($enable_external_height_workaround == 'false' || $enable_external_height_workaround == 'external') && empty($hide_part_of_iframe);
 
    if ($use_ios_fix && ai_is_ios() && ai_is_mobile()) {
      $show_iframe_as_layer_div = true;
      // without height and width on ipad you have autoheight!
-     $layer_div_style = $style . ';-webkit-overflow-scrolling: touch; overflow: auto;width:'.$this->addPx($width).';height:'.$this->addPx($height) . ';'; 
+     $layer_div_style = $style . ';-webkit-overflow-scrolling: touch; overflow: auto;width:'.$this->addPx($width).';height:'.$this->addPx($height) . ';';
      $width='100%';
      $height='100%';
      $style = "width:100%;height:100%";
