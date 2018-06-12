@@ -253,8 +253,10 @@ function carousel_extra() {
 	) );
 }
 */
-add_action( 'cmb2_init', 'media_lib' );
-function media_lib() {
+
+
+add_action( 'cmb2_init', function(){
+	
 	$prefix = '_media_lib_';
 
 	$cmb_media = new_cmb2_box( array(
@@ -298,8 +300,9 @@ function media_lib() {
 		'id'   => $prefix . 'file4',
 		'type' => 'file',
 	) );
+	
+} );
 
-}
 
 
 //add_action( 'cmb2_init', 'custom_boxes' );
