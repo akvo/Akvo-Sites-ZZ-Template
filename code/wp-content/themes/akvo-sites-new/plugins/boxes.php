@@ -65,6 +65,7 @@ function yourprefix_before_row_if_2( $field_args, $field ) {
 	}
 }
 
+/*
 add_action( 'cmb2_init', 'map_option' );
 function map_option() {
 	$prefix = '_map_option_';
@@ -88,6 +89,7 @@ function map_option() {
 		'type' => 'text',
 	) );
 }
+
 
 add_action( 'cmb2_init', 'post_extra_boxes' );
 function post_extra_boxes() {
@@ -114,9 +116,9 @@ function post_extra_boxes() {
 		'options'	=> array( 'on'	=> 'On', 'off'	=> 'Off' )
 	) );
 }
+*/
 
-add_action( 'cmb2_init', 'video_extra_boxes' );
-function video_extra_boxes() {
+add_action( 'cmb2_init', function(){
 	$prefix = '_video_extra_boxes_';
 
 	$cmb_vid = new_cmb2_box( array(
@@ -130,7 +132,7 @@ function video_extra_boxes() {
 		// 'cmb_styles' => false, // false to disable the CMB stylesheet
 		// 'closed'     => true, // true to keep the metabox closed by default
 	) );
-
+	
 	$cmb_vid->add_field( array(
 		'name' => __( 'Youtube URL', 'cmb2' ),
 		'desc' => __( 'Enter the Youtube video URL', 'cmb2' ),
@@ -139,8 +141,12 @@ function video_extra_boxes() {
 		// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
 		// 'repeatable' => true,
 	) );
-}
+	
+	
+} );
 
+
+/*
 add_action( 'cmb2_init', 'flow_url' );
 function flow_url() {
 	$prefix = '_flow_url_';
@@ -246,7 +252,7 @@ function carousel_extra() {
 		'type' => 'text_url',
 	) );
 }
-
+*/
 add_action( 'cmb2_init', 'media_lib' );
 function media_lib() {
 	$prefix = '_media_lib_';
@@ -296,7 +302,7 @@ function media_lib() {
 }
 
 
-add_action( 'cmb2_init', 'custom_boxes' );
+//add_action( 'cmb2_init', 'custom_boxes' );
 /**
  * Hook in and add a demo metabox. Can only happen on the 'cmb2_init' hook.
  */
@@ -585,7 +591,7 @@ function custom_boxes() {
 
 }
 
-add_action( 'cmb2_init', 'yourprefix_register_theme_options_metabox' );
+//add_action( 'cmb2_init', 'yourprefix_register_theme_options_metabox' );
 /**
  * Hook in and register a metabox to handle a theme options page
  */
