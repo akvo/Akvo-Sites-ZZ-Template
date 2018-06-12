@@ -35,6 +35,12 @@
 	// HIDE ADMIN BAR ON THE FRONT END
 	add_filter('show_admin_bar', '__return_false');
 
+	
+	add_action('siteorigin_widgets_widget_folders', function( $folders ){
+		$folders[] = get_template_directory() . '/so-widgets/';
+		return $folders;
+	});
+	
   	function akvo_featured_img( $post_id ){
 		
 		/* GET POST TYPE */
