@@ -1,5 +1,4 @@
 	<footer class="content-info" role="contentinfo">
-		
 		<div class="twitter">
 			<div class="container">
 				<div class="row">
@@ -7,19 +6,22 @@
 						
 						global $akvo;
 						
+						/* GET THE SELECTED NUMBER OF COLUMNS */
 						$footer_cols = 3; 
-						
 						$akvo_options = $akvo->get_option();
 						if( isset( $akvo_options['footer'] ) && isset( $akvo_options['footer']['cols_num'] ) ){
 							$footer_cols = $akvo_options['footer']['cols_num'];
 						}
+						/* GET THE SELECTED NUMBER OF COLUMNS */
 						
+						/* GET COLUMN CLASS BASED ON THE NUMBER OF COLUMNS SELECTED */
 						$col_class='col-md-4';
 						if( $footer_cols == 2 ){ $col_class = 'col-md-6';}
 						elseif( $footer_cols == 1 ){ $col_class = 'col-md-12';}
+						/* GET COLUMN CLASS BASED ON THE NUMBER OF COLUMNS SELECTED */
 						
-						for( $i=1; $i<=$footer_cols; $i++ ):
-					?>
+					?>	
+					<?php for( $i=1; $i<=$footer_cols; $i++ ):?>
 					<div class="<?php _e( $col_class );?>">
 						<?php dynamic_sidebar( 'sidebar-footer-'.$i ); ?>
 					</div>
@@ -27,7 +29,8 @@
 				</div>
 			</div>
 		</div>
-		<!--
+		<?php /* TO BE REMOVED IN THE FUTURE
+		
 		<div class="custom">
 			<div class="container">
 				<div class="row">
@@ -37,7 +40,7 @@
 				</div>
 			</div>
 		</div>
-		-->
+		*/ ?>
 		<div class="fixed">
 			<div class="container">
 				<a href="http://www.akvo.org" target="_blank">Powered by akvo.org</a>
