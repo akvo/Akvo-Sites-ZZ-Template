@@ -7,6 +7,7 @@
          				<?php $type = get_post_type();?>
          				<article>
          					<?php
+								/* SHOW YOUTUBE PICTURE */
 								if (in_array($type, array('video','testimonial'), true )) :
 									$url = convertYoutube(get_post_meta( get_the_ID(), '_video_extra_boxes_url', true ));
 								?>

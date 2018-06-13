@@ -2,22 +2,23 @@
 // Don't load directly
 defined( 'WPINC' ) or die;
 
-class Tribe__Events__Aggregator__Record__Queue {
+class Tribe__Events__Aggregator__Record__Queue implements Tribe__Events__Aggregator__Record__Queue_Interface {
 	public static $in_progress_key = 'tribe_aggregator_queue_';
 	public static $queue_key = 'queue';
 	public static $activity_key = 'activity';
 
+	/**
+	 * @var Tribe__Events__Aggregator__Record__Abstract
+	 */
 	public $record;
 
 	public $is_fetching = false;
 	protected $importer;
 
 	/**
-	 * Holds a Log of what has been done on This Queue
-	 *
 	 * @var Tribe__Events__Aggregator__Record__Activity
 	 */
-	public $activity = null;
+	protected $activity;
 
 	/**
 	 * Holds the Items that will be processed
@@ -40,26 +41,60 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 */
 	public $total = 0;
 
-	public function __construct( $record, $items = array() ) {
+	/**
+	 * @var Tribe__Events__Aggregator__Record__Queue_Cleaner
+	 */
+	protected $cleaner;
+
+	/**
+	 * Whether any real processing should happen for the queue or not.
+	 *
+	 * @var bool
+	 */
+	protected $null_process = false;
+
+	/**
+	 * @var bool Whether this queue instance has acquired the lock or not.
+	 */
+	protected $has_lock = false;
+
+	/**
+	 * Tribe__Events__Aggregator__Record__Queue constructor.
+	 *
+	 * @param int|Tribe__Events__Aggregator__Record__Abstract       $record
+	 * @param array                                                 $items
+	 * @param Tribe__Events__Aggregator__Record__Queue_Cleaner|null $cleaner
+	 */
+	public function __construct( $record, $items = array(), Tribe__Events__Aggregator__Record__Queue_Cleaner $cleaner = null ) {
 		if ( is_numeric( $record ) ) {
 			$record = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $record );
 		}
 
-		if ( ! in_array( 'Tribe__Events__Aggregator__Record__Abstract', class_parents( $record ) ) ) {
-			return false;
+		if ( ! is_object( $record ) || ! in_array( 'Tribe__Events__Aggregator__Record__Abstract', class_parents( $record ) ) ) {
+			$this->null_process = true;
+
+			return;
 		}
 
-		// Prevent it going any further
-		if ( is_wp_error( $record ) ) {
-			return $record;
+		if ( is_wp_error( $items ) ) {
+			$this->null_process = true;
+
+			return;
+		}
+
+		$this->cleaner = $cleaner ? $cleaner : new Tribe__Events__Aggregator__Record__Queue_Cleaner();
+
+		$this->cleaner->remove_duplicate_pending_records_for( $record );
+
+		$failed = $this->cleaner->maybe_fail_stalled_record( $record );
+
+		if ( $failed ) {
+			$this->null_process = true;
+
+			return;
 		}
 
 		$this->record = $record;
-
-		// Prevent it going any further
-		if ( is_wp_error( $items ) ) {
-			return $this;
-		}
 
 		$this->activity();
 
@@ -75,9 +110,18 @@ class Tribe__Events__Aggregator__Record__Queue {
 		} else {
 			$this->load_queue();
 		}
+		$this->cleaner = $cleaner;
 	}
 
-	public function init_queue( $items ) {
+	public function __get( $key ) {
+		switch ( $key ) {
+			case 'activity':
+				return $this->activity();
+				break;
+		}
+	}
+
+	protected function init_queue( $items ) {
 		if ( 'csv' === $this->record->origin ) {
 			$this->record->reset_tracking_options();
 			$this->importer = $items;
@@ -91,8 +135,13 @@ class Tribe__Events__Aggregator__Record__Queue {
 		}
 	}
 
-	public function load_queue() {
-		$this->items = $this->record->meta[ self::$queue_key ];
+	protected function load_queue() {
+		if ( empty( $this->record->meta[ self::$queue_key ] ) ) {
+			$this->is_fetching = false;
+			$this->items       = array();
+		} else {
+			$this->items = $this->record->meta[ self::$queue_key ];
+		}
 
 		if ( 'fetch' === $this->items ) {
 			$this->is_fetching = true;
@@ -100,7 +149,7 @@ class Tribe__Events__Aggregator__Record__Queue {
 	}
 
 	public function activity() {
-		if ( ! $this->activity ) {
+		if ( empty( $this->activity ) ) {
 			if (
 				empty( $this->record->meta[ self::$activity_key ] )
 				|| ! $this->record->meta[ self::$activity_key ] instanceof Tribe__Events__Aggregator__Record__Activity
@@ -119,7 +168,7 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 *
 	 * @return boolean
 	 */
-	public function is_fetching() {
+	protected function is_fetching() {
 		return $this->is_fetching;
 	}
 
@@ -129,16 +178,17 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 * @return int
 	 */
 	public function count() {
-		return count( $this->items );
+		return is_array( $this->items ) ? count( $this->items ) : 0;
 	}
 
 	/**
-	 * Shortcut to check if this queue is empty
+	 * Shortcut to check if this queue is empty.
 	 *
-	 * @return boolean
+	 * @return boolean `true` if this queue instance has acquired the lock and
+	 *                 the count is 0, `false` otherwise.
 	 */
 	public function is_empty() {
-		return 0 === $this->count();
+		return $this->has_lock && 0 === $this->count();
 	}
 
 	/**
@@ -146,7 +196,7 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 *
 	 * @return int
 	 */
-	public function get_total() {
+	protected function get_total() {
 		return $this->count() + $this->activity->count( $this->get_queue_type() );
 	}
 
@@ -155,8 +205,14 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 *
 	 * @return self
 	 */
-	public function save() {
+	protected function save() {
 		$this->record->update_meta( self::$activity_key, $this->activity );
+
+		/** @var Tribe__Meta__Chunker $chunker */
+		$chunker = tribe( 'chunker' );
+		// this data has the potential to be very big, so we register it for possible chunking in the db
+		$key = Tribe__Events__Aggregator__Record__Abstract::$meta_key_prefix . self::$queue_key;
+		$chunker->register_chunking_for( $this->record->post->ID, $key );
 
 		if ( empty( $this->items ) ) {
 			$this->record->delete_meta( self::$queue_key );
@@ -167,7 +223,8 @@ class Tribe__Events__Aggregator__Record__Queue {
 		// If we have a parent also update that
 		if ( ! empty( $this->record->post->post_parent ) ) {
 			$parent = Tribe__Events__Aggregator__Records::instance()->get_by_post_id( $this->record->post->post_parent );
-			if ( isset( $parent->meta[ self::$activity_key ] ) ) {
+
+			if ( ! tribe_is_error( $parent ) && isset( $parent->meta[ self::$activity_key ] ) ) {
 				$activity = $parent->meta[ self::$activity_key ];
 
 				if ( $activity instanceof Tribe__Events__Aggregator__Record__Activity ) {
@@ -188,53 +245,77 @@ class Tribe__Events__Aggregator__Record__Queue {
 
 		wp_update_post( $args );
 
+		$this->release_lock();
+
 		return $this;
 	}
 
 	/**
 	 * Processes a batch for the queue
 	 *
-	 * @return self
+	 * @return self|Tribe__Events__Aggregator__Record__Activity
 	 */
 	public function process( $batch_size = null ) {
-		if ( $this->is_fetching() ) {
-			$data = $this->record->prep_import_data();
+		if ( $this->null_process ) {
+			return $this;
+		}
 
-			if (
-				'fetch' === $data
-				|| ! is_array( $data )
-				|| is_wp_error( $data )
-			) {
-				return $this->activity();
+		$this->has_lock = $this->acquire_lock();
+
+		if ( $this->has_lock ) {
+			if ( $this->is_fetching() ) {
+				if ( $this->record->should_queue_import() ) {
+					$response = $this->record->queue_import();
+
+					if ( $response instanceof WP_Error ) {
+						// the import queueing generated an error
+						$this->record->set_status_as_failed( $response );
+
+						return $this;
+					}
+
+					if ( is_numeric( $response ) ) {
+						// the import queueing was rescheduled
+						$this->record->set_status_as_pending();
+
+						return $this;
+					}
+				}
+
+				$data = $this->record->prep_import_data();
+
+				if (
+					'fetch' === $data
+					|| ! is_array( $data )
+					|| is_wp_error( $data )
+				) {
+					$this->release_lock();
+					return $this->activity();
+				}
+
+				$this->init_queue( $data );
+				$this->save();
 			}
 
-			$this->init_queue( $data );
-			$this->save();
-		}
 
-		// Every time we are about to process we reset the next var
-		$this->next = array();
-
-		if ( ! $batch_size ) {
-			$batch_size = apply_filters( 'tribe_aggregator_batch_size', Tribe__Events__Aggregator__Record__Queue_Processor::$batch_size );
-		}
-
-		for ( $i = 0; $i < $batch_size; $i++ ) {
-			if ( 0 === count( $this->items ) ) {
-				break;
+			if ( ! $batch_size ) {
+				$batch_size = apply_filters( 'tribe_aggregator_batch_size', Tribe__Events__Aggregator__Record__Queue_Processor::$batch_size );
 			}
 
-			// Remove the Event from the Items remaining
-			$this->next[] = array_shift( $this->items );
-		}
+			// Every time we are about to process we reset the next var
+			$this->next = array_splice( $this->items, 0, $batch_size );
 
-		if ( 'csv' === $this->record->origin ) {
-			$activity = $this->record->continue_import();
+			if ( 'csv' === $this->record->origin ) {
+				$activity = $this->record->continue_import();
+			} else {
+				$activity = $this->record->insert_posts( $this->next );
+			}
+
+			$this->activity = $this->activity()->merge( $activity );
 		} else {
-			$activity = $this->record->insert_posts( $this->next );
+			// this queue instance should not register any new activity
+			$this->activity = $this->activity();
 		}
-
-		$this->activity = $this->activity()->merge( $activity );
 
 		return $this->save();
 	}
@@ -264,6 +345,10 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 * execution hangs half way through the processing of a batch.
 	 */
 	public function set_in_progress_flag() {
+		if ( empty( $this->record->id ) ) {
+			return;
+		}
+
 		Tribe__Post_Transient::instance()->set( $this->record->id, self::$in_progress_key, true, HOUR_IN_SECONDS );
 	}
 
@@ -271,6 +356,10 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 * Clears the in progress flag.
 	 */
 	public function clear_in_progress_flag() {
+		if ( empty( $this->record->id ) ) {
+			return;
+		}
+
 		Tribe__Post_Transient::instance()->delete( $this->record->id, self::$in_progress_key );
 	}
 
@@ -280,6 +369,10 @@ class Tribe__Events__Aggregator__Record__Queue {
 	 * @return bool
 	 */
 	public function is_in_progress() {
+		if ( empty( $this->record->id ) ) {
+			return false;
+		}
+
 		Tribe__Post_Transient::instance()->get( $this->record->id, self::$in_progress_key );
 	}
 
@@ -291,10 +384,60 @@ class Tribe__Events__Aggregator__Record__Queue {
 	public function get_queue_type() {
 		$item_type = Tribe__Events__Main::POSTTYPE;
 
-		if ( 'csv' === $this->record->origin ) {
+		if ( ! empty( $this->record->origin ) && 'csv' === $this->record->origin ) {
 			$item_type = $this->record->meta['content_type'];
 		}
 
 		return $item_type;
 	}
+
+	/**
+	 * Acquires the global (db stored) queue lock if available.
+	 *
+	 * @since 4.5.12
+	 *
+	 * @return bool Whether the lock could be acquired or not if another instance/process has
+	 *              already acquired the lock.
+	 */
+	protected function acquire_lock() {
+		if ( empty( $this->record->post->ID ) ) {
+			return false;
+		}
+
+		$post_id = $this->record->post->ID;
+
+		$post_transient = Tribe__Post_Transient::instance();
+
+		$locked = $post_transient->get( $post_id, 'aggregator_queue_lock' );
+
+		if ( ! empty( $locked ) ) {
+			return false;
+		}
+
+		$post_transient->set( $post_id, 'aggregator_queue_lock', '1', 180 );
+
+		return true;
+	}
+
+	/**
+	 * Release the queue lock if this instance of the queue holds it.
+	 *
+	 * @since 4.5.12
+	 *
+	 * @return bool
+	 */
+	protected function release_lock() {
+		if ( empty( $this->record->post->ID ) || ! $this->has_lock ) {
+			return false;
+		}
+
+		$post_id = $this->record->post->ID;
+
+		$post_transient = Tribe__Post_Transient::instance();
+
+		$post_transient->delete( $post_id, 'aggregator_queue_lock' );
+
+		return true;
+	}
 }
+

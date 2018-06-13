@@ -79,7 +79,9 @@ if ( ! function_exists( 'tribe_beginning_of_day' ) ) {
 		if ( is_null( $date ) || empty( $date ) ) {
 			$date = date( $format, strtotime( date( 'Y-m-d' ) . ' +' . $hours_to_add . ' hours ' . $minutes_to_add . ' minutes' ) );
 		} else {
-			$date = date( $format, strtotime( date( 'Y-m-d', strtotime( $date ) ) . ' +' . $hours_to_add . ' hours ' . $minutes_to_add . ' minutes' ) );
+			$date      = Tribe__Date_Utils::is_timestamp( $date ) ? $date : strtotime( $date );
+			$timestamp = strtotime( date( 'Y-m-d', $date ) . ' +' . $hours_to_add . ' hours ' . $minutes_to_add . ' minutes' );
+			$date      = date( $format, $timestamp );
 		}
 
 		/**
@@ -114,7 +116,9 @@ if ( ! function_exists( 'tribe_end_of_day' ) ) {
 		if ( is_null( $date ) || empty( $date ) ) {
 			$date = date( $format, strtotime( 'tomorrow  +' . $hours_to_add . ' hours ' . $minutes_to_add . ' minutes' ) - 1 );
 		} else {
-			$date = date( $format, strtotime( date( 'Y-m-d', strtotime( $date ) ) . ' +1 day ' . $hours_to_add . ' hours ' . $minutes_to_add . ' minutes' ) - 1 );
+			$date      = Tribe__Date_Utils::is_timestamp( $date ) ? $date : strtotime( $date );
+			$timestamp = strtotime( date( 'Y-m-d', $date ) . ' +1 day ' . $hours_to_add . ' hours ' . $minutes_to_add . ' minutes' ) - 1;
+			$date      = date( $format, $timestamp );
 		}
 
 		/**
@@ -194,7 +198,13 @@ if ( ! function_exists( 'tribe_get_start_time' ) ) {
 			$date_format = tribe_get_time_format();
 		}
 
-		return tribe_format_date( $start_date, false, $date_format );
+		/**
+		 * Filters the returned event start time
+		 *
+		 * @param string  $start_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_start_time', tribe_format_date( $start_date, false, $date_format ), $event );
 	}
 }
 
@@ -239,7 +249,13 @@ if ( ! function_exists( 'tribe_get_end_time' ) ) {
 			$date_format = tribe_get_time_format();
 		}
 
-		return tribe_format_date( $end_date, false, $date_format );
+		/**
+		 * Filters the returned event end time
+		 *
+		 * @param string  $end_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_end_time', tribe_format_date( $end_date, false, $date_format ), $event );
 	}
 }
 
@@ -251,10 +267,12 @@ if ( ! function_exists( 'tribe_get_start_date' ) ) {
 	 *
 	 * @category Events
 	 *
+	 * @since 4.7.6 Deprecated the $timezone parameter.
+	 *
 	 * @param int    $event        (optional)
 	 * @param bool   $display_time If true shows date and time, if false only shows date
 	 * @param string $date_format  Allows date and time formating using standard php syntax (http://php.net/manual/en/function.date.php)
-	 * @param string $timezone     Timezone in which to present the date/time (or default behaviour if not set)
+	 * @param string $timezone     Deprecated. Timezone in which to present the date/time (or default behaviour if not set)
 	 *
 	 * @return string|null Date
 	 */
@@ -283,7 +301,13 @@ if ( ! function_exists( 'tribe_get_start_date' ) ) {
 			return null;
 		}
 
-		return tribe_format_date( $start_date, $display_time, $date_format );
+		/**
+		 * Filters the returned event start date and time
+		 *
+		 * @param string  $start_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_start_date', tribe_format_date( $start_date, $display_time, $date_format ), $event );
 	}
 }
 
@@ -295,10 +319,12 @@ if ( ! function_exists( 'tribe_get_end_date' ) ) {
 	 *
 	 * @category Events
 	 *
+	 * @since 4.7.6 Deprecated the $timezone parameter.
+	 *
 	 * @param int    $event        (optional)
 	 * @param bool   $display_time If true shows date and time, if false only shows date
 	 * @param string $date_format  Allows date and time formating using standard php syntax (http://php.net/manual/en/function.date.php)
-	 * @param string $timezone     Timezone in which to present the date/time (or default behaviour if not set)
+	 * @param string $timezone     Deprecated. Timezone in which to present the date/time (or default behaviour if not set)
 	 *
 	 * @return string|null Date
 	 */
@@ -322,12 +348,18 @@ if ( ! function_exists( 'tribe_get_end_date' ) ) {
 
 		// @todo move timezones to Common
 		if ( class_exists( 'Tribe__Events__Timezones' ) ) {
-			$end_date = Tribe__Events__Timezones::event_end_timestamp( $event->ID, $timezone );
+			$end_date = Tribe__Events__Timezones::event_end_timestamp( $event->ID );
 		} else {
 			return null;
 		}
 
-		return tribe_format_date( $end_date, $display_time, $date_format );
+		/**
+		 * Filters the returned event end date and time
+		 *
+		 * @param string  $end_date
+		 * @param WP_Post $event
+		 */
+		return apply_filters( 'tribe_get_end_date', tribe_format_date( $end_date, $display_time, $date_format ), $event );
 	}
 }
 
@@ -353,5 +385,47 @@ if ( ! function_exists( 'tribe_normalize_manual_utc_offset' ) ) {
 		}
 
 		return $utc_offset;
+	}
+}
+
+if ( ! function_exists( 'tribe_wp_locale_weekday' ) ) {
+	/**
+	 * Return a WP Locale weekday in the specified format
+	 *
+	 * @param int|string $weekday Day of week
+	 * @param string $format Weekday format: full, weekday, initial, abbreviation, abbrev, abbr, short
+	 *
+	 * @return string
+	 */
+	function tribe_wp_locale_weekday( $weekday, $format ) {
+		return Tribe__Date_Utils::wp_locale_weekday( $weekday, $format );
+	}
+}
+
+if ( ! function_exists( 'tribe_wp_locale_month' ) ) {
+	/**
+	 * Return a WP Locale month in the specified format
+	 *
+	 * @param int|string $month Month of year
+	 * @param string $format month format: full, month, abbreviation, abbrev, abbr, short
+	 *
+	 * @return string
+	 */
+	function tribe_wp_locale_month( $month, $format ) {
+		return Tribe__Date_Utils::wp_locale_month( $month, $format );
+	}
+}
+
+if ( ! function_exists( 'tribe_is_site_using_24_hour_time' ) ) {
+	/**
+	 * Handy function for easily detecting if this site's using the 24-hour time format.
+	 *
+	 * @since 4.7.1
+	 *
+	 * @return boolean
+	 */
+	function tribe_is_site_using_24_hour_time() {
+		$time_format = get_option( 'time_format' );
+		return strpos( $time_format, 'H' ) !== false;
 	}
 }

@@ -68,7 +68,7 @@ class Tribe__Events__Aggregator__Migrate {
 			return false;
 		}
 
-		$aggregator = Tribe__Events__Aggregator::instance();
+		$aggregator = tribe( 'events-aggregator.main' );
 
 		$html = '<p>' . esc_html__( 'Thanks for activating Event Aggregator! It looks like you have some settings and imports configured on our legacy importer plugins. To complete your transition, we need to transfer those options to our new system.', 'the-events-calendar' );
 
@@ -94,7 +94,7 @@ class Tribe__Events__Aggregator__Migrate {
 		// It's important only to use values here that are true for the `empty()` function
 		$data = (object) array(
 			'post_status' => null,
-			'ids' => '',
+			'ids' => array(),
 			'google_maps' => false,
 			'auto' => false,
 			'frequency' => null,

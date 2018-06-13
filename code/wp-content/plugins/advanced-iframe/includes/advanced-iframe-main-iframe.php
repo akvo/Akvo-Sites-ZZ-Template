@@ -6,6 +6,40 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
  
 $filenamedir  = dirname(__FILE__) . '/../../advanced-iframe-custom'; 
  
+if ($debug_js != 'false' && !isset($_REQUEST['debugRendered'])) {
+    $html .= '<div id="aiDebugDivTotal"><div id="aiDebugDivHeader">Advanced iframe debug console - l: local messages, r: remote messages (pro only).</div><div id="aiDebugDiv">';
+    include_once dirname(__FILE__) . '/advanced-iframe-admin-functions.php';
+    $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+    $result_check = ai_checkUrlStatus( trim($src), $agent);
+    $html .= 'User agent: ' . $agent;
+    $html .= '<p><strong>Headers of ' . $src . '</strong>:<br>';
+    foreach ($result_check['header'] as $line) {
+        if (!empty($line)) {
+            $replace = array("\n", "\r");
+            $html .= str_replace($replace, '', $line) . '<br>';
+        }           
+    }     
+    $html .= ai_print_result($result_check);   
+    $html .= '</p></div></div>';
+  
+    $html .= '<script>
+    console.log = function() {
+      var content = "<" + "p class=\'ai-debug-local\'> l: " + [].map.call(arguments, JSON.stringify) + "<" + "/" + "p>";
+      jQuery("#aiDebugDiv").append(content);
+      return false;
+    };          
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      var content = "<" + "p class=\'ai-debug-error\'> ERROR: " + msg + " - " + lineNo + ":" + columnNo  + "<" + "/" + "p>";
+      jQuery("#aiDebugDiv").append(content);
+      return false;
+    };   
+    </script> 
+ ';
+  $_REQUEST['debugRendered'] = true; 
+} 
+ 
+ 
+ 
 if (!empty($hide_content_until_iframe_color)) {
     // we print the div to hide everything directly when the plugin is evaluated.
     $hide_content_until_iframe_color_print = trim(str_replace('|keep','', strtolower($hide_content_until_iframe_color)));
@@ -20,7 +54,8 @@ if ($show_iframe_loader == 'true') {
  }
 
  if (!empty($hide_part_of_iframe)) {
-      $rectangles = explode('|' , $hide_part_of_iframe);
+       $html_hide = ''; 
+       $rectangles = explode('|' , $hide_part_of_iframe);
       
        $div_width = $this->addPx($width); 
        if ($show_part_of_iframe == 'true') {
@@ -62,28 +97,74 @@ if ($show_iframe_loader == 'true') {
             
             // $values[4] does also support a html file which also includes a shortcode
             // It is added with a $ after the color. html files needs to be in the custom folder.
+            
+            // hide and hide1000 creade click events on close + automatic hide at a specific time.
             $values_color = explode('$' , $values[4]);
             $bg_color = $values_color[0];
             // file or shortcode
             $div_content = '<!-- -->';
-            if (count($values_color) == 2) {
-                $element = $values_color[1];
-                $filename = $filenamedir . '/hide_'.esc_html(trim($element)).'.html'; 
-                // load file and show a message if it does not exist
-                if (file_exists($filename)) {
-                  $div_content = trim(file_get_contents($filename));
-                  // evaluate shortcodes
-                  $div_content = do_shortcode($div_content);
+            if (count($values_color) >= 2) {
+                if (count($values_color) == 3) {
+                  $element = $values_color[1];
+                  $hide = $values_color[2];
                 } else {
-                  $content = 'The file "' .$filename . '" cannot be found.';
-                }     
+                  if ($this->ai_startsWith($values_color[1], 'hide')) {
+                    $hide = $values_color[1];
+                    $element = "not_used";
+                  } else {
+                    $element = $values_color[1];
+                    $hide = "not_used";
+                  }   
+                }  
+                if ($element != 'not_used') {  
+                  $filename = $filenamedir . '/hide_'.esc_html(trim($element)).'.html'; 
+                  // load file and show a message if it does not exist
+                  if (file_exists($filename)) {
+                    $div_content = trim(file_get_contents($filename));
+                    // evaluate shortcodes
+                    $div_content = do_shortcode($div_content);
+                  } else {
+                    $content = 'The file "' .$filename . '" cannot be found.';
+                  }     
+                } 
+                if  ($hide != 'not_used') { 
+                   $error = false;
+                   if ($this->ai_startsWith($hide, 'hide')) {
+                      $html_hide = '<script>';
+                      if ($hide == 'hide') {
+                          $html_hide .= 'jQuery("#wrapper-div-element-'.$id.'-'.$hi.'").on( "click" , function() { jQuery( this ).remove(); }); '; 
+                      } else {
+                        $time_hide = substr($hide, 4);
+                        if (is_numeric($time_hide)) {   
+                          $html_hide .= 'setTimeout(function() { jQuery( "#wrapper-div-element-'.$id.'-'.$hi.'").remove(); }, '.$time_hide.');';                         
+                        } else {
+                           $error = true;
+                        }                       
+                      }
+                      $html_hide .= '</script>';
+                      if ($hide == 'hide') {
+                          $html_hide .= '<style>';
+                          $html_hide .= '#wrapper-div-element-'.$id.'-'.$hi.', #wrapper-div-element-'.$id.'-'.$hi.' *:hover { cursor:pointer } ';
+                          $html_hide .= '</style>';
+                      }
+                   } else {
+                      $error = true; 
+                   }
+                   if ($error) {
+                       $html = $error_css . '<div class="errordiv">' . __('ERROR: hide part of iframe ony supports $hide or $hideXXX as last parameter.', 'advanced-iframe') . '</div>';
+                       return $html;
+                   }    
+                }
             }
        
+            // replace § with , for rbga !          
+            $bg_color = str_replace('§',',',$bg_color ); 
             $html .= '<style>';
             $html .= '#wrapper-div-element-'.$id.'-'.$hi.' {';
             $html .= 'position:absolute;z-index:'.esc_html(trim($values[5])).';'.$x_style.':'.esc_html(trim($r_x)).';'.$y_style.':'.esc_html(trim($r_y)).';width:'.$r_width.';height:'.$r_height.';background-color:'.esc_html(trim($bg_color)).';';
             $html .= '}</style>';     
             $html .= '<'.$display_type.$hide_href.' id="wrapper-div-element-'.$id.'-'.$hi.'">'.$div_content.'</'.$display_type.'>';
+            $html .= $html_hide;
          } else {
             $html = $error_css . '<div class="errordiv">' . __('ERROR: hide part of iframe does not have the required 6 parameters', 'advanced-iframe') . '</div>';
             return $html;
@@ -93,12 +174,15 @@ if ($show_iframe_loader == 'true') {
 
 if ($show_part_of_iframe == 'true') {
     $html .= '<div id="ai-div-'.$id.'">';
+    if ($fix_chrome_65) {
+        $html .= '<div id="ai-div-inner-'.$id.'">';
+    }
 }
 if (!empty($iframe_zoom)) {
      $html .= '<div id="ai-zoom-div-'.$id.'">';
 }
 if ($enable_lazy_load == 'true') {
-     $html .= '<div id="ai-lazy-load-'.$id.'" class="ai-lazy-load-'.$id.'"><!--';
+     $html .= '<div id="ai-lazy-load-'.$id.'" class="ai-lazy-load-'.$id.'"><script type="text/lazyload">';
 }
 
 if ($show_iframe_as_layer_div) {
@@ -133,78 +217,89 @@ if ($show_iframe_as_layer_div) {
    }
 }
 $parent_http = site_url();
-if ($this->ai_startsWith(strtolower($src), "http:") && 
-    $this->ai_startsWith(strtolower($parent_http), "https:")) {
+if ($this->ai_startsWith(strtolower($src), "http://") && 
+    $this->ai_startsWith(strtolower($parent_http), "https://")) {
   // show a warning if https pages are shown in http pages.
-  $html .= 'Http iframes are not shown in https pages in many major browsers. Please read <a href="http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https" target="_blank">this post</a> for details.';
+  $html .= 'Http iframes are not shown in https pages in many major browsers. Please read <a href="http://www.tinywebgallery.com/blog/iframe-do-not-mix-http-and-https" rel="nofollow" target="_blank">this post</a> for details.';
 } else if ($this->ai_startsWith(strtolower($src), "https:") && 
     $this->ai_startsWith(strtolower($parent_http), "http:") &&
     $enable_external_height_workaround == "true" && $use_post_message == 'false' ) {
     $html .= 'You use a https iframe in a http page with the external workaround. To enable the external workaround you NEED to enable "Use postMessage for communication" on the "external workaround" tab.';
 } 
  
-$html .= "<iframe id='" . $id . "' ";
+$html .= '<iframe id="' . $id . '" ';
 if (!empty ($name)) {
-    $html .= " name='" . $name . "' ";
+    $html .= ' name="' . esc_html(trim($name)) . '" ';
 }
-$html .= " src='" . trim($src) . "' ";
+$html .= ' src="' . trim($src) . '" ';
 if ($width != 'not set' && $width != '') {
-     $html .= " width='" . esc_html(trim($width)) . "' ";
-     // html5 style to support vw and vh
-     // $style .= 'width:'. esc_html(trim($width)) .';';
+     $html .= ' width="' . esc_html(trim($width)) . '" ';
+     // html5 style to support vw and vh and we only add it if not present.
+     if (strpos($style, 'width:') === false) {
+         $style .= ';width:'. esc_html(trim($width)) .';';
+     }
 }
  if ($height != 'not set' && $height != '') {
-     $html .= " height='" . esc_html(trim($height)) . "' ";
-     // html5 style to support vw and vh
-     // $style .= 'height:'. esc_html(trim($height)) .';';
+     $html .= ' height="' . esc_html(trim($height)) . '" ';
+     // html5 style to support vw and vh and we only add it if not present.
+     if (strpos($style, 'height:') === false) {
+         $style .= 'height:'. esc_html(trim($height)) .';';
+     }
 }
 
 // default is auto - enables to add scrolling with css!
 if ($scrolling != 'none') {
-     $html .= " scrolling='" . esc_html(trim($scrolling)) . "' ";
+     $html .= ' scrolling="' . esc_html(trim($scrolling)) . '" ';
 }
-
 if (!empty ($marginwidth)) {
-    $html .= " marginwidth='" . esc_html(trim($marginwidth)) . "' ";
+    $html .= ' marginwidth="' . esc_html(trim($marginwidth)) . '" ';
 }
 if (!empty ($marginheight)) {
-    $html .= " marginheight='" . esc_html(trim($marginheight)) . "' ";
+    $html .= ' marginheight="' . esc_html(trim($marginheight)) . '" ';
 }
 if ($frameborder != '') {
-    $html .= " frameborder='" . esc_html(trim($frameborder)) . "' ";
+    $html .= ' frameborder="' . esc_html(trim($frameborder)) . '" ';
     if ($frameborder == 0) {
-       $html .= " border='0' ";
+       $html .= ' border="0" ';
     }
 }
 if (!empty ($transparency)) {
-    $html .= " allowtransparency='" . esc_html(trim($transparency)) . "' ";
+    $html .= ' allowtransparency="' . esc_html(trim($transparency)) . '" ';
 }
 if (!empty ($class)) {
-    $html .= " class='" . esc_html(trim($class)) . "' ";
+    $html .= ' class="' . esc_html(trim($class)) . '" ';
 }
 if (!empty ($sandbox)) {
-    if (trim($sandbox) == 'sandbox') {
-      $html .= " sandbox ";
-    } else {
-      $html .= " sandbox='" . esc_html(trim($sandbox)) . "' ";
+    if  (trim($sandbox) != '') {
+        if (trim($sandbox) == 'sandbox') {
+          $html .= ' sandbox ';
+        } else {
+          $html .= ' sandbox="' . esc_html(trim($sandbox)) . '" ';
+        }
     }
 }
-if (!empty ($style) || $show_part_of_iframe == 'true' || $enable_responsive_iframe == 'true') {
-    if (strpos($style, 'max-width') === false) {
-      if ($show_part_of_iframe == 'true') {
-          $style .= ';max-width:none;';
-      } else if ($enable_responsive_iframe == 'true') {
-          // width:1px;min-width:100%; fix for IOS 
-          $style .= ';width:1px;min-width:100%;max-width:100%;';
-      }
-    }
-    $html .= " style='" . esc_html(trim($style)) . "' ";
+if (!empty ($title)) {
+    $html .= ' title="' . esc_html(trim($title)) . '" ';
 }
+
+if (!empty ($allow)) {
+    $html .= ' allow="' . esc_html(trim($allow)) . '" ';
+}
+
+if (strpos($style, 'max-width') === false) {
+  if ($show_part_of_iframe == 'true') {
+      $style .= ';max-width:none;';
+  } else if ($enable_responsive_iframe == 'true') {
+      // width:1px;min-width:100%; fix for IOS 
+      $style .= ';width:1px;min-width:100%;max-width:100%;';
+  }
+}
+$html .= ' style="' . esc_html(trim($style)) . '" ';
+
 
 if ($allowfullscreen != 'false') {
-     $html .= " allowfullscreen ";
+     $html .= ' allowfullscreen ';
 }
-
 
 // create onload string
 $onload_str = '';
@@ -280,6 +375,7 @@ if ($onload_scroll_top == 'true' || $onload_scroll_top == 'iframe') {
 // hide_page_until_loaded
 if ($hide_page_until_loaded  == 'true') {
     $onload_str .= 'jQuery("#'.$id.'").css("visibility", "visible");';
+    $onload_str .= 'ifrm_'.$id.'.contentWindow.onunload  = hide_iframe_loading_'.$id.';';
     if (!empty($hide_part_of_iframe)) {
         $onload_str .= 'jQuery("#wrapper-div-'.$id.'").css("visibility", "visible");';
     } 
@@ -309,13 +405,16 @@ if ($show_iframe_as_layer_div) {
   $html .= '</div>';
 }
 if ($enable_lazy_load == 'true') {
-    $html .= '--></div>';
+    $html .= '</script></div>';
 } 
 if (!empty($iframe_zoom)) {
     $html .= '</div>';
 }
 
 if ($show_part_of_iframe == 'true') {
+    if ($fix_chrome_65) {
+        $html .= '</div>';
+    }
     $html .= '</div>';
 }
 if (!empty($hide_part_of_iframe)) {

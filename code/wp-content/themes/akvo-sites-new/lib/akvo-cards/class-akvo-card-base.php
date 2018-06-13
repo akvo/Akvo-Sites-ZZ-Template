@@ -6,6 +6,8 @@
 		var $shortcode_slug;
 		var $template;
 		
+		var $counters;
+		
 		function __construct(){
 			
 			/* HANDLE AJAX */
@@ -15,19 +17,24 @@
 			/* HANDLE SHORTCODE */
 			add_shortcode( $this->shortcode_str, array( $this, 'shortcode' ) );
 			
+			$this->counters = array();
+			
 		}
 		
-		
+		function get_counter( $label ){
+			if( !isset($this->counters[$label]) ) { $this->counters[$label] = -1; }	/* reset offset counter if rsr-id or type has changed */
+      		$this->counters[$label]++;
+			return $this->counters[$label];
+		}
 		
 		/* SHORTCODE FUNCTIONALITY */
-		function shortcode( $atts ){
-			
-		}
+		function shortcode( $atts ){}
 		
 		/* FUNCTION THAT HANDLES YOUR AJAX */
-		function ajax(){
-			
-		}
+		function ajax(){}
+		
+		/* ABOVE FUNCTIONS ARE TO BE IMPLEMENTED BY THE CHILD CLASSES */
+		
 		
 		function get_ajax_url($action, $atts, $dont_inc = array()){
 			$url = admin_url('admin-ajax.php')."?action=".$action;
@@ -39,38 +46,37 @@
 			return $url;
 		}
 		
+		/* SPECIFIC TO RSR PROJECT UPDATES */
 		function rsr_updates($atts){
 			
 			$data = array();
 			$jsondata = self::get_json_data($atts['rsr-id']);
 			
-			$offset = self::get_offset( $atts ); //(((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
+			$offset = self::get_offset( $atts ); 
 			
 			for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
-				$temp = self::parse_rsr_updates($jsondata->results[$i]);
 				
-				/* adding extra params */
-				$temp = self::add_extra_params($temp, $atts);
+				$temp = self::parse_rsr_updates($jsondata->results[$i]);	/* PARSE JSON */
+				$temp = self::add_extra_params($temp, $atts);				/* adding extra params */
 				
-				array_push($data, $temp);
+				array_push($data, $temp);									/* ADD TO FINAL DATA */
 			}
 			return $data;
 		}
 		
-		
+		/* SPECIFIC TO RSR PROJECT */
 		function rsr_project($atts){
+			
 			$data = array();
 			$jsondata = self::get_json_data($atts['rsr-id']);
 			
 			// SINGULAR DATA
 			if( !isset( $jsondata->results ) ){
 				
-				$temp = self::parse_rsr_project($jsondata);
+				$temp = self::parse_rsr_project($jsondata);					/* PARSE JSON */
+				$temp = self::add_extra_params($temp, $atts);				/* adding extra params */
 				
-				/* adding extra parameters to the akvo_card array */
-				$temp = self::add_extra_params($temp, $atts);
-				
-				array_push($data, $temp);
+				array_push($data, $temp);									/* ADD TO FINAL DATA */
 			}
 			else{
 				// MULTIPLE VALUES
@@ -84,7 +90,6 @@
 					
 					array_push($data, $temp);
 				}
-				
 			}
 			
 			return $data;
@@ -100,9 +105,7 @@
 			return $base_url;
 		}
 		
-		function get_date_format(){
-			return get_option('date_format');
-		}
+		function get_date_format(){ return get_option('date_format'); }
 		
 		function get_json_data($data_feed_id){
 			// Dependancy on the Data Feed Plugin
@@ -111,6 +114,7 @@
 			
 		}
 		
+		/* PARSING WP POST - CUSTOM POST TYPE */
 		function parse_post($post){
 			/* parsing post object */
 			$akvo_card = array(
@@ -118,8 +122,10 @@
 				'content'	=> '',
 				'date'		=> '',
 				'img'		=> '',
-				'link'		=> ''
+				'link'		=> '',
+				'post_id'	=> '0'
 			);
+			$akvo_card['post_id'] = $post->ID;
 			$akvo_card['img'] = akvo_featured_img($post->ID);
 			$akvo_card['title'] = get_the_title($post->ID);
 			$akvo_card['date'] = get_the_date(self::get_date_format(), $post->ID);
@@ -128,6 +134,7 @@
 			return $akvo_card;	
 		}
 		
+		/* PARSING RSR PROJECT FROM JSON DATA */
 		function parse_rsr_project($rsr_obj){
 			/* parsing json object of rsr project */
 			$akvo_card = array(
@@ -162,8 +169,8 @@
 			return $akvo_card;
 		}
 		
+		/* PARSING RSR PROJECT UPDATES FROM JSON DATA */
 		function parse_rsr_updates($rsr_obj){
-			/* parsing json object of rsr updates */
 			
 			$akvo_card = array(
 				'title'		=> '',
@@ -174,18 +181,11 @@
 				'type-text'	=> 'RSR Updates'
 			);
 			
-			if($rsr_obj->title){
-				$akvo_card['title'] = $rsr_obj->title;
-			}
+			if($rsr_obj->title){ $akvo_card['title'] = $rsr_obj->title; }
 			
-			if($rsr_obj->text){
-				$akvo_card['content'] = truncate($rsr_obj->text, 130);
-			}
+			if($rsr_obj->text){ $akvo_card['content'] = truncate($rsr_obj->text, 130); }
 			
-			
-			if($rsr_obj->created_at){
-				$akvo_card['date'] = date(self::get_date_format(), strtotime($rsr_obj->created_at));	
-			}
+			if($rsr_obj->created_at){ $akvo_card['date'] = date(self::get_date_format(), strtotime($rsr_obj->created_at));	}
 			
 			if($rsr_obj->photo){
 				if( isset($rsr_obj->photo->original) ){
@@ -197,69 +197,64 @@
 			}
 			
 			
-			if($rsr_obj->absolute_url){
-				$akvo_card['link'] = self::get_base_url().$rsr_obj->absolute_url;
-			}
+			if($rsr_obj->absolute_url){ $akvo_card['link'] = self::get_base_url().$rsr_obj->absolute_url; }
 			
 			return $akvo_card;
 		}
 		
 		function get_types(){
 			$post_type_arr = array(
-				'news' 			=> 'News',
-				'blog' 			=> 'Blog',
-				'video' 		=> 'Videos',
-				'testimonial' 	=> 'Testimonials',
 				'project' 		=> 'RSR Updates',
 				'rsr-project'	=> 'RSR Project',
-				'map' 			=> 'Maps',
-				'flow' 			=> 'Flow',
-				'media' 		=> 'Media Library'
 			);
+			
+			global $akvo;
+			foreach( $akvo->custom_post_types as $slug => $post_type ){
+				$post_type_arr[ $slug ] = $post_type['plural_name'];
+			}
+			
 			return $post_type_arr;
 		}
 		
 		function form_shortcode($data){
-			$shortcode = '[akvo-card ';
+			$shortcode = '['.$this->shortcode_str.' ';
         		
-        		foreach($data as $key=>$val){
+        	foreach($data as $key=>$val){
         		
-        			$val = str_replace("[","&#91;",$val);
-        			$val = str_replace("]","&#93;",$val);
+        		$val = str_replace("[","&#91;",$val);
+        		$val = str_replace("]","&#93;",$val);
         			
-        			$shortcode .= $key.'="'.$val.'" ';
-        		}
-        		$shortcode .= ']';
+        		$shortcode .= $key.'="'.$val.'" ';
+        	}
+        	$shortcode .= ']';
         		
-
-        		
-        		return $shortcode;
+			return $shortcode;
 		}
 		
-		function slugify($text){
-			// replace non letter or digits by -
-  			$text = preg_replace('~[^\pL\d]+~u', '-', $text);
-			// transliterate
-  			$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-  			// remove unwanted characters
-			$text = preg_replace('~[^-\w]+~', '', $text);
-
-			// trim
-			$text = trim($text, '-');
-
-			// remove duplicate -
-			$text = preg_replace('~-+~', '-', $text);
-
-			// lowercase
-			$text = strtolower($text);
-
-			if (empty($text)) {return 'n-a';}
-			return $text;
+		
+		
+		/* FOR MEDIA TYPE, ADD EXTRA TYPES FROM TAXONOMY */
+		function get_media_term_types( $post_id ){
+			$types = array();
+			$term_types = get_the_terms( $post_id, 'types' );
+			
+			if( is_array( $term_types ) && count( $term_types ) ){
+				foreach( $term_types as $term_type ){
+					array_push( $types, $term_type->name );
+				}
+			}
+			
+			return !empty ( implode( ',', $types ) ) ? implode( ',', $types ) : 'media';
 		}
 		
 		/* add extra params from one array to another */
 		function add_extra_params($data, $atts, $extras = array('type-text', 'type')){
+			
+			/* ONLY FOR MEDIA POSTS, GET EXTRA TYPES FROM TAXONOMY */
+			if( $atts['template'] == 'list' && $atts['type'] == 'media' ){
+				$atts['type'] = self::get_media_term_types( $data['post_id'] );	
+			}
+			
 			foreach($extras as $extra){
 				if($atts[$extra]){
 					$data[$extra] = $atts[$extra];
@@ -322,4 +317,16 @@
 			return (((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
 		}
 		
+		function slugify( $text ){
+			
+			global $akvo;
+			return $akvo->slugify( $text );
+			
+			
+		}
+		
+		function get_taxonomies(){
+			global $akvo;
+			return $akvo->custom_taxonomies;
+		}
 	}

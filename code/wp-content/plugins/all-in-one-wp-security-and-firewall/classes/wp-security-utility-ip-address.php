@@ -1,4 +1,7 @@
 <?php
+if(!defined('ABSPATH')){
+    exit;//Exit if accessed directly
+}
 
 class AIOWPSecurity_Utility_IP
 {
@@ -8,17 +11,44 @@ class AIOWPSecurity_Utility_IP
     
     static function get_user_ip_address()
     {
-        foreach (array('HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
-            if (array_key_exists($key, $_SERVER) === true){
-                foreach (explode(',', $_SERVER[$key]) as $ip){
-                    $userIP = trim($ip);
-                    if (filter_var($userIP, FILTER_VALIDATE_IP) !== false){
-                        return $userIP;
-                    }
-                }
+        global $aio_wp_security;
+
+        //check if user configured custom IP retrieval method
+        $ip_method = $aio_wp_security->configs->get_value('aiowps_ip_retrieve_method');
+        $visitor_ip = ''; //set default
+        if(!empty($ip_method)){
+            //means user has configured non default IP retrieval
+            if($ip_method == 1 && !empty($_SERVER['HTTP_CF_CONNECTING_IP'])){
+                $visitor_ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+            }else if($ip_method == 2 && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                $visitor_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }else if($ip_method == 3 && !empty($_SERVER['HTTP_X_FORWARDED'])){
+                $visitor_ip = $_SERVER['HTTP_X_FORWARDED'];
+            }else if($ip_method == 4 && !empty($_SERVER['HTTP_CLIENT_IP'])){
+                $visitor_ip = $_SERVER['HTTP_CLIENT_IP'];
             }
         }
-        return ''; //if we get this far we have an invalid address - return empty string
+        
+        //Check if multiple IPs were given - these will be present as comma-separated list
+        
+        if(stristr($visitor_ip, ',')){
+            $visitor_ip = trim(reset((explode(',', $visitor_ip)))); //get first address because this will likely be the original connecting IP
+        }
+        
+        //Now remove port portion if applicable
+        if(strpos($visitor_ip, '.') !== FALSE && strpos($visitor_ip, ':') !== FALSE){
+            //likely ipv4 address with port
+            $visitor_ip = preg_replace('/:\d+$/', '', $visitor_ip); //Strip off port
+        }
+
+        if(filter_var($visitor_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {    
+            return $visitor_ip;
+        }else if(filter_var($visitor_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
+            return $visitor_ip;
+        }else{
+            $visitor_ip = !empty($_SERVER['REMOTE_ADDR'])?$_SERVER['REMOTE_ADDR']:'';
+            return $visitor_ip;
+        }
     }
     
      /*
@@ -71,7 +101,7 @@ class AIOWPSecurity_Utility_IP
                         //possible ipv6 addr
                         $res = WP_Http::is_ip_address($item);
                         if(FALSE === $res){
-                            $errors .= '<p>'.$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall').'</p>';
+                            $errors .= "\n".$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall');
                         }else if($res == '6'){
                             $list[] = trim($item);
                         }
@@ -86,7 +116,7 @@ class AIOWPSecurity_Utility_IP
                     
                     if (count($ipParts) < 2)
                     {
-                        $errors .= '<p>'.$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall').'</p>';
+                        $errors .= "\n".$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall');
                         continue;
                     }
 
@@ -105,7 +135,7 @@ class AIOWPSecurity_Utility_IP
                                     if (trim($part) == '*') 
                                     {
                                         $goodip = false;
-                                        $errors .= '<p>'.$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall').'</p>';
+                                        $errors .= "\n".$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall');
                                     }
                                     break;
                                 case 2:
@@ -120,7 +150,7 @@ class AIOWPSecurity_Utility_IP
                                         if ($foundwild == true) 
                                         {
                                             $goodip = false;
-                                            $errors .= '<p>'.$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall').'</p>';
+                                            $errors .= "\n".$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall');
                                         }
                                     }
                                     else 
@@ -135,7 +165,7 @@ class AIOWPSecurity_Utility_IP
                     }
                     if (ip2long(trim(str_replace('*', '0', $item))) == false) 
                     { //invalid ip 
-                        $errors .= '<p>'.$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall').'</p>';
+                        $errors .= "\n".$item.__(' is not a valid ip address format.', 'all-in-one-wp-security-and-firewall');
                     } 
                     elseif (strlen($item) > 4 && !in_array($item, $list)) 
                     {
@@ -143,7 +173,7 @@ class AIOWPSecurity_Utility_IP
                         if ($current_user_ip == $item && $list_type == 'blacklist')
                         {
                             //You can't ban your own IP
-                            $errors .= '<p>'.__('You cannot ban your own IP address: ', 'all-in-one-wp-security-and-firewall').$item.'</p>';
+                            $errors .= "\n".__('You cannot ban your own IP address: ', 'all-in-one-wp-security-and-firewall').$item;
                         }
                         else
                         {
@@ -174,5 +204,43 @@ class AIOWPSecurity_Utility_IP
 
         $return_payload = array(1, array());
         return $return_payload;
-    }    
+    }
+    
+    
+    /**
+     * Checks if IP address matches against the specified whitelist of IP addresses or IP ranges
+     * @global type $aio_wp_security
+     * @param type $ip_address
+     * @param type $whitelisted_ips (newline separated string of IPs)
+     * @return boolean
+     */
+    static function is_ip_whitelisted($ip_address, $whitelisted_ips){
+        global $aio_wp_security;
+        if(empty($ip_address) || empty($whitelisted_ips)) return false;
+        
+        $ip_list_array = AIOWPSecurity_Utility_IP::create_ip_list_array_from_string_with_newline($whitelisted_ips);
+        
+        $visitor_ipParts = explode('.', $ip_address);
+        foreach ($ip_list_array as $white_ip){
+            $ipParts = explode('.', $white_ip);
+            $found = array_search('*', $ipParts);
+            if($found !== false){
+                //Means we have a whitelisted IP range so do some checks
+                if($found == 1){
+                    //means last 3 octets are wildcards - check if visitor IP falls inside this range
+                    if($visitor_ipParts[0] == $ipParts[0]){return true;}
+                }elseif($found == 2){
+                    //means last 2 octets are wildcards - check if visitor IP falls inside this range
+                    if($visitor_ipParts[0] == $ipParts[0] && $visitor_ipParts[1] == $ipParts[1]){return true;}
+                }elseif($found == 3){
+                    //means last octet is wildcard - check if visitor IP falls inside this range
+                    if($visitor_ipParts[0] == $ipParts[0] && $visitor_ipParts[1] == $ipParts[1] && $visitor_ipParts[2] == $ipParts[2]){return true;}
+                }
+            }elseif($white_ip == $ip_address){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

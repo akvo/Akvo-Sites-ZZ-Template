@@ -23,8 +23,6 @@
 				'page'				=> 1
 			)); 
 			
-			
-			
 			$akvo_card = array();
 			$data = array();
 			
@@ -91,4 +89,6 @@
 		
 	}
 	
-	new Akvo_Card;
+	global $akvo_card;
+	
+	$akvo_card = new Akvo_Card;

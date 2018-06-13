@@ -31,6 +31,13 @@ $html .= '}';
     }
  $html .= '}';
 
+// this does hide the window after an initial page load when the iframe url changes.
+// the onbeforeunload event is added on onload!
+if ($hide_page_until_loaded  == 'true') {
+     $html .= 'var hide_iframe_loading_'.$id.' = function() {
+        jQuery("#'.$id.'").css("visibility","hidden");
+     };';
+}
 $html .= '</script>';
 
 if ($store_height_in_cookie == 'true') {
@@ -191,16 +198,23 @@ if (!empty($resize_on_element_resize)) {
      ((int)$resize_on_element_resize_delay) >= 50 ) {
       $html .= 'jQuery.resize.delay='.esc_html($resize_on_element_resize_delay).';';
   }
+  $html .= 'try {';
   if ($resize_on_element_resize == 'body') {
       $html .= 'var res_element = jQuery("#'.$id.'");'; 
   } else {
       $html .= 'var res_element = jQuery("#'.$id.'").contents().find("'.esc_html($resize_on_element_resize).'");';
   }
   $html .= '
+     }  catch(e) {
+        var res_element = "";
+        if (console && console.log) { 
+            console.log(e);
+        }
+    }
     if (res_element.length == 0) {
                 // show an error if null
                 if (console && console.log) {                  
-                     console.log(\'The configuration of "resize_on_element_resize" is invalid. The specified element ' . esc_html($resize_on_element_resize) . ' could not be found. Please check your configuration.\');
+                     console.log(\'The configuration of "resize_on_element_resize" is invalid. The specified element ' . esc_html($resize_on_element_resize) . ' could not be found or accessed. Please check your configuration.\');
                 }  
     } else {   
         res_element.resize(function(){ ';
@@ -223,6 +237,6 @@ $this->include_additional_files($additional_css, $additional_js, $version_counte
 $html .= $this->interceptAjaxResize($id, $onload_resize_width, $resize_on_ajax, $resize_on_ajax_jquery,
                                     $resize_on_click,  $resize_on_click_elements, $resize_min_height);
  if ($default_options > 100*100) {
-    $html =  __('You reached the view limit for this month.<br />Please get the advanced iframe pro version.<br />Go to the administration for details.', 'advanced-iframe');
+    $html .=  __('<p><small>powered by Advanced iFrame free. Get the <a target="_blank" href="http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle">Pro version on CodeCanyon</a>.</small></p>', 'advanced-iframe');
  }
 ?>

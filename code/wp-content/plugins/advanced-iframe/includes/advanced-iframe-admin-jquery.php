@@ -135,6 +135,7 @@ Omitting E is identical to *#i.</td>
 				<li>$("#testButton") selects the element with the id value of testButton</li>
 				<li>$("img[alt]") selects all &lt;img&gt; elements that possess an alt attribute</li>
 				<li>$("a[href$=.pdf]") selects all &lt;a&gt; elements that possess an href attribute that ends in .pdf</li>
+        <li>$("a[href=\'example.html\']") selects all &lt;a&gt; elements that has the href example.html</li>
 				<li>$("button[id*=test]") selects all buttons whose id attributes contain test</li>
         <li>$("tr:not(.keep)") selects all table row that don\'t have the class "keep"</li>
         <li>$("table:nth-child(1)") selects the 2nd row of a table</li>

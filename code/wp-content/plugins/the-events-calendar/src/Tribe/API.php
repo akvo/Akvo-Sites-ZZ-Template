@@ -10,8 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'Tribe__Events__API' ) ) {
 	class Tribe__Events__API {
-		public static $modified_field_key = '_tribe_modified_fields';
-
 		public static $valid_venue_keys = array(
 			'Venue',
 			'Address',
@@ -63,6 +61,15 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 			$args['ID'] = $event_id;
 			$args['post_type'] = Tribe__Events__Main::POSTTYPE;
 
+			// allow for the change of the date and the status in the same update request
+			if (
+				isset( $args['post_date'], $args['post_status'] )
+				&& in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ) )
+				&& $args['post_status'] !== $post->post_status
+			) {
+				$args['edit_date'] = true;
+			}
+
 			if ( wp_update_post( $args ) ) {
 				self::saveEventMeta( $event_id, $args, $post );
 			}
@@ -95,16 +102,6 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 
 			$data = self::prepare_event_date_meta( $event_id, $data );
 
-			$now = current_time( 'timestamp' );
-
-			$post_meta = self::get_and_flatten_event_meta( $event_id );
-
-			if ( empty( $post_meta[ self::$modified_field_key ] ) ) {
-				$modified = array();
-			} else {
-				$modified = $post_meta[ self::$modified_field_key ];
-			}
-
 			if ( empty( $data['EventHideFromUpcoming'] ) ) {
 				delete_metadata( 'post', $event_id, '_EventHideFromUpcoming' );
 			}
@@ -122,9 +119,14 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 			Tribe__Events__Linked_Posts::instance()->handle_submission( $event_id, $data );
 
 			// Ordinarily there is a single cost value for each event, but addons (ie, ticketing plugins) may need
-			// to record a number of different pricepoints for the same event
+			// to record a number of different price points for the same event
 			$event_cost = isset( $data['EventCost'] ) ? (array) $data['EventCost'] : array();
 			$data['EventCost'] = (array) apply_filters( 'tribe_events_event_costs', $event_cost, $event_id );
+
+			// If we are saving just one meta, we reset to avoid deleting and re-adding cost every time
+			if ( is_array( $data['EventCost'] ) && 1 === count( $data['EventCost'] ) ) {
+				$data['EventCost'] = reset( $data['EventCost'] );
+			}
 
 			if ( isset( $data['FeaturedImage'] ) && ! empty( $data['FeaturedImage'] ) ) {
 				update_metadata( 'post', $event_id, '_thumbnail_id', $data['FeaturedImage'] );
@@ -135,7 +137,16 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 				$data['EventDuration'] = null;
 			}
 
-			do_action( 'tribe_events_event_save', $event_id );
+			/**
+			 * Allow hooking in prior to updating meta fields.
+			 *
+			 * @param int     $event_id The event ID we are modifying meta for.
+			 * @param array   $data     The meta fields we want saved.
+			 * @param WP_Post $event    The event itself.
+			 *
+			 * @since 4.6
+			 */
+			do_action( 'tribe_events_event_save', $event_id, $data, $event );
 
 			//update meta fields
 			foreach ( $tec->metaTags as $tag ) {
@@ -154,10 +165,6 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 					// Fields with a single value per key
 					else {
 						update_metadata( 'post', $event_id, $tag, $data[ $htmlElement ] );
-					}
-
-					if ( self::is_meta_value_changed( $tag, $data, $post_meta ) ) {
-						$modified[ $tag ] = $now;
 					}
 				}
 			}
@@ -179,24 +186,21 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 				}
 			}
 
-			$fields_to_check_for_changes = array(
-				'_EventShowInCalendar',
-				'_thumbnail_id',
-			);
+			// Set featured status
+			empty( $data['feature_event'] )
+				? tribe( 'tec.featured_events' )->unfeature( $event_id )
+				: tribe( 'tec.featured_events' )->feature( $event_id );
 
-			foreach ( $fields_to_check_for_changes as $field ) {
-				if ( ! self::is_meta_value_changed( $field, $data, $post_meta ) ) {
-					continue;
-				}
-
-				$modified[ $field ] = $now;
-			}
-
-			if ( $modified ) {
-				update_post_meta( $event_id, self::$modified_field_key, $modified );
-			}
-
-			do_action( 'tribe_events_update_meta', $event_id, $data );
+			/**
+			 * Allow hooking in after all event meta has been saved.
+			 *
+			 * @param int     $event_id The event ID we are modifying meta for.
+			 * @param array   $data     The meta fields we want saved.
+			 * @param WP_Post $event    The event itself.
+			 *
+			 * @since 4.6
+			 */
+			do_action( 'tribe_events_update_meta', $event_id, $data, $event );
 		}
 
 		/**
@@ -294,44 +298,81 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 
 			if ( isset( $data['EventStartDate'] ) ) {
 				$data['EventStartDate'] = Tribe__Date_Utils::datetime_from_format( $datepicker_format, $data['EventStartDate'] );
+			} elseif ( $existing_start_date = get_post_meta( $event_id, '_EventStartDate', true ) ) {
+				$data['EventStartDate'] = $existing_start_date;
 			}
 
 			if ( isset( $data['EventEndDate'] ) ) {
 				$data['EventEndDate'] = Tribe__Date_Utils::datetime_from_format( $datepicker_format, $data['EventEndDate'] );
+			} elseif ( $existing_end_date = get_post_meta( $event_id, '_EventEndDate', true ) ) {
+				$data['EventEndDate'] = $existing_end_date;
 			}
 
 			if ( isset( $data['EventAllDay'] ) && 'yes' === $data['EventAllDay'] ) {
 				$date_provided = true;
 				$data['EventStartDate'] = tribe_beginning_of_day( $data['EventStartDate'] );
 				$data['EventEndDate']   = tribe_end_of_day( $data['EventEndDate'] );
-			} elseif ( isset( $data['EventStartDate'] ) && isset( $data['EventEndDate'] ) ) {
-				$date_provided = true;
+			} elseif ( isset( $data['EventStartDate'], $data['EventEndDate'] ) ) {
+				$has_start_time      = isset( $data['EventStartTime'] );
+				$has_start_hour_min  = isset( $data['EventStartHour'], $data['EventStartMinute'] );
+				$has_end_time        = isset( $data['EventEndTime'] );
+				$has_end_hour_minute = isset( $data['EventEndHour'], $data['EventEndMinute'] );
+
+				$date_provided         = ( $has_start_time || $has_start_hour_min ) && ( $has_end_time || $has_end_hour_minute );
+
 				delete_post_meta( $event_id, '_EventAllDay' );
 
-				$start_date_string = "{$data['EventStartDate']} {$data['EventStartHour']}:{$data['EventStartMinute']}:00";
-				$end_date_string = "{$data['EventEndDate']} {$data['EventEndHour']}:{$data['EventEndMinute']}:00";
+				if ( $has_start_time || $has_start_hour_min ) {
+					// EventStartTime will always be 24h Format
+					if ( $has_start_time ) {
+						$start_date_string = "{$data['EventStartDate']} {$data['EventStartTime']}";
+					} elseif ( $has_start_hour_min ) {
+						$start_date_string = "{$data['EventStartDate']} {$data['EventStartHour']}:{$data['EventStartMinute']}:00";
+						if ( isset( $data['EventStartMeridian'] ) ) {
+							$start_date_string .= " {$data['EventStartMeridian']}";
+						}
+					}
 
-				if ( isset( $data['EventStartMeridian'] ) ) {
-					$start_date_string .= " {$data['EventStartMeridian']}";
+					$data['EventStartDate'] = date( Tribe__Date_Utils::DBDATETIMEFORMAT, strtotime( $start_date_string ) );
 				}
 
-				if ( isset( $data['EventEndMeridian'] ) ) {
-					$end_date_string .= " {$data['EventEndMeridian']}";
-				}
+				if ( $has_end_time || $has_end_hour_minute ) {
+					// EventEndTime will always be 24h Format
+					if ( $has_end_time ) {
+						$end_date_string = "{$data['EventEndDate']} {$data['EventEndTime']}";
+					} elseif ( $has_end_hour_minute ) {
+						$end_date_string = "{$data['EventEndDate']} {$data['EventEndHour']}:{$data['EventEndMinute']}:00";
+						if ( isset( $data['EventEndMeridian'] ) ) {
+							$end_date_string .= " {$data['EventEndMeridian']}";
+						}
+					}
 
-				$data['EventStartDate'] = date( Tribe__Date_Utils::DBDATETIMEFORMAT, strtotime( $start_date_string ) );
-				$data['EventEndDate'] = date( Tribe__Date_Utils::DBDATETIMEFORMAT, strtotime( $end_date_string ) );
+					$data['EventEndDate'] = date( Tribe__Date_Utils::DBDATETIMEFORMAT, strtotime( $end_date_string ) );
+				}
 			}
 
 			if ( ! $date_provided ) {
 				$data['EventStartDate'] = get_post_meta( $event_id, '_EventStartDate', true );
-				$data['EventEndDate'] = get_post_meta( $event_id, '_EventEndDate', true );
-				return $data;
+				$data['EventEndDate']   = get_post_meta( $event_id, '_EventEndDate', true );
 			}
 
 			// If a specific timezone was not specified, default to the sitewide timezone
-			if ( ! isset( $data['EventTimezone'] ) ) {
+			if ( empty( $data['EventTimezone'] ) ) {
 				$data['EventTimezone'] = Tribe__Events__Timezones::wp_timezone_string();
+			}
+
+			if ( empty( $data['EventTimezoneAbbr'] ) ) {
+				if ( Tribe__Timezones::is_utc_offset( $data['EventTimezone'] ) ) {
+					$data['EventTimezoneAbbr'] = $data['EventTimezone'];
+				} elseif ( Tribe__Timezones::is_valid_timezone( $data['EventTimezone'] ) ) {
+					$data['EventTimezoneAbbr'] = Tribe__Events__Timezones::abbr( $data['EventStartDate'], $data['EventTimezone'] );
+				} else {
+					$data['EventTimezoneAbbr'] = Tribe__Timezones::wp_timezone_abbr( $data['EventStartDate'] );
+				}
+			}
+
+			if ( ! $date_provided ) {
+				return $data;
 			}
 
 			// Additionally store datetimes in UTC
@@ -341,10 +382,6 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 
 			if ( empty( $data['EventEndDateUTC'] ) ) {
 				$data['EventEndDateUTC']   = Tribe__Events__Timezones::to_utc( $data['EventEndDate'], $data['EventTimezone'] );
-			}
-
-			if ( empty( $data['EventTimezoneAbbr'] ) ) {
-				$data['EventTimezoneAbbr'] = Tribe__Events__Timezones::abbr( $data['EventStartDate'], $data['EventTimezone'] );
 			}
 
 			// sanity check that start date < end date
@@ -382,6 +419,26 @@ if ( ! class_exists( 'Tribe__Events__API' ) ) {
 			foreach ( $event_cost as $cost ) {
 				add_post_meta( $event_id, '_EventCost', $cost );
 			}
+		}
+
+		/**
+		 * @param int $event_id The event post ID
+		 * @param array $args An array of arguments supported by the `wp_get_object_terms` function.
+		 *
+		 * @since 4.5
+		 *
+		 * @see wp_get_object_terms()
+		 *
+		 * @return array An associative array of terms in the [ <taxonomy> => [ <term_1>, <term_2>, ...], ...] format.
+		 */
+		public static function get_event_terms( $event_id, array $args = array() ) {
+			$terms = array();
+			foreach ( get_post_taxonomies( $event_id ) as $taxonomy ) {
+				$tax_terms = wp_get_object_terms( $event_id, $taxonomy, $args );
+				$terms[ $taxonomy ] = $tax_terms;
+			}
+
+			return $terms;
 		}
 
 		/**

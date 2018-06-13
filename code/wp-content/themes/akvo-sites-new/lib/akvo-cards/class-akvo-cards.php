@@ -4,6 +4,9 @@
 		
 		function __construct(){
 			
+			$this->shortcode_str = 'akvo-cards';
+			$this->shortcode_slug = 'akvo_cards';
+			
 			/* HANDLING AJAX */
 			add_action( "wp_ajax_akvo_cards", array( $this, "ajax" ) );
 			add_action( "wp_ajax_nopriv_akvo_cards", array( $this, "ajax" ) );
@@ -14,6 +17,7 @@
 		
 		function get_default_atts(){
 			return array( 
+				'template'			=> 'card',
 				'type' 				=> 'post', 
 				'posts_per_page' 	=> 3,
 				'rsr-id' 			=> 'rsr', 
@@ -31,6 +35,8 @@
 			/* CREATE ATTS ARRAY FROM DEFAULT AND USER PARAMETERS IN GET */
 			$atts = wp_parse_args( (array) $_GET, $this->get_default_atts() ); 
 			
+			
+			
 			/* CHECK IF PAGINATION HAS BEEN INVOKED */
 			if(isset($_GET['akvo-paged'])){
 				$atts['page'] = $_GET['akvo-paged'];
@@ -42,6 +48,7 @@
 			}
 			else {
 				$data = $this->wp_query($atts);
+				
 			}
 			
 			$url = $this->get_ajax_url('akvo_cards', $atts);
@@ -71,7 +78,8 @@
 		
 	}
 	
-	new AKVO_CARDS;
+	global $akvo_cards;
+	$akvo_cards = new AKVO_CARDS;
 	
 	
 	

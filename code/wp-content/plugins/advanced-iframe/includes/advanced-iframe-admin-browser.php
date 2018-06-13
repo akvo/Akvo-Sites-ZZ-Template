@@ -9,7 +9,9 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
       <p>
      Pro users can now specify browser specific iframes. This is imporant especially for the "Show only part of the iframe" feature where browser differences of a few pixels can matter. But you can use this for other things as well because mobile, iphone, ipad can also be detected.
       </p>
-     <?php if ($evanto || $isDemo) {  ?>
+     <?php if ($evanto || $isDemo) { 
+     $securitykeyString =  $devOptions['securitykey'] == '' ? '' : 'securitykey="xxx" ';
+      ?>
     <p>
     <a href="#" onclick="jQuery('#browser-help').show(); return false;" > <?php _e('Show me how to configure the browser detection in advanced iframe pro.') ?></a>
     </p>
@@ -24,20 +26,20 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
          </p>
          <h4>Example 1 - Special settings for IE 10 and IE 11</h4>
          <p>
-            [advanced_iframe securitykey="xxx" id="example1" show_part_of_iframe_x="25" browser="ie(10),ie(11)"]<br />
-            [advanced_iframe securitykey="xxx" id="example1" show_part_of_iframe_x="20" browser="default"]
+            [advanced_iframe '.$securitykeyString.'id="example1" show_part_of_iframe_x="25" browser="ie(10),ie(11)"]<br />
+            [advanced_iframe '.$securitykeyString.'id="example1" show_part_of_iframe_x="20" browser="default"]
          </p>
          <h4>Example 2 - Special settings for IE, Firefox and Chrome</h4>
          <p>
-            [advanced_iframe securitykey="xxx" id="example2" show_part_of_iframe_x="25" browser="ie"]<br />
-            [advanced_iframe securitykey="xxx" id="example2" show_part_of_iframe_x="23" browser="firefox,chrome"]<br />
-            [advanced_iframe securitykey="xxx" id="example2" show_part_of_iframe_x="20" browser="default"]
+            [advanced_iframe '.$securitykeyString.'id="example2" show_part_of_iframe_x="25" browser="ie"]<br />
+            [advanced_iframe '.$securitykeyString.'id="example2" show_part_of_iframe_x="23" browser="firefox,chrome"]<br />
+            [advanced_iframe '.$securitykeyString.'id="example2" show_part_of_iframe_x="20" browser="default"]
          </p>
           <h4>Example 3 - Show a different iframe on iframe on apple devices and mobile devices</h4>
          <p>
-            [advanced_iframe securitykey="xxx" id="example3" src="apple iframe" browser="iphone,ipad,ipod"]<br />
-            [advanced_iframe securitykey="xxx" id="example3" src="other mobile devices iframe" browser="mobile"]<br />
-            [advanced_iframe securitykey="xxx" id="example3" src="normal iframe" browser="default"]
+            [advanced_iframe '.$securitykeyString.'id="example3" src="apple iframe" browser="iphone,ipad,ipod"]<br />
+            [advanced_iframe '.$securitykeyString.'id="example3" src="other mobile devices iframe" browser="mobile"]<br />
+            [advanced_iframe '.$securitykeyString.'id="example3" src="normal iframe" browser="default"]
          </p>
 
          <h3 id="config-options">Configuration options</h3>

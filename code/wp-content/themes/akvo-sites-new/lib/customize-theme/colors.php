@@ -142,7 +142,7 @@
 			array(
 				'selector'	=> '.carousel .text, nav ul.navbar-nav li.current-menu-item a, .carousel .carousel-indicators li.active',
 				'styles'	=> array(
-					'background'	=> 'item_bg_imp'
+					'background'	=> 'item_bg'
 				)
 			),
 			array(

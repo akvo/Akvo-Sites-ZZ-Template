@@ -1,4 +1,5 @@
 <?php
+$tab                = $this->tabs->get_active();
 $origin_slug        = 'meetup';
 $field              = (object) array();
 $field->label       = __( 'Import Type:', 'the-events-calendar' );
@@ -126,6 +127,12 @@ $missing_meetup_credentials = ! $meetup_api_key;
 </tr>
 
 <?php
+if ( 'edit' === $tab->get_slug() ) {
+	$this->template( 'fields/schedule', array( 'record' => $record, 'origin' => $origin_slug, 'aggregator_action' => $aggregator_action ) );
+}
+?>
+
+<?php
 $field              = (object) array();
 $field->label       = __( 'URL:', 'the-events-calendar' );
 $field->placeholder = __( 'meetup.com/example', 'the-events-calendar' );
@@ -143,6 +150,8 @@ $field->help        = __( 'Enter the url for a Meetup group, page, or individual
 			class="tribe-ea-field tribe-ea-size-xlarge"
 			placeholder="<?php echo esc_attr( $field->placeholder ); ?>"
 			value="<?php echo esc_attr( empty( $record->meta['source'] ) ? '' : $record->meta['source'] ); ?>"
+			data-validation-match-regexp="<?php echo esc_attr( Tribe__Events__Aggregator__Record__Meetup::get_source_regexp() ); ?>"
+			data-validation-error="<?php esc_attr_e( 'Invalid Meetup URL', 'the-events-calendar' ); ?>"
 		>
 		<span class="tribe-bumpdown-trigger tribe-bumpdown-permanent tribe-bumpdown-nohover tribe-ea-help dashicons dashicons-editor-help" data-bumpdown="<?php echo esc_attr( $field->help ); ?>" data-width-rule="all-triggers"></span>
 	</td>
