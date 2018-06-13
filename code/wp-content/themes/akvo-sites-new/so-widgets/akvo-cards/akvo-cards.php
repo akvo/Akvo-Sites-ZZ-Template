@@ -48,6 +48,16 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 					'default' => 'news',
 					'options' => $this->get_types()
 				),
+				'pagination' => array(
+					'type' 		=> 'checkbox',
+					'label' 	=> __( 'Enable Lazy Loading / Pagination', 'siteorigin-widgets' ),
+					'default' 	=> false
+				),
+				'posts_per_page' => array(
+					'type' 		=> 'number',
+					'label' 	=> __( 'Number of Items to be shown', 'siteorigin-widgets' ),
+					'default' 	=> '3'
+				),
 				'rsr-id' => array(
 					'type' => 'text',
 					'label' => __( 'RSR ID (from data-feed)', 'siteorigin-widgets' ),
@@ -58,6 +68,7 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 					'label' 	=> __( 'Custom Tag (such as news, blog, etc)', 'siteorigin-widgets' ),
 					'default' 	=> ''
 				),
+				
 			),
 
 			//The $base_folder path string.

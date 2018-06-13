@@ -50,6 +50,7 @@
 				console.log($(result).html());
 				*/
 				
+				console.log( result );
 				
 				
 				if($(result).find(ul.attr('data-target')).length){
