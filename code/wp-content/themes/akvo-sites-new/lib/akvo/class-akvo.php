@@ -10,6 +10,11 @@
 		
 		public $options = array();
 		
+		public $custom_taxonomies = array();
+		
+		public $custom_post_types = array();
+		
+		
 		function __construct(){
 		
 			$this->init_header_options();
@@ -26,6 +31,108 @@
 			
 			add_action( 'wp_head', array( $this, 'css' ) );
 			
+			$this->custom_taxonomies = array(
+				'languages'	=> array(
+					'plural_name'	=> 'Languages',
+					'singular_name'	=> 'Language',
+					'post_type'		=> array('map', 'media', 'blog', 'news', 'video', 'testimonial')
+				),
+				'countries'	=> array(
+					'plural_name'	=> 'Locations',
+					'singular_name'	=> 'Location',
+					'post_type'		=> array('map', 'media', 'blog', 'news', 'video', 'testimonial')
+				),
+				'types'	=> array(
+					'plural_name'	=> 'Types',
+					'singular_name'	=> 'Type',
+					'post_type'		=> array('media')
+				),
+				'map-types' => array( 
+					'plural_name' 	=> 'Types', 
+					'singular_name'	=> 'Type', 
+					'post_type'		=> array('map')
+				),
+				'video-types' => array( 
+					'plural_name'	=> 'Types',
+					'singular_name'	=> 'Type',
+					'post_type'		=> array('video')
+				),
+				'media-category' => array( 
+					'plural_name' 	=> 'Categories', 
+					'singular_name'	=> 'Category', 
+					'post_type'		=> array('media')
+				),
+				'map-category' => array( 
+					'plural_name'	=> 'Categories',
+					'singular_name'	=> 'Category', 
+					'post_type'		=> array('map')
+				),
+				'blog-category' => array( 
+					'plural_name'	=> 'Categories',
+					'singular_name'	=> 'Category', 
+					'post_type'		=> array('blog')
+				),
+				'news-category' => array( 
+					'plural_name'	=> 'Categories',
+					'singular_name'	=> 'Category', 
+					'post_type'		=> array('news')
+				),
+				'video-category' => array( 
+					'plural_name'	=> 'Categories',
+					'singular_name'	=> 'Category', 
+					'post_type'		=> array('video')
+				),
+				'testimonial-category' => array( 
+					'plural_name'	=> 'Categories',
+					'singular_name'	=> 'Category', 
+					'post_type'		=> array('testimonial')
+				)
+			);
+			
+			$this->custom_post_types = array(
+				
+				'blog' => array( 
+					'plural_name' 	=> 'Blog posts', 
+					'singular_name'	=> 'Blog post',
+					'icon'			=> 'dashicons-calendar-alt'
+				),
+				'news' => array( 
+					'plural_name' 	=> 'News',
+					'singular_name'	=> 'News',
+					'icon'			=> 'dashicons-format-aside'
+				),
+				'video' => array( 
+					'plural_name' 	=> 'Videos',
+					'singular_name'	=> 'Video',
+					'icon'			=> 'dashicons-media-video'
+				),
+				'media' => array( 
+					'plural_name' 	=> 'Media Library',
+					'singular_name'	=> 'Media Item',
+					'icon'			=> 'dashicons-book'
+				),
+				'testimonial' => array( 
+					'plural_name' 	=> 'Testimonials',
+					'singular_name'	=> 'Testimonial',
+					'icon'			=> 'dashicons-megaphone'
+				),
+				'map' => array( 
+					'plural_name' 	=> 'Maps',
+					'singular_name'	=> 'Map',
+					'icon'			=> 'dashicons-location-alt'
+				),
+				'carousel' => array( 
+					'plural_name' 	=> 'Carousel',
+					'singular_name'	=> 'Carousel Slide',
+					'icon'			=> 'dashicons-images-alt'
+				),
+				'flow' => array( 
+					'plural_name' 	=> 'Akvo Flow',
+					'singular_name'	=> 'Flow item',
+					'icon'			=> 'dashicons-welcome-widgets-menus'
+				),
+				
+			);
 		}
 		
 		function get_option(){
@@ -97,32 +204,14 @@
 		/* CUSTOM POST TYPES AND TAXONOMIES */
 		function custom_posts(){
 			
-			/* LANGUAGE AND COUNTRIES FOR ALL TYPES */
-			$this->register_taxonomy('languages', 'Languages', 'Language', array('map', 'media', 'blog', 'news', 'video', 'testimonial'));
-			$this->register_taxonomy('countries', 'Locations', 'Location', array('map', 'media', 'blog', 'news', 'video', 'testimonial'));
+			foreach( $this->custom_taxonomies as $slug => $tax ){
+				$this->register_taxonomy( $slug, $tax['plural_name'], $tax['singular_name'], $tax['post_type'] );
+			}
+			
+			foreach( $this->custom_post_types as $slug => $post_type ){
+				$this->register_post_type( $slug, $post_type['plural_name'], $post_type['singular_name'], $post_type['icon'] );
+			}
 		
-			/* TYPES */
-			$this->register_taxonomy('types', 'Types', 'Type', array('media'));
-			$this->register_taxonomy('map-types', 'Types', 'Type', array('map'));
-			$this->register_taxonomy('video-types', 'Types', 'Type', array('video'));
-		
-			/* CATEGORY */
-			$this->register_taxonomy('media-category', 'Categories', 'Category', array('media'));
-			$this->register_taxonomy('map-category', 'Categories', 'Category', array('map'));
-			$this->register_taxonomy('blog-category', 'Categories', 'Category', array('blog'));
-			$this->register_taxonomy('news-category', 'Categories', 'Category', array('news'));
-			$this->register_taxonomy('video-category', 'Categories', 'Category', array('video'));
-			$this->register_taxonomy('testimonial-category', 'Categories', 'Category', array('testimonial'));
-		
-			/* REGISTER POST TYPES */
-			$this->register_post_type('blog', 'Blog posts', 'Blog post', 'dashicons-calendar-alt');
-			$this->register_post_type('news', 'News', 'News', 'dashicons-format-aside');
-			$this->register_post_type('video', 'Videos', 'Video', 'dashicons-media-video');
-			$this->register_post_type('media', 'Media Library', 'Media Item', 'dashicons-book');
-			$this->register_post_type('testimonial', 'Testimonials', 'Testimonial', 'dashicons-megaphone');
-			$this->register_post_type('map', 'Maps', 'Map', 'dashicons-location-alt');
-			$this->register_post_type('carousel', 'Carousel', 'Carousel slide', 'dashicons-images-alt', true);
-			$this->register_post_type('flow', 'Akvo Flow', 'Flow item', 'dashicons-welcome-widgets-menus');
 		}
 		
 		function load_scripts(){

@@ -204,16 +204,15 @@
 		
 		function get_types(){
 			$post_type_arr = array(
-				'news' 			=> 'News',
-				'blog' 			=> 'Blog',
-				'video' 		=> 'Videos',
-				'testimonial' 	=> 'Testimonials',
 				'project' 		=> 'RSR Updates',
 				'rsr-project'	=> 'RSR Project',
-				'map' 			=> 'Maps',
-				'flow' 			=> 'Flow',
-				'media' 		=> 'Media Library'
 			);
+			
+			global $akvo;
+			foreach( $akvo->custom_post_types as $slug => $post_type ){
+				$post_type_arr[ $slug ] = $post_type['plural_name'];
+			}
+			
 			return $post_type_arr;
 		}
 		
@@ -232,23 +231,7 @@
 			return $shortcode;
 		}
 		
-		/*
 		
-		TO BE REMOVED IN THE FUTURE 
-			
-		function slugify($text){
-			
-  			$text = preg_replace('~[^\pL\d]+~u', '-', $text);		// replace non letter or digits by - 
-			$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);	// transliterate 
-			$text = preg_replace('~[^-\w]+~', '', $text);			// remove unwanted characters 
-			$text = trim($text, '-');								// trim	
-			$text = preg_replace('~-+~', '-', $text);				// remove duplicate - 
-			$text = strtolower($text);								// lowercase 
-			
-			if (empty($text)) {return 'n-a';}
-			return $text;
-		}
-		*/
 		
 		/* FOR MEDIA TYPE, ADD EXTRA TYPES FROM TAXONOMY */
 		function get_media_term_types( $post_id ){
@@ -340,5 +323,10 @@
 			return $akvo->slugify( $text );
 			
 			
+		}
+		
+		function get_taxonomies(){
+			global $akvo;
+			return $akvo->custom_taxonomies;
 		}
 	}

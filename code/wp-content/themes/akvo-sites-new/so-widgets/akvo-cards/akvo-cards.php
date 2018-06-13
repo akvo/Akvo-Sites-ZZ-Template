@@ -60,7 +60,7 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 				),
 				'rsr-id' => array(
 					'type' => 'text',
-					'label' => __( 'RSR ID (from data-feed)', 'siteorigin-widgets' ),
+					'label' => __( 'RSR ID (from data-feed - only for RSR Updates or Projects)', 'siteorigin-widgets' ),
 					'default' => 'rsr'
 				),
 				'type-text' => array(
@@ -68,12 +68,38 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 					'label' 	=> __( 'Custom Tag (such as news, blog, etc)', 'siteorigin-widgets' ),
 					'default' 	=> ''
 				),
-				
+				'filter_taxonomy' => array(
+					'type' => 'select',
+					'label' => __( 'Filter by taxonomy', 'siteorigin-widgets' ),
+					'default' => 'none',
+					'options' => $this->get_taxonomies()
+				),
+				'filter_value' => array(
+					'type' 		=> 'text',
+					'label' 	=> __( 'Filter by value', 'siteorigin-widgets' ),
+					'default' 	=> ''
+				),
 			),
 
 			//The $base_folder path string.
 			get_template_directory()."/so-widgets/akvo-cards"
 		);
+	}
+	
+	function get_taxonomies(){
+		
+		global $akvo_card;
+		
+		$tax_arr = array('none' => 'None');
+		
+		$taxonomies = $akvo_card->get_taxonomies();
+			
+		foreach( $taxonomies as $slug => $tax ){
+			$tax_arr[ $slug ] = $slug;
+		}
+		
+		return $tax_arr;
+		
 	}
 	
 	function get_types(){
