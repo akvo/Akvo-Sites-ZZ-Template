@@ -6,6 +6,28 @@
 	
 	} );
 
+    function oxfam_scripts(){
+        wp_enqueue_script(
+            'oxfam-script',
+            get_stylesheet_directory_uri() . '/js/oxfam.js',
+            array('jquery')
+        );
+    }
+    add_action( 'wp_enqueue_scripts', 'oxfam_scripts');
+
+    function flickr_photo(){
+        wp_enqueue_script(
+            'flickr-photo',
+            get_stylesheet_directory_uri() . '/js/flickr.js',
+            array('jquery')
+        );
+    }
+
+    if ($_SERVER['REQUEST_URI'] === '/photo-gallery/')
+    {
+        add_action( 'wp_enqueue_scripts', 'flickr_photo');
+    }
+
 	add_filter('akvo_fonts', function($fonts){
 		
 		$fonts[] = array(
