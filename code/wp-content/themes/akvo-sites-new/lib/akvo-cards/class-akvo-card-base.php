@@ -59,7 +59,11 @@
 				$temp = self::parse_rsr_updates($jsondata->results[$i]);	/* PARSE JSON */
 				$temp = self::add_extra_params($temp, $atts);				/* adding extra params */
 				
-				array_push($data, $temp);									/* ADD TO FINAL DATA */
+				if( $temp['title'] || $temp['content'] ){
+					array_push($data, $temp);									/* ADD TO FINAL DATA */
+				}
+				
+				
 			}
 			return $data;
 		}
@@ -109,7 +113,12 @@
 		
 		function get_json_data($data_feed_id){
 			// Dependancy on the Data Feed Plugin
+			//$data = do_shortcode('[data_feed name="'.$data_feed_id.'" pagination_policy="page-url=next:next&limit=100"]');
+			
 			$data = do_shortcode('[data_feed name="'.$data_feed_id.'"]');
+			
+			//echo $data;
+			
 			return json_decode( str_replace('&quot;', '"', $data) );
 			
 		}
