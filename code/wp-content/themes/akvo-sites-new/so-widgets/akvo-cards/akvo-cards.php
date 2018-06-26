@@ -46,6 +46,10 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 					'type' => 'select',
 					'label' => __( 'Select Type', 'siteorigin-widgets' ),
 					'default' => 'news',
+					'state_emitter' => array(
+						'callback' 	=> 'select',
+						'args' 		=> array( 'type' )
+					),
 					'options' => $this->get_types()
 				),
 				'pagination' => array(
@@ -61,7 +65,12 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 				'rsr-id' => array(
 					'type' => 'text',
 					'label' => __( 'RSR ID (from data-feed - only for RSR Updates or Projects)', 'siteorigin-widgets' ),
-					'default' => 'rsr'
+					'default' => 'rsr',
+					'state_handler' => array(
+						'type[project]' 	=> array('show'),
+						'type[rsr-project]' => array('show'),
+						'_else[type]' 		=> array('hide'),
+					),
 				),
 				'type-text' => array(
 					'type' 		=> 'text',
@@ -72,12 +81,22 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 					'type' => 'select',
 					'label' => __( 'Filter by taxonomy', 'siteorigin-widgets' ),
 					'default' => 'none',
-					'options' => $this->get_taxonomies()
+					'options' => $this->get_taxonomies(),
+					'state_handler' => array(
+						'type[project]' 	=> array('hide'),
+						'type[rsr-project]' => array('hide'),
+						'_else[type]' 		=> array('show'),
+					),
 				),
 				'filter_value' => array(
 					'type' 		=> 'text',
 					'label' 	=> __( 'Filter by value', 'siteorigin-widgets' ),
-					'default' 	=> ''
+					'default' 	=> '',
+					'state_handler' => array(
+						'type[project]' 	=> array('hide'),
+						'type[rsr-project]' => array('hide'),
+						'_else[type]' 		=> array('show'),
+					),
 				),
 			),
 
