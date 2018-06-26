@@ -43,13 +43,15 @@
 			}
 			
 			/* CHECK FOR RSR UPDATES OR WP QUERY */
-			if ($atts['type'] == 'rsr') {
+			if( ( $atts['type'] == 'rsr' ) || ( $atts['type'] == 'project' ) ){
 				$data = $this->rsr_updates($atts);
 			}
 			else {
 				$data = $this->wp_query($atts);
 				
 			}
+			
+			
 			
 			$url = $this->get_ajax_url('akvo_cards', $atts);
 			include "templates/cards.php";
