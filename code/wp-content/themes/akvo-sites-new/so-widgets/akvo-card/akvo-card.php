@@ -37,12 +37,21 @@ class Akvo_Card_Widget extends SiteOrigin_Widget {
 					'type' => 'select',
 					'label' => __( 'Type', 'siteorigin-widgets' ),
 					'default' => 'news',
-					'options' => $this->get_types()
+					'options' => $this->get_types(),
+					'state_emitter' => array(
+						'callback' 	=> 'select',
+						'args' 		=> array( 'type' )
+					),
 				),
 				'rsr-id' => array(
 					'type' => 'text',
 					'label' => __( 'RSR ID (from data-feed)', 'siteorigin-widgets' ),
-					'default' => 'rsr'
+					'default' => 'rsr',
+					'state_handler' => array(
+						'type[project]' 	=> array('show'),
+						'type[rsr-project]' => array('show'),
+						'_else[type]' 		=> array('hide'),
+					),
 				),
 				'type-text' => array(
 					'type' 		=> 'text',
