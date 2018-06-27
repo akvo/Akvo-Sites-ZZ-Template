@@ -34,59 +34,65 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 			//The $form_options array, which describes the form fields used to configure SiteOrigin widgets. We'll explain these in more detail later.
 			array(
 				'template' => array(
-					'type' => 'select',
-					'label' => __( 'Choose Template', 'siteorigin-widgets' ),
-					'default' => 'news',
-					'options' => array(
+					'type' 		=> 'select',
+					'label' 	=> __( 'Choose Template', 'siteorigin-widgets' ),
+					'default' 	=> 'news',
+					'options' 	=> array(
 						'card'	=> 'Card',
 						'list'	=> 'List'
 					)
 				),
 				'type' => array(
-					'type' => 'select',
-					'label' => __( 'Select Type', 'siteorigin-widgets' ),
-					'default' => 'news',
+					'type' 			=> 'select',
+					'label' 		=> __( 'Choose Type', 'siteorigin-widgets' ),
+					'default' 		=> 'news',
 					'state_emitter' => array(
 						'callback' 	=> 'select',
 						'args' 		=> array( 'type' )
 					),
-					'options' => $this->get_types()
+					'options' 		=> $this->get_types(),
+					'description'	=> 'Choose from Data-Feeds or Wordpress Custom Post Types'
 				),
 				'pagination' => array(
-					'type' 		=> 'checkbox',
-					'label' 	=> __( 'Enable Lazy Loading / Pagination', 'siteorigin-widgets' ),
-					'default' 	=> false
+					'type' 			=> 'checkbox',
+					'label' 		=> __( 'Load More Button', 'siteorigin-widgets' ),
+					'default' 		=> false,
+					'description'	=> 'Enable Lazy Loading / Pagination'
 				),
 				'posts_per_page' => array(
-					'type' 		=> 'number',
-					'label' 	=> __( 'Number of Items to be shown', 'siteorigin-widgets' ),
-					'default' 	=> '3'
+					'type' 			=> 'number',
+					'label' 		=> __( 'Number of Items', 'siteorigin-widgets' ),
+					'default' 		=> '3',
+					'description'	=> 'Items per request to be shown'
 				),
 				'rsr-id' => array(
-					'type' => 'text',
-					'label' => __( 'RSR ID (from data-feed - only for RSR Updates or Projects)', 'siteorigin-widgets' ),
-					'default' => 'rsr',
+					'type' 			=> 'select',
+					'label' 		=> __( 'Choose Data-Feed', 'siteorigin-widgets' ),
+					'default' 		=> 'none',
 					'state_handler' => array(
 						'type[project]' 	=> array('show'),
 						'type[rsr-project]' => array('show'),
 						'_else[type]' 		=> array('hide'),
 					),
+					'options' => $this->get_data_feeds()
 				),
 				'type-text' => array(
-					'type' 		=> 'text',
-					'label' 	=> __( 'Custom Tag (such as news, blog, etc)', 'siteorigin-widgets' ),
-					'default' 	=> ''
+					'type' 			=> 'text',
+					'label' 		=> __( 'Custom Tag', 'siteorigin-widgets' ),
+					'default' 		=> '',
+					'description'	=> 'To replace the default tags such as news, blog, etc'
 				),
 				'filter_taxonomy' => array(
-					'type' => 'select',
-					'label' => __( 'Filter by taxonomy', 'siteorigin-widgets' ),
-					'default' => 'none',
-					'options' => $this->get_taxonomies(),
+					'type' 		=> 'select',
+					'label' 	=> __( 'Filter by taxonomy', 'siteorigin-widgets' ),
+					'default' 	=> 'none',
+					'options' 	=> $this->get_taxonomies(),
 					'state_handler' => array(
 						'type[project]' 	=> array('hide'),
 						'type[rsr-project]' => array('hide'),
 						'_else[type]' 		=> array('show'),
 					),
+					'description'	=> 'Select custom wordpress taxonomy to be filtered'
 				),
 				'filter_value' => array(
 					'type' 		=> 'text',
@@ -97,6 +103,7 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 						'type[rsr-project]' => array('hide'),
 						'_else[type]' 		=> array('show'),
 					),
+					'description'	=> 'Select taxonomy term to be filtered'
 				),
 			),
 
@@ -107,11 +114,11 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 	
 	function get_taxonomies(){
 		
-		global $akvo_card;
+		global $akvo_cards;
 		
 		$tax_arr = array('none' => 'None');
 		
-		$taxonomies = $akvo_card->get_taxonomies();
+		$taxonomies = $akvo_cards->get_taxonomies();
 			
 		foreach( $taxonomies as $slug => $tax ){
 			$tax_arr[ $slug ] = $slug;
@@ -122,8 +129,18 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 	}
 	
 	function get_types(){
-		global $akvo_card;
-		return $akvo_card->get_types();
+		global $akvo_cards;
+		return $akvo_cards->get_types();
+	}
+	
+	function get_data_feeds(){
+		global $akvo_cards;
+		
+		$data_feeds = $akvo_cards->get_data_feeds();
+		
+		$data_feeds['none'] = 'Select None';
+		
+		return $data_feeds;
 	}
 	
 	function get_template_name($instance) {

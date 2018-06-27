@@ -4,91 +4,49 @@
 		
 		function __construct(){
 			
-			$this->shortcode_str = 'akvo-card';
-			$this->shortcode_slug = 'akvo_card';
-			$this->template = 'card';
+			$this->shortcode_str 	= 'akvo-card';
+			$this->shortcode_slug 	= 'akvo_card';
+			$this->template 		= 'card';
 			
 			parent::__construct();
 		}
 		
-		function ajax(){
-			
-			/* init instance arguments */
-			$instance = wp_parse_args( (array) $_GET, array( 
-				'type' 				=> 'post', 
-				'rsr-id' 			=> 'rsr', 
-				'type-text' 		=> '', 
-				'offset' 			=> 0, 
+		function get_default_atts(){
+			return array(
+				'title' 		=> 'Untitled',
+				'content' 		=> '',
+				'date' 			=> '',
+				'type' 			=> 'project',
+				'rsr-id' 		=> 'rsr', 
+				'link' 			=> '',
+				'img' 			=> '', 
+				'type-text' 	=> '',
+				'read_more_text'=> 'Read more',
 				'posts_per_page' 	=> 1,
 				'page'				=> 1
-			)); 
-			
-			$akvo_card = array();
-			$data = array();
-			
-			switch($instance['type']){
-				case 'rsr-project': 
-					// RSR Project Card
-					$data = $this->rsr_project($instance);
-					break;
-				case 'project': 
-					// RSR Updates Card
-					$data = $this->rsr_updates($instance);
-					break;
-				default:
-					$data = $this->wp_query($instance);		
-			}
-			
-			if(is_array($data) and count($data)){
-				$akvo_card = $data[0];
-			}
-			
-			/* FORM THE SHORTCODE */
-			$shortcode = $this->form_shortcode($akvo_card);
-			
-			/* PRINT THE SHORTCODE */			
-			echo do_shortcode($shortcode);
-			
-			/* kill the function after the processing is done */
-			wp_die();
+			);
 		}
 		
-		
-		/* main shortcode function that displays the card */
-		function shortcode( $atts ){
-			ob_start();
-			$atts = shortcode_atts(array(
-					'title' 		=> 'Untitled',
-					'content' 		=> '',
-					'date' 			=> '',
-					'type' 			=> 'Blog',
-					'link' 			=> '',
-					'img' 			=> '', 
-					'type-text' 	=> '',
-					'read_more_text'=> 'Read more'
-				), $atts, 'akvo_card');
+		function ajax(){
 			
-			/* get options from customise */
-			global $akvo;
-			$akvo_options = $akvo->get_option();
-			if( isset( $akvo_options['card'] ) ){
-				$akvo_card_options = $akvo_options['card'];
-			}
-			else{
-				$akvo_card_options = get_option('akvo_card');
+			$instance = wp_parse_args( (array) $_GET, $this->get_default_atts() );	/* init instance arguments */
+			
+			$data = $this->get_data_based_on_type( $instance );						/* GET DATA BASED IN TYPE OF DATA SELECTED */
+			
+			/* GET AKVO CARD FROM THE DATA */
+			$akvo_card_atts = array();
+			if( is_array( $data ) and count( $data ) ){
+				$akvo_card_atts = $data[0];
 			}
 			
-			/* INCASE THE READ MORE TEXT HAS BEEN ADDED BY THE USER */
-			if($akvo_card_options && array_key_exists('read_more_text', $akvo_card_options)){
-				$atts['read_more_text'] = $akvo_card_options['read_more_text'];
-			}
+			$shortcode = $this->form_shortcode( $akvo_card_atts );		/* FORM THE SHORTCODE */
 			
-			include "templates/".$this->template.".php";
-			return ob_get_clean();
+			echo do_shortcode( $shortcode );							/* PRINT THE SHORTCODE */
+			
+			wp_die();													/* kill the function after the processing is done */		
 		}
 		
 	}
 	
 	global $akvo_card;
-	
 	$akvo_card = new Akvo_Card;
