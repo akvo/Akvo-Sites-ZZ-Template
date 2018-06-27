@@ -30,35 +30,17 @@
 		
 		function ajax(){
 			
-			$data = array();
+			$atts = wp_parse_args( (array) $_GET, $this->get_default_atts() ); 		/* CREATE ATTS ARRAY FROM DEFAULT AND USER PARAMETERS IN GET */
 			
-			/* CREATE ATTS ARRAY FROM DEFAULT AND USER PARAMETERS IN GET */
-			$atts = wp_parse_args( (array) $_GET, $this->get_default_atts() ); 
+			if(isset($_GET['akvo-paged'])){	$atts['page'] = $_GET['akvo-paged']; }	/* CHECK IF PAGINATION HAS BEEN INVOKED */
+
+			$data = $this->get_data_based_on_type( $atts );							/* GET DATA BASED IN TYPE OF DATA SELECTED */
 			
+			$url = $this->get_ajax_url('akvo_cards', $atts);						/* GET AJAX URL */
 			
+			include "templates/cards.php";											/* TEMPLATING */
 			
-			/* CHECK IF PAGINATION HAS BEEN INVOKED */
-			if(isset($_GET['akvo-paged'])){
-				$atts['page'] = $_GET['akvo-paged'];
-			}
-			
-			/* CHECK FOR RSR UPDATES OR WP QUERY */
-			if( ( $atts['type'] == 'rsr' ) || ( $atts['type'] == 'project' ) ){
-				$data = $this->rsr_updates($atts);
-			}
-			else {
-				$data = $this->wp_query($atts);
-				
-			}
-			
-			
-			
-			$url = $this->get_ajax_url('akvo_cards', $atts);
-			include "templates/cards.php";
-			
-			/* kill the function after ajax processing */
-			wp_die();
-			
+			wp_die();																/* kill the function after ajax processing */
 			
 		}
 		

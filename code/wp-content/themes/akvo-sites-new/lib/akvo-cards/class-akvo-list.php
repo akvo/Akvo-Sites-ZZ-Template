@@ -40,4 +40,5 @@
 		
 	}
 	
-	new AKVO_LIST;
+	global $akvo_list;
+	$akvo_list = new AKVO_LIST;

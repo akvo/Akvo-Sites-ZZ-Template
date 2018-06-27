@@ -36,6 +36,32 @@
 		/* ABOVE FUNCTIONS ARE TO BE IMPLEMENTED BY THE CHILD CLASSES */
 		
 		
+		function get_data_based_on_type( $instance ){
+			
+			$data = array();
+			
+			switch($instance['type']){
+				
+				case 'rsr-project': 
+					$data = $this->rsr_project($instance);		/* RSR Project Card */
+					break;
+				
+				case 'rsr':
+					$data = $this->rsr_updates($instance);		/* RSR Updates Card */
+					break;
+					
+				case 'project': 
+					$data = $this->rsr_updates($instance);		/* RSR Updates Card */
+					break;
+				
+				default:
+					$data = $this->wp_query($instance);			/* WP QUERY OF CUSTOM POST TYPES */
+			
+			}
+			
+			return $data;
+		}
+		
 		function get_ajax_url($action, $atts, $dont_inc = array()){
 			$url = admin_url('admin-ajax.php')."?action=".$action;
 			foreach($atts as $key => $val){
@@ -227,13 +253,19 @@
 		
 		function form_shortcode($data){
 			$shortcode = '['.$this->shortcode_str.' ';
-        		
+        	
+			$default_atts = $this->get_default_atts(); /* GET DEFAULT ATTS OF THE SHORTCODE */
+			
         	foreach($data as $key=>$val){
         		
-        		$val = str_replace("[","&#91;",$val);
-        		$val = str_replace("]","&#93;",$val);
+				/* ONLY ADD THOSE KEYS THAT ARE PART OF THE SHORTCODE */
+				if( array_key_exists( $key, $default_atts ) ){
+				
+					$val = str_replace("[","&#91;",$val);
+					$val = str_replace("]","&#93;",$val);
         			
-        		$shortcode .= $key.'="'.$val.'" ';
+					$shortcode .= $key.'="'.$val.'" ';
+				}
         	}
         	$shortcode .= ']';
         		
@@ -332,6 +364,7 @@
 			return $akvo->slugify( $text );
 		}
 		
+		/* GET CUSTOM TAXONOMIES */
 		function get_taxonomies(){
 			global $akvo;
 			return $akvo->custom_taxonomies;
