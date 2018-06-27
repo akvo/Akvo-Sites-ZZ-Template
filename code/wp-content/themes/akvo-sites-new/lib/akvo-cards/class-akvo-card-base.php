@@ -326,16 +326,30 @@
 			return (((int)$atts['page'] - 1) * (int)$atts['posts_per_page']) + (int)$atts['offset'];
 		}
 		
+		/* SLUGIFY TEXT */
 		function slugify( $text ){
-			
 			global $akvo;
 			return $akvo->slugify( $text );
-			
-			
 		}
 		
 		function get_taxonomies(){
 			global $akvo;
 			return $akvo->custom_taxonomies;
+		}
+		
+		/* GET DATA FEEDS FROM THE DATABASE */
+		function get_data_feeds(){
+			global $wpdb;
+			
+			$data_feeds = array();
+			
+			$rows = $wpdb->get_results( 'SELECT df_name FROM ' . $wpdb->prefix . 'data_feeds' );
+			
+			foreach( $rows as $row ){
+				$data_feeds[ $row->df_name ] = $row->df_name;
+			}
+			
+			return $data_feeds;
+			
 		}
 	}

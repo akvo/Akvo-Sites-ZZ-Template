@@ -56,7 +56,8 @@ class Akvo_Card_Widget extends SiteOrigin_Widget {
 				'type-text' => array(
 					'type' 		=> 'text',
 					'label' 	=> __( 'Custom Tag (such as news, blog, etc)', 'siteorigin-widgets' ),
-					'default' 	=> ''
+					'default' 	=> '',
+					'description'	=> ''
 				),
 			),
 

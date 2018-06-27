@@ -63,19 +63,21 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 					'default' 	=> '3'
 				),
 				'rsr-id' => array(
-					'type' => 'text',
-					'label' => __( 'RSR ID (from data-feed - only for RSR Updates or Projects)', 'siteorigin-widgets' ),
-					'default' => 'rsr',
+					'type' 	=> 'select',
+					'label' => __( 'Choose Data-Feed', 'siteorigin-widgets' ),
+					//'default' => 'rsr',
 					'state_handler' => array(
 						'type[project]' 	=> array('show'),
 						'type[rsr-project]' => array('show'),
 						'_else[type]' 		=> array('hide'),
 					),
+					'options' => $this->get_data_feeds()
 				),
 				'type-text' => array(
-					'type' 		=> 'text',
-					'label' 	=> __( 'Custom Tag (such as news, blog, etc)', 'siteorigin-widgets' ),
-					'default' 	=> ''
+					'type' 			=> 'text',
+					'label' 		=> __( 'Custom Tag', 'siteorigin-widgets' ),
+					'default' 		=> '',
+					'description'	=> 'To replace the default tags such as news, blog, etc'
 				),
 				'filter_taxonomy' => array(
 					'type' => 'select',
@@ -107,11 +109,11 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 	
 	function get_taxonomies(){
 		
-		global $akvo_card;
+		global $akvo_cards;
 		
 		$tax_arr = array('none' => 'None');
 		
-		$taxonomies = $akvo_card->get_taxonomies();
+		$taxonomies = $akvo_cards->get_taxonomies();
 			
 		foreach( $taxonomies as $slug => $tax ){
 			$tax_arr[ $slug ] = $slug;
@@ -122,8 +124,13 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 	}
 	
 	function get_types(){
-		global $akvo_card;
-		return $akvo_card->get_types();
+		global $akvo_cards;
+		return $akvo_cards->get_types();
+	}
+	
+	function get_data_feeds(){
+		global $akvo_cards;
+		return $akvo_cards->get_data_feeds();
 	}
 	
 	function get_template_name($instance) {
