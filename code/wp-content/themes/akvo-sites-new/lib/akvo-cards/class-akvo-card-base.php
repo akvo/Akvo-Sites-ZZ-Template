@@ -5,7 +5,6 @@
 		var $shortcode_str;
 		var $shortcode_slug;
 		var $template;
-		
 		var $counters;
 		
 		function __construct(){
@@ -17,6 +16,7 @@
 			/* HANDLE SHORTCODE */
 			add_shortcode( $this->shortcode_str, array( $this, 'shortcode' ) );
 			
+			/* COUNTERS FOR INCREMENTING */
 			$this->counters = array();
 			
 		}
@@ -27,13 +27,21 @@
 			return $this->counters[$label];
 		}
 		
-		/* SHORTCODE FUNCTIONALITY */
-		function shortcode( $atts ){}
-		
-		/* FUNCTION THAT HANDLES YOUR AJAX */
+		/* FUNCTION THAT HANDLES YOUR AJAX - TO BE IMPLEMENTED BY THE CHILD CLASSES */
 		function ajax(){}
+		/* FUNCTION THAT HANDLES YOUR AJAX - TO BE IMPLEMENTED BY THE CHILD CLASSES */
 		
-		/* ABOVE FUNCTIONS ARE TO BE IMPLEMENTED BY THE CHILD CLASSES */
+		/* SHORTCODE FUNCTIONALITY */
+		function shortcode( $atts ){
+			ob_start();																				/* STORE TEMPLATING INTO BUFFER */
+			
+			$atts = shortcode_atts( $this->get_default_atts(), $atts, $this->shortcode_slug );		/* SHORTCODE ATTRIBUTES */
+			
+			include "templates/".$this->template.".php";											/* TEMPLATE */
+				
+			return ob_get_clean();																	/* RETURN BUFFER TEMPLATING */	
+		}
+		/* SHORTCODE FUNCTIONALITY */
 		
 		
 		function get_data_based_on_type( $instance ){
@@ -64,7 +72,7 @@
 		
 		function get_ajax_url($action, $atts, $dont_inc = array()){
 			$url = admin_url('admin-ajax.php')."?action=".$action;
-			foreach($atts as $key => $val){
+			foreach($atts as $key => $val){								/* ITERATE THROUGH ATTRIBUTES */
 				if(!in_array($key, $dont_inc)){
 					$url .= "&".$key."=".$val;
 				}	
@@ -76,9 +84,10 @@
 		function rsr_updates($atts){
 			
 			$data = array();
-			$jsondata = self::get_json_data($atts['rsr-id']);
 			
-			$offset = self::get_offset( $atts ); 
+			$jsondata = self::get_json_data($atts['rsr-id']);				
+			
+			$offset = self::get_offset( $atts );							/* GET OFFSET BASED ON PAGE NUMBER */ 
 			
 			for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
 				
@@ -86,9 +95,8 @@
 				$temp = self::add_extra_params($temp, $atts);				/* adding extra params */
 				
 				if( $temp['title'] || $temp['content'] ){
-					array_push($data, $temp);									/* ADD TO FINAL DATA */
+					array_push($data, $temp);								/* ADD TO FINAL DATA */
 				}
-				
 				
 			}
 			return $data;
@@ -100,35 +108,52 @@
 			$data = array();
 			$jsondata = self::get_json_data($atts['rsr-id']);
 			
-			// SINGULAR DATA
-			if( !isset( $jsondata->results ) ){
+			
+			if( !isset( $jsondata->results ) ){								/* SINGULAR DATA */
 				
 				$temp = self::parse_rsr_project($jsondata);					/* PARSE JSON */
 				$temp = self::add_extra_params($temp, $atts);				/* adding extra params */
 				
 				array_push($data, $temp);									/* ADD TO FINAL DATA */
 			}
-			else{
-				// MULTIPLE VALUES
-				$offset = self::get_offset( $atts );
+			else{															/* MULTIPLE VALUES */
+				
+				$offset = self::get_offset( $atts );						
 				
 				for($i = $offset; $i < $offset+$atts['posts_per_page']; $i++){
-					$temp = self::parse_rsr_project($jsondata->results[$i]);
+					$temp = self::parse_rsr_project($jsondata->results[$i]);	/* PARSE JSON */
+					$temp = self::add_extra_params($temp, $atts);				/* adding extra params */
 					
-					/* adding extra params */
-					$temp = self::add_extra_params($temp, $atts);
-					
-					array_push($data, $temp);
+					array_push($data, $temp);									/* ADD TO FINAL DATA */
 				}
 			}
 			
 			return $data;
 		}
 		
+		/* GET AKVO CARD OPTIONS FROM CUSTOMISE */
+		function get_akvo_card_options(){
+			
+			global $akvo;
+			
+			$akvo_card_options = array();
+			
+			$akvo_options = $akvo->get_option();				/* GLOBAL AKVO OPTIONS */
+			
+			if( isset( $akvo_options['card'] ) ){				/* CHECK IF THE CARD OPTIONS EXISTS IN GLOBAL */ 
+				$akvo_card_options = $akvo_options['card'];
+			}
+			else{
+				$akvo_card_options = get_option('akvo_card');	/* GET OPTIONS FROM AKVO CARD SETTINGS */
+			}
+			return $akvo_card_options;
+		
+		}
+		
+		
 		function get_base_url(){
 			$base_url = 'http://rsr.akvo.org';
-			/* from customise theme */
-			$akvo_card_options = get_option('akvo_card');
+			$akvo_card_options = $this->get_akvo_card_options();
 			if($akvo_card_options && array_key_exists('akvoapp', $akvo_card_options)){
 				$base_url = $akvo_card_options['akvoapp'];
 			}
@@ -137,71 +162,50 @@
 		
 		function get_date_format(){ return get_option('date_format'); }
 		
-		function get_json_data($data_feed_id){
-			// Dependancy on the Data Feed Plugin
-			//$data = do_shortcode('[data_feed name="'.$data_feed_id.'" pagination_policy="page-url=next:next&limit=100"]');
-			
-			$data = do_shortcode('[data_feed name="'.$data_feed_id.'"]');
-			
-			//echo $data;
-			
-			return json_decode( str_replace('&quot;', '"', $data) );
-			
-		}
 		
 		/* PARSING WP POST - CUSTOM POST TYPE */
 		function parse_post($post){
+			
+			$data = array();
+			
 			/* parsing post object */
-			$akvo_card = array(
-				'title'		=> '',
-				'content'	=> '',
-				'date'		=> '',
-				'img'		=> '',
-				'link'		=> '',
-				'post_id'	=> '0'
-			);
-			$akvo_card['post_id'] = $post->ID;
-			$akvo_card['img'] = akvo_featured_img($post->ID);
-			$akvo_card['title'] = get_the_title($post->ID);
-			$akvo_card['date'] = get_the_date(self::get_date_format(), $post->ID);
-			$akvo_card['link'] = get_the_permalink($post->ID);
-			$akvo_card['content'] = wp_trim_words(get_the_excerpt($post->ID));
-			return $akvo_card;	
+			$data['post_id'] = $post->ID;
+			$data['img'] 	 = akvo_featured_img( $post->ID );
+			$data['title'] 	 = get_the_title( $post->ID );
+			$data['date'] 	 = get_the_date( self::get_date_format(), $post->ID );
+			$data['link'] 	 = get_the_permalink( $post->ID );
+			$data['content'] = wp_trim_words( get_the_excerpt( $post->ID ) );
+			
+			return $data;	
 		}
 		
 		/* PARSING RSR PROJECT FROM JSON DATA */
 		function parse_rsr_project($rsr_obj){
+			
+			$data = array('type-text'	=> 'RSR Project');
+			
 			/* parsing json object of rsr project */
-			$akvo_card = array(
-				'title'		=> '',
-				'content'	=> '',
-				'date'		=> '',
-				'img'		=> '',
-				'link'		=> '',
-				'type-text'	=> 'RSR Project'
-			);
-			
-			if(isset($rsr_obj->title)){
-				$akvo_card['title'] = $rsr_obj->title;
+			if( isset( $rsr_obj->title ) ){
+				$data['title'] = $rsr_obj->title;
 			}
 			
-			if(isset($rsr_obj->project_plan_summary)){
-				$akvo_card['content'] = truncate($rsr_obj->project_plan_summary, 130);
+			if( isset( $rsr_obj->project_plan_summary ) ){
+				$data['content'] = truncate($rsr_obj->project_plan_summary, 130);
 			}
 			
-			if(isset($rsr_obj->created_at)){
-				$akvo_card['date'] = date(self::get_date_format(), strtotime($rsr_obj->created_at));
+			if( isset( $rsr_obj->created_at ) ){
+				$data['date'] = date(self::get_date_format(), strtotime($rsr_obj->created_at));
 			}
 			
-			if(isset($rsr_obj->absolute_url)){
-				$akvo_card['link'] = self::get_base_url().$rsr_obj->absolute_url;	
+			if( isset( $rsr_obj->absolute_url ) ){
+				$data['link'] = self::get_base_url().$rsr_obj->absolute_url;	
 			}
 			
-			if(isset($rsr_obj->current_image)){
-				$akvo_card['img'] = self::get_base_url().$rsr_obj->current_image;
+			if( isset( $rsr_obj->current_image ) ){
+				$data['img'] = self::get_base_url().$rsr_obj->current_image;
 			}
 			
-			return $akvo_card;
+			return $data;
 		}
 		
 		/* PARSING RSR PROJECT UPDATES FROM JSON DATA */
@@ -237,12 +241,16 @@
 			return $akvo_card;
 		}
 		
+		/* TYPES OF INFOMATION - RSR AND WP CUSTOM POST TYPES */
 		function get_types(){
+			
+			/* RSR INFOMATION */
 			$post_type_arr = array(
 				'project' 		=> 'RSR Updates',
 				'rsr-project'	=> 'RSR Project',
 			);
 			
+			/* WP CUSTOM POST TYPES */
 			global $akvo;
 			foreach( $akvo->custom_post_types as $slug => $post_type ){
 				$post_type_arr[ $slug ] = $post_type['plural_name'];
@@ -251,12 +259,14 @@
 			return $post_type_arr;
 		}
 		
-		function form_shortcode($data){
-			$shortcode = '['.$this->shortcode_str.' ';
-        	
-			$default_atts = $this->get_default_atts(); /* GET DEFAULT ATTS OF THE SHORTCODE */
+		/* PASS AN ARRAY TO CREATE ATTRIBUTES OF SHORTCODE */
+		function form_shortcode( $data ){
 			
-        	foreach($data as $key=>$val){
+        	$default_atts = $this->get_default_atts(); 				/* GET DEFAULT ATTS OF THE SHORTCODE */
+			
+			$shortcode = '['.$this->shortcode_str.' ';				/* SHORTCODE STRING START */
+			
+        	foreach( $data as $key => $val ){
         		
 				/* ONLY ADD THOSE KEYS THAT ARE PART OF THE SHORTCODE */
 				if( array_key_exists( $key, $default_atts ) ){
@@ -264,38 +274,16 @@
 					$val = str_replace("[","&#91;",$val);
 					$val = str_replace("]","&#93;",$val);
         			
-					$shortcode .= $key.'="'.$val.'" ';
+					$shortcode .= $key.'="'.$val.'" ';				/* SHORTCODE STRING ADD ATTRIBUTES */
 				}
         	}
-        	$shortcode .= ']';
+        	$shortcode .= ']';										/* SHORTCODE STRING END */
         		
 			return $shortcode;
 		}
 		
-		
-		
-		/* FOR MEDIA TYPE, ADD EXTRA TYPES FROM TAXONOMY */
-		function get_media_term_types( $post_id ){
-			$types = array();
-			$term_types = get_the_terms( $post_id, 'types' );
-			
-			if( is_array( $term_types ) && count( $term_types ) ){
-				foreach( $term_types as $term_type ){
-					array_push( $types, $term_type->name );
-				}
-			}
-			
-			return !empty ( implode( ',', $types ) ) ? implode( ',', $types ) : 'media';
-		}
-		
 		/* add extra params from one array to another */
 		function add_extra_params($data, $atts, $extras = array('type-text', 'type')){
-			
-			/* ONLY FOR MEDIA POSTS, GET EXTRA TYPES FROM TAXONOMY */
-			if( $atts['template'] == 'list' && $atts['type'] == 'media' ){
-				$atts['type'] = self::get_media_term_types( $data['post_id'] );	
-			}
-			
 			foreach($extras as $extra){
 				if($atts[$extra]){
 					$data[$extra] = $atts[$extra];
@@ -309,18 +297,15 @@
 			$data = array();
 			
 			$query_atts = array(
-				'post_type' 	=> $atts['type'],
-        		'posts_per_page' => $atts['posts_per_page'],
-        		'offset'	=> self::get_offset( $atts ),
+				'post_type' 		=> $atts['type'],
+        		'posts_per_page' 	=> $atts['posts_per_page'],
+        		'offset'			=> self::get_offset( $atts ),
 			);
 			
 			/* TAXONOMY QUERY - CUSTOM TYPES AND TERMS */
 			if( isset( $atts['filter_by'] ) ){
-				
 				$atts['filter_by'] = explode( ':',  $atts['filter_by'] );
-				
 				if( is_array( $atts['filter_by'] ) && ( count( $atts['filter_by'] ) > 1 ) ){
-					
 					$query_atts['tax_query'] = array(
 						array(
 							'taxonomy' => $atts['filter_by'][0],
@@ -328,25 +313,19 @@
 							'terms'    => $atts['filter_by'][1],
 						)
 					);
-					
 				}
-				
 			}
-			
-			
+			/* TAXONOMY QUERY - CUSTOM TYPES AND TERMS */
 			
 			$query = new WP_Query( $query_atts );
-			
 			if ( $query->have_posts() ) { 
 				while ( $query->have_posts() ) {
 					$query->the_post();
 					
-          			$temp = self::parse_post($query->post);
-          			
-          			/* adding extra params */
-					$temp = self::add_extra_params($temp, $atts);
+          			$temp = self::parse_post($query->post);				/* parse wp post into an array */
+          			$temp = self::add_extra_params($temp, $atts);		/* adding extra params */
 					
-					array_push($data, $temp);
+					array_push($data, $temp);							/* add to global data */
           		}
 				wp_reset_postdata();
 			}
@@ -372,17 +351,12 @@
 		
 		/* GET DATA FEEDS FROM THE DATABASE */
 		function get_data_feeds(){
-			global $wpdb;
-			
-			$data_feeds = array();
-			
-			$rows = $wpdb->get_results( 'SELECT df_name FROM ' . $wpdb->prefix . 'data_feeds' );
-			
-			foreach( $rows as $row ){
-				$data_feeds[ $row->df_name ] = $row->df_name;
-			}
-			
-			return $data_feeds;
-			
+			global $akvo_rsr;
+			return $akvo_rsr->get_data_feeds();
+		}
+		
+		function get_json_data( $data_feed_id ){
+			global $akvo_rsr;
+			return $akvo_rsr->get_json_data( $data_feed_id );
 		}
 	}

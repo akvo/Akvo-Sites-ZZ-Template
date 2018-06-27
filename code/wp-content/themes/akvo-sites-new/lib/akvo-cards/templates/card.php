@@ -1,3 +1,11 @@
+<?php 
+	$akvo_card_options = $this->get_akvo_card_options();
+			
+	/* INCASE THE READ MORE TEXT HAS BEEN ADDED BY THE USER */
+	if($akvo_card_options && array_key_exists('read_more_text', $akvo_card_options)){
+		$atts['read_more_text'] = $akvo_card_options['read_more_text'];
+	}
+?>
 <div class='card <?php _e(self::slugify($atts['type']));?>'>
 	<div class='card-header'>
 		<h3 class='card-title'>
