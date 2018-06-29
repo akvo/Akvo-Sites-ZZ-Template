@@ -71,10 +71,10 @@
 			}
 			elseif( $type == 'update' && isset( $rsr_obj->photo ) ){
 				if( isset( $rsr_obj->photo->original ) ){
-					$akvo_card['img'] = $base_url.$rsr_obj->photo->original;
+					$data['img'] = $base_url.$rsr_obj->photo->original;
 				}
 				else{
-					$akvo_card['img'] = $base_url.$rsr_obj->photo;	
+					$data['img'] = $base_url.$rsr_obj->photo;	
 				}
 			}
 			/* RSR OBJECT IMAGE */
