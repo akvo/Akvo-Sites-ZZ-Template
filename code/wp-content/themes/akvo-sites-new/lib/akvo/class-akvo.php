@@ -307,8 +307,11 @@
 						
 						$css .= $style .":"; //.$options[ $val ].";";
 						
-						if( 'font-family' == $style ){
+						if( 'font-family' == $style ){ 			/* FOR FONT FAMILY, ADD QUOTES */
 							$css .= "'".$options[ $val ]."'";
+						}
+						elseif( 'background-image' == $style ){	/* FOR BACKGROUND-IMAGE, THE ITEM NEEDS TO WRAPPED WITH THE URL FUNCTION */
+							$css .= "url('".$options[ $val ]."')";
 						}
 						else{
 							$css .= $options[ $val ];

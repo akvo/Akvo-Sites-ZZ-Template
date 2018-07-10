@@ -112,6 +112,7 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 		);
 	}
 	
+	/* Wordpress custom taxonomies for the custom post types created within the teme */
 	function get_taxonomies(){
 		
 		global $akvo_cards;
@@ -128,6 +129,7 @@ class Akvo_Cards_Widget extends SiteOrigin_Widget {
 		
 	}
 	
+	/* Wordpress Custom Post Types and RSR Data including projects and updates */
 	function get_types(){
 		global $akvo_cards;
 		return $akvo_cards->get_types();
