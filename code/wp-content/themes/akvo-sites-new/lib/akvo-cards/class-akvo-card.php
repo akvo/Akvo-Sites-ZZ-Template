@@ -6,7 +6,7 @@
 			
 			$this->shortcode_str 	= 'akvo-card';
 			$this->shortcode_slug 	= 'akvo_card';
-			$this->template 		= 'card';
+			$this->template 		= get_template_directory().'/lib/akvo-cards/templates/card.php';
 			
 			parent::__construct();
 		}

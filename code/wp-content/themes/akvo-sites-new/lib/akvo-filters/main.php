@@ -4,11 +4,41 @@
 	include "customize-theme.php";
 	
 	
-	class AKVO_FILTERS{
+	class AKVO_FILTERS extends AKVO_SHORTCODE{
 		
 		function __construct(){
 			
 			add_action('pre_get_posts', array( $this, 'query' ), 1 );
+			
+			$this->shortcode_str 	= 'akvo_filters';
+			$this->template 		= get_template_directory().'/lib/akvo-filters/templates/filters.php';
+			
+			parent::__construct();
+			
+			
+			
+		}
+		
+		/* TYPES OF INFOMATION - ONLY WP CUSTOM POST TYPES */
+		function get_types(){
+			
+			$post_type_arr = array();
+			
+			/* WP CUSTOM POST TYPES */
+			global $akvo;
+			foreach( $akvo->custom_post_types as $slug => $post_type ){
+				$post_type_arr[ $slug ] = $post_type['plural_name'];
+			}
+			
+			return $post_type_arr;
+		}
+		
+		function get_default_atts(){
+			return array(
+				'template'			=> 'card',
+				'posts_per_page'	=> 9,
+				'post_type'			=> 'post'
+			);
 		}
 			
 		function get_option(){
@@ -171,16 +201,3 @@
 	}
 	global $akvo_filters;
 	$akvo_filters = new AKVO_FILTERS;
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

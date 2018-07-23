@@ -1,6 +1,7 @@
 <?php
 	
 	$sage_includes = [
+		'lib/class-akvo-shortcode.php',		// Akvo Shortcode class
   		'lib/akvo/main.php',				// Akvo Class
   		'lib/conditional-tag-check.php', 	// ConditionalTagCheck class
   		'lib/config.php',                	// Configuration

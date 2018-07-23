@@ -1,6 +1,6 @@
 <?php 
 	
-	class AKVO_CARD_BASE{
+	class AKVO_CARD_BASE extends AKVO_SHORTCODE{
 		
 		var $shortcode_str;
 		var $shortcode_slug;
@@ -13,11 +13,10 @@
 			add_action( "wp_ajax_".$this->shortcode_slug, array( $this, "ajax" ) );
 			add_action( "wp_ajax_nopriv_".$this->shortcode_slug, array( $this, "ajax" ) );
 			
-			/* HANDLE SHORTCODE */
-			add_shortcode( $this->shortcode_str, array( $this, 'shortcode' ) );
-			
 			/* COUNTERS FOR INCREMENTING */
 			$this->counters = array();
+			
+			parent::__construct();
 			
 		}
 		
@@ -31,16 +30,15 @@
 		function ajax(){}
 		/* FUNCTION THAT HANDLES YOUR AJAX - TO BE IMPLEMENTED BY THE CHILD CLASSES */
 		
-		/* SHORTCODE FUNCTIONALITY */
+		/* SHORTCODE FUNCTIONALITY *
 		function shortcode( $atts ){
-			ob_start();																				/* STORE TEMPLATING INTO BUFFER */
+			ob_start();																				// STORE TEMPLATING INTO BUFFER 
 			
-			$atts = shortcode_atts( $this->get_default_atts(), $atts, $this->shortcode_slug );		/* SHORTCODE ATTRIBUTES */
-			
-			include "templates/".$this->template.".php";											/* TEMPLATE */
+			echo "hi";
 				
-			return ob_get_clean();																	/* RETURN BUFFER TEMPLATING */	
+			return ob_get_clean();																	// RETURN BUFFER TEMPLATING 
 		}
+		*/
 		
 		
 		/* GET DATA BASED ON TYPE OF DATA TO BE PULLED */
@@ -173,28 +171,7 @@
 			return $post_type_arr;
 		}
 		
-		/* PASS AN ARRAY TO CREATE ATTRIBUTES OF SHORTCODE */
-		function form_shortcode( $data ){
-			
-        	$default_atts = $this->get_default_atts(); 				// GET DEFAULT ATTS OF THE SHORTCODE 
-			
-			$shortcode = '['.$this->shortcode_str.' ';				// SHORTCODE STRING START 
-			
-        	foreach( $data as $key => $val ){
-        		
-				/* ONLY ADD THOSE KEYS THAT ARE PART OF THE SHORTCODE */
-				if( array_key_exists( $key, $default_atts ) ){
-				
-					$val = str_replace("[","&#91;",$val);
-					$val = str_replace("]","&#93;",$val);
-        			
-					$shortcode .= $key.'="'.$val.'" ';				/* SHORTCODE STRING ADD ATTRIBUTES */
-				}
-        	}
-        	$shortcode .= ']';										/* SHORTCODE STRING END */
-        		
-			return $shortcode;
-		}
+		
 		
 		/* add extra params from one array to another */
 		function add_extra_params($data, $atts, $extras = array('type-text', 'type')){
@@ -217,6 +194,35 @@
 			);
 			
 			/* TAXONOMY QUERY - CUSTOM TYPES AND TERMS */
+			if( isset( $atts['filter_by'] ) && $atts['filter_by'] ){
+				
+				$filter_args = explode( ',', $atts['filter_by'] );
+				
+				$query_atts['tax_query'] = array();
+				
+				foreach( $filter_args as $filter_arg ){
+					$temp = explode( ':',  $filter_arg );
+					if( is_array( $temp ) && ( count( $temp ) > 1 ) ){
+						if( is_numeric( $temp[1] ) ){
+							array_push( $temp, 'term_id' );	
+						}
+						else{
+							array_push( $temp, 'slug' );	
+						}
+						
+						array_push( $query_atts['tax_query'], array(
+							'taxonomy' => $temp[0],
+							'terms'    => $temp[1],
+							'field'    => $temp[2],
+						) );
+						
+					}
+					
+				}
+				
+			}
+			
+			/*
 			if( isset( $atts['filter_by'] ) ){
 				$atts['filter_by'] = explode( ':',  $atts['filter_by'] );
 				if( is_array( $atts['filter_by'] ) && ( count( $atts['filter_by'] ) > 1 ) ){

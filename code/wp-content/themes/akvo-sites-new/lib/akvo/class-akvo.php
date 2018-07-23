@@ -312,7 +312,7 @@
 						}
 						elseif( 'background-image' == $style ){	/* FOR BACKGROUND-IMAGE, THE ITEM NEEDS TO WRAPPED WITH THE URL FUNCTION */
 							$css .= "url('".$options[ $val ]."')";
-						}
+						} 	
 						else{
 							$css .= $options[ $val ];
 						}

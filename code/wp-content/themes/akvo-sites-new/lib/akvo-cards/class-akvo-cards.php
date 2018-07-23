@@ -7,6 +7,8 @@
 			$this->shortcode_str 	= 'akvo-cards';
 			$this->shortcode_slug 	= 'akvo_cards';
 			
+			add_shortcode( $this->shortcode_str.'-without-ajax', array( $this, 'without_ajax' ) );
+			
 			parent::__construct();
 			
 		}
@@ -24,9 +26,9 @@
 			); 
 		}
 		
-		function ajax(){
+		function without_ajax( $atts ){
 			
-			$atts = wp_parse_args( (array) $_GET, $this->get_default_atts() ); 		/* CREATE ATTS ARRAY FROM DEFAULT AND USER PARAMETERS IN GET */
+			$atts = shortcode_atts( $this->get_default_atts(), $atts, $this->shortcode_slug );
 			
 			if(isset($_GET['akvo-paged'])){	$atts['page'] = $_GET['akvo-paged']; }	/* CHECK IF PAGINATION HAS BEEN INVOKED */
 
@@ -34,9 +36,26 @@
 			
 			$url = $this->get_ajax_url('akvo_cards', $atts);						/* GET AJAX URL */
 			
-			include "templates/cards.php";											/* TEMPLATING */
+			include "templates/cards.php";		
+		}
+		
+		function ajax(){
 			
-			wp_die();																/* kill the function after ajax processing */
+			$atts = wp_parse_args( (array) $_GET, $this->get_default_atts() ); 		// CREATE ATTS ARRAY FROM DEFAULT AND USER PARAMETERS IN GET 
+			
+			/*
+			if(isset($_GET['akvo-paged'])){	$atts['page'] = $_GET['akvo-paged']; }	// CHECK IF PAGINATION HAS BEEN INVOKED 
+
+			$data = $this->get_data_based_on_type( $atts );							// GET DATA BASED IN TYPE OF DATA SELECTED 
+			
+			$url = $this->get_ajax_url('akvo_cards', $atts);						// GET AJAX URL 
+			
+			include "templates/cards.php";											// TEMPLATING 
+			*/
+			
+			$this->without_ajax( $atts );
+			
+			wp_die();																// kill the function after ajax processing 
 			
 		}
 		
