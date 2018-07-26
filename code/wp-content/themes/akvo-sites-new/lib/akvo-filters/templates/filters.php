@@ -21,20 +21,23 @@
 			$shortcode .= " filter_by='";
 			
 			$count = 0;
-			foreach( $akvo_filters[ $atts[ 'post_type' ] ] as $slug => $arr ){
+			
+			if( is_array( $akvo_filters[ $atts[ 'post_type' ] ] ) ){
 				
-				if( isset( $arr['id'] ) && $arr['id'] ){
-					
-					if( $count != 0 ){ $shortcode .= ","; }
-					
-					$shortcode .= $slug.":".$arr['id'];
-					
-					$count++;
+				foreach( $akvo_filters[ $atts[ 'post_type' ] ] as $slug => $arr ){
+				
+					if( isset( $arr['id'] ) && $arr['id'] ){
+						
+						if( $count != 0 ){ $shortcode .= ","; }
+						
+						$shortcode .= $slug.":".$arr['id'];
+						
+						$count++;
+					}
 				}
 				
-				
-				
 			}
+			
 			
 			$shortcode .= "']";
 			

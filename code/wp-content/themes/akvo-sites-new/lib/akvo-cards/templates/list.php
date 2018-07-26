@@ -17,7 +17,7 @@
 					$atts['types'] = $atts['type'];
 				}
 			?>
-			<?php if( count( $atts['types'] ) ):?>
+			<?php if( is_array( $atts['types'] ) && count( $atts['types'] ) ):?>
 			<ul class="small list-inline">
 				<?php foreach( $atts['types'] as $type ): ?>
 				<li><span class='badge'><?php _e( $type );?></span></li>
