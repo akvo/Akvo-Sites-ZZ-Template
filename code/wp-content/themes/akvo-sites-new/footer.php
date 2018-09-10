@@ -29,8 +29,6 @@
 				</div>
 			</div>
 		</div>
-		<?php /* TO BE REMOVED IN THE FUTURE
-		
 		<div class="custom">
 			<div class="container">
 				<div class="row">
@@ -40,7 +38,6 @@
 				</div>
 			</div>
 		</div>
-		*/ ?>
 		<div class="fixed">
 			<div class="container">
 				<a href="http://www.akvo.org" target="_blank">Powered by akvo.org</a>
