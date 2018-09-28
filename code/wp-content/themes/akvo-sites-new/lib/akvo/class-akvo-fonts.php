@@ -206,7 +206,7 @@
 			
 			
 			foreach( $font_locations as $location_id => $label ){
-				$akvo_customize->dropdown( $wp_customize, 'akvo_font_section', $location_id, $label, 'Open Sans', $fonts_arr);
+				$akvo_customize->ajax_dropdown( $wp_customize, 'akvo_font_section', $location_id, $label, 'Open Sans', $fonts_arr);
 			}
 			
 			//$wp_customize->remove_section( 'nav');
