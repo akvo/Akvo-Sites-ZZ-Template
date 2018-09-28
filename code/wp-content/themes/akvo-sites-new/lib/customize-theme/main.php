@@ -8,7 +8,7 @@
 		'article.php', 
 		'search.php',
 		'external-assets.php',		// HEADER AND FOOTER SECTION
-		'fonts.php',
+		'fonts.php',				// PROVISION TO ADD GOOGLE FONTS
 		'carousel.php',
 		'footer.php'
 	);

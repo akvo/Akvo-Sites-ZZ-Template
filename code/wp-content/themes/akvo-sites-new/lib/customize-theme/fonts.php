@@ -1,5 +1,11 @@
 <?php
-
+	
+	/*
+	* PROVISION TO ADD GOOGLE FONTS THAT ARE NOT THERE IN THE LIST
+	* ONCE ADDED THROUGH THESE FIELDS, THEY WILL BE AVAILABLE IN /lib/akvo/class-akvo-fonts.php 
+	*/
+	
+	
 	/* CUSTOM FONTS */
 	add_action( 'customize_register', function($wp_customize){
 	

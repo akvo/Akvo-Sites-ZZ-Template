@@ -32,6 +32,13 @@
 			/* HIDE MENU ITEMS */
 			add_action( 'admin_init', array( $this, 'hide_menu_items' ) );
 			
+			/* ADMIN ENQUEUE SCRIPTS */
+			//add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
+			
+		}
+		
+		function assets(){
+			//wp_enqueue_script( 'akvo-admin', get_template_directory_uri() . '/dist/scripts/admin-main.js', array('jquery'), '1.0.1' );
 		}
 		
 		function hide_menu_items(){
