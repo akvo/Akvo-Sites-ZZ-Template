@@ -48,12 +48,12 @@ class options_page
                 <div class="container">
                     <div class="container" style="background-color:	#e0e5e5">
                     <h3 >Privacy policy and terms</h3>
-                    <div class="container" style="background-color:white">
+                    <div class="container2" style="background-color:white">
                 <p > We’re committed to ensuring that your privacy is protected and strictly follow the General Data
                     Protection Regulation (GDPR) rules.</p>
                 <div class="panel-body">
                     <form id="postform" name="postform" method="POST" action="#">
-                        <div class="container" style="background-color:white">
+                        <div class="container3" style="background-color:white">
                             <fieldset>
                                 <label><input type="checkbox" required name="privacy_policy"
                                               id="privacy_policy" class="form-radio" value="<?php echo $_POST['privacy_policy']; ?>"/>Check
@@ -137,11 +137,21 @@ function admin_css() { ?>
     <style type="text/css">
         body {font-family: Arial, Helvetica, sans-serif;}
         .container {
+            padding: 8px;
+            width: 933px;
+
+        }
+        .container2 {
             padding: 5px;
-            background-color: #f1f1f1;
+            width: 920px;
+        }
+        .container3 {
+            padding: 5px;
+            width: 900px;
         }
         h3{
             color:#656d6d;
+            padding: 8px;
         }
         label{
             font-weight: 700;
@@ -151,9 +161,11 @@ function admin_css() { ?>
 <?php }
 add_action('admin_head', 'admin_css');
 
+
+
 // Function that outputs the contents of the dashboard widget
 function dashboard_widget_function( $post, $callback_args )
-{ ?><label> Here you can read the <a href = "<?php echo site_url('/akvo-general-terms-and-conditions') ?>">privacy policy and terms </a>of Akvo Foundation.</label >
+{ ?><label> Here you can read the <a href = "<?php echo site_url('akvo-general-terms-and-conditions') ?>">privacy policy and terms </a>of Akvo Foundation.</label >
     <?php
 }
 // Function used in the action hook
