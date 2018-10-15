@@ -60,7 +60,7 @@ class options_page
                                     here
                                     to indicate that you
                                     have read and agree to the<a
-                                        href="<?php echo site_url('/akvo-general-privacy-policy') ?>">
+                                        href="<?php echo site_url('/akvo-general-terms-and-conditions') ?>">
                                         privacy-policy and
                                         terms</a>
                                     of Akvo foundation.</label>
@@ -153,7 +153,7 @@ add_action('admin_head', 'admin_css');
 
 // Function that outputs the contents of the dashboard widget
 function dashboard_widget_function( $post, $callback_args )
-{ ?><label> Here you can read the <a href = "<?php echo site_url('/akvo-general-privacy-policy') ?>">privacy policy and terms </a>of Akvo Foundation.</label >
+{ ?><label> Here you can read the <a href = "<?php echo site_url('/akvo-general-terms-and-conditions') ?>">privacy policy and terms </a>of Akvo Foundation.</label >
     <?php
 }
 // Function used in the action hook
