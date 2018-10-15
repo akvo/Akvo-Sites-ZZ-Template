@@ -151,8 +151,6 @@ function admin_css() { ?>
 <?php }
 add_action('admin_head', 'admin_css');
 
-
-
 // Function that outputs the contents of the dashboard widget
 function dashboard_widget_function( $post, $callback_args )
 { ?><label> Here you can read the <a href = "<?php echo site_url('/akvo-general-privacy-policy') ?>">privacy policy and terms </a>of Akvo Foundation.</label >
