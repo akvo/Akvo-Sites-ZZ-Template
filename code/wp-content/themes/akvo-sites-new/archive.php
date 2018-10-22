@@ -32,7 +32,7 @@
 			<?php if(have_posts()):?>
 			
 				<!-- WP QUERY RESULTS STARTS HERE -->
-				<div id="archives-list" class="row" data-target="#archives-list <?php _e( $col_class );?>.eq">
+				<div id="archives-list" class="row" data-target="#archives-list <?php _e( '.'.$col_class );?>.eq">
          		
 				<?php while ( have_posts() ) : the_post();?>
 					
