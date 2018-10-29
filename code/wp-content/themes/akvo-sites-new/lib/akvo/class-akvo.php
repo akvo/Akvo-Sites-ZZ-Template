@@ -358,6 +358,19 @@
 			
 		}
 		
+		function nav_menu( $args = array() ){
+			
+			$args = wp_parse_args( $args, array(
+				'menu'              => 'primary',
+				'theme_location' 	=> 'primary_navigation', 
+				'walker'		 	=> new wp_bootstrap_navwalker(), 
+				'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+				'menu_class' 		=> 'nav navbar-nav' 
+			) );
+			
+			wp_nav_menu( $args );
+		}
+		
 	}
 	
 	

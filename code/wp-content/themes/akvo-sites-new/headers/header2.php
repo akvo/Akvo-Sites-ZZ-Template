@@ -5,7 +5,7 @@
      	<div class="affix-menu">	
   			<nav class="navbar affix-top" data-spy="affix" data-offset-top="60">
   				
-  				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 					<span class="sr-only">Toggle navigation</span>
 					<i class="fa fa-bars fa-2x"></i>
 				</button>
@@ -18,20 +18,17 @@
 				<?php endif;?>
 			
   				<?php
-            		wp_nav_menu( array(
-            			'menu'              => 'primary',
-	                	'theme_location'    => 'primary_navigation',
-    	            	'depth'             => 2,
-        	        	'container'         => 'div',
-            	    	'container_class'   => 'collapse navbar-collapse',
-	        			'container_id'      => 'bs-example-navbar-collapse-1',
-    	            	'menu_class'        => 'nav navbar-nav',
-        	        	'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
-            	    	'walker'            => new wp_bootstrap_navwalker())
-            		);
-        		?>
-  			
-			</nav>
+					if( has_nav_menu( 'primary_navigation' ) ){
+						$akvo->nav_menu( array(
+							'depth'             => 2,
+							'container'         => 'div',
+							'container_class'   => 'collapse navbar-collapse',
+							'container_id'      => 'bs-example-navbar-collapse-1',
+							'menu_class'        => 'nav navbar-nav',
+						) );
+					}
+				?>
+  			</nav>
 		</div>
 	</div>
 	<div class="container">

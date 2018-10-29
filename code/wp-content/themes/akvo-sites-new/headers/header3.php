@@ -8,11 +8,15 @@
 			<div class="col-sm-9 wrap-search-menu">
 				<?php if( $akvo->search_flag ):?><div class="hidden-xs" style="margin-bottom: 10px;"><?php get_search_form();?></div><?php endif;?>
                 <nav class="navbar-collapse collapse" role="navigation" aria-expanded="true" style="">
-				<?php if (has_nav_menu('primary_navigation')){
-						wp_nav_menu(['theme_location' => 'primary_navigation', 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'nav navbar-nav']);
-					}
-				?>
-				<?php if ( is_plugin_active( 'google-website-translator/google-website-translator.php' ) && !is_user_logged_in() ) : ?>
+				<?php if( has_nav_menu( 'primary_navigation' ) ){ $akvo->nav_menu(); } ?>
+				<?php
+					/*
+					* UNIQUE CASE
+					* CHECK IF GOOGLE-WEBSITE-TRANSLATOR PLUGIN IS ACTIVE AND USER SHOULD NOT BE LOGGED IN
+					* IF ACTIVE THEN ENABLE THE FOLLOWING SNIPPET OF THE SHORTCODE
+					* 
+					*/
+					if ( is_plugin_active( 'google-website-translator/google-website-translator.php' ) && !is_user_logged_in() ) : ?>
 					<div style="display:none;"><?php echo do_shortcode('[prisna-google-website-translator]'); ?></div>
 				<?php endif;?>
 				</nav>

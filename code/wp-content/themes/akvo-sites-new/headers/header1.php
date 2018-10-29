@@ -30,8 +30,8 @@
 				
 				<nav class="navbar-collapse collapse" role="navigation" aria-expanded="true" style="">
 				<?php
-					if (has_nav_menu('primary_navigation')){
-						wp_nav_menu(['theme_location' => 'primary_navigation', 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'nav navbar-nav']);
+					if( has_nav_menu( 'primary_navigation' ) ){
+						$akvo->nav_menu();
 					}
 				?>
 				<?php if ( is_plugin_active( 'google-website-translator/google-website-translator.php' ) && !is_user_logged_in() ) : ?>
