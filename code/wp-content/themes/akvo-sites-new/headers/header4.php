@@ -1,4 +1,5 @@
-<header id="top" role="banner" class="header4">
+<?php global $akvo;?>
+<header role="banner" class="header4">
 	<nav id="header" class="navbar navbar-fixed-top">
 		<div id="header-container" class="container navbar-container">
 			<div class="navbar-header">
@@ -9,21 +10,11 @@
 					<span class="icon-bar"></span>
 				</button>
 				<div class="logobrand">
-					<a id="brand" class="navbar-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-						<img src="<?php bloginfo('template_url'); ?>/images/logos/akvologowhite.png">
-					</a>
+					<?php get_template_part('partials/logo');?>
 				</div>
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
-				<?php 
-					wp_nav_menu( array( 
-						'theme_location' 	=> 'header-menu', 
-						'menu_id' 			=> 'menu-main', 
-						'menu_class' 		=> 'nav navbar-nav',
-						'fallback_cb'       => 'WP_Bootstrap_Navwalker::fallback',
-						'walker'            => new WP_Bootstrap_Navwalker(),
-					) ); 
-				?>
+				<?php if( has_nav_menu( 'primary_navigation' ) ){ $akvo->nav_menu(); } ?>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#search"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 				</ul>
@@ -31,13 +22,15 @@
 		</div><!-- /.container -->
 	</nav><!-- /.navbar -->
 </header>
+<!--
 <div id="search">
 	<button type="button" class="close">×</button>
 	<?php get_search_form(); ?>
 </div>
-<!-- Progress Bar -->
+
 <progress value="0" id="progressBar">
 	<div class="progress-container">
 		<span class="progress-bar"></span>
 	</div>		
 </progress>
+-->
