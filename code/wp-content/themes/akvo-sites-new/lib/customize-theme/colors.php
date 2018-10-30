@@ -146,7 +146,7 @@
 				)
 			),
 			array(
-				'selector'	=> 'nav .lang .fa-circle, nav ul.navbar-nav li i',
+				'selector'	=> 'nav .lang .fa-circle, nav ul.navbar-nav li i, .header4 .navbar-nav .dropdown-menu li a',
 				'styles'	=> array(
 					'color'	=> 'main_color'
 				)
