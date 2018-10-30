@@ -16,16 +16,19 @@
 			<div id="navbar" class="collapse navbar-collapse">
 				<?php if( has_nav_menu( 'primary_navigation' ) ){ $akvo->nav_menu(); } ?>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#search"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+					<li><a href="#search-modal"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 				</ul>
 			</div>
 		</div><!-- /.container -->
 	</nav><!-- /.navbar -->
 </header>
-<!--
-<div id="search">
+
+<div id="search-modal">
 	<button type="button" class="close">×</button>
-	<?php get_search_form(); ?>
+	<form>
+        <input type="search" value="" placeholder="type keyword(s) here">
+        <button type="submit" class="btn btn-primary searchbutton">Search</button>
+    </form>
 </div>
 
 <progress value="0" id="progressBar">
@@ -33,4 +36,3 @@
 		<span class="progress-bar"></span>
 	</div>		
 </progress>
--->

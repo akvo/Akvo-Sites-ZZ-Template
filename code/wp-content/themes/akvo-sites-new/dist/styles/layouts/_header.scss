@@ -371,7 +371,7 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
 				border: none;
 			}
 			
-			li:hover a, li a:hover, li.current-menu-item a{
+			li:hover a, li a:hover, li.current-menu-item a, li a:focus{
 				background: transparent !important;
 			}
 			
