@@ -6240,6 +6240,77 @@ blockquote {
         background-color: #f2f2f2;
         cursor: text; } }
 
+/* SEARCH MODAL FOR HEADER 4 */
+.body-header4 #search-modal {
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(32, 32, 32, 0.9);
+  z-index: 999999;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-transform: translate(0px, 0px) scale(0, 0);
+  -moz-transform: translate(0px, 0px) scale(0, 0);
+  -o-transform: translate(0px, 0px) scale(0, 0);
+  -ms-transform: translate(0px, 0px) scale(0, 0);
+  transform: translate(0px, 0px) scale(0, 0); }
+  .body-header4 #search-modal.open {
+    -webkit-transform: translate(0px, 0px) scale(1, 1);
+    -moz-transform: translate(0px, 0px) scale(1, 1);
+    -o-transform: translate(0px, 0px) scale(1, 1);
+    -ms-transform: translate(0px, 0px) scale(1, 1);
+    transform: translate(0px, 0px) scale(1, 1);
+    opacity: 1; }
+  .body-header4 #search-modal .close {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    opacity: 1;
+    padding: 10px 17px;
+    font-size: 27px;
+    z-index: 999999999; }
+  .body-header4 #search-modal input[type=search] {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+    -moz-box-shadow: none;
+    width: 100%;
+    color: white;
+    background: transparent;
+    font-size: 40px;
+    text-align: center;
+    margin: 0px auto;
+    margin-top: -51px; }
+  .body-header4 #search-modal button[type=submit] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 61px;
+    padding: 1em 2em;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+    background: transparent;
+    margin-left: -45px;
+    border-radius: 0; }
+    .body-header4 #search-modal button[type=submit]:hover {
+      background: #FFF;
+      color: #333; }
+
 .form .bg {
   padding: 10px 15px; }
 .form p {
@@ -6563,6 +6634,45 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
 @media (max-width: 767px) {
   .header3 nav ul.navbar-nav li a {
     padding: 0 30px; } }
+
+.header4 {
+  /* NAVBAR */ }
+  .header4 nav.navbar-fixed-top {
+    background: #202024;
+    min-height: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /* MOBILE TOGGLE BUTTON FOR MENU */
+    /* LOGO */
+    /* MENU */ }
+    .header4 nav.navbar-fixed-top .navbar-toggle {
+      margin-top: 0;
+      margin-bottom: 0; }
+      .header4 nav.navbar-fixed-top .navbar-toggle .icon-bar {
+        background: #fff; }
+    .header4 nav.navbar-fixed-top .logobrand {
+      margin-top: 5px;
+      display: inline-block;
+      margin-bottom: -5px; }
+      .header4 nav.navbar-fixed-top .logobrand .brand p {
+        display: none; }
+      @media (max-width: 768px) {
+        .header4 nav.navbar-fixed-top .logobrand {
+          margin-left: 15px; } }
+    @media (min-width: 769px) {
+      .header4 nav.navbar-fixed-top .navbar-nav {
+        margin-left: 20px; } }
+    .header4 nav.navbar-fixed-top .navbar-nav li {
+      background: transparent !important;
+      border: none; }
+    .header4 nav.navbar-fixed-top .navbar-nav li:hover a, .header4 nav.navbar-fixed-top .navbar-nav li a:hover, .header4 nav.navbar-fixed-top .navbar-nav li.current-menu-item a, .header4 nav.navbar-fixed-top .navbar-nav li a:focus {
+      background: transparent !important; }
+    .header4 nav.navbar-fixed-top .navbar-nav .dropdown-menu {
+      background: #202024; }
+      .header4 nav.navbar-fixed-top .navbar-nav .dropdown-menu li a {
+        background: transparent; }
+    .header4 nav.navbar-fixed-top .navbar-nav .dropdown:hover .dropdown-menu {
+      border-radius: 0; }
 
 #siderbar .widgettitle {
   font-family: Roboto;
@@ -7031,6 +7141,12 @@ a {
 #main-page-container {
   margin-top: 30px;
   /* margin-bottom: 30px; */ }
+
+.body-header4 #main-page-container {
+  margin-top: 45px; }
+  @media (min-width: 769px) {
+    .body-header4 #main-page-container {
+      margin-top: 50px; } }
 
 .embedded-akvopedia {
   width: 100%;

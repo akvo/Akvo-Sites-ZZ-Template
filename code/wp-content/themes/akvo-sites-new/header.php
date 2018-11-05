@@ -22,7 +22,7 @@
     
 		<?php wp_head();?>
 	</head>
-	<body>
+	<body <?php body_class();?>>
 	<?php
 		$header_option = get_option('sage_header_options');
 		

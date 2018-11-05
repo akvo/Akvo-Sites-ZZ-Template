@@ -7,10 +7,7 @@ class PRIVACY_POLICY_PAGE{
 	
     public function __construct(){
 		
-		// ACTION HOOKS
-		add_action( 'wp_login', array( $this, 'wp_login' ) );
-		
-        add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 		
@@ -20,7 +17,7 @@ class PRIVACY_POLICY_PAGE{
 	/* GETTER AND SETTER FUNCTIONS */
 	function get_privacy_policy(){
 		$current_user = get_current_user_id();
-        return get_user_meta($current_user, 'privacy_policy', true);
+        return get_user_meta( $current_user, 'privacy_policy', true );
 	}
 	
 	function set_privacy_policy( $value ){
@@ -28,21 +25,21 @@ class PRIVACY_POLICY_PAGE{
 	}
 	/* GETTER AND SETTER FUNCTIONS */
 	
-	/*
-	* Redirects the user to the policy page,
-	* if the user has not signed the policy terms.
-	* And if signed direct the use to dashboard
-	*/
-	function wp_login(){
+	
+	function admin_init(){
+		/*
+		* Redirects the user to the policy page,
+		* if the user has not signed the policy terms.
+		* And if signed direct the use to dashboard
+		*/
 		$privacy_policy = $this->get_privacy_policy();
-		if( !$privacy_policy ) {
+		$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+		if( !$privacy_policy && $page != 'options_page_slug' ) {
 			// this field was not set or was empty
 			wp_redirect(admin_url('admin.php?page=options_page_slug'));  // or whatever success page
 			exit;
 		}
-	}
-	
-	function admin_init(){
+		
 		/* 	Update user meta table
 		* 	@return datetime to database table
 		*/

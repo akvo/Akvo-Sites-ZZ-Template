@@ -1,8 +1,13 @@
 <?php
+	
+	
 	$home_url = home_url('/');
-						
+	
+
+	/*
+	* SPECIAL USE CASE FOR AFRIALLIANCE AS THEY USE WPML
+	*/
 	if ( is_multisite() ) {
-		// should execute only for multisites
 		$current_site = get_current_site();
 		if( ICL_LANGUAGE_CODE == 'fr' && isset($current_site->domain) && $current_site->domain == "afrialliance.org" ) {
 			$home_url = 'http://afrialliance.org/';

@@ -21,6 +21,17 @@
 			
 			$this->options = get_option('akvo');
 			
+			add_filter( 'body_class', function( $classes ){
+				
+				$header_option = get_option('sage_header_options');
+				if( isset($header_option['header_type']) ){
+					$header_type = $header_option['header_type'];
+					$classes[] = 'body-'.$header_type;
+				}
+			
+				return $classes;
+			});
+			
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ), 100 );
 			
 			add_action( 'init', array( $this, 'custom_posts' ) );
@@ -220,7 +231,7 @@
 			wp_enqueue_style( 'fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', false, null);
   			
 			/* AKVO SITES STYLESHEET */
-			wp_enqueue_style( 'sage_css', get_template_directory_uri().'/dist/styles/main.css', false, '2.1.7');
+			wp_enqueue_style( 'sage_css', get_template_directory_uri().'/dist/styles/main.css', false, '2.2.0');
   		
 			/* COMMENTS REPLY JS */
 			if (is_single() && comments_open() && get_option('thread_comments')) { wp_enqueue_script('comment-reply'); }
@@ -229,7 +240,7 @@
 			wp_enqueue_script('bootstrap_js', get_template_directory_uri().'/dist/scripts/bootstrap.min.js', ['jquery'], '1.0.1', true);
 			
 			/* CUSTOM SCRIPT JS */
-			wp_enqueue_script('akvo_js', get_template_directory_uri().'/dist/scripts/main.js', ['jquery'], "1.0.4", true);
+			wp_enqueue_script('akvo_js', get_template_directory_uri().'/dist/scripts/main.js', ['jquery'], "1.0.5", true);
 		}
 		
 		
@@ -356,6 +367,19 @@
 			}
 			
 			
+		}
+		
+		function nav_menu( $args = array() ){
+			
+			$args = wp_parse_args( $args, array(
+				'menu'              => 'primary',
+				'theme_location' 	=> 'primary_navigation', 
+				'walker'		 	=> new wp_bootstrap_navwalker(), 
+				'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+				'menu_class' 		=> 'nav navbar-nav' 
+			) );
+			
+			wp_nav_menu( $args );
 		}
 		
 	}

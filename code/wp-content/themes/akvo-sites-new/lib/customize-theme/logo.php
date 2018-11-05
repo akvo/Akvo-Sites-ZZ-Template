@@ -1,5 +1,13 @@
 <?php
-
+	
+	/*
+	*	CUSTOMIZE THEME OPTIONS
+	*	UPLOAD LOGO
+	*	OPTION TO USE ORIGINAL LOGO SIZE
+	*	LOCATION OF THE LOGO										(MIGHT GET REMOVED)
+	*	TYPE OF HEADER - DEFINES THE NAVIGATION MENU TYPE
+	*	OPTION TO STRETCH HEADER 									(MIGHT GET REMOVED)
+	*/
 	
 	add_action( 'customize_register', function($wp_customize){
 		
@@ -42,7 +50,8 @@
       	$headers_arr = array(
 			'header1' => 'Default',
 			'header2' => 'Sticky',
-			'header3' => 'Narrow Single Row'
+			'header3' => 'Narrow Single Row',
+			'header4' => 'Dark sticky menu'	
 	    );
     	$akvo_customize->dropdown( $wp_customize, $section, 'sage_header_options[header_type]', 'Header Type', 'header1', $headers_arr);
 		
