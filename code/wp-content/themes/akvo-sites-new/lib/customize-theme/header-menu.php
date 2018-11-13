@@ -51,6 +51,8 @@
 		
 		$header_option = get_option('sage_header_options');
 		
+		//print_r( $header_option );
+		
 		$menus = array(
 			array(
 				'selector'	=> '#menu-main-nav .menu-item .current-menu-item a, #menu-main-nav .menu-item .menu-item a:hover',
@@ -60,7 +62,7 @@
 				)
 			),
 			array(
-				'selector'	=> 'nav ul.navbar-nav li a',
+				'selector'	=> 'ul.navbar-nav li a, #header5-modal .navbar-nav a',
 				'styles'	=> array(
 					'background'	=> 'bg_menu',
 					'color'			=> 'color_menu',

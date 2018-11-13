@@ -6635,6 +6635,9 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
   .header3 nav ul.navbar-nav li a {
     padding: 0 30px; } }
 
+/*
+* BLACK STICKY MENU WITH THE LOGO ON THE LEFT
+*/
 .header4 {
   /* NAVBAR */ }
   .header4 nav.navbar-fixed-top {
@@ -6673,6 +6676,143 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
         background: transparent; }
     .header4 nav.navbar-fixed-top .navbar-nav .dropdown:hover .dropdown-menu {
       border-radius: 0; }
+
+/*
+* STICKY TRANSPARENT LOGO & MENU
+* INSPIRED FROM: https://www.evomedia.lt/en
+*/
+.header5 .logobrand {
+  top: 0;
+  background: #f7f7f7;
+  display: block;
+  z-index: 999;
+  left: 30px;
+  padding: 20px;
+  position: fixed; }
+  .header5 .logobrand p {
+    display: none; }
+.header5 .navbar-toggle {
+  display: block;
+  position: fixed;
+  right: 20px;
+  margin: 0;
+  z-index: 999;
+  top: 10px;
+  border-radius: 100px;
+  height: 55px;
+  width: 55px;
+  background: transparent;
+  transition: all 0.3s ease; }
+  .header5 .navbar-toggle .icon-bar {
+    border: #333 solid 1px;
+    margin: 4px auto; }
+  .header5 .navbar-toggle:hover {
+    background: #fff;
+    box-shadow: 0px 0px 11px -2px rgba(0, 0, 0, 0.43); }
+@media (min-width: 1800px) {
+  .header5 .logobrand {
+    left: 100px; }
+  .header5 .navbar-toggle {
+    right: 100px; } }
+@media (max-width: 768px) {
+  .header5 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    background: #fff;
+    border-bottom: #eee solid 1px; }
+    .header5 .logobrand {
+      position: relative;
+      background: transparent;
+      left: 0;
+      width: 80%; }
+    .header5 .navbar-toggle {
+      position: absolute;
+      right: 10px;
+      top: 7px; }
+      .header5 .navbar-toggle:hover {
+        box-shadow: none; } }
+
+/*
+* MODAL MENU FOR HEADER5
+*/
+#header5-modal {
+  /* LIST THE MENU AND ITEMS VERTICALLY */ }
+  #header5-modal .navbar-nav, #header5-modal .navbar-nav li {
+    float: none; }
+  #header5-modal.modal.fade .modal-dialog {
+    transform: translate(25%, 0); }
+  #header5-modal.modal.fade.in .modal-dialog {
+    transform: translate(0, 0); }
+  #header5-modal .modal-dialog {
+    margin: 0;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    background: #fff;
+    width: 100%;
+    max-width: 700px; }
+    #header5-modal .modal-dialog .modal-content {
+      box-shadow: none;
+      border: none;
+      padding: 50px 100px;
+      border-radius: 0;
+      /* CLOSE BUTTON */ }
+      #header5-modal .modal-dialog .modal-content button.btn.btn-default {
+        background: none;
+        border: none;
+        color: #333;
+        font-size: 36px;
+        position: absolute;
+        right: -70px;
+        top: -50px; }
+      @media (max-width: 768px) {
+        #header5-modal .modal-dialog .modal-content {
+          padding: 20px; }
+          #header5-modal .modal-dialog .modal-content button.btn.btn-default {
+            right: -15px;
+            top: -25px; } }
+  #header5-modal .navbar-nav {
+    /* DROPDOWN ICONS */ }
+    #header5-modal .navbar-nav .fa.fa-chevron-down {
+      display: none; }
+    #header5-modal .navbar-nav a {
+      text-transform: uppercase;
+      position: relative;
+      padding: 20px;
+      background-color: transparent;
+      color: #555;
+      font-size: 24px;
+      line-height: 1.4;
+      margin-bottom: 5px; }
+      #header5-modal .navbar-nav a:focus, #header5-modal .navbar-nav a:hover {
+        background: none; }
+    #header5-modal .navbar-nav a:before {
+      display: inline-block;
+      position: absolute;
+      content: '';
+      width: 0px;
+      border-top: 1px solid #4bbda1;
+      left: -50px;
+      top: 50%;
+      transition: width 0.3s ease; }
+    #header5-modal .navbar-nav li.active a, #header5-modal .navbar-nav .dropdown-menu li.active a, #header5-modal .navbar-nav li:hover a {
+      color: #4bbda1; }
+    #header5-modal .navbar-nav li.active a:before, #header5-modal .navbar-nav .dropdown-menu li.active a:before, #header5-modal .navbar-nav li:hover a:before {
+      width: 50px; }
+    #header5-modal .navbar-nav .dropdown-menu {
+      display: block;
+      position: relative;
+      float: none;
+      border: none;
+      box-shadow: none;
+      padding-left: 40px; }
+      #header5-modal .navbar-nav .dropdown-menu a {
+        color: #555; }
+      #header5-modal .navbar-nav .dropdown-menu a:before {
+        width: 0px; }
 
 #siderbar .widgettitle {
   font-family: Roboto;
