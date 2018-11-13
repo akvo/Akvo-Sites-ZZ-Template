@@ -325,6 +325,10 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
 	}
 }
 
+/*
+* BLACK STICKY MENU WITH THE LOGO ON THE LEFT
+*/
+
 .header4{
 	
 	/* NAVBAR */
@@ -390,7 +394,197 @@ nav ul.navbar-nav ul.dropdown-menu li:last-child, nav ul.navbar-nav ul.dropdown-
 		}
 		
 	}
+}
+
+/*
+* STICKY TRANSPARENT LOGO & MENU
+* INSPIRED FROM: https://www.evomedia.lt/en
+*/
+.header5{
+	
+	
+	.logobrand{
+		top			: 0;
+		background	: #f7f7f7;
+		display		: block;
+		z-index		: 999;
+		left		: 30px;
+		padding		: 20px;
+		position	: fixed;
+		
+		p{ display: none; }
+	}
+	
+	.navbar-toggle{
+		display			: block;
+		position		: fixed;
+		right			: 20px;
+		margin			: 0;
+		z-index			: 999;
+		top				: 10px;
+		border-radius	: 100px;
+		height			: 55px;
+		width			: 55px;
+		background		: transparent;
+		transition		: all 0.3s ease;
+		
+		.icon-bar{
+			border: #333 solid 1px;
+			margin: 4px auto;
+		}
+		
+		&:hover{
+			background	: #fff;
+			box-shadow	: 0px 0px 11px -2px rgba(0, 0, 0, 0.43);
+		}
+		
+	}
+	
+	@media( min-width: 1800px ){
+		.logobrand{
+			left: 100px;
+		}
+		.navbar-toggle{
+			right: 100px;
+		}
+	}
+	
+	@media( max-width: 768px ){
+		position: fixed;
+		top: 0;
+		left:0;
+		z-index: 999;
+		width: 100%;
+		background: #fff;
+		border-bottom: #eee solid 1px;
+		
+		.logobrand{
+			position: relative;
+			background: transparent;
+			left: 0;
+			width: 80%;
+		}
+		.navbar-toggle{
+			position: absolute;
+			right: 10px;
+			top: 7px;
+			
+			&:hover{
+				box-shadow: none;
+			}
+		}
+	}
+	
+}
+/*
+* MODAL MENU FOR HEADER5
+*/
+#header5-modal{
+	
+	$activeColor	: #4bbda1;
+	$defaultColor	: #555;
+	
+	/* LIST THE MENU AND ITEMS VERTICALLY */
+	.navbar-nav, .navbar-nav li{
+		float: none;
+	}
+	
+	&.modal.fade .modal-dialog{
+		transform	: translate( 25%, 0 ); 
+	}
+	&.modal.fade.in .modal-dialog{
+		transform	: translate( 0, 0 ); 
+	}
+	
+	.modal-dialog{
+		margin		: 0;
+		position	: absolute;
+		right		: 0;
+		height		: 100%;
+		background	: #fff;
+		width		: 100%;
+		max-width	: 700px;
+		
+		.modal-content{
+			box-shadow		: none;
+			border			: none;
+			padding			: 50px 100px;
+			border-radius	: 0;
+			
+			/* CLOSE BUTTON */
+			button.btn.btn-default{
+				background	: none;
+				border		: none;
+				color		: #333;
+				font-size	: 36px;
+				position	: absolute;
+				right		: -70px;
+				top			: -50px;
+			}
+			
+			@media( max-width: 768px ){
+				padding	: 20px;
+				
+				button.btn.btn-default{
+					right	: -15px;
+					top		: -25px;
+				}
+				
+			}
+			
+		}
+		
+	}
 	
 	
 	
+	.navbar-nav{
+		
+		/* DROPDOWN ICONS */
+		.fa.fa-chevron-down{ display: none; }
+		
+		a{
+			text-transform	: uppercase;
+			position		: relative;
+			padding			: 20px;
+			background-color: transparent;
+			color 			: $defaultColor;
+			font-size		: 24px;
+			line-height		: 1.4;
+			margin-bottom	: 5px;
+			
+			&:focus, &:hover{
+				background: none;
+			}
+		}
+	
+		a:before{
+			display		: inline-block;
+			position	: absolute;
+			content		: '';
+			width		: 0px;
+			border-top	: 1px solid $activeColor;
+			left		: -50px;
+			top			: 50%;
+			transition	: width 0.3s ease;
+		}
+		
+		li.active, .dropdown-menu li.active, li:hover{
+			a{ color: $activeColor; }
+			a:before{ width : 50px; }
+		}
+		
+		.dropdown-menu{ 
+			display		: block;
+			position	: relative;
+			float		: none;
+			border		: none;
+			box-shadow	: none;
+			padding-left: 40px;	
+			
+			a{ color: $defaultColor; }
+			a:before{ width: 0px; }
+		}
+		
+	}
 }

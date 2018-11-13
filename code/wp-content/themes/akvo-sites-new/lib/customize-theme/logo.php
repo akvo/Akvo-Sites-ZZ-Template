@@ -51,7 +51,8 @@
 			'header1' => 'Default',
 			'header2' => 'Sticky',
 			'header3' => 'Narrow Single Row',
-			'header4' => 'Dark sticky menu'	
+			'header4' => 'Dark Sticky Menu',
+			'header5' => 'Sticky Transparent Logo & Menu'	
 	    );
     	$akvo_customize->dropdown( $wp_customize, $section, 'sage_header_options[header_type]', 'Header Type', 'header1', $headers_arr);
 		

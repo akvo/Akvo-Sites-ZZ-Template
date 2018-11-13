@@ -35,7 +35,12 @@
 	
 	// HIDE ADMIN BAR ON THE FRONT END
 	add_filter('show_admin_bar', '__return_false');
-
+	
+	/* ADD PREDEFINED LAYOUTS */
+	add_filter( 'siteorigin_panels_local_layouts_directories', function( $layout_folders ){
+		$layout_folders[] = get_template_directory() . '/lib/layouts';
+		return $layout_folders;
+	} );
 	
 	add_action('siteorigin_widgets_widget_folders', function( $folders ){
 		$folders[] = get_template_directory() . '/so-widgets/';
