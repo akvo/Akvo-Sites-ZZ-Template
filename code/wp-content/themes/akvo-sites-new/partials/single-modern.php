@@ -67,4 +67,8 @@
 	.single .post-content{
 		padding: 20px 0;
 	}
+	
+	.single .entry-content{
+		padding: 15px 0;
+	}
 </style>
