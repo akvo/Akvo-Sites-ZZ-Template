@@ -11,5 +11,5 @@ Text Domain:
 Domain Path:
 */
 
-include_once dirname( __FILE__ ) . './includes/add_posts.php';
+//include_once dirname( __FILE__ ) . './includes/add_posts.php';
 include_once dirname( __FILE__ ) . './includes/fb-api.php';

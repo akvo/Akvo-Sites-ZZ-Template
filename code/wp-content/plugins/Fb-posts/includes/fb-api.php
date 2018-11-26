@@ -11,33 +11,68 @@ require_once dirname( __FILE__ ) . './../facebook/src/Facebook/Exceptions/Facebo
 require_once dirname( __FILE__ ) . './../facebook/src/Facebook/Helpers/FacebookRedirectLoginHelper.php';
 
 
-$appId = "439925743203152";
-$appSecret = "dcf810d4eaabe81a26fbd60f510c69ee";
-$fb = $appId . '|' . $appSecret;
-
-$fb = new Facebook(['app_id' => $appId,
-'app_secret' => $appSecret,
-'default_graph_version' => 'v3.2']);
-
-$accessToken = "EAAGQHDGms1ABAAFsvVI4jHPEIgYwl05XUAOqV41ZCYGSZChGkx3kbxZBtcEF1kaJfZBV5yoeZCO7fIzDTZBpyIce0pH05jIZB1zIZAUwL4QcZAchcV6SwDdlF0iOUrs7gx0u3h0bk93LbQkJZBp4GBToO1ZBNfqw079IgCwOJUjTyWtrwZDZD";
-$pageId = "1048509591976007";
-$postData = "";
+class FB_API{
+	
+	var $appID;
+	var $appSecret;
+	var $fb;
+	var $accessToken;
+	
+	function __construct(){
+		
+		$this->setAppID( "439925743203152" );
+		$this->setAppSecret( "dcf810d4eaabe81a26fbd60f510c69ee" );
+		$this->setAccessToken( "EAAGQHDGms1ABAAFsvVI4jHPEIgYwl05XUAOqV41ZCYGSZChGkx3kbxZBtcEF1kaJfZBV5yoeZCO7fIzDTZBpyIce0pH05jIZB1zIZAUwL4QcZAchcV6SwDdlF0iOUrs7gx0u3h0bk93LbQkJZBp4GBToO1ZBNfqw079IgCwOJUjTyWtrwZDZD" );
+		$this->setFB();
+		
+	}
+	
+	/* GETTER AND SETTER FUNCTIONS */
+	function getAppID(){ return $this->appID; }
+	function setAppID( $appID ){ $this->appID = $appID; }
+	
+	function getAppSecret(){ return $this->appSecret; }
+	function setAppSecret( $appSecret ){ $this->appSecret = $appSecret; }
+	
+	function getFB(){ return $this->fb; }
+	function setFB(){
+		$this->fb = new Facebook( array(
+			'app_id' 				=> $this->getAppID(),
+			'app_secret' 			=> $this->getAppSecret(),
+			'default_graph_version' => 'v3.2'
+		) );
+	}
+	
+	function setAccessToken( $accessToken ){ $this->accessToken = $accessToken; }
+	function getAccessToken(){ return $this->accessToken; }
+	/* GETTER AND SETTER FUNCTIONS */
+	
+	function getPagePosts( $pageID ){
+		$userPosts = $this->getFB()->get( "/$pageID/feed", $this->getAccessToken() );
+		return $userPosts->getDecodedBody();
+	}
+}
 
 try {
-    $userPosts = $fb->get("/$pageId/feed", $accessToken);
-    $postBody = $userPosts->getDecodedBody();
-    $postData = $postBody["data"];
-
-}
-catch
-(FacebookResponseException $e) {
-    // display error message
-    exit();
+	
+	$fb_api = new FB_API;
+	
+	$data = $fb_api->getPagePosts( "1048509591976007" );
+	
+	//echo '<pre>';
+	//print_r( $data );
+	//echo '</pre>';
+	
+	
+}catch( FacebookResponseException $e ){
+    
 } catch (FacebookSDKException $e) {
-    // display error message
-    exit();
+    
 }
-//echo '<pre>' . print_r($postData, 1) . '</pre>';
+
+
+
+/*
 
 //function Fb_insert_post( $postData ){
 //Insert data in Fb-posts and Db
@@ -60,7 +95,7 @@ catch
 
         //wp_die();
 }
-
+*/
 
 
 
