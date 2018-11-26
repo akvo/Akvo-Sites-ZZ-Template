@@ -1,6 +1,6 @@
 <?php
 
-
+/*
 use Facebook\Facebook;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
@@ -9,7 +9,7 @@ require_once dirname( __FILE__ ) . './../facebook/src/Facebook/autoload.php';
 require_once dirname( __FILE__ ) . './../facebook/src/Facebook/Exceptions/FacebookResponseException.php';
 require_once dirname( __FILE__ ) . './../facebook/src/Facebook/Exceptions/FacebookSDKException.php';
 require_once dirname( __FILE__ ) . './../facebook/src/Facebook/Helpers/FacebookRedirectLoginHelper.php';
-
+*/
 
 class FB_API{
 	
@@ -17,13 +17,15 @@ class FB_API{
 	var $appSecret;
 	var $fb;
 	var $accessToken;
+	var $pageID;
 	
 	function __construct(){
 		
-		$this->setAppID( "439925743203152" );
-		$this->setAppSecret( "dcf810d4eaabe81a26fbd60f510c69ee" );
+		//$this->setAppID( "439925743203152" );
+		//$this->setAppSecret( "dcf810d4eaabe81a26fbd60f510c69ee" );
 		$this->setAccessToken( "EAAGQHDGms1ABAAFsvVI4jHPEIgYwl05XUAOqV41ZCYGSZChGkx3kbxZBtcEF1kaJfZBV5yoeZCO7fIzDTZBpyIce0pH05jIZB1zIZAUwL4QcZAchcV6SwDdlF0iOUrs7gx0u3h0bk93LbQkJZBp4GBToO1ZBNfqw079IgCwOJUjTyWtrwZDZD" );
-		$this->setFB();
+		$this->setPageID( "1048509591976007" );
+		//$this->setFB();
 		
 	}
 	
@@ -43,35 +45,45 @@ class FB_API{
 		) );
 	}
 	
+	function getPageID(){ return $this->pageID; }
+	function setPageID( $pageID ){ $this->pageID = $pageID; }
+	
 	function setAccessToken( $accessToken ){ $this->accessToken = $accessToken; }
 	function getAccessToken(){ return $this->accessToken; }
 	/* GETTER AND SETTER FUNCTIONS */
 	
-	function getPagePosts( $pageID ){
-		$userPosts = $this->getFB()->get( "/$pageID/feed", $this->getAccessToken() );
-		return $userPosts->getDecodedBody();
+	function getPagePosts(){
+		
+		//$userPosts = $this->getFB()->get( "/$pageID/feed", $this->getAccessToken() );
+		//return $userPosts->getDecodedBody();
+		
+		$fields = "id,message,picture,link,name,description,type,icon,created_time,from,object_id";
+		$limit = 5;
+	
+		$json_link = "https://graph.facebook.com/{$this->getPageID()}/feed?access_token={$this->getAccessToken()}&fields={$fields}&limit={$limit}";
+		$jsonData = json_decode( file_get_contents( $json_link ), true );
+		return $jsonData;
 	}
 }
 
-/*
+
 try {
-	
+	/*
 	$fb_api = new FB_API;
 	
 	$data = $fb_api->getPagePosts( "1048509591976007" );
 	
-	//echo '<pre>';
-	//print_r( $data );
-	//echo '</pre>';
+	echo '<pre>';
+	print_r( $data );
+	echo '</pre>';
 	
+	wp_die();
+	*/
 	
-}catch( FacebookResponseException $e ){
+}catch( Exception $e ){
     
-} catch (FacebookSDKException $e) {
-    
-}
+} 
 
-*/
 
 /*
 
