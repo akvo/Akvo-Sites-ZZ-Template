@@ -53,6 +53,7 @@ class FB_API{
 	}
 }
 
+/*
 try {
 	
 	$fb_api = new FB_API;
@@ -70,7 +71,7 @@ try {
     
 }
 
-
+*/
 
 /*
 
