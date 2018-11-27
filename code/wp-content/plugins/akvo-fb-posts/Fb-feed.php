@@ -11,9 +11,9 @@ Domain Path	:
 */
 
 $inc_files = array(
-	'includes/class-singleton.php',
-	'includes/class-fb-api.php',
-	'includes/class-fb-posts-list-table.php',
+	'inc/class-singleton.php',
+	'inc/class-fb-api.php',
+	'inc/class-fb-posts-list-table.php',
 );
 
 foreach( $inc_files as $inc_file ){
