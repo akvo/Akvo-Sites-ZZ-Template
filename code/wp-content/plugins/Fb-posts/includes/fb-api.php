@@ -11,66 +11,18 @@ require_once dirname( __FILE__ ) . './../facebook/src/Facebook/Exceptions/Facebo
 require_once dirname( __FILE__ ) . './../facebook/src/Facebook/Helpers/FacebookRedirectLoginHelper.php';
 */
 
-class FB_API{
-	
-	var $appID;
-	var $appSecret;
-	var $fb;
-	var $accessToken;
-	var $pageID;
-	
-	function __construct(){
-		
-		//$this->setAppID( "439925743203152" );
-		//$this->setAppSecret( "dcf810d4eaabe81a26fbd60f510c69ee" );
-		$this->setAccessToken( "EAAGQHDGms1ABAAFsvVI4jHPEIgYwl05XUAOqV41ZCYGSZChGkx3kbxZBtcEF1kaJfZBV5yoeZCO7fIzDTZBpyIce0pH05jIZB1zIZAUwL4QcZAchcV6SwDdlF0iOUrs7gx0u3h0bk93LbQkJZBp4GBToO1ZBNfqw079IgCwOJUjTyWtrwZDZD" );
-		$this->setPageID( "1048509591976007" );
-		//$this->setFB();
-		
-	}
-	
-	/* GETTER AND SETTER FUNCTIONS */
-	function getAppID(){ return $this->appID; }
-	function setAppID( $appID ){ $this->appID = $appID; }
-	
-	function getAppSecret(){ return $this->appSecret; }
-	function setAppSecret( $appSecret ){ $this->appSecret = $appSecret; }
-	
-	function getFB(){ return $this->fb; }
-	function setFB(){
-		$this->fb = new Facebook( array(
-			'app_id' 				=> $this->getAppID(),
-			'app_secret' 			=> $this->getAppSecret(),
-			'default_graph_version' => 'v3.2'
-		) );
-	}
-	
-	function getPageID(){ return $this->pageID; }
-	function setPageID( $pageID ){ $this->pageID = $pageID; }
-	
-	function setAccessToken( $accessToken ){ $this->accessToken = $accessToken; }
-	function getAccessToken(){ return $this->accessToken; }
-	/* GETTER AND SETTER FUNCTIONS */
-	
-	function getPagePosts(){
-		
-		//$userPosts = $this->getFB()->get( "/$pageID/feed", $this->getAccessToken() );
-		//return $userPosts->getDecodedBody();
-		
-		$fields = "id,message,picture,link,name,description,type,icon,created_time,from,object_id";
-		$limit = 5;
-	
-		$json_link = "https://graph.facebook.com/{$this->getPageID()}/feed?access_token={$this->getAccessToken()}&fields={$fields}&limit={$limit}";
-		$jsonData = json_decode( file_get_contents( $json_link ), true );
-		return $jsonData;
-	}
-}
+
+/*
+* EAAGQHDGms1ABAAFsvVI4jHPEIgYwl05XUAOqV41ZCYGSZChGkx3kbxZBtcEF1kaJfZBV5yoeZCO7fIzDTZBpyIce0pH05jIZB1zIZAUwL4QcZAchcV6SwDdlF0iOUrs7gx0u3h0bk93LbQkJZBp4GBToO1ZBNfqw079IgCwOJUjTyWtrwZDZD
+* 1048509591976007
+*/
 
 
 try {
-	/*
+	
 	$fb_api = new FB_API;
 	
+	/*
 	$data = $fb_api->getPagePosts( "1048509591976007" );
 	
 	echo '<pre>';
@@ -81,7 +33,7 @@ try {
 	*/
 	
 }catch( Exception $e ){
-    
+	
 } 
 
 
@@ -109,8 +61,3 @@ try {
         //wp_die();
 }
 */
-
-
-
-
-
