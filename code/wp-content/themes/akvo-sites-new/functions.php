@@ -216,3 +216,20 @@
 		
 		wp_die();
 	} );
+	
+	
+	add_shortcode( 'akvo_hero_section', function( $atts ){
+		
+		$atts = shortcode_atts( array(
+			'url' 	=> get_bloginfo('template_directory')."/dist/images/brushrepeat.jpg",
+			'title'	=> 'TITLE'
+		), $atts, 'akvo_hero_section' );
+		
+		_e( "<div class='hero-image' style='background-image:url(".$atts['url']." )'>" );
+		_e( "<div class='container'><div class='caption'>" );
+		_e( "<h1>".$atts['title']."</h1>");
+		_e( "</div></div>" );
+		_e( "</div>" );
+		
+		
+	});
