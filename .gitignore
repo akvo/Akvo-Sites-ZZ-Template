@@ -2,7 +2,6 @@
 /code/mu-upgrade/
 /code/upgrade/
 /code/uploads/
-/code/wp-content/plugins/
 /code/wp-config.php*
 /code/.htaccess
 npm-debug.log
