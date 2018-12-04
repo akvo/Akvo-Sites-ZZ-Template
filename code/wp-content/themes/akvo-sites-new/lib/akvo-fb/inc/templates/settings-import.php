@@ -12,13 +12,25 @@
 	
 	$fbPostsTable->display();
 	
-	print_r( $_POST );
+	
 	
 ?>
 </form>	
 <style>
 	#image{
 		width: 120px;
+	}
+	
+	@media(max-width:768px){
+		.wp-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before{
+			display: none;
+		}	
+		#name {
+			width: 100%;
+		}
+		#image, #desc{
+			display: none;
+		}
 	}
 </style>
 	
