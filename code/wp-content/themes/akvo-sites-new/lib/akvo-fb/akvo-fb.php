@@ -10,6 +10,7 @@ Author URI: https://akvo.org
 
 $inc_files = array(
 	'inc/class-singleton.php',
+	'inc/class-fb-db.php',
 	'inc/class-fb-api.php',
 	'inc/class-fb-posts-list-table.php',
 	'inc/class-fb-admin.php',

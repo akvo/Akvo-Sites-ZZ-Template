@@ -59,6 +59,12 @@
 		}
 		
 		function column_cb( $item ) {
+			
+			$fb_db = FB_DB::getInstance();
+			
+			if( $fb_db->isFBPostImported( $item['id'] ) ){
+				return '<input type="checkbox" disabled="disabled" name="fb[]" value="'.$item['id'].'" />';
+			}
 			return '<input type="checkbox" name="fb[]" value="'.$item['id'].'" />';
 		}
 		
@@ -122,7 +128,8 @@
 					
 					foreach( $_POST['fb'] as $fb_id ){
 						
-						echo $fb_id;
+						$fb_db = FB_DB::getInstance();
+						$post_id = $fb_db->importPost( $fb_id );
 						
 					}
 					

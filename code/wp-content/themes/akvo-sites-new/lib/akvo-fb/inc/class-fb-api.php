@@ -18,94 +18,36 @@ class FB_API extends SINGLETON{
 	function getAccessToken(){ return $this->accessToken; }
 	/* GETTER AND SETTER FUNCTIONS */
 	
-	
-	/*
-	* CREATE FEATURED IMAGE FROM A URL
-	* POST_ID
-	* IMAGE_URL
-	* IMAGE_NAME
-	*/
-	function addFeaturedImage( $post_id, $image_url ){
+	/* EXTRACT POST ID FROM THE FACEBOOK ID WHICH IS PREPENDED WITH PAGE ID */
+	function extractPostID( $fb_post_id ){
 		
-		// Add Featured Image to Post
-		$upload_dir       = wp_upload_dir(); 														// Set upload folder
-		$image_data       = file_get_contents( $image_url ); 										// Get image data
-		$unique_file_name = wp_unique_filename( $upload_dir['path'], 'fb'.$post_id.'.jpg' ); 		// Generate unique name
-		$filename         = basename( $unique_file_name ); 											// Create image file name
-
-		// Check folder permission and define file location
-		if( wp_mkdir_p( $upload_dir['path'] ) ) {
-			$file = $upload_dir['path'] . '/' . $filename;
-		} else {
-			$file = $upload_dir['basedir'] . '/' . $filename;
+		if( strpos( $fb_post_id, '_') !== false ){
+			$post_id = explode('_', $fb_post_id );
+			if( is_array( $post_id ) && count( $post_id ) > 1 ){
+				return $post_id[1];
+			}
 		}
-
-		// Create the image  file on the server
-		file_put_contents( $file, $image_data );
-
-		// Check image file type
-		$wp_filetype = wp_check_filetype( $filename, null );
-
-		// Set attachment data
-		$attachment = array(
-			'post_mime_type' => $wp_filetype['type'],
-			'post_title'     => sanitize_file_name( $filename ),
-			'post_content'   => '',
-			'post_status'    => 'inherit'
-		);
-
-		// Create the attachment
-		$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
-
-		// Include image.php
-		require_once(ABSPATH . 'wp-admin/includes/image.php');
-
-		// Define attachment metadata
-		$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
-
-		// Assign metadata to attachment
-		wp_update_attachment_metadata( $attach_id, $attach_data );
-
-		// And finally assign featured image to post
-		set_post_thumbnail( $post_id, $attach_id );
-		
-		
+		return $fb_post_id;
 	}
+	
 	
 	function ajaxImport(){
 		
-		
-		
-		if( isset( $_GET['post_id'] ) ){
-			$post_id = $_GET['post_id'];
+		if( isset( $_GET['fb_post_id'] ) ){
 			
-			$fbPost = $this->fbPost( $post_id );
+			//$fb_post_id = $this->extractPostID( $_GET['fb_post_id'] );
 			
-			$args = array(
-				'post_title'	=> isset( $fbPost['name'] ) ? $fbPost['name'] : '',
-				'post_content'	=> isset( $fbPost['description'] ) ? $fbPost['description'] : ( isset( $fbPost['name'] ) ? $fbPost['name'] : '' ),
-				'post_status'   => 'publish',
-				'post_type'    	=> 'Fb_post',
-			);
+			$fb_post_id = $_GET['fb_post_id'];
 			
-			if( !$args['post_title'] && $args['post_content'] ){
-				$args['post_title'] = substr( $args['post_content'], 0, 20 );
+			// FACEBOOK DB OBJECT
+			$fb_db = FB_DB::getInstance();
+			$post_id = $fb_db->importPost( $fb_post_id );
+			
+			if( $post_id > 0 ){
+				echo "Post has been created from FB Post";
 			}
-			
-			if( $args['post_title'] && $args['post_content'] ){
-				echo "<pre>";
-				print_r( $fbPost );
-				print_r( $args );
-				echo "</pre>";
-				
-				// Insert the post into the database
-				$post_id = wp_insert_post( $args );
-				
-				if( isset( $fbPost['full_picture'] ) && $fbPost['full_picture'] ){
-					$this->addFeaturedImage( $post_id, $fbPost['full_picture'] );
-				}
-				
-				
+			else{
+				echo "Post Import did not work";
 			}
 			
 		}
