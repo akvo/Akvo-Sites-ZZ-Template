@@ -25,6 +25,9 @@
 					return $item['name'];
 				case 'desc':
 					return $item['description'];
+				case 'post-date':
+					$post_date = strtotime( $item['created_time'] );
+					return date("D, d-m-Y", $post_date);
 				case 'image':
 					
 					$img = "";
@@ -53,7 +56,9 @@
 				'cb'		=> '<input type="checkbox" />',
 				'name' 		=> 'Title',
 				'image'		=> 'Image',
+				'post-date'	=> 'Date',
 				'desc'    	=> 'Description',
+				
 			);
 			return $columns;
 		}
