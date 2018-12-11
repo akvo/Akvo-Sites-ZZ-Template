@@ -70,18 +70,16 @@ class PRIVACY_POLICY_PAGE{
 	?>
 	<div class="container">
 		<div class="container" style="background-color:	#e0e5e5">
-			<h3>Privacy policy and terms</h3>
+			<h3>Akvo SaaS Terms of Service and Privacy Policy</h3>
 			<div class="container2" style="background-color:white">
 				<p> We’re committed to ensuring that your privacy is protected and strictly follow the General Data Protection Regulation (GDPR) rules.</p>
 				<div class="panel-body">
 					<form id="postform" name="postform" method="POST" action="">
-						<div class="container3" style="background-color:white">
+						<div class="container3" style="background-color:#fff">
 							<fieldset>
 								<label>
 									<input type="checkbox" required name="privacy_policy" id="privacy_policy" class="form-radio" value="<?php echo $_POST['privacy_policy']; ?>"/>
-									Check here to indicate that you have read and agree to the
-									<a href="<?php echo site_url('akvo-general-terms-and-conditions') ?>">privacy-policy and terms</a>
-									of Akvo foundation.
+									I have read and understood the updated <a href="https://akvo.org/help/akvo-policies-and-terms-2/akvo-saas-terms-of-service/">Akvo SaaS Terms of Service and Akvo Sites Privacy Policy</a>.
 								</label>
 							</fieldset>
 							<br>
@@ -150,7 +148,7 @@ new PRIVACY_POLICY_PAGE;
 // Function that outputs the contents of the dashboard widget
 function dashboard_widget_function( $post, $callback_args ){ 
 ?>
-	<label> Here you can read the <a href = "<?php echo site_url('akvo-general-terms-and-conditions') ?>">privacy policy and terms </a>of Akvo Foundation.</label >
+	<label> Here you can read the <a href="https://akvo.org/help/akvo-policies-and-terms-2/akvo-saas-terms-of-service/">privacy policy and terms </a>of Akvo Foundation.</label >
 <?php
 }
 
