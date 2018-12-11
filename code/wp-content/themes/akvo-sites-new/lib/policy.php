@@ -59,7 +59,7 @@ class PRIVACY_POLICY_PAGE{
             add_options_page(
                 'Privacy_policy',
                 'Privacy policy',
-				'manage_options',
+				'level_0',
 				'options_page_slug',
                 array($this, 'settings_page')
             );
