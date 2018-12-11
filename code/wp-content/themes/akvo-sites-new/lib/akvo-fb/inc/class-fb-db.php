@@ -177,6 +177,9 @@ class FB_DB extends SINGLETON{
 				if( isset( $fbPost['full_picture'] ) && $fbPost['full_picture'] ){
 					$this->addFeaturedImage( $post_id, $fbPost['full_picture'] );
 				}
+				
+				update_post_meta( $post_id, 'fb_post_id', $fb_post_id );
+				
 				return $post_id;
 			}
 			
@@ -196,8 +199,7 @@ class FB_DB extends SINGLETON{
 			ID BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			fb_post BIGINT(20) NOT NULL,
 			wp_post BIGINT(20) NOT NULL,
-			PRIMARY KEY(ID),
-			FOREIGN KEY (wp_post) REFERENCES $postsTable(ID) ON DELETE CASCADE
+			PRIMARY KEY(ID)
 		) $charset_collate;";
 		
 		return $this->query( $sql );
