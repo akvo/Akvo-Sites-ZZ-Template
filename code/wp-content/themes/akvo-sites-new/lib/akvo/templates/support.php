@@ -1,5 +1,5 @@
 <div id="akvo-support-link" class="">
-	<a target="_blank" href="http://sitessupport.akvo.org">Help</a>
+	<a target="_blank" href="http://sitessupport.akvo.org/form">Help</a>
 </div>
 <style>
 	#akvo-support-link{

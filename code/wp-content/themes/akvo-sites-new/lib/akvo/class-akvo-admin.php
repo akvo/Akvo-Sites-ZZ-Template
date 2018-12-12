@@ -85,7 +85,7 @@
 			$wp_admin_bar->add_node(  array(
 				'id'    => 'akvo-sites-support',
 				'title' => 'Support',
-				'href'  => 'http://sitessupport.akvo.org',
+				'href'  => 'http://sitessupport.akvo.org/form',
 				'meta'  => array( 'class' => 'my-toolbar-page' )
 			) );
 		}
