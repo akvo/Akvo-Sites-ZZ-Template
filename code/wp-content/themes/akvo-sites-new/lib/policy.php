@@ -40,22 +40,26 @@ class PRIVACY_POLICY_PAGE{
 		* if the user has not signed the policy terms.
 		* And if signed direct the use to dashboard
 		*/
-		$privacy_policy = $this->get_privacy_policy();
-		$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
-		if( !$privacy_policy && $page != 'options_page_slug' ) {
-			// this field was not set or was empty
-			wp_redirect(admin_url('admin.php?page=options_page_slug'));  // or whatever success page
-			exit;
-		}
 		
-		/* 	Update user meta table
-		* 	@return datetime to database table
-		*/
-		if(	isset(	$_POST['privacy_policy']	)	){
-			$current_date = date("Y-m-d H:i:s");
-			$this->set_privacy_policy( $current_date );
-			wp_redirect( admin_url( 'index.php' ) );  // or whatever success page
-			exit;
+		if( $_SERVER['PHP_SELF'] != '/wp-admin/admin-ajax.php' ){	// CHECK IF THE CURRENT ADMIN REQUEST IS NOT FOR AJAX ACTIONS
+		
+			$privacy_policy = $this->get_privacy_policy();
+			$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+			if( !$privacy_policy && $page != 'options_page_slug' ) {
+				// this field was not set or was empty
+				wp_redirect(admin_url('admin.php?page=options_page_slug'));  // or whatever success page
+				exit;
+			}
+			
+			/* 	Update user meta table
+			* 	@return datetime to database table
+			*/
+			if(	isset(	$_POST['privacy_policy']	)	){
+				$current_date = date("Y-m-d H:i:s");
+				$this->set_privacy_policy( $current_date );
+				wp_redirect( admin_url( 'index.php' ) );  // or whatever success page
+				exit;
+			}
 		}
 	}
 	
