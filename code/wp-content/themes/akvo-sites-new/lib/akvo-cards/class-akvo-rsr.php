@@ -4,9 +4,12 @@
 		
 		function get_json_data( $data_feed_id ){
 			
-			$data = do_shortcode('[data_feed name="'.$data_feed_id.'"]'); 		/* Dependancy on the Data Feed Plugin */
+			//$data = do_shortcode('[data_feed name="'.$data_feed_id.'"]'); 		/* Dependancy on the Data Feed Plugin */
 			
-			return json_decode( str_replace('&quot;', '"', $data) );
+			//return json_decode( str_replace('&quot;', '"', $data) );
+			
+			return $this->get_data_feed_response( $data_feed_id );
+				
 		}
 		
 		/* GET DATA FEEDS FROM THE DATABASE */
@@ -23,6 +26,68 @@
 			
 			return $data_feeds;
 			
+		}
+		
+		/* GET DATA FEED URL FROM ID */
+		function get_data_feed_url( $data_feed_id ){
+			
+			global $wpdb;
+			
+			$rows = $wpdb->get_results( "SELECT df_url FROM " . $wpdb->prefix . "data_feeds WHERE df_name='" . $data_feed_id . "' LIMIT 0,1;" );
+			
+			foreach( $rows as $row ){
+				return $row->df_url;
+			}
+			
+			return false;
+		}
+		
+		function get_data_feed_response( $data_feed_id ){
+			
+			$json_key = 'df'.$data_feed_id;
+			$_json_expiration = 60 * 5; // 5 minutes
+			$key = $json_key . md5($json_key );
+			
+			$data = array();
+			
+			if ( ! ( $data = get_transient($key) ) ) {
+				
+				$url = $this->get_data_feed_url( $data_feed_id );
+				
+				$request = wp_remote_get( $url );
+				
+				if( ! is_wp_error( $request ) ) {
+					$body = wp_remote_retrieve_body( $request );
+					
+					// MORE OF YOUR CODE HERE
+					$data = json_decode( $body );
+
+					// IF IT IS NEW, SET THE TRANSIENT FOR NEXT TIME
+					set_transient($key, $data, $_json_expiration);
+				}
+				
+			}
+			
+			return $data;
+			
+		}
+		
+		function get_feed_api( $url ){
+			
+			$body = false;
+			
+			try{
+				$request = wp_remote_get( $url );
+				
+				//print_r( $request );
+					
+				if( ! is_wp_error( $request ) ) {
+					$body = wp_remote_retrieve_body( $request );
+				}
+			}catch( Exception $e ){
+				print_r( $e );
+			}
+			return $body;
 		}
 		
 		function get_base_url( $akvo_card_options ){
