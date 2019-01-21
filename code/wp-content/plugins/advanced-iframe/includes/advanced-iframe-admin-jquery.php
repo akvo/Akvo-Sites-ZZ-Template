@@ -136,13 +136,35 @@ Omitting E is identical to *#i.</td>
 				<li>$("img[alt]") selects all &lt;img&gt; elements that possess an alt attribute</li>
 				<li>$("a[href$=.pdf]") selects all &lt;a&gt; elements that possess an href attribute that ends in .pdf</li>
         <li>$("a[href=\'example.html\']") selects all &lt;a&gt; elements that has the href example.html</li>
-				<li>$("button[id*=test]") selects all buttons whose id attributes contain test</li>
+        <li>$("a[href*=\'example.html\']") selects all &lt;a&gt; elements where the href does contain example.html</li>
+        <li>$("a[href^=\'http://www.tinywebgallery.com\']") selects all &lt;a&gt; elements that has a href that starts with http://www.tinywebgallery.com</li>
+        <li>$("a:not([href^=\'http://www.tinywebgallery.com\'])") selects all &lt;a&gt; elements that has a href that does NOT start with http://www.tinywebgallery.com. This can be used to detect external links and add target="_blank" there.</li>
+        <li>$("button[id*=test]") selects all buttons whose id attributes contain test</li>
         <li>$("tr:not(.keep)") selects all table row that don\'t have the class "keep"</li>
         <li>$("table:nth-child(1)") selects the 2nd row of a table</li>
-
 				</ul>
         <p>You can create the union of multiple disparate selectors by listing them, separated by commas. For example, the following matches all &lt;div&gt; and &lt;p&gt; elements: div,p</p>
-      </div>', 'advanced-iframe');
+     
+      
+       <h3>Usage in Advanced iframe</h3>
+       Above the default usage in jQuery is shown in the examples In Advanced iFrame the jQuery part is already rendered by the plugin. Therefore you only need to specify the selector. Also the following two rules apply: 
+       
+       <ol>
+       <li><b>Only single quotes are allowed</b>. So please always use \' and never ".</li>
+       <li>Because brackets [ ... ] are replaced in the short code by Wordpress you need to <b>replace [...] them with {{ ... }}</b></li>
+       </ol>
+       <b>Examples:</b>
+       <ul>
+         <li>$("div") -> div</li>
+         <li>$("p:has(b)") -> p:has(b)</li>
+         <li>$("a[href$=.pdf]") -> a{{href$=.pdf}}</li> 
+         <li>a[href="example.html"] -> a{{href=\'example.html\'}}</li>
+       </ul>
+      </div>  
+       
+      
+      ', 'advanced-iframe');
+
 } else {
       _e('<p>Please go to the jQuery API <a target="_blank" href="http://api.jquery.com/category/selectors/">http://api.jquery.com/category/selectors/</a> for the official documentation.
           </p>

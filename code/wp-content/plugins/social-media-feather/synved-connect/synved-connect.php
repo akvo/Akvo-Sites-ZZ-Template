@@ -26,6 +26,7 @@ include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'synved-connect-sponsor.p
 define('SYNVED_CONNECT_LOADED', true);
 define('SYNVED_CONNECT_VERSION', 100000004);
 define('SYNVED_CONNECT_VERSION_STRING', '1.0.4');
+define('SYNVED_WP_MODERN_VERSION', '4.1');
 
 
 $synved_connect = array();
@@ -136,13 +137,23 @@ function synved_connect_enqueue_scripts()
 	wp_register_style('synved-connect-admin', $uri . '/style/admin.css', false, '1.0');
 	
 	wp_enqueue_style('synved-connect-admin');
+
+	if ( version_compare( get_bloginfo( 'version' ), SYNVED_WP_MODERN_VERSION, 'lt' ) ) {
+		wp_register_style( 'synved-connect-old-wp-support-css', $uri . '/style/synved_old_wp_support.css', false,
+			null, 'all' );
+		wp_enqueue_style( 'synved-connect-old-wp-support-css' );
+	}
 }
 
 function synved_connect_init() {
 	$install_date = get_option( 'synved_connect_install_date' );
 
+	// Fresh install.
 	if ( ! $install_date ) {
 		update_option( 'synved_connect_install_date', time() );
+		update_option( 'synved_version', SYNVED_VERSION );
+		synved_option_set( 'synved_social', 'accepted_sharethis_terms', false );
+
 	}
 
 	$version = get_option( 'synved_version' );
@@ -158,11 +169,12 @@ function synved_connect_init() {
  */
 function synved_connect_upgrade( $version ) {
 	// Show the ShareThis notice on version upgrade.
+	synved_option_set( 'synved_social', 'accepted_sharethis_terms', false );
 	synved_option_set( 'synved_social', 'hide_sharethis_terms', false );
 
 	// Saves the new option in the DB.
 	update_option( 'synved_version', SYNVED_VERSION );
 }
 
-add_action( 'init', 'synved_connect_init' );
+add_action( 'init', 'synved_connect_init', 9 );
 add_action( 'admin_enqueue_scripts', 'synved_connect_enqueue_scripts' );

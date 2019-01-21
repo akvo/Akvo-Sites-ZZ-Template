@@ -1,91 +1,125 @@
 === WP Advanced Importer ===
 Contributors: smackcoders
-Donate link: http://www.smackcoders.com/donate.html
-Tags: products import, import images, import featured images, xml importer, import xml, xml import, Import all in one seo, xml, import external url, migration, import cctm, csv importer,
+Donate link: https://www.paypal.me/smackcoders
+Tags: Wordpress importer, wp importer, importer, WordPress XML Import, WooCommerce xml import, XML, XML Importer, products import, import, WooCommerce.
 Requires at least: 4.0
-Tested up to: 4.5.2
-Stable tag: 2.3
-Version: 2.3
+Tested up to: 4.8
+Stable tag: 2.4
+Version: 2.4
 Author: smackcoders
 Author URI: http://profiles.WordPress.org/smackcoders/
 License: GPLv2 or later
-An importer with better inline and featured image handling with Post, Page, Custom Post and User import.
+
+Import Post, Page, Custom Post and Users from XML into WordPress with WP Advanced Importer.
 
 == Description ==
-Advanced importer enables to import a bulk XML file with any number of records. It enables to import Post, Page, Custom Post and Users. It also supports Custom Post Type UI plugin and SEO import with All in One SEO plugin. The import process is executed in a few simple clicks.
+Advanced importer enables to import a bulk XML file with any number of records. It enables to import WooCommerce simple products, Post, Page, Custom Post and Users data in a XML file. It also supports Custom Post Type UI plugin, Custom Field Suite and SEO import with All in One SEO plugin. The import process is executed in a few simple clicks.
 
 Please show your support for WP Advanced Importer by giving it a [rating](https://wordpress.org/support/view/plugin-reviews/wp-advanced-importer?rate=5#postform) :)
 
+Steps to import an XML file:
+1. Upload an XML file by clicking on the Import button.
+2. Then in mapping section, relate the XML nodes with the corresponding fields of WordPress.
+3. In the final import, check for the duplicate entries based on the Post Title, ID, slug and content and import your XML file.
+4. Now your import starts and your files are updated in your WordPress website.
+
+= Import WooCommerce Simple Products into WordPress from XML =
+The advanced XML importer enables to import the simple products in XML file into WordPress. The WooCommerce simple product data can be imported along with the custom fields of Custom Field Suite and All in One SEO add-on.
+
+The featured image can be imported from external URL like Google image, pexels, pixabay, shutterstock, etc,. The images that need to imported are unprotected and it should be accessible without any password prompting. To enhance the performance of the Advanced XML Importer, the images are imported parallely in the background with the help of WP-CRON. You can easily <a href="https://www.smackcoders.com/blog/enable-configure-wp-cron.html?utm_source=wordpress&utm_medium=readme&utm_campaign=free_xml_importer" target="_blank">configure WP Cron</a> and import your data faster and smoother.
+
+If you have your data as a CSV file, you can use the [WP Ultimate CSV Importer](https://www.smackcoders.com/wp-ultimate-csv-importer-pro.html). Which supports the same for the CSV file.
+
+
 = Highlights =
-* Advanced media handling with inline image import with shortcodes and featured image with URLs.
+* Import your WooCommerce simple product from XML into WordPress.
+* Import Custom Field Suite data in XML into WordPress.
+* Advanced media handling with featured image import from external URLs.
 * All in One SEO fields can be imported along with Post, Page and Custom Post.
-* Reduces shifting of screen by providing an option for WordPress Custom Field create on the flow of import.
+* Perfect duplicate prevention with duplicate detection based on Title, ID, slug and content. 
 * Dashboard to grasp the details of the import process.
 
 = Modules supported To Import =
 * Core Modules - Post, Page, Custom Post and Users.
+* eCommerce products - WooCommerce simple products.
 * Custom Post - CPT UI and default WordPress Custom Post.
+* Custom Fields - Custom Field Suite.
 * SEO field - All in One SEO.
 
 = Ultimate CSV Importer PRO =
-[Ultimate CSV Importer PRO](https://www.smackcoders.com/wp-ultimate-csv-importer-pro.html) has all the features of WP Advanced Importer and it is extended with a lot of features that enables to [import](https://www.youtube.com/watch?v=S1P8KebpLaU&index=1&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_), schedule and [update](https://www.youtube.com/watch?v=VEumAqpJfSw&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_&index=2) both XML and CSV files. The import details over a year is mentioned in dashboard chart and the site updates can be tracked in a fraction of a second. Any changes like modifying existing content or appending new content can be done with the update. The update or import can be performed periodically with scheduler. The update or schedule is done with the templates which is created with mapped fields in the mapping section of the import. The export option enables to export the imported modules as CSV based on the filters.
+[Ultimate CSV Importer PRO](https://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=wordpress&utm_medium=readme&utm_campaign=free_xml_importer) has all the features of WP Advanced Importer and it is extended with a lot of features that enables to import, schedule and update both XML and CSV files. The import details over a year is mentioned in dashboard chart and the site updates can be tracked in a fraction of a second. Any changes like modifying existing content or appending new content can be done with the update. The update or import can be performed periodically at regular frequency with scheduler. The update or schedule is done with the templates which is created with mapped fields in the mapping section of the import. The export option enables to export the imported modules as CSV based on the filters.
 
 = Supported Modules To Import and Export =
-* Core Module - Post, Page, Custom Post, Category, Tags, Users, Customer Reviews.
-* eCommerce Products – WooCommerce, MarketPress, eShop, WP e-Commerce.
+* Core Module - Post, Page, Custom Post, Category, Tags, User, Comments, Customer Reviews.
+* eCommerce Products – WooCommerce, MarketPress, WP e-Commerce.
 * SEO field - All in One SEO and Yoast SEO.
-* Custom fields – CustomPress,ACF, Types, Pods, CCTM.
+* Custom fields – CustomPress,ACF, CMB2, Custom Fields Suite, Types, Pods, CCTM.
 * Custom Post – CustomPress,Types, Pods, CPT UI, CCTM.
 
 = Highlighted Features =
-* [Import inline image with shortcode and featured images with shortcode or external URL.](https://www.youtube.com/watch?v=VvcVLERTEHo)
-* The image zip can be uploaded even after the completion of the import flow to populate the shortcode image.
+* Import from FTP, external URL, from computer and server.
+* Import, Update and schedule CSV and XML. Export the imported data as a CSV file.
+* Featured images import from external URL.
+* Save your mapping as a template to automate future imports and updates.
 * Supports WooCommerce product import along with 5 WooCommerce add-on such as WooCommerce chained products, WooCommerce pre-orders, WooCommerce retailer, WooCommerce products and WooCommerce returns and warranty.
 * Imports MarketPress PRO add-on to import products.
-* Registers Custom Fields of [ACF](https://www.youtube.com/watch?v=6tdiOjw4EDk&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_&index=4), Types, [Pods](https://www.youtube.com/watch?v=ziDeb0iXXXA&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_&index=5) and WordPress fields in the flow of import.
-* Supports Custom Posts created with CPT UI, CCTM, Types and Pods.
-* Specific record import. (i.e) Selective records in a CSV/XML can be imported or scheduled.
-* [Imported modules can be managed in the File manager and the logs are maintained in the Log manager.](https://www.youtube.com/watch?v=iBqWrq7M6g0)
+* Simple drag and drop mapping to easily relate the fields in XML & CSV file.
+* Perfect duplicate handling with an option to skip or update the information.
+* Supports Custom Posts created with CPT UI, Custom Press, Types, Pods and CCTM.
+* Imported modules can be managed in the File manager and the logs are maintained in the Log manager.
 
 = Helpful links =
-[Documentation](https://www.smackcoders.com/documentation/wordpress-advanced-importer/getting-started).
+[Documentation](https://www.smackcoders.com/documentation/wordpress-advanced-importer/getting-started?utm_source=wordpress&utm_medium=readme&utm_campaign=free_xml_importer).
 
-Try the demo of our [WP Ultimate CSV Importer PRO](http://demo.smackcoders.com/wordpressdemofour/wp-admin/admin.php?page=wp-ultimate-csv-importer-pro%2Findex.php&__module=dashboard) plugin for advanced XML import.
+[Try the demo](https://demo.smackcoders.com/wordpress/wp-admin/admin.php?page=sm-uci-dashboard) of our WP Ultimate CSV Importer PRO plugin for advanced XML import.
 
-To know more about the product, visit our <a href="https://www.smackcoders.com/wp-ultimate-csv-importer-pro.html">site</a>
+To know more about the product, visit our <a href="https://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=wordpress&utm_medium=readme&utm_campaign=free_xml_importer">WP Ultimate CSV Importer</a> page
 
-For technical support and feature request, visit <a href="https://www.smackcoders.com/support.html"> Smackcoders support </a> or <a href="mailto:support@smackcoders.com">mail us</a>.
+For technical support and feature request, visit <a href="https://www.smackcoders.com/support.html?utm_source=wordpress&utm_medium=readme&utm_campaign=free_xml_importer"> Smackcoders support </a> or <a href="mailto:support@smackcoders.com">mail us</a>.
 
 == Installation ==
 1. Extract the wp-advanced-importer.zip in wordpress/wp-content/plugins using FTP or through plugin install in wp-admin.
 2. Activate the plugin in the WordPress plugin list.
 
-== Screenshots ==
-1. WP Advanced Importer with ultimate user friendly dashboard features.
-2. XML upload view of the Advance Importer.
-3. An advanced mapping section with 'Add Custom field' button, Post type and Post status drop down .
-4. Security and Performance improvement and duplicate title and content check.
-5. Advanced logs of the current import process with Admin view and Webview.
-6. Settings of the Advanced importer to know the php.ini details.
 
 == Frequently Asked Questions ==
 
-1. Is there any limitation on file size?<br />
+= 1. Is there any limitation on file size? =
 The size of the file is based on the Upload size of your server configuration. The upload_max_filesize should be at least 2M. You can verify your system values in settings -> security and performance.
 
-2. Can we register any number of Custom fields during import?<br />
+= 2. Can we register any number of Custom fields during import? =
 Yes, any number of fields can be registered on the flow of import process.
 
-3. Can we include external URL for image import?<br />
-Featured image can be imported from external URL but inline image can be populated only through shortcode.
+= 3. Can we include external URL for image import? =
+Featured image can be imported from external URL but the images need to be placed in an accessible location.
 
-4. Is there any format specification for the inline image import ?<br />
-Yes, the image folder need to be in zip format and it should contain all the images specified in the shortcode of your uploaded XML.
+= 4. Why the featured images are not getting populated ? =
+The featured images are imported in the background for faster and smoother performance, so you need to <a href="https://www.smackcoders.com/blog/enable-configure-wp-cron.html?utm_source=wordpress&utm_medium=readme&utm_campaign=free_xml_importer" target="_blank">configure WP Cron</a>.
 
-5. Why the import button doesn’t get enabled?<br />
+= 5. Why the import button doesn’t get enabled? =
 The import button will be enabled only after uploading your XML file successfully. If not, verify whether the file is properly formatted.
 
+= 6. Is there an option to update existing Post? =
+Yes, you can update the existing Post with the Post title, Id, slug and content.
+
+= 7. Can I skip the duplicate data during import? =
+Yes, the duplicate data can be handled perfectly with the option to create, skip or update.
+
+== Screenshots ==
+1. XML upload view of the Advance Importer.
+2. An advanced mapping section with simple drag and drop.
+3. Duplicate Post import check and import XML.
+4. Advanced logs of the current import process with Admin view and Webview.
+5. Settings of the Advanced importer to know the php.ini details.
+
 == Change log ==
+= 2.4 =
+* Added: Drag and drop mapping section.
+* Added: WooCommerce simple Products Import.
+* Added: Custom Field Suite(CFS) add-on support.
+* Improved: Duplicate detection Title, ID, slug and content. 
+* Modified: User interface.
+* Removed: Comments Import
 = 2.3 =
 * Fixed: "The plugin does not have a valid header" issue.
 * Fixed: Issue with Custom Post module.
@@ -149,6 +183,8 @@ The import button will be enabled only after uploading your XML file successfull
 * Initial release version. Tested and found to work well without any issues.
 
 == Upgrade Notice ==
+= 2.4 =
+* Upgrade now for improved UI, WooCommerce & Custom Field Suite import.
 = 2.3 =
 * Upgrade now for Custom Post support.
 = 2.2 =

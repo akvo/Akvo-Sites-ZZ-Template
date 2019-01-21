@@ -49,8 +49,10 @@ if (!empty($hide_content_until_iframe_color)) {
 if ($show_iframe_loader == 'true') {
    // div around 
    $html .= '<div id="ai-div-container-'.$id.'">';
+   $filenameloader = $filenamedir . '/loader.gif'; 
+   $loader_url = file_exists($filenameloader) ? AIP_URL_CUSTOM : AIP_IMGURL;
    // div for the loader 
-   $html .= '<div id="ai-div-loader-'.$id.'"><img src="' . AIP_IMGURL . '/loader.gif" width="66" height="66" title="Loading" alt="Loading"></div>';
+   $html .= '<div id="ai-div-loader-'.$id.'"><img src="' . $loader_url . '/loader.gif" width="66" height="66" title="Loading" alt="Loading"></div>';
  }
 
  if (!empty($hide_part_of_iframe)) {
@@ -375,14 +377,14 @@ if ($onload_scroll_top == 'true' || $onload_scroll_top == 'iframe') {
 // hide_page_until_loaded
 if ($hide_page_until_loaded  == 'true') {
     $onload_str .= 'jQuery("#'.$id.'").css("visibility", "visible");';
-    $onload_str .= 'ifrm_'.$id.'.contentWindow.onunload  = hide_iframe_loading_'.$id.';';
     if (!empty($hide_part_of_iframe)) {
         $onload_str .= 'jQuery("#wrapper-div-'.$id.'").css("visibility", "visible");';
     } 
+    $onload_str .= 'ai_hide_iframe_loading_'.$id.'(this);';
 }   
  
 if (!empty($resize_on_element_resize)) {
-    $onload_str .= 'onloadFired'.$id.' = true;';
+    $onload_str .= 'initResizeIframe'.$id.'();';
 }
 
 if ($add_iframe_url_as_param == 'same') {

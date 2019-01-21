@@ -13,10 +13,11 @@ class NF_Extension_Updater
     public $product_nice_name = '';
     public $product_name = '';
     public $version = '';
-    public $store_url = 'https://ninjaforms.com';
+    public $store_url = 'https://ninjaforms.com/update-check/';
     public $file = '';
     public $author = '';
     public $error = '';
+    private $_last_error;
 
     /**
      * Constructor function
@@ -69,11 +70,12 @@ class NF_Extension_Updater
         $api_params = array(
             'edd_action'=> 'activate_license',
             'license' 	=> $license_key,
-            'item_name' => urlencode( $this->product_nice_name ) // the name of our product in EDD
+            'item_name' => urlencode( $this->product_nice_name ), // the name of our product in EDD
+            'url' => home_url()
         );
 
         // Call the custom API.
-        $response = wp_remote_post( esc_url_raw( add_query_arg( $api_params, $this->store_url ) ) );
+        $response = wp_remote_post( $this->store_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
         $this->maybe_debug( $response );
 
@@ -86,6 +88,15 @@ class NF_Extension_Updater
 
         if ( 'invalid' == $license_data->license ) {
             $error = '<span style="color: red;">' . __( 'Could not activate license. Please verify your license key', 'ninja-forms' ) . '</span>';
+            
+            if ( isset ( $_REQUEST[ 'nf_debug' ] ) && 1 == absint( $_REQUEST[ 'nf_debug' ] ) ) {
+                // Add an error to our admin notice if nf_debug is turned on.
+                add_filter( 'nf_admin_notices', array( $this, 'show_license_error_notice' ) );
+                $this->_last_error = var_export( $license_data, true );
+            }
+          
+            Ninja_Forms()->logger()->emergency( var_export( $license_data, true ) );
+
         } else {
             $error = '';
         }
@@ -93,6 +104,17 @@ class NF_Extension_Updater
         Ninja_Forms()->update_setting( $this->product_name . '_license', $license_key );
         Ninja_Forms()->update_setting( $this->product_name . '_license_error', $error );
         Ninja_Forms()->update_setting( $this->product_name . '_license_status', $license_data->license );
+    }
+
+    public function show_license_error_notice( $notices ) {
+        $notices[ 'license_error' ] = array(
+            'title' => __( 'License Activation Error', 'ninja-forms' ),
+            'msg' => '<pre>' . $this->_last_error . '</pre>',
+            'int' => 0,
+            'ignore_spam' => true,
+        );
+
+        return $notices;
     }
 
     /*
@@ -111,11 +133,12 @@ class NF_Extension_Updater
         $api_params = array(
             'edd_action'=> 'deactivate_license',
             'license' 	=> $license,
-            'item_name' => urlencode( $this->product_nice_name ) // the name of our product in EDD
+            'item_name' => urlencode( $this->product_nice_name ), // the name of our product in EDD
+            'url'       => home_url()
         );
 
         // Call the custom API.
-        $response = wp_remote_post( esc_url_raw( add_query_arg( $api_params, $this->store_url ) ), array( 'timeout' => 15, 'sslverify' => false ) );
+        $response = wp_remote_post( $this->store_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
         $this->maybe_debug( $response );
 

@@ -8,8 +8,11 @@ class NF_AJAX_Controllers_Form extends NF_Abstracts_Controller
     {
         add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 
+        add_action( 'wp_ajax_nf_ajax_get_new_nonce', array( $this, 'get_new_nonce' ) );
+	    add_action( 'wp_ajax_nopriv_nf_ajax_get_new_nonce', array( $this, 'get_new_nonce' ) );
         add_action( 'wp_ajax_nf_save_form',   array( $this, 'save' )   );
         add_action( 'wp_ajax_nf_delete_form', array( $this, 'delete' ) );
+        add_action( 'wp_ajax_nf_remove_maintenance_mode', array( $this, 'remove_maintenance_mode' ) );
     }
 
     public function plugins_loaded()
@@ -38,43 +41,22 @@ class NF_AJAX_Controllers_Form extends NF_Abstracts_Controller
             $form = Ninja_Forms()->form($form_data['id'])->get();
         }
 
+        unset( $form_data[ 'settings' ][ '_seq_num' ] );
+
         $form->update_settings( $form_data[ 'settings' ] )->save();
 
         if( isset( $form_data[ 'fields' ] ) ) {
-
-            foreach ($form_data['fields'] as &$field_data) {
-
-                if( 'unknown' == $field_data[ 'settings' ][ 'type' ] ) continue;
-
-                $id = $field_data['id'];
-
-                $field = Ninja_Forms()->form( $form_data[ 'id' ] )->get_field($id);
-
-                if ($field->get_tmp_id()) {
-
-                    $field->save();
-                    $tmp_id = $field->get_tmp_id();
-                    $this->_data['new_ids']['fields'][$tmp_id] = $field->get_id();
-                    $field_data[ 'id' ] = $field->get_id();
-                }
-
-                $this->publish_processing->push_to_queue( array(
-                    'id' => $field->get_id(),
-                    'type' => 'field',
-                    'settings' => $field_data[ 'settings' ]
-                ));
-
-                $this->_data[ 'fields' ][ $field->get_id() ] = $field->get_settings();
-            }
-
-            $this->publish_processing->save()->dispatch();
+            $db_fields_controller = new NF_Database_FieldsController( $form_data[ 'id' ], $form_data[ 'fields' ] );
+            $db_fields_controller->run();
+            $form_data[ 'fields' ] = $db_fields_controller->get_updated_fields_data();
+            $this->_data['new_ids']['fields'] = $db_fields_controller->get_new_field_ids();
         }
 
         if( isset( $form_data[ 'deleted_fields' ] ) ){
 
             foreach( $form_data[ 'deleted_fields' ] as  $deleted_field_id ){
 
-                $field = Ninja_Forms()->form()->get_field( $deleted_field_id );
+                $field = Ninja_Forms()->form( $form_data[ 'id' ])->get_field( $deleted_field_id );
                 $field->delete();
             }
         }
@@ -146,7 +128,7 @@ class NF_AJAX_Controllers_Form extends NF_Abstracts_Controller
         }
 
         delete_user_option( get_current_user_id(), 'nf_form_preview_' . $form_data['id'] );
-        update_option( 'nf_form_' . $form_data[ 'id' ], $form_data );
+        WPN_Helper::update_nf_cache( $form_data[ 'id' ], $form_data );
 
         do_action( 'ninja_forms_save_form', $form->get_id() );
 
@@ -158,5 +140,39 @@ class NF_AJAX_Controllers_Form extends NF_Abstracts_Controller
         check_ajax_referer( 'ninja_forms_builder_nonce', 'security' );
 
         $this->_respond();
+    }
+
+    /**
+     * This function will take all form out of maintenance mode( in case some
+     * are still in maintenance mode after some required updates )
+     * 
+     * @since 3.4.0
+     */
+    public function remove_maintenance_mode() {
+
+        check_ajax_referer( 'ninja_forms_settings_nonce', 'security' );
+
+        WPN_Helper::set_forms_maintenance_mode();
+
+        $this->_respond();
+    }
+
+	/**
+	 * Let's generate a unique nonce for each form render so that we don't get
+	 * caught with an expiring nonce accidentally and fail to allow a submission
+	 * @since 3.2
+	 */
+    public function get_new_nonce() {
+    	// get a timestamp to append to nonce name
+		$current_time_stamp = time();
+
+		// Let's generate a unique nonce
+    	$new_nonce_name = 'ninja_forms_display_nonce_' . $current_time_stamp;
+
+		$res = array(
+			'new_nonce' => wp_create_nonce( $new_nonce_name ),
+			'nonce_ts' => $current_time_stamp );
+
+		$this->_respond( $res );
     }
 }

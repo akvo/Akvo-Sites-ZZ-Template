@@ -3,6 +3,8 @@ var columnTypes = [
 	{ name: 'int', value: 'Integer' },
 	{ name: 'float', value: 'Float' },
 	{ name: 'date', value: 'Date' },
+    { name: 'datetime', value: 'DateTime' },
+    { name: 'time', value: 'Time' },
 	{ name: 'link', value: 'URL link' },
 	{ name: 'email', value: 'E-mail link' },
 	{ name: 'image', value: 'Image' }
@@ -14,6 +16,8 @@ var filterTypes = [
 	{ name: 'number', value: 'Number' },
 	{ name: 'number-range', value: 'Number range' },
 	{ name: 'date-range', value: 'Date range' },
+    { name: 'datetime-range', value: 'Datetime range' },
+    { name: 'time-range', value: 'Time range' },
 	{ name: 'select', value: 'Select box' },
 	{ name: 'checkbox', value: 'Checkbox' }
 ];
@@ -26,6 +30,8 @@ var editorTypes = [
 	{ name: 'selectbox', value: 'Single-value selectbox' },
 	{ name: 'multi-selectbox', value: 'Multi-value selectbox' },
 	{ name: 'date', value: 'Date' },
+    { name: 'datetime', value: 'Datetime' },
+    { name: 'time', value: 'Time' },
 	{ name: 'link', value: 'URL link' },
 	{ name: 'email', value: 'E-mail link' },
 	{ name: 'attachment', value: 'Attachment' }
@@ -42,6 +48,7 @@ var columnsToDelete = [];
 var wdtDateFormat = jQuery('#wdt_date_format').val().replace(/y/g, 'yy').replace(/Y/g, 'yyyy').replace(/M/g, 'mmm');
 var $clickedSaveButton = null;
 var wdtConfigChanged = false;
+var additional_options;
 
 (function($){
 
@@ -253,6 +260,17 @@ var wdtConfigChanged = false;
 
         });
 
+        var full_version_message = function(){
+	    if( $(this).is(':checked')  || $(this).hasClass('addFormulaButton') || $(this).hasClass('define_formatting_rules') ) {
+		wdtAlertDialog("Sorry, this function is available only in FULL version of wpDataTables along with many others! Please go to our <a href='http://wpdatatables.com/'>website</a> to see the full list and to purchase!","Full version only!");
+	    }
+	    if( $(this).hasClass('addFormulaButton') || $(this).hasClass('define_formatting_rules') ) {
+	        return false;
+	    }
+	}
+
+	$(document).on('click', '.full_version_option, button.addFormulaButton, button.define_formatting_rules', full_version_message);
+
         window.send_to_editor = function(html) {
             // adding a wrapper so $ could find the element
             html = '<span>'+html+'</span>';
@@ -396,6 +414,7 @@ var wdtConfigChanged = false;
             data.show_title = $('#wpShowTableTitle').is(':checked') ? 1 : 0;
             data.table_type = $('#wpTableType').val();
             data.columns_to_delete = columnsToDelete;
+            data.wdtSaveTableNonce = $('#wdtSaveTableNonce').val();
 
             if( $( '#wdt_table_manual' ).val() == '1' ){
                 data.table_type = 'manual';
@@ -448,6 +467,14 @@ var wdtConfigChanged = false;
             data.var1_placeholder = $('#wdtVar1PlaceholderDefault').val();
             data.var2_placeholder = $('#wdtVar2PlaceholderDefault').val();
             data.var3_placeholder = $('#wdtVar3PlaceholderDefault').val();
+
+            if ( typeof additional_options != 'undefined' ) {
+                for ( var i = 0; i < additional_options.length; i++ ) {
+                    var option_name = additional_options[i]['option_name'];
+                    var option_value = additional_options[i]['option_value']();
+                    data[additional_options[i]['option_name']] = option_value;
+                }
+            }
 
             $('#wdtPreloadLayer').show();
             $.ajax({
@@ -552,6 +579,7 @@ var wdtConfigChanged = false;
                                 var data = { };
                                 data.action = 'wdt_save_columns';
                                 data.table_id = $('#wpDataTableId').val();
+                                data.wdtColumnsNonce = $('#wdtColumnsNonce').val();
                                 data.columns = JSON.stringify( collectColumnsData() );
 
                                 $.ajax({
@@ -634,109 +662,6 @@ var wdtConfigChanged = false;
         })
 
         /**
-         * Init editor roles dialog
-         */
-        $('#wdtUserRoles').dialog({
-                autoOpen: false,
-                modal: true,
-                buttons: [
-                        {
-                            text: wpdatatables_edit_strings.ok,
-                            click: function(){
-                                var editorRoles = [];
-                                $('input.wdtRoleCheckbox:checked').each(function(){
-                                    editorRoles.push($(this).val());
-                                });
-                                var editorRolesStr = editorRoles.join(',');
-                                $('#wpTableEditorRoles').html(editorRolesStr);
-                                $(this).dialog('close');
-                            }
-                        },
-                        {
-                            text: wpdatatables_edit_strings.cancel,
-                            click: function(){
-                                $(this).dialog('close');
-                            }
-                        }
-                ]
-        });
-
-        /**
-         * Init formula dialog
-         */
-        $('#wdtFormulaBuilderDialog').dialog({
-            autoOpen: false,
-            modal: true,
-            width: 750,
-            buttons: [
-                {
-                    text: wpdatatables_edit_strings.ok,
-                    click: function(){
-                        $('#wdt_formula_preview_block div.preview_container').html('').hide();
-                        if( $currentFormulaContainer !== null ){
-                            $currentFormulaContainer.val( $('#wdt_formula_edit').val() );
-                            $('#wdt_formula_edit').val('');
-                            $currentFormulaContainer = null;
-                        }
-                        $(this).dialog('close');
-                    }
-                },
-                {
-                    text: wpdatatables_edit_strings.cancel,
-                    click: function(){
-                        $currentFormulaContainer = null;
-                        $('#wdt_formula_preview_block div.preview_container').html('').hide();
-                        $('#wdt_formula_edit').val('');
-                        $(this).dialog('close');
-                    }
-                }
-            ]
-        });
-
-        /**
-         * Init formatting rules dialog
-         */
-        $('#wdtConditionalFormattingDialog').dialog({
-                autoOpen: false,
-                modal: true,
-                width: 970,
-                buttons: [
-                    {
-                        text: wpdatatables_edit_strings.ok,
-                        click: function(){
-                            if( $currentFormattingRulesContainer !== null ){
-                                var columnType = $currentFormattingRulesContainer.closest('tbody').find('select.columnType').val();
-                                var formattingRules = [];
-                                jQuery( '#formattingRules div.formattingRuleBlock' ).each(function(){
-                                    if( ( columnType == 'int' ) || ( columnType == 'float' ) ){
-                                        var cellVal = parseFloat( jQuery(this).find('input.cellVal').val() );
-                                    }else{
-                                        var cellVal = jQuery(this).find('input.cellVal').val().replace('"',"'");
-                                    }
-                                    formattingRules.push({
-                                        ifClause: jQuery(this).find('select.formatting_rule_if_clause').val(),
-                                        cellVal: cellVal,
-                                        action: jQuery(this).find('select.formatting_rule_action').val(),
-                                        setVal:  jQuery(this).find('input.setVal').val()
-                                    });
-                                });
-                                $currentFormattingRulesContainer.val( JSON.stringify( formattingRules ) );
-                            }
-                            $currentFormattingRulesContainer = null;
-                            $(this).dialog('close');
-                        }
-                    },
-                    {
-                        text: wpdatatables_edit_strings.cancel,
-                        click: function(){
-                            $currentFormattingRulesContainer = null;
-                            $(this).dialog('close');
-                        }
-                    }
-                ]
-        });
-        
-        /**
          * Allow making editor mandatory
          */
         $(document).on('change','select.inputType',function(e){
@@ -770,114 +695,7 @@ var wdtConfigChanged = false;
             $('#wdtUserRoles').dialog('open');
         });
 
-        /**
-         * Add a formula column
-         */
-        $('button.addFormulaButton').click(function(e){
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            wdtFormulaColumnsCount++;
-            var column_name = 'formula_'+wdtFormulaColumnsCount;
-            if( $( 'table.formula_column b:contains("' + column_name + '")').length ){
-                column_name = column_name+'_1';
-            }
-            var formulaBlockHtml = createColumnsBlock([{
-                orig_header: column_name,
-                display_header: column_name,
-                calc_formula: '',
-                chart_horiz_axis: 0,
-                color: '',
-                column_type: 'formula',
-                css_class: '',
-                default_value: '',
-                filter_type: 'text',
-                formatting_rules: '[]',
-                group_column: 0,
-                hide_on_phones: 0,
-                hide_on_tablets: 0,
-                id: '',
-                id_column: 0,
-                input_mandatory: 0,
-                input_type: '',
-                pos: $('.columnsBlock table.column_table').length,
-                possible_values: '',
-                skip_thousands_separator: 0,
-                sort_column: 0,
-                sum_column: 0,
-                table_id: $('#wpdatatable_id').val(),
-                text_after: '',
-                text_before: '',
-                use_in_chart: 0,
-                visible: 1
-            }], true);
-            $('td.columnsBlock tr.sort_columns_block').append( formulaBlockHtml );
-            applySelecter();
-            $('#step2-postbox .inside').animate({scrollLeft: $('#step2-postbox .inside')[0].scrollWidth}, 200);
-        });
-
-        /**
-         * Open formula editor
-         */
-        $(document).on('click','button.define_formula',function(e){
-            e.preventDefault();
-            $currentFormulaContainer = $(this).closest('tr').find('input.calc_formula');
-            var table_columns = [];
-            var columns_block_str = '';
-            $('table.column_table:not(.formula_column)').each(function(){
-                var columnType = $(this).find('select.columnType').val();
-                if( columnType == 'int' || columnType == 'float' ) {
-                    columns_block_str += '<div class="column_block" >' + $(this).find('tr.columnHeaderRow td b').html() + '</div>';
-                }
-            });
-            $('#wdt_formula_editor_columns div.columns_container').html( columns_block_str );
-            $('#wdt_formula_edit').val( $currentFormulaContainer.val() );
-            $('#wdtFormulaBuilderDialog').dialog('open');
-        });
-
-        /**
-         * Remove a formula column
-         */
-        $(document).on('click','button.removeColumnBlock',function(e){
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            columnsToDelete.push( $(this).closest('td').find('b').html() );
-            $(this).closest('table.column_table').parent().remove();
-        });
-
-        /**
-         * Insert column header in formula editor
-         */
-        $(document).on('click','#wdt_formula_editor_columns div.column_block', function(e){
-            e.preventDefault();
-            $('#wdt_formula_edit').insertAtCaret( $(this).text() );
-        });
-
-        /**
-         * Insert operator in formula editor
-         */
-        $(document).on('click','#wdt_formula_editor_operators button', function(e){
-            e.preventDefault();
-            $('#wdt_formula_edit').insertAtCaret( $(this).text() );
-        });
-
-        /**
-         * Preview formula result for 5 rows
-         */
-        $(document).on('click','#wdt_formula_preview_block button.preview_formula_result',function(e){
-            e.preventDefault();
-            $.ajax({
-                url: ajaxurl,
-                method: 'POST',
-                data: {
-                    action: 'wpdatatables_preview_formula_result',
-                    table_id: $('#wpdatatable_id').val(),
-                    formula: $('#wdt_formula_edit').val()
-                },
-                success: function(data){
-                    $('#wdt_formula_preview_block div.preview_container').html( data ).show();
-                }
-            })
-        });
+        
 
         /**
          * Preview handlder
@@ -940,37 +758,8 @@ var wdtConfigChanged = false;
                 wdtPreviewTable();
             }
         });
+
         
-        /**
-         * Conditional formatting dialog for columns
-         */
-        $(document).on('click', 'button.define_formatting_rules', function(e){
-            e.preventDefault();
-            $('#formattingRules').html('');
-            // Render the rules
-            $currentFormattingRulesContainer = $(this).parent().find('input.formatting_rules');
-            var formattingRules = $.parseJSON( $currentFormattingRulesContainer.val() );
-            var columnType = $currentFormattingRulesContainer.closest('tbody').find('select.columnType').val();
-            if( formattingRules ){
-                $('#formattingRules').html('');
-                for( var i in formattingRules ){
-                    var formattingRuleHtml = generateFormattingRuleHTML({
-                                                    ifClause: formattingRules[i].ifClause,
-                                                    cellVal: formattingRules[i].cellVal,
-                                                    action: formattingRules[i].action,
-                                                    setVal: formattingRules[i].setVal
-                                                });
-                    jQuery('#formattingRules').append( formattingRuleHtml );
-                }
-                if( columnType == 'date'  ){
-                    applyPickadate( $('#formattingRules input.cellVal') );
-                }
-                $('#formattingRules select.formatting_rule_action').change();
-            }else{
-                $('#formattingRules').html(wpdatatables_edit_strings.no_formatting_rules);
-            }
-            $('#wdtConditionalFormattingDialog').dialog('open');
-        });
 
         /**
          * Show 'toggle table tools config' button when table tools is enabled/disabled
@@ -1008,7 +797,7 @@ var wdtConfigChanged = false;
             
             var columnType = $currentFormattingRulesContainer.closest('tbody').find('select.columnType').val();
             
-            if( ['date','int','float'].indexOf( columnType ) !== -1 ){
+            if( ['date','int','float','datetime','time'].indexOf( columnType ) !== -1 ){
                 $formattingRuleHtml
                         .find('select.formatting_rule_if_clause option[value="contains"],select.formatting_rule_if_clause option[value="contains_not"]')
                         .remove();
@@ -1040,48 +829,7 @@ var wdtConfigChanged = false;
             });
         }
 
-        /**
-         * Add a conditional formatting rule block
-         */
-        jQuery('button.addFormattingRuleBlock').click(function(e){
-            e.preventDefault();
-            var formattingRuleHtml = generateFormattingRuleHTML({
-                                            ifClause: 'lt',
-                                            cellVal: '',
-                                            action: 'setCellColor',
-                                            setVal: ''
-                                        });
-            if( jQuery('#formattingRules div.formattingRuleBlock').length == 0 ){
-                $('#formattingRules').html('');
-            }
-            $('#formattingRules').append( formattingRuleHtml );
-            var columnType = $currentFormattingRulesContainer.closest('tbody').find('select.columnType').val();
-            if( columnType == 'date'  ){
-                applyPickadate( $('#formattingRules input.cellVal:eq(-1)') );
-            }
-            $('#formattingRules select.formatting_rule_action:eq(-1)').change();
-        });
         
-        /**
-         * Delete formatting rule
-         */
-        $(document).on('click','button.deleteFormattingRule',function(e){
-            e.preventDefault();
-            $(this).closest('div.formattingRuleBlock').remove();
-        });
-
-        /**
-         * Helper function to show/hide the colorpicker in conditional formatting block
-         */
-        $(document).on('change','div.formattingRuleBlock select.formatting_rule_action',function(e){
-            e.preventDefault();
-            if( $(this).val() == 'setCellColor' || $(this).val() == 'setRowColor' || $(this).val() == 'setColumnColor' ){
-                $(this).parent().find('input.setVal').wpColorPicker();
-            }else{
-                var val = $(this).parent().find('input.setVal').val();
-                $(this).parent().find('div.wp-picker-container').replaceWith('<input class="setVal" value="'+val+'" />')
-            }
-        });
 
         /**
          * Ungroup columns
@@ -1093,7 +841,7 @@ var wdtConfigChanged = false;
 
         $('#wpTableType').trigger('change');
 
-        if(columns_data.length > 0) {
+        if(typeof columns_data !== 'undefined' && columns_data.length > 0) {
                     var columns_block = createColumnsBlock(columns_data);
                     $('#step2-postbox').show();
                     $('tr.step2_row').show();
@@ -1111,93 +859,7 @@ var wdtConfigChanged = false;
 
         applySelecter();
 
-        /**
-         * Handler to generate possible values for columns
-         */
-        $(document).on('click','button.generatePossibleValues',function(e){
-            e.preventDefault();
-
-            var $this = $(this);
-            var $coulmn_table_elm = $(this).closest('table.column_table');
-            var data = { };
-            data.action = 'wpdatatable_get_column_distinct_values';
-            data.table_id = $('#wpDataTableId').val();
-            data.column_id = $coulmn_table_elm.attr('rel');
-
-            $.ajax({
-                type: 'post',
-                url: ajaxurl,
-                data: data,
-                dataType: 'json',
-                beforeSend: function() {
-                    $this.closest('tr').loading();
-                },
-                complete: function() {
-                    $this.closest('tr').loading('stop');
-                },
-                success: function( column_distinct_values ) {
-                    if( !(column_distinct_values instanceof Array) ) {
-                        return;
-                    }
-
-                    var $possible_values_elm = $coulmn_table_elm.find('.possibleValues');
-                    if( $possible_values_elm.val().length > 0 ) {
-                        //confirmation dialog
-                        $( "#merge-possible-values" ).dialog({
-                            resizable: false,
-                            height: 'auto',
-                            width: 'auto',
-                            modal: true,
-                            buttons: [
-                                {
-                                    text: wpdatatables_edit_strings.merge,
-                                    click: function() {
-                                        var possible_values = $possible_values_elm.val().split('|');
-                                        $.merge(possible_values, column_distinct_values);
-
-                                        //merging without duplicates
-                                        column_distinct_values = column_distinct_values.concat(possible_values.filter(function (item) {
-                                            return column_distinct_values.indexOf(item) < 0;
-                                        }));
-                                        column_distinct_values.sort();
-                                        $possible_values_elm.importTags( column_distinct_values.join('|') );
-
-                                        $( this ).dialog( "destroy" );
-                                    }
-                                },
-                                {
-                                    text: wpdatatables_edit_strings.replace,
-                                    click: function () {
-                                        column_distinct_values.sort();
-                                        $possible_values_elm.importTags(column_distinct_values.join('|'));
-                                        $(this).dialog("destroy");
-                                    }
-                                },
-                                {
-                                    text: wpdatatables_edit_strings.cancel,
-                                    click: function() {
-                                        $( this ).dialog( "destroy" );
-                                    }
-                                }
-                            ]
-                        });
-                    } else {
-                        column_distinct_values.sort();
-                        $possible_values_elm.importTags( column_distinct_values.join('|') );
-                    }
-                }
-            });
-
-        });
-
-        /**
-         * Clear possible values
-         */
-        $(document).on('click','button.clearPossibleValues', function(e){
-            e.preventDefault();
-
-            var $coulmn_table_elm = $(this).closest('table.column_table').find('.possibleValues').importTags('');
-        });
+        
 
         /**
          * Helper method to insert at textarea cursor position
@@ -1233,9 +895,11 @@ var wdtConfigChanged = false;
         /**
          * Apply syntax highlighter
          */
-        aceEditor = ace.edit('wpMySQLQuery');
-        aceEditor.getSession().setMode("ace/mode/sql");
-        aceEditor.setTheme("ace/theme/idle_fingers");
+        if( $('#wpMySQLQuery').length ) {
+            aceEditor = ace.edit('wpMySQLQuery');
+            aceEditor.getSession().setMode("ace/mode/sql");
+            aceEditor.setTheme("ace/theme/idle_fingers");
+        }
     
     });
 

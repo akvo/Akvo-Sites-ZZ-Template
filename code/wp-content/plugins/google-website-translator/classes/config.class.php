@@ -3,7 +3,7 @@
 class PrisnaGWTConfig {
 	
 	const NAME = 'PrisnaGWT';
-	const UI_NAME = 'Google Website Translator by Prisna';
+	const UI_NAME = 'Google Website Translator';
 	const WIDGET_NAME = 'Prisna GWT';
 	const WIDGET_INTERNAL_NAME = 'prisna-google-website-translator';
 	const ADMIN_SETTINGS_NAME = 'prisna-google-website-translator-settings';

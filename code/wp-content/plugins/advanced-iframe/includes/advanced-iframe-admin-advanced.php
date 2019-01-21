@@ -73,6 +73,7 @@ _e('<div style="clear:left;"></div>
    
         printTextInput(true,$devOptions, __('Reload interval', 'advanced-iframe'), 'reload_interval', __('You can reload the iframe in a given interval. Enter the intervall im ms or leave the field blank for no reload. Shortcode attribute: reload_interval=""', 'advanced-iframe'));    
  
+        printTextInput(false,$devOptions, __('Safari cookie fix', 'advanced-iframe'), 'safari_fix_url', __('If you need cookies in the page in the iframe to work properly you have a problem with Safari because Safari blocks 3rd party cookies by default! Therefore such pages will not work in iframes in Safari and browsers that are configured the same way. Please read about the problem and the basic solution here: <a href="http://vitr.github.io/safari-cookie-in-iframe/" target="_blank">http://vitr.github.io/safari-cookie-in-iframe/</a>. the solution in this plugin has even more features like full browser and message support. Please go <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/3rd-party-cookie-in-iframe-workaround" target="_blank">my example pages</a> for the different options and how you can configure this. Shortcode attribute: safari_fix_url=""', 'advanced-iframe'));
     ?> 
      
      <tr <?php if ($isDemo) { echo 'class="ai-pro"'; } ?>>

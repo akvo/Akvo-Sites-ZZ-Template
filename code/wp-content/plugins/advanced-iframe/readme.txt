@@ -3,8 +3,8 @@ Contributors: mdempfle
 Donate link: http://www.tinywebgallery.com
 Tags: iframe, embed, resize, zoom, content, advanced, shortcode, modify css, widget 
 Requires at least: 3.2
-Tested up to: 4.9.5
-Stable tag: 7.5.7
+Tested up to: 5.0.1
+Stable tag: 7.6
 Requires PHP: 5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,11 +14,13 @@ Include content the way YOU like in an iframe that can hide and modify elements 
 == Description ==
 > **[Advanced iFrame Pro](http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle)** | 
 > **[Demo](http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0)**
+Include content the way YOU like in an iframe that can hide and modify elements and foreward parameters. You can also embed content directly or show a part of an iframe.
 
 = Main features of advanced iframe =
 By entering the shortcode '[advanced_iframe]' you can include any webpage to any page or article. 
 The following cool features compared to a normal iframe are implemented:
 
+- Security code: You can only insert the shortcode with a valid security code from the administration.
 - Hide areas of the layout to give the iframe more space (see screenshot) 
 - Show only specific areas of the iframe when the iframe is on a same domain (The Pro version supports this on different domains) or include parts directly by jQuery
 - Modify css styles in the parent and the iframe to e.g. change the width of the content area (see screenshot)
@@ -27,7 +29,6 @@ The following cool features compared to a normal iframe are implemented:
 - Scroll the parent to the top when the iframe is loaded
 - Hide the content until it is fully loaded 
 - Add a css and js file to the parent page
-- Security code: You can only insert the shortcode with a valid security code from the administration. Optional since 7.5.4
 - Many additional cool features are available the pro version - see http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-comparison-chart 
 
 Please note: Modification inside the iframe are only possible if you are on the same domain or use a workaround like described in the settings.
@@ -164,6 +165,34 @@ If you have some radio elements empty after the update simply
 select the one you like and save again.
 
 == Changelog ==
+= 7.6 =
+- New: Tested with Wordpress 5.0. A Gutenberg block will come with 7.6.1
+- New: Support of the safari cookie fix from http://vitr.github.io/safari-cookie-in-iframe/. Please see the documentation at "Safari cookie fix" on the advanced tab. See example http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/3rd-party-cookie-in-iframe-workaround. This setting can be done at the "Advanced Settings" tab -> "Advanced features" section.  
+- New: The safari coookie fix is also availabe in the resize.js. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/share-content-from-your-domain-add-ai_external-js-local 
+- New: header('P3P: CP="ALL DSP NID CURa ADMa DEVa HISa OTPa OUR NOR NAV DEM"'); is now set by default to allow cookies in IE. You have to set this manually for remote pages.
+- New: Cookie fix for IE is included and added to the documentation (p3p header is sent!). See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/3rd-party-cookie-in-iframe-workaround
+- New: Scroll to top is now also available for the external workaround for ajax forms. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-with-post-message#e51
+- New: Scroll to top is now also available if you share your content to a different domain. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/share-content-from-your-domain-add-ai_external-js-local
+- New: Extended jQuery help and documentation for finding external links and changing the target there!
+- New: Margin top and botttom is now set to 0 of the elememt to measure to avoid that you need to use the additional height setting if this is not the case. 
+- New: Improved the add_iframe_url_as_param_prefix setting. Additional checks was added for https. s| is now only added when a https site is included into a http page. 
+- New: The mapping of parameters from the parent url is now done after "Map parameter to url". So that this 2 features now work together!
+- New: Standalone version does now also support to be included inside a method. This makes is possible to include it also to e.g. Joomla
+- New: Standalone version does now support to set $iframeStandaloneOptions directly before you include the standalone version. This makes it possible that you don't need to create a settings file but define it before the include.
+- New: Standalone version was now tested with the latest version of Joomla 3.8.10 with the usage of phpDirect successfully.
+- New: resize_on_element_resize is now initialized in the onload event and not only once. So it works on next pages in an iframe also! 
+- New: Demo for iframeresizer
+- New: Resize summary on the website: http://www.tinywebgallery.com/blog/advanced-iframe-resize-to-content-summary
+- New: The reset to default get postMessage communication as default as only 0.2% of all used browsers (IE <= 8) do not support this! When the project was started this was almost 20%!
+- New: {session_id} is now available as url parameter. If a session does exist it is replaced by the session id otherwise with a empty string.
+- New: Added overflow:hidden by default to the ai_wrapper_div. Seems that the measurement especially for floating layouts is better then. This is also added to the documentation of the "element to measure". 
+- Fix: $hide_page_until_loaded unload event is now moved as last part of the onload event and surrounded with a try/catch. This caused the hide_part_of_iframe feature to fail when it was used on different domains. So now the $hide_page_until_loaded works again on different domains but without otimized page transitions. But for this you should still use hide_page_until_loaded_external if you like to hide css modifications on an external domain. 
+- Fix: Improved documentation of show_part_of_iframe_style
+- Fix: wp_kses was not mapped in the standalone version. 
+- Fix: advanced-iframe-custom folder in the standalone version für a custom loader icon is now also mapped correctly.
+- Fix: The area selector was not inserting the security key properly after the security key was made optional. Now it is inserted properly again.
+- Fix: The code for $hide_page_until_loaded changed because if about:blank is used as default the onload event was fired too fast.
+
 = 7.5.7 =
 - New: Keep iframe modifications outside iframe: Normally the page in the iframe is only modified if it is in the iframe. But sometimes the page in the iframe does not work properly in the iframe in a workflow. So you need to jump out out of the iframe. But you maybe still want to hide/modify the content of this page even outside the iframe. This feature does enable this by setting a session cookie. If you enable this feature a cookie is set if you do modifications in the iframe and even if you jump out of the iframe the modifications are still done. See http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo/external-workaround-auto-height-and-css-modifications 
 - New: "allow" is now supported as attribute. This is needed to still allow auto play. See: https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
@@ -176,7 +205,7 @@ select the one you like and save again.
 - Fix: The placeholder for rgba was changed from ; to § to still support additional styles in the "hide a part of the iframe" feature,  
 
 = 7.5.6 =
-- New: $hide_page_until_loaded does now hide the page again for onload events after the initial one. So css modifications are now also invisible for all page transactions. Before this was only possible by using the external workaround even on the same domain. 
+- New: $hide_page_until_loaded does now hide the page again for onload events after the initial one. So css modifications are now also invisible for all page transitions. Before this was only possible by using the external workaround even on the same domain. 
 - New: "Check iframes on save" can fail and a white page is then displayed if curl is blockend on the server. If this is the case this feature is now disabled automatically. By default it is disabled since 7.5.5 anyway. But the reason is curl and not virtual composer as supposed in 7.5.5 ! 
 - Fix: 7.5.5 was adding the fake plugin which caused the activation of the normal plugin to fail because WP was scanning the wrong file. The file is now internally renamed and now it works also fine when installing with the zip.  
 

@@ -3,7 +3,7 @@ Contributors: socialmediafeather
 Tags: social media, social sharing, social buttons, Facebook, Share, Like, twitter, google, Reddit, youtube, instagram, pinterest, social media buttons, button, shortcode, sidebar, sharing buttons, follow buttons
 Requires at least: 3.1
 Tested up to: 4.7
-Stable tag: trunk
+Stable tag: 1.8.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -190,6 +190,12 @@ margin-left: 10px;
 7. This shows the available social sharing and following widgets and their settings
 
 == Changelog ==
+
+= 1.8.4 =
+* Added option to decline terms of service after having accepted
+
+= 1.8.3 =
+* Minor design improvements
 
 = 1.8.2 =
 * NEW: 6 icon styles which were previously available as a $15 add on are now included for FREE!

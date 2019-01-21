@@ -57,17 +57,21 @@ abstract class MC4WP_Integration {
 	/**
 	 * Return array of default options
 	 *
-	 * @staticvar $defaults
 	 * @return array
 	 */
 	protected function get_default_options() {
-		static $defaults;
-
-		if( ! $defaults ) {
-			$defaults = require MC4WP_PLUGIN_DIR . 'config/default-integration-options.php';
-		}
-
-		return $defaults;
+		return array(
+			'css'           => 0,
+		    'double_optin'  => 1,
+			'enabled'       => 0,
+			'implicit'      => 0,
+			'label'         => __( 'Sign me up for the newsletter!', 'mailchimp-for-wp' ),
+		    'lists'         => array(),
+			'precheck'      => 0,
+		    'replace_interests' => 0,
+			'update_existing' => 0,
+		    'wrap_p' => 1
+		);
 	}
 
 	/**
@@ -78,7 +82,13 @@ abstract class MC4WP_Integration {
 	protected function parse_options( array $options ) {
 		$slug = $this->slug;
 
-		$options = array_merge( $this->get_default_options(), $options );
+		$default_options = $this->get_default_options();
+		$options = array_merge( $default_options, $options );
+
+		/**
+		* @deprecated Use mc4wp_integration_{$slug}_options instead
+		*/
+		$options = (array) apply_filters( 'mc4wp_' . $slug . '_integration_options', $options );
 
 		/**
 		 * Filters options for a specific integration
@@ -86,9 +96,8 @@ abstract class MC4WP_Integration {
 		 * The dynamic portion of the hook, `$slug`, refers to the slug of the ingration.
 		 *
 		 * @param array $integration_options
-         * @ignore
 		 */
-		return (array) apply_filters( 'mc4wp_' . $slug . '_integration_options', $options );
+		return (array) apply_filters( 'mc4wp_integration_' . $slug . '_options', $options );
 	}
 
 	/**
@@ -220,7 +229,7 @@ abstract class MC4WP_Integration {
 	 * Outputs a checkbox
 	 */
 	public function output_checkbox() {
-		echo $this->get_checkbox_html();
+        echo $this->get_checkbox_html();
 	}
 
 	/**
@@ -229,6 +238,21 @@ abstract class MC4WP_Integration {
 	 * @return string
 	 */
 	public function get_checkbox_html() {
+
+        $show_checkbox = empty( $this->options['implicit'] );
+        $integration_slug = $this->slug;
+
+        /**
+         * Filters whether to show the sign-up checkbox for this integration.
+         *
+         * @param bool $show_checkbox
+         * @param string $integration_slug
+         */
+        $show_checkbox = (bool) apply_filters( 'mc4wp_integration_show_checkbox', $show_checkbox, $integration_slug );
+
+        if( ! $show_checkbox ) {
+            return '';
+        }
 
 		ob_start();
 
@@ -339,7 +363,6 @@ abstract class MC4WP_Integration {
 		$slug = $this->slug;
 		$mailchimp = new MC4WP_MailChimp();
 		$log = $this->get_log();
-		$request= $this->get_request();
 		$list_ids = $this->get_lists();
 
 		/** @var MC4WP_MailChimp_Subscriber $subscriber */
@@ -397,7 +420,7 @@ abstract class MC4WP_Integration {
 		foreach( $map as $list_id => $subscriber ) {
 			$subscriber->status = $this->options['double_optin'] ? 'pending' : 'subscribed';
 			$subscriber->email_type = $email_type;
-			$subscriber->ip_signup = $request->get_client_ip();
+			$subscriber->ip_signup = mc4wp_get_request_ip_address();
 
 			/** @ignore (documented elsewhere) */
 			$subscriber = apply_filters( 'mc4wp_subscriber_data', $subscriber );
@@ -509,8 +532,7 @@ abstract class MC4WP_Integration {
 	 * @return array
 	 */
 	public function get_data() {
-		$request = mc4wp('request');
-		$data = $request->params->all();
+		$data = array_merge( (array) $_GET, (array) $_POST );
 		return $data;
 	}
 
@@ -527,12 +549,4 @@ abstract class MC4WP_Integration {
 	protected function get_api() {
 		return mc4wp('api');
 	}
-
-	/**
-	 * @return MC4WP_Request
-	 */
-	protected function get_request() {
-		return mc4wp('request');
-	}
-
 }

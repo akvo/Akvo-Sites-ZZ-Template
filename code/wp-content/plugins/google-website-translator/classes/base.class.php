@@ -1447,7 +1447,7 @@ class PrisnaGWTItemCollection {
 
     protected $_position = 0;
 
-    public $collection;
+    public $collection = array();
 
     public function __construct() {
 
@@ -1522,6 +1522,9 @@ class PrisnaGWTItemCollection {
 
 	protected function _add_count_for_render() {
 
+		if (!is_array($this->collection))
+			return;
+
 		if (count($this->collection) > 0) {
 			$i = 0;
 			foreach ($this->collection as $item) {
@@ -1539,9 +1542,10 @@ class PrisnaGWTItemCollection {
 
 		$this->_add_count_for_render();
 
-		if (count($this->collection) > 0) 
-			foreach ($this->collection as $item)
-				$partial[] = $item->output($_html_encode);
+		if (is_array($this->collection))
+			if (count($this->collection) > 0) 
+				foreach ($this->collection as $item)
+					$partial[] = $item->output($_html_encode);
 
 		$object = (object) array(
 			'collection' => join("\n", $partial),

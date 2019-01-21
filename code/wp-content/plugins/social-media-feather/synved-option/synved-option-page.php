@@ -130,6 +130,16 @@ function synved_option_page_cb($id, $name, $item)
 		</p>
 		</form>
 	</div>
+
+    <script type="text/javascript">
+        const SYNVED_DISABLE_FEATURE_URL = '<?php echo admin_url('options-general.php?page=synved_social_settings&accept-terms=no'); ?>';
+        const SYNVED_ENABLE_FEATURE_URL = '<?php echo admin_url('options-general.php?page=synved_social_settings&accept-terms=yes'); ?>';
+
+        jQuery(document).ready(function () {
+            synved_switcher.init(<?php echo synved_option_get('synved_social', 'accepted_sharethis_terms'); ?>);
+        });
+    </script>
+
 <?php
 }
 

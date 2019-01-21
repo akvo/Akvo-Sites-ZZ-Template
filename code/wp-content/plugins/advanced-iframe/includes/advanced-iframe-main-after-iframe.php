@@ -3,8 +3,8 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  Creates the Javascript which is executed after the iframe is created
  */
-$html .= '<script type="text/javascript">
-          var ifrm_'.$id.' = document.getElementById("'.$id.'");';
+$html .= '<script type="text/javascript">';
+$html .= 'var ifrm_'.$id.' = document.getElementById("'.$id.'");';
 $html .= 'var hiddenTabsDone'.$id.' = false;
 function resizeCallback'.$id.'() {';
 if (!empty ($tab_hidden)) {
@@ -25,19 +25,11 @@ if (!empty ($tab_hidden)) {
 }
 $html .= '}';
 
- $html .= 'function aiChangeUrl(loc) {';
+$html .= 'function aiChangeUrl(loc) {';
     if ($add_iframe_url_as_param == 'remote') {
         $html .= '  aiChangeUrlParam(loc,"'.$map_parameter_to_url.'","'.$src_orig.'","'.$add_iframe_url_as_param_prefix.'");';
     }
- $html .= '}';
-
-// this does hide the window after an initial page load when the iframe url changes.
-// the onbeforeunload event is added on onload!
-if ($hide_page_until_loaded  == 'true') {
-     $html .= 'var hide_iframe_loading_'.$id.' = function() {
-        jQuery("#'.$id.'").css("visibility","hidden");
-     };';
-}
+$html .= '}';
 $html .= '</script>';
 
 if ($store_height_in_cookie == 'true') {
@@ -184,14 +176,7 @@ if (!empty($resize_on_element_resize)) {
       $html .= '<script type="text/javascript" src="' . AIP_URL .'includes/scripts/jquery.ba-resize.min.js" ></script>';
   }
   $html .= '<script type="text/javascript">';
-  $html .= 'function initResizeIframe'.$id.'() {
-            if (onloadFired'.$id.' === false) {
-              // onload is not fired yet. we wait 100 ms and retry
-              window.setTimeout("initResizeIframe'.$id.'()",100);
-              return;
-            }
-            onloadFired'.$id.' = true;
-  ';
+  $html .= 'function initResizeIframe'.$id.'() {';
 
   // minimum delay is 50 ms !
   if (!empty($resize_on_element_resize_delay) &&
@@ -227,7 +212,9 @@ if (!empty($resize_on_element_resize)) {
                });
             }
     }';
-  $html .= 'aiReadyCallbacks.push(initResizeIframe' . $id . ');';
+  
+  // now done in the onload event.
+  // $html .= 'aiReadyCallbacks.push(initResizeIframe' . $id . ');';
   $html .= '</script>';
 }
 

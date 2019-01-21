@@ -85,7 +85,99 @@ jQuery(document).ready(function($) {
 
 		"statuscol-desc": function ( a, b ) {
 			return b - a;
-		}						
+		},
+
+		'datetime-pre': function( datetime ){
+			var dateTimeArr = datetime.split(' ');
+			return jQuery.fn.dataTableExt.oSort['date-pre'](dateTimeArr[0])+wdtPrepareTime( dateTimeArr[1] );
+		},
+
+		'datetime-asc':  function ( a, b ) {
+			return a - b;
+		},
+
+		"datetime-desc": function ( a, b ) {
+			return b - a;
+		},
+
+		'datetime-am-pre': function( datetime ){
+			// First divide date and time
+			var dateTimeArr = datetime.split(' ');
+			return jQuery.fn.dataTableExt.oSort['date-pre'](dateTimeArr[0])+wdtPrepareAmTime(dateTimeArr[1]+' '+dateTimeArr[2]);;
+		},
+
+		'datetime-am-asc':  function ( a, b ) {
+			return a - b;
+		},
+
+		"datetime-am-desc": function ( a, b ) {
+			return b - a;
+		},
+
+		'datetime-eu-pre': function( datetime ){
+			// First divide date and time
+			var dateTimeArr = datetime.split(' ');
+			return (wdtDateEuPre( dateTimeArr[0] )*100000)+wdtPrepareTime(dateTimeArr[1]);
+		},
+
+		'datetime-eu-asc':  function ( a, b ) {
+			return a - b;
+		},
+
+		"datetime-eu-desc": function ( a, b ) {
+			return b - a;
+		},
+
+		'datetime-eu-am-pre': function( datetime ){
+			// First divide date and time
+			var dateTimeArr = datetime.split(' ');
+			return ( wdtDateEuPre( dateTimeArr[0] )*100000 )+wdtPrepareAmTime(dateTimeArr[1]+' '+dateTimeArr[2]);
+		},
+
+		'datetime-eu-am-asc':  function ( a, b ) {
+			return a - b;
+		},
+
+		"datetime-eu-am-desc": function ( a, b ) {
+			return b - a;
+		},
+
+		'datetime-dd-mmm-yyyy-pre': function( datetime ){
+			// First divide date and time
+			var dateTimeArr = datetime.split(' ');
+			return wdtCustomDateDDMMMYYYYToOrd(dateTimeArr[0]+'-'+dateTimeArr[1]+'-'+dateTimeArr[2])+wdtPrepareTime(dateTimeArr[3]);
+		},
+
+		'datetime-dd-mmm-yyyy-asc':  function ( a, b ) {
+			return a - b;
+		},
+
+		"datetime-dd-mmm-yyyy-desc": function ( a, b ) {
+			return b - a;
+		},
+
+		'datetime-dd-mmm-yyyy-am-pre': function( datetime ){
+			// First divide date and time
+			var dateTimeArr = datetime.split(' ');
+			return wdtCustomDateDDMMMYYYYToOrd(dateTimeArr[0]+'-'+dateTimeArr[1]+'-'+dateTimeArr[2])+wdtPrepareAmTime(dateTimeArr[3]+' '+dateTimeArr[4]);
+		},
+
+		'datetime-dd-mmm-yyyy-am-asc':  function ( a, b ) {
+			return a - b;
+		},
+
+		"datetime-dd-mmm-yyyy-am-desc": function ( a, b ) {
+			return b - a;
+		},
+
+		'time-pre': function( time ){
+			return wdtPrepareTime( time )
+		},
+
+		'time-am-pre': function( time ){
+			return wdtPrepareAmTime( time )
+		},
+
 	} );
 	
 	$.fn.dataTableExt.oApi.fnGetColumnIndex = function ( oSettings, sCol ) 
@@ -101,13 +193,6 @@ jQuery(document).ready(function($) {
 		return -1;
 	};	
 
-	var customDateDDMMMYYYYToOrd = function (date) {
-	    "use strict"; //let's avoid tom-foolery in this function
-	    // Convert to a number YYYYMMDD which we can use to order
-	    var dateParts = date.split(/-/);
-	    return (dateParts[2] * 10000) + ($.inArray(dateParts[1].toUpperCase(), ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]) * 100) + dateParts[0];
-	};
-	 
 	// This will help DataTables magic detect the "dd-MMM-yyyy" format; Unshift so that it's the first data type (so it takes priority over existing)
 	jQuery.fn.dataTableExt.aTypes.unshift(
 	    function (sData) {
@@ -122,52 +207,20 @@ jQuery(document).ready(function($) {
 	// define the sorts
 	jQuery.fn.dataTableExt.oSort['date-dd-mmm-yyyy-asc'] = function (a, b) {
 	    "use strict"; //let's avoid tom-foolery in this function
-	    var ordA = customDateDDMMMYYYYToOrd(a),
-	        ordB = customDateDDMMMYYYYToOrd(b);
+	    var ordA = wdtCustomDateDDMMMYYYYToOrd(a),
+	        ordB = wdtCustomDateDDMMMYYYYToOrd(b);
 	    return (ordA < ordB) ? -1 : ((ordA > ordB) ? 1 : 0);
 	};
 	 
 	jQuery.fn.dataTableExt.oSort['date-dd-mmm-yyyy-desc'] = function (a, b) {
 	    "use strict"; //let's avoid tom-foolery in this function
-	    var ordA = customDateDDMMMYYYYToOrd(a),
-	        ordB = customDateDDMMMYYYYToOrd(b);
+	    var ordA = wdtCustomDateDDMMMYYYYToOrd(a),
+	        ordB = wdtCustomDateDDMMMYYYYToOrd(b);
 	    return (ordA < ordB) ? 1 : ((ordA > ordB) ? -1 : 0);
 	};
-	
 	jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 	    "date-eu-pre": function ( date ) {
-	        var date = date.replace(" ", "");
-	        if (date.indexOf('.') > 0) {
-	            /*date a, format dd.mn.(yyyy) ; (year is optional)*/
-	            var eu_date = date.split('.');
-	        } else if (date.indexOf('-') > 0) {
-	            /*date a, format dd.mn.(yyyy) ; (year is optional)*/
-	            var eu_date = date.split('-');
-	        } else {
-	            /*date a, format dd/mn/(yyyy) ; (year is optional)*/
-	            var eu_date = date.split('/');
-	        }
-	        
-	        var year = 0;
-	        var month = 0;
-	        var day = 0;
-	          
-	        /*year (optional)*/
-	        if (eu_date[2]) {
-	            year = eu_date[2];
-	        }
-	          
-	        /*month*/
-	        if(eu_date[1]){
-	        	month = 0+eu_date[1];
-	        }
-	          
-	        /*day*/
-	        if(eu_date[0]) {
-	            day = 0+eu_date[0];
-	        }
-	        
-	        return (year + month + day) * 1;
+			return wdtDateEuPre( date );
 	    },
 	 
 	    "date-eu-asc": function ( a, b ) {
@@ -181,9 +234,62 @@ jQuery(document).ready(function($) {
 	
 });
 
+
+var wdtCustomDateDDMMMYYYYToOrd = function (date) {
+	"use strict"; //let's avoid tom-foolery in this function
+	// Convert to a number YYYYMMDD which we can use to order
+	var dateParts = date.split(/-/);
+	return (dateParts[2] * 10000) + (jQuery.inArray(dateParts[1].toUpperCase(), ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]) * 100) + dateParts[0];
+};
+
+function wdtDateEuPre( date ){
+	var date = date.replace(" ", "");
+	if (date.indexOf('.') > 0) {
+		/*date a, format dd.mn.(yyyy) ; (year is optional)*/
+		var eu_date = date.split('.');
+	} else if (date.indexOf('-') > 0) {
+		/*date a, format dd.mn.(yyyy) ; (year is optional)*/
+		var eu_date = date.split('-');
+	} else {
+		/*date a, format dd/mn/(yyyy) ; (year is optional)*/
+		var eu_date = date.split('/');
+	}
+
+	var year = 0;
+	var month = 0;
+	var day = 0;
+
+	/*year (optional)*/
+	if (eu_date[2]) {
+		year = eu_date[2];
+	}
+
+	/*month*/
+	if(eu_date[1]){
+		month = eu_date[1];
+		if( month.length < 2 ){ month = 0+month; }
+	}
+
+	/*day*/
+	if(eu_date[0]) {
+		day = eu_date[0];
+		if( day.length < 2 ){ day = 0+day; }
+	}
+
+	return (year + month + day) * 1;
+}
+
 function wdtValidateURL(textval) {
   var regex = /^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?(||.*)?$/i;
   return regex.test(textval);
+}
+
+function wdtPrepareTime( time ){
+	return moment.duration( time, 'HH:mm').asSeconds()
+}
+
+function wdtPrepareAmTime( time ){
+	return moment.duration( moment( time, 'hh:mm A').format("HH:mm"), 'HH:mm' ).asSeconds()
 }
 
 function wdtValidateEmail(email) {
@@ -222,7 +328,7 @@ function wdtUnformatNumber( number, thousandsSeparator, decimalsSeparator, isFlo
 	var return_string = number.toString().replace( new RegExp( '\\'+thousandsSeparator, 'g'), '' );
 
 	if( isFloat && decimalsSeparator == ',' ){
-		return_string = return_string.replace( '\\'+decimalsSeparator, '.' );
+		return_string = return_string.replace( new RegExp( '\\'+decimalsSeparator ), '.' );
 	}
 	return return_string;
 }

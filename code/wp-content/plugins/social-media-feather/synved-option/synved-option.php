@@ -326,7 +326,7 @@ function synved_option_item_list($id)
 	
 	if (isset($synved_option_list[$id]))
 	{
-		$list = $synved_option_list[$id]['items'];
+		$list = !empty($synved_option_list[$id]['items'])?$synved_option_list[$id]['items']:null;
 		
 		if ($list == null)
 		{
@@ -346,22 +346,22 @@ function synved_option_prepare_list($id)
 	
 	if (isset($synved_option_list[$id]))
 	{
-		$options = $synved_option_list[$id]['options'];
+		$options = !empty($synved_option_list[$id]['options'])?$synved_option_list[$id]['options']:array();
 		$options = apply_filters('synved_option_init_list', $options, $id);
 		$options = apply_filters('synved_option_init_list_' . $id, $options, $id);
-		
+
 		$final_list = array();
 		$default_page = null;
 		$default_section = null;
-		
+
 		foreach ($options as $name => $item)
 		{
 			$type = synved_option_item_type($item);
-			
+
 			if ($type == 'options-page')
 			{
 				$item = synved_option_prepare_list_item($id, null, null, $name, $item);
-				
+
 				if ($item != null)
 				{
 					$final_list[$name] = $item;
@@ -373,14 +373,14 @@ function synved_option_prepare_list($id)
 				{
 					$default_page = synved_option_page_default($id);
 					$default_page = synved_option_prepare_list_item($id, null, null, $default_page['name'], $default_page);
-					
+
 					$final_list[$default_page['name']] = &$default_page;
 				}
-			
+
 				if ($type == 'options-section')
 				{
 					$item = synved_option_prepare_list_item($id, $default_page['name'], null, $name, $item);
-				
+
 					if ($item != null)
 					{
 						$default_page['sections'][$name] = $item;
@@ -392,15 +392,15 @@ function synved_option_prepare_list($id)
 					{
 						$default_section = synved_option_section_default($id, $default_page['name']);
 						$default_section = synved_option_prepare_list_item($id, $default_page['name'], null, $default_section['name'], $default_section);
-						
+
 						$default_page['sections'][$default_section['name']] = &$default_section;
 					}
-					
+
 					$default_section['settings'][$name] = $item;
 				}
 			}
 		}
-		
+
 		if ($default_page != null)
 		{
 			$item = $default_page;
@@ -530,8 +530,8 @@ function synved_option_set($id, $name, $value)
 	
 	$options_name = synved_option_name_default($id);
 	$options = get_option($options_name);
+
 	$options[$name] = synved_option_item_sanitize_value($id, $name, $value);
-	
 	update_option($options_name, $options);
 	
 	unset($synved_option_list[$id]['values']);

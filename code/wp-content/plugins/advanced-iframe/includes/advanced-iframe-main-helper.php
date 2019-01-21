@@ -30,6 +30,7 @@ class AdvancedIframeHelper {
               
               // the random number can be used to avoid caching
               $str_input = str_replace('{timestamp}', time() , $str_input);
+              $str_input = str_replace('{session_id}', session_id(), $str_input);
               
               if (!isset($aip_standalone)) {
                   $str_input = str_replace('{site}', site_url(), $str_input);

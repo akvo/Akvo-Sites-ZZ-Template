@@ -1,8 +1,11 @@
 <?php
+if (defined('WFWAF_VERSION') && !defined('WFWAF_RUN_COMPLETE')) {
 
 interface wfWAFRequestInterface {
 
 	public function getBody();
+	
+	public function getRawBody();
 	
 	public function getMd5Body();
 
@@ -81,6 +84,14 @@ class wfWAFRequest implements wfWAFRequestInterface {
 		list($headersString, $bodyString) = explode("\n\n", $requestString, 2);
 		$headersString = trim($headersString);
 		$bodyString = trim($bodyString);
+		
+		if (defined('WFWAF_DISABLE_RAW_BODY') && WFWAF_DISABLE_RAW_BODY) {
+			$request->setRawBody('');
+		}
+		else {
+			$request->setRawBody($bodyString);
+		}
+		
 		$headers = explode("\n", $headersString);
 		// Assume first is method
 		if (preg_match('/^([a-z]+) (.*?) HTTP\/1.[0-9]/i', $headers[0], $matches)) {
@@ -248,6 +259,13 @@ class wfWAFRequest implements wfWAFRequestInterface {
 		$request->setMetadata(array());
 
 		$request->setBody(wfWAFUtils::stripMagicQuotes($_POST));
+		if (defined('WFWAF_DISABLE_RAW_BODY') && WFWAF_DISABLE_RAW_BODY) {
+			$request->setRawBody('');
+		}
+		else {
+			$request->setRawBody(wfWAFUtils::rawPOSTBody());
+		}
+		
 		$request->setQueryString(wfWAFUtils::stripMagicQuotes($_GET));
 		$request->setCookies(wfWAFUtils::stripMagicQuotes($_COOKIE));
 		$request->setFiles(wfWAFUtils::stripMagicQuotes($_FILES));
@@ -323,6 +341,7 @@ class wfWAFRequest implements wfWAFRequestInterface {
 
 	private $auth;
 	private $body;
+	private $rawBody;
 	private $md5Body;
 	private $cookies;
 	private $fileNames;
@@ -369,6 +388,10 @@ class wfWAFRequest implements wfWAFRequestInterface {
 			return $this->_arrayValueByKeys($this->body, $args);
 		}
 		return $this->body;
+	}
+	
+	public function getRawBody() {
+		return $this->rawBody;
 	}
 	
 	public function getMd5Body() {
@@ -421,7 +444,7 @@ class wfWAFRequest implements wfWAFRequestInterface {
 	 * @param string|null $baseKey The base key used when recursing.
 	 * @return string
 	 */
-	public function getCookieString($cookies = null, $baseKey = null) {
+	public function getCookieString($cookies = null, $baseKey = null, $preventRedaction = false) {
 		if ($cookies == null) {
 			$cookies = $this->getCookies();
 		}
@@ -442,8 +465,11 @@ class wfWAFRequest implements wfWAFRequestInterface {
 				$nestedCookies = $this->getCookieString($cookieValue, $resolvedName);
 				$cookieString .= $nestedCookies;
 			}
-			else
-			{
+			else {
+				if (strpos($resolvedName, 'wordpress_') === 0 && !$preventRedaction) {
+					$cookieValue = '[redacted]';
+				}
+				
 				$cookieString .= $resolvedName . '=' . urlencode($cookieValue) . '; ';
 			}
 		}
@@ -523,7 +549,7 @@ class wfWAFRequest implements wfWAFRequestInterface {
 	 * @return string
 	 */
 	public function highlightFailedParams($failedParams = array(), $highlightParamFormat = '[param]%s[/param]',
-	                                      $highlightMatchFormat = '[match]%s[/match]') {
+	                                      $highlightMatchFormat = '[match]%s[/match]', $preventRedaction = false) {
 		$highlights = array();
 
 		// Cap at 47.5kb
@@ -597,7 +623,7 @@ class wfWAFRequest implements wfWAFRequestInterface {
 				switch (wfWAFUtils::strtolower($header)) {
 					case 'cookie':
 						// TODO: Hook up highlights to cookies
-						$request .= 'Cookie: ' . trim($this->getCookieString()) . "\n";
+						$request .= 'Cookie: ' . trim($this->getCookieString(null, null, $preventRedaction)) . "\n";
 						break;
 
 					case 'host':
@@ -607,7 +633,7 @@ class wfWAFRequest implements wfWAFRequestInterface {
 					case 'authorization':
 						$hasAuth = true;
 						if ($auth) {
-							$request .= 'Authorization: Basic ' . base64_encode($auth['user'] . ':' . $auth['password']) . "\n";
+							$request .= 'Authorization: Basic ' . ($preventRedaction ? base64_encode($auth['user'] . ':' . $auth['password']) : '[redacted]') . "\n";
 						}
 						break;
 
@@ -619,18 +645,139 @@ class wfWAFRequest implements wfWAFRequestInterface {
 		}
 
 		if (!$hasAuth && $auth) {
-			$request .= 'Authorization: Basic ' . base64_encode($auth['user'] . ':' . $auth['password']) . "\n";
+			$request .= 'Authorization: Basic ' . ($preventRedaction ? base64_encode($auth['user'] . ':' . $auth['password']) : '[redacted]') . "\n";
 		}
+		
+		$bareRequestURI = wfWAFUtils::extractBareURI($this->getURI());
+		$isAuthRequest = (strpos($bareRequestURI, '/wp-login.php') !== false);
+		$isXMLRPC = (strpos($bareRequestURI, '/xmlrpc.php') !== false);
+		$xmlrpcFieldMap = array(
+			'wp.getUsersBlogs' => array(0, 1),
+			'wp.newPost' => array(1, 2),
+			'wp.editPost' => array(1, 2),
+			'wp.deletePost' => array(1, 2),
+			'wp.getPost' => array(1, 2),
+			'wp.getPosts' => array(1, 2),
+			'wp.newTerm' => array(1, 2),
+			'wp.editTerm' => array(1, 2),
+			'wp.deleteTerm' => array(1, 2),
+			'wp.getTerm' => array(1, 2),
+			'wp.getTerms' => array(1, 2),
+			'wp.getTaxonomy' => array(1, 2),
+			'wp.getTaxonomies' => array(1, 2),
+			'wp.getUser' => array(1, 2),
+			'wp.getUsers' => array(1, 2),
+			'wp.getProfile' => array(1, 2),
+			'wp.editProfile' => array(1, 2),
+			'wp.getPage' => array(2, 3),
+			'wp.getPages' => array(1, 2),
+			'wp.newPage' => array(1, 2),
+			'wp.deletePage' => array(1, 2),
+			'wp.editPage' => array(2, 3),
+			'wp.getPageList' => array(1, 2),
+			'wp.getAuthors' => array(1, 2),
+			'wp.getTags' => array(1, 2),
+			'wp.newCategory' => array(1, 2),
+			'wp.deleteCategory' => array(1, 2),
+			'wp.suggestCategories' => array(1, 2),
+			'wp.getComment' => array(1, 2),
+			'wp.getComments' => array(1, 2),
+			'wp.deleteComment' => array(1, 2),
+			'wp.editComment' => array(1, 2),
+			'wp.newComment' => array(1, 2),
+			'wp.getCommentStatusList' => array(1, 2),
+			'wp.getCommentCount' => array(1, 2),
+			'wp.getPostStatusList' => array(1, 2),
+			'wp.getPageStatusList' => array(1, 2),
+			'wp.getPageTemplates' => array(1, 2),
+			'wp.getMediaItem' => array(1, 2),
+			'wp.getMediaLibrary' => array(1, 2),
+			'wp.getPostFormats' => array(1, 2),
+			'wp.getPostType' => array(1, 2),
+			'wp.getPostTypes' => array(1, 2),
+			'wp.getRevisions' => array(1, 2),
+			'wp.restoreRevision' => array(1, 2),
+			'blogger.getUsersBlogs' => array(1, 2),
+			'blogger.getUserInfo' => array(1, 2),
+			'blogger.getPost' => array(2, 3),
+			'blogger.getRecentPosts' => array(2, 3),
+			'blogger.newPost' => array(2, 3),
+			'blogger.editPost' => array(2, 3),
+			'blogger.deletePost' => array(2, 3),
+			'metaWeblog.newPost' => array(1, 2),
+			'metaWeblog.editPost' => array(1, 2),
+			'metaWeblog.getPost' => array(1, 2),
+			'metaWeblog.getRecentPosts' => array(1, 2),
+			'metaWeblog.getCategories' => array(1, 2),
+			'metaWeblog.newMediaObject' => array(1, 2),
+			'mt.getRecentPostTitles' => array(1, 2),
+			'mt.getCategoryList' => array(1, 2),
+			'mt.getPostCategories' => array(1, 2),
+			'mt.setPostCategories' => array(1, 2),
+			'mt.publishPost' => array(1, 2),
+		);
 
 		$body = $this->getBody();
+		$rawBody = $this->getRawBody();
 		$contentType = $this->getHeaders('Content-Type');
-		if (is_array($body)) {
+		if (wfXMLRPCBody::canParse() && $isXMLRPC && is_string($rawBody) && !$preventRedaction) {
+			$xml =& $rawBody;
+			if ($contentType == 'application/x-www-form-urlencoded') {
+				$xml = @urldecode($rawBody);
+			}
+			
+			$xmlrpc = new wfXMLRPCBody($xml);
+			if ($xmlrpc->parse() && $xmlrpc->messageType == 'methodCall') {
+				if ($xmlrpc->methodName == 'system.multicall') {
+					$subCalls =& $xmlrpc->params[0]['value'];
+					if (is_array($subCalls)) {
+						foreach ($subCalls as &$call) {
+							$method = $call['value']['methodName']['value'];
+							$params =& $call['value']['params']['value'];
+							
+							if (isset($xmlrpcFieldMap[$method])) {
+								$fieldIndexes = $xmlrpcFieldMap[$method];
+								foreach ($fieldIndexes as $i) {
+									if (isset($params[$i])) {
+										$params[$i]['value'] = '[redacted]';
+									}
+								}
+							}
+						}
+					}
+				}
+				else {
+					if (isset($xmlrpcFieldMap[$xmlrpc->methodName])) {
+						$params =& $xmlrpc->params;
+						$fieldIndexes = $xmlrpcFieldMap[$xmlrpc->methodName];
+						foreach ($fieldIndexes as $i) {
+							if (isset($params[$i])) {
+								$params[$i]['value'] = '[redacted]';
+							}
+						}
+					}
+				}
+				
+				$xml = (string) $xmlrpc;
+				if ($contentType == 'application/x-www-form-urlencoded') {
+					$body = urlencode($xml);
+				}
+			}
+		}
+		else if (is_array($body)) {
+			foreach ($body as $bkey => &$bvalue) {
+				if (!$preventRedaction && $isAuthRequest && ($bkey == 'log' || $bkey == 'pwd' || $bkey == 'user_login' || $bkey == 'user_email' || $bkey == 'pass1' || $bkey == 'pass2' || $bkey == 'rp_key')) {
+					$bvalue = '[redacted]';
+				}
+			}
+			
 			if (preg_match('/^multipart\/form\-data;(?:\s*(?!boundary)(?:[^\x00-\x20\(\)<>@,;:\\"\/\[\]\?\.=]+)=[^;]+;)*\s*boundary=([^;]*)(?:;\s*(?:[^\x00-\x20\(\)<>@,;:\\"\/\[\]\?\.=]+)=[^;]+)*$/i', $contentType, $boundaryMatches)) {
 				$boundary = $boundaryMatches[1];
 				$bodyArray = array();
 				foreach ($body as $key => $value) {
 					$bodyArray = array_merge($bodyArray, $this->reduceBodyParameter($key, $value));
 				}
+				
 				$body = '';
 				foreach ($bodyArray as $param => $value) {
 					if (!empty($highlights['body'])) {
@@ -717,6 +864,7 @@ FORM;
 				}
 			}
 		}
+		
 		if (!is_string($body)) {
 			$body = '';
 		}
@@ -825,6 +973,10 @@ FORM;
 		$this->setMd5Body($this->md5EncodeKeys($body));
 	}
 	
+	public function setRawBody($rawBody) {
+		$this->rawBody = $rawBody;
+	}
+	
 	/**
 	 * @param mixed $md5Body
 	 */
@@ -931,4 +1083,4 @@ FORM;
 		$this->metadata = $metadata;
 	}
 }
-
+}

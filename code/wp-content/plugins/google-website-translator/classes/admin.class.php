@@ -244,7 +244,7 @@ class PrisnaGWTAdminForm extends PrisnaGWTAdminBaseForm {
 		$this->advanced_import_export_message = __('Import / Export', 'prisna-gwt');
 		$this->advanced_import_success_message = __('Settings succesfully imported.', 'prisna-gwt');
 		$this->advanced_import_fail_message = __('There was a problem while importing the settings. Please make sure the exported string is complete. Changes weren\'t saved.', 'prisna-gwt');
-		$this->wp_version_check_fail_message = sprintf(__( 'Google Website Translator requires WordPress version %s or later.', 'prisna-gwt'), PRISNA_GWT__MINIMUM_WP_VERSION);
+		$this->wp_version_check_fail_message = sprintf(__('Google Website Translator requires WordPress version %s or later.', 'prisna-gwt'), PRISNA_GWT__MINIMUM_WP_VERSION);
 
 		$this->nonce = wp_nonce_field(PrisnaGWTConfig::getAdminHandle(), '_prisna_gwt_nonce');
 
@@ -342,7 +342,6 @@ class PrisnaGWTAdminForm extends PrisnaGWTAdminBaseForm {
 				}
 				case 'import':
 				case 'export': {
-					continue;
 					break;
 				}
 				default: {

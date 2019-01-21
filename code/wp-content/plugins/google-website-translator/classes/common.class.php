@@ -149,97 +149,110 @@ class PrisnaGWTCommon {
 	public static function getLanguageCoordinates($_language) {
 		
 		$languages = array(
-			'en' => array(0, 0),
-			'fr' => array(-22, 0),
-			'nl' => array(-44, 0),
-			'el' => array(-66, 0),
-			'la' => array(-66, 0),
-			'de' => array(-88, 0),
-			'es' => array(-110, 0),
-			'zh-cn' => array(-132, 0),
-			'zh-tw' => array(-154, 0),
-			'pl' => array(-176, 0),
-			'pt' => array(-198, 0),
-			'th' => array(0, -16),
-			'pa' => array(-22, -16),
-			'ur' => array(-22, -16),
-			'ro' => array(-44, -16),
-			'ru' => array(-66, -16),
-			'no' => array(-88, -16),
-			'da' => array(-110, -16),
-			'fi' => array(-132, -16),
-			'hi' => array(-154, -16),
-			'gu' => array(-154, -16),
-			'kn' => array(-154, -16),
-			'ml' => array(-154, -16),
-			'mr' => array(-154, -16),
-			'ta' => array(-154, -16),
-			'te' => array(-154, -16),
-			'it' => array(-176, -16),
-			'ja' => array(-198, -16),
+			'en'=>array(0, 0),
+			'fr'=>array(-22, 0),
+			'co'=>array(-22, 0),
+			'nl'=>array(-44, 0),
+			'fy'=>array(-44, 0),
+			'el'=>array(-66, 0),
+			'la'=>array(-66, 0),
+			'de'=>array(-88, 0),
+			'es'=>array(-110, 0),
+			'zh-cn'=>array(-132, 0),
+			'zh-tw'=>array(-154, 0),
+			'pl'=>array(-176, 0),
+			'pt'=>array(-198, 0),
+			'th'=>array(0, -16),
+			'pa'=>array(-22, -16),
+			'ur'=>array(-22, -16),
+			'sd'=>array(-22, -16),
+			'ro'=>array(-44, -16),
+			'ru'=>array(-66, -16),
+			'no'=>array(-88, -16),
+			'da'=>array(-110, -16),
+			'fi'=>array(-132, -16),
+			'hi'=>array(-154, -16),
+			'gu'=>array(-154, -16),
+			'kn'=>array(-154, -16),
+			'ml'=>array(-154, -16),
+			'mr'=>array(-154, -16),
+			'ta'=>array(-154, -16),
+			'te'=>array(-154, -16),
+			'it'=>array(-176, -16),
+			'ja'=>array(-198, -16),
 			'af' => array(0, -32),
 			'st' => array(0, -32),
 			'zu' => array(0, -32),
-			'sq' => array(-22, -32),
-			'ar' => array(-44, -32),
-			'hy' => array(-66, -32),
-			'az' => array(-88, -32),
-			'eu' => array(-110, -32),
-			'be' => array(-132, -32),
-			'bn' => array(-154, -32),
-			'bs' => array(-176, -32),
-			'bg' => array(-198, -32),
-			'ca' => array(0, -48),
-			'ceb' => array(-22, -48),
-			'tl' => array(-22, -48),
-			'ny' => array(-44, -48),
-			'hr' => array(-66, -48),
-			'cs' => array(-88, -48),
-			'et' => array(-110, -48),
-			'gl' => array(-132, -48),
-			'ka' => array(-154, -48),
-			'ht' => array(-176, -48),
-			'ha' => array(-198, -48),
-			'ig' => array(-198, -48),
-			'iw' => array(0, -64),
-			'yi' => array(0, -64),
-			'hmn' => array(-22, -64),
-			'vi' => array(-22, -64),
-			'hu' => array(-44, -64),
-			'is' => array(-66, -64),
-			'id' => array(-88, -64),
-			'jw' => array(-88, -64),
-			'su' => array(-88, -64),
-			'ga' => array(-110, -64),
-			'kk' => array(-132, -64),
-			'km' => array(-154, -64),
-			'ko' => array(-176, -64),
-			'lo' => array(-198, -64),
-			'lv' => array(0, -80),
-			'lt' => array(-22, -80),
-			'mk' => array(-44, -80),
-			'mg' => array(-66, -80),
-			'ms' => array(-88, -80),
-			'mt' => array(-110, -80),
-			'mi' => array(-132, -80),
-			'mn' => array(-154, -80),
-			'my' => array(-176, -80),
-			'ne' => array(-198, -80),
-			'fa' => array(0, -96),
-			'tg' => array(0, -96),
-			'sr' => array(-22, -96),
-			'si' => array(-44, -96),
-			'sk' => array(-66, -96),
-			'sl' => array(-88, -96),
-			'so' => array(-110, -96),
-			'sw' => array(-110, -96),
-			'sv' => array(-132, -96),
-			'tr' => array(-154, -96),
-			'uk' => array(-176, -96),
-			'uz' => array(-198, -96),
-			'cy' => array(0, -112),
-			'yo' => array(-22, -112),
-			'eo' => array(-44, -112)
+			'xh' => array(0, -32),
+			'sq'=>array(-22, -32),
+			'ar'=>array(-44, -32),
+			'hy'=>array(-66, -32),
+			'az'=>array(-88, -32),
+			'eu'=>array(-110, -32),
+			'be'=>array(-132, -32),
+			'bn'=>array(-154, -32),
+			'bs'=>array(-176, -32),
+			'bg'=>array(-198, -32),
+			'ca'=>array(0, -48),
+			'ceb'=>array(-22, -48),
+			'tl'=>array(-22, -48),
+			'ny'=>array(-44, -48),
+			'hr'=>array(-66, -48),
+			'cs'=>array(-88, -48),
+			'et'=>array(-110, -48),
+			'gl'=>array(-132, -48),
+			'ka'=>array(-154, -48),
+			'ht'=>array(-176, -48),
+			'ha'=>array(-198, -48),
+			'ig'=>array(-198, -48),
+			'iw'=>array(0, -64),
+			'yi'=>array(0, -64),
+			'hmn'=>array(-22, -64),
+			'vi'=>array(-22, -64),
+			'hu'=>array(-44, -64),
+			'is'=>array(-66, -64),
+			'id'=>array(-88, -64),
+			'jw'=>array(-88, -64),
+			'su'=>array(-88, -64),
+			'ga'=>array(-110, -64),
+			'kk'=>array(-132, -64),
+			'km'=>array(-154, -64),
+			'ko'=>array(-176, -64),
+			'lo'=>array(-198, -64),
+			'lv'=>array(0, -80),
+			'lt'=>array(-22, -80),
+			'mk'=>array(-44, -80),
+			'mg'=>array(-66, -80),
+			'ms'=>array(-88, -80),
+			'mt'=>array(-110, -80),
+			'mi'=>array(-132, -80),
+			'mn'=>array(-154, -80),
+			'my'=>array(-176, -80),
+			'ne'=>array(-198, -80),
+			'fa'=>array(0, -96),
+			'tg'=>array(0, -96),
+			'ku'=>array(0, -96),
+			'sr'=>array(-22, -96),
+			'si'=>array(-44, -96),
+			'sk'=>array(-66, -96),
+			'sl'=>array(-88, -96),
+			'so'=>array(-110, -96),
+			'sw'=>array(-110, -96),
+			'sv'=>array(-132, -96),
+			'tr'=>array(-154, -96),
+			'uk'=>array(-176, -96),
+			'uz'=>array(-198, -96),
+			'cy'=>array(0, -112),
+			'yo'=>array(-22, -112),
+			'eo'=>array(-44, -112),
+			'am'=>array(-66, -112),
+			'ky'=>array(-88, -112),
+			'lb'=>array(-110, -112),
+			'ps'=>array(-132, -112),
+			'sm'=>array(-154, -112),
+			'gd'=>array(-176, -112),
+			'sn'=>array(-198, -112),
+			'haw'=>array(0, -128)
 		);
 		
 		return array_key_exists($_language, $languages) ? $languages[$_language] : false;
@@ -250,27 +263,9 @@ class PrisnaGWTCommon {
 	
 		$languages = array(
 			'en' => 'English',
-			'fr' => 'French',
-			'nl' => 'Dutch',
-			'el' => 'Greek',
-			'de' => 'German',
-			'es' => 'Spanish',
-			'zh-CN' => 'Chinese Simplified',
-			'zh-TW' => 'Chinese Traditional',
-			'pl' => 'Polish',
-			'pt' => 'Portuguese',
-			'th' => 'Thai',
-			'pa' => 'Punjabi',
-			'ro' => 'Romanian',
-			'ru' => 'Russian',
-			'no' => 'Norwegian',
-			'da' => 'Danish',
-			'fi' => 'Finnish',
-			'hi' => 'Hindi',
-			'it' => 'Italian',
-			'ja' => 'Japanese',
 			'af' => 'Afrikaans',
 			'sq' => 'Albanian',
+			'am' => 'Amharic',
 			'ar' => 'Arabic',
 			'hy' => 'Armenian',
 			'az' => 'Azerbaijani',
@@ -282,31 +277,49 @@ class PrisnaGWTCommon {
 			'ca' => 'Catalan',
 			'ceb' => 'Cebuano',
 			'ny' => 'Chichewa',
+			'zh-CN' => 'Chinese Simplified',
+			'zh-TW' => 'Chinese Traditional',
+			'co' => 'Corsican',
 			'hr' => 'Croatian',
 			'cs' => 'Czech',
+			'da' => 'Danish',
+			'nl' => 'Dutch',
+			'eo' => 'Esperanto',
 			'et' => 'Estonian',
-			'st' => 'Sesotho',
+			'tl' => 'Filipino',
+			'fi' => 'Finnish',
+			'fr' => 'French',
+			'fy' => 'Frisian',
 			'gl' => 'Galician',
 			'ka' => 'Georgian',
+			'de' => 'German',
+			'el' => 'Greek',
 			'gu' => 'Gujarati',
 			'ht' => 'Haitian Creole',
 			'ha' => 'Hausa',
+			'haw' => 'Hawaiian',
 			'iw' => 'Hebrew',
+			'hi' => 'Hindi',
 			'hmn' => 'Hmong',
 			'hu' => 'Hungarian',
 			'is' => 'Icelandic',
 			'ig' => 'Igbo',
 			'id' => 'Indonesian',
 			'ga' => 'Irish',
+			'it' => 'Italian',
+			'ja' => 'Japanese',
 			'jw' => 'Javanese',
 			'kn' => 'Kannada',
 			'kk' => 'Kazakh',
 			'km' => 'Khmer',
 			'ko' => 'Korean',
+			'ku' => 'Kurdish',
+			'ky' => 'Kyrgyz',
 			'lo' => 'Lao',
 			'la' => 'Latin',
 			'lv' => 'Latvian',
 			'lt' => 'Lithuanian',
+			'lb' => 'Luxembourgish',
 			'mk' => 'Macedonian',
 			'mg' => 'Malagasy',
 			'ms' => 'Malay',
@@ -317,29 +330,42 @@ class PrisnaGWTCommon {
 			'mn' => 'Mongolian',
 			'my' => 'Burmese',
 			'ne' => 'Nepali',
+			'no' => 'Norwegian',
+			'ps' => 'Pashto',
 			'fa' => 'Persian',
+			'pl' => 'Polish',
+			'pt' => 'Portuguese',
+			'pa' => 'Punjabi',
+			'ro' => 'Romanian',
+			'ru' => 'Russian',
+			'sm' => 'Samoan',
+			'gd' => 'Scots Gaelic',
 			'sr' => 'Serbian',
-			'tl' => 'Filipino',
+			'st' => 'Sesotho',
+			'sn' => 'Shona',
+			'sd' => 'Sindhi',
 			'si' => 'Sinhala',
 			'sk' => 'Slovak',
 			'sl' => 'Slovenian',
 			'so' => 'Somali',
+			'es' => 'Spanish',
 			'su' => 'Sundanese',
 			'sw' => 'Swahili',
 			'sv' => 'Swedish',
 			'tg' => 'Tajik',
 			'ta' => 'Tamil',
+			'te' => 'Telugu',
+			'th' => 'Thai',
 			'tr' => 'Turkish',
 			'uk' => 'Ukrainian',
 			'ur' => 'Urdu',
 			'uz' => 'Uzbek',
 			'vi' => 'Vietnamese',
 			'cy' => 'Welsh',
+			'xh' => 'Xhosa',
 			'yi' => 'Yiddish',
 			'yo' => 'Yoruba',
-			'zu' => 'Zulu',
-			'te' => 'Telugu',
-			'eo' => 'Esperanto'
+			'zu' => 'Zulu'
 		);
 		
 		if ($_sort)
@@ -1020,261 +1046,6 @@ class PrisnaGWTChain {
 
 	}
 
-}
-
-class PrisnaGWTFastJSON {
-
-	// public methods
-
-	/**
-	 * public static method
-	 *
-	 *	PrisnaGWTFastJSON::convert(params:* [, result:Instance]):*
-	 *
-	 * @param	*		String or Object
-	 * @param	Instance	optional new generic class instance if first
-	 *				parameter is an object.
-	 * @return	*		time() value or new Instance with object parameters.
-	 *
-	 * @note	please read Special PrisnaGWTFastJSON::convert method Informations
-	 */
-	public static function convert($params, $result = null){
-		switch(gettype($params)){
-			case	'array':
-					$tmp = array();
-					foreach($params as $key => $value) {
-						if(($value = PrisnaGWTFastJSON::encode($value)) !== '')
-							array_push($tmp, PrisnaGWTFastJSON::encode(strval($key)).':'.$value);
-					};
-					$result = '{'.implode(',', $tmp).'}';
-					break;
-			case	'boolean':
-					$result = $params ? 'true' : 'false';
-					break;
-			case	'double':
-			case	'float':
-			case	'integer':
-					$result = $result !== null ? strftime('%Y-%m-%dT%H:%M:%S', $params) : strval($params);
-					break;
-			case	'NULL':
-					$result = 'null';
-					break;
-			case	'string':
-					$i = create_function('&$e, $p, $l', 'return intval(substr($e, $p, $l));');
-					if(preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $params))
-						$result = mktime($i($params, 11, 2), $i($params, 14, 2), $i($params, 17, 2), $i($params, 5, 2), $i($params, 9, 2), $i($params, 0, 4));
-					break;
-			case	'object':
-					$tmp = array();
-					if(is_object($result)) {
-						foreach($params as $key => $value)
-							$result->$key = $value;
-					} else {
-						$result = get_object_vars($params);
-						foreach($result as $key => $value) {
-							if(($value = PrisnaGWTFastJSON::encode($value)) !== '')
-								array_push($tmp, PrisnaGWTFastJSON::encode($key).':'.$value);
-						};
-						$result = '{'.implode(',', $tmp).'}';
-					}
-					break;
-		}
-		return $result;
-	}
-
-	/**
-	 * public method
-	 *
-	 *	PrisnaGWTFastJSON::decode(params:String[, useStdClass:Boolean]):*
-	 *
-	 * @param	String	valid JSON encoded string
-	 * @param	Bolean	uses stdClass instead of associative array if params contains objects (default false)
-	 * @return	*	converted variable or null
-	 *				is params is not a JSON compatible string.
-	 * @note	This method works in an optimist way. If JSON string is not valid
-	 * 		the code execution will die using exit.
-	 *		This is probably not so good but JSON is often used combined with
-	 *		XMLHttpRequest then I suppose that's better more protection than
-	 *		just some WARNING.
-	 *		With every kind of valid JSON string the old error_reporting level
-	 *		and the old error_handler will be restored.
-	 *
-	 * @example
-	 *		PrisnaGWTFastJSON::decode('{"param":"value"}'); // associative array
-	 *		PrisnaGWTFastJSON::decode('{"param":"value"}', true); // stdClass
-	 *		PrisnaGWTFastJSON::decode('["one",two,true,false,null,{},[1,2]]'); // array
-	 */
-	public static function decode($encode, $stdClass = false){
-		$pos = 0;
-		$slen = is_string($encode) ? strlen($encode) : null;
-		if($slen !== null) {
-			$error = error_reporting(0);
-			set_error_handler(array('PrisnaGWTFastJSON', '__exit'));
-			$result = PrisnaGWTFastJSON::__decode($encode, $pos, $slen, $stdClass);
-			error_reporting($error);
-			restore_error_handler();
-		}
-		else
-			$result = null;
-		return $result;
-	}
-
-	/**
-	 * public method
-	 *
-	 *	PrisnaGWTFastJSON::encode(params:*):String
-	 *
-	 * @param	*		Array, Boolean, Float, Int, Object, String or NULL variable.
-	 * @return	String		JSON genric object rappresentation
-	 *				or empty string if param is not compatible.
-	 *
-	 * @example
-	 *		PrisnaGWTFastJSON::encode(array(1,"two")); // '[1,"two"]'
-	 *
-	 *		$obj = new MyClass();
-	 *		obj->param = "value";
-	 *		obj->param2 = "value2";
-	 *		PrisnaGWTFastJSON::encode(obj); // '{"param":"value","param2":"value2"}'
-	 */
-	public static function encode($decode){
-		$result = '';
-		switch(gettype($decode)){
-			case	'array':
-			
-					if (count(array_keys($decode)) == 2 && array_key_exists('value', $decode) && array_key_exists('type', $decode) && $decode['type'] == 'literal')
-						$result = $decode['value'];
-					else {
-				
-						if(!count($decode) || array_keys($decode) === range(0, count($decode) - 1)) {
-							$keys = array();
-							foreach($decode as $value) {
-								if(($value = PrisnaGWTFastJSON::encode($value)) !== '')
-									array_push($keys, $value);
-							}
-							$result = '['.implode(',', $keys).']';
-						}
-						else
-							$result = PrisnaGWTFastJSON::convert($decode);
-							
-					}
-					break;
-			case	'string':
-					$replacement = PrisnaGWTFastJSON::__getStaticReplacement();
-					$result = '"'.str_replace($replacement['find'], $replacement['replace'], $decode).'"';
-					break;
-			default:
-					if(!is_callable($decode))
-						$result = PrisnaGWTFastJSON::convert($decode);
-					break;
-		}
-		return $result;
-	}
-
-	// private methods, uncommented, sorry
-	protected static function __getStaticReplacement(){
-		static $replacement = array('find'=>array(), 'replace'=>array());
-		if($replacement['find'] == array()) {
-			foreach(array_merge(range(0, 7), array(11), range(14, 31)) as $v) {
-				$replacement['find'][] = chr($v);
-				$replacement['replace'][] = "\\u00".sprintf("%02x", $v);
-			}
-			$replacement['find'] = array_merge(array(chr(0x5c), chr(0x2F), chr(0x22), chr(0x0d), chr(0x0c), chr(0x0a), chr(0x09), chr(0x08)), $replacement['find']);
-			$replacement['replace'] = array_merge(array('\\\\', '\\/', '\\"', '\r', '\f', '\n', '\t', '\b'), $replacement['replace']);
-		}	
-		return $replacement;
-	}
-	
-	protected static function __decode(&$encode, &$pos, &$slen, &$stdClass){
-		switch($encode{$pos}) {
-			case 't':
-				$result = true;
-				$pos += 4;
-				break;
-			case 'f':
-				$result = false;
-				$pos += 5;
-				break;
-			case 'n':
-				$result = null;
-				$pos += 4;
-				break;
-			case '[':
-				$result = array();
-				++$pos;
-				while($encode{$pos} !== ']') {
-					array_push($result, PrisnaGWTFastJSON::__decode($encode, $pos, $slen, $stdClass));
-					if($encode{$pos} === ',')
-						++$pos;
-				}
-				++$pos;
-				break;
-			case '{':
-				$result = $stdClass ? new stdClass : array();
-				++$pos;
-				while($encode{$pos} !== '}') {
-					$tmp = PrisnaGWTFastJSON::__decodeString($encode, $pos);
-					++$pos;
-					if($stdClass)
-						$result->$tmp = PrisnaGWTFastJSON::__decode($encode, $pos, $slen, $stdClass);
-					else
-						$result[$tmp] = PrisnaGWTFastJSON::__decode($encode, $pos, $slen, $stdClass);
-					if($encode{$pos} === ',')
-						++$pos;
-				}
-				++$pos;
-				break;
-			case '"':
-				switch($encode{++$pos}) {
-					case '"':
-						$result = "";
-						break;
-					default:
-						$result = PrisnaGWTFastJSON::__decodeString($encode, $pos);
-						break;
-				}
-				++$pos;
-				break;
-			default:
-				$tmp = '';
-				preg_replace('/^(\-)?([0-9]+)(\.[0-9]+)?([eE]\+[0-9]+)?/e', '$tmp = "\\1\\2\\3\\4"', substr($encode, $pos));
-				if($tmp !== '') {
-					$pos += strlen($tmp);
-					$nint = intval($tmp);
-					$nfloat = floatval($tmp);
-					$result = $nfloat == $nint ? $nint : $nfloat;
-				}
-				break;
-		}
-		return $result;
-	}
-	
-	protected static function __decodeString(&$encode, &$pos) {
-		$replacement = PrisnaGWTFastJSON::__getStaticReplacement();
-		$endString = PrisnaGWTFastJSON::__endString($encode, $pos, $pos);
-		$result = str_replace($replacement['replace'], $replacement['find'], substr($encode, $pos, $endString));
-		$pos += $endString;
-		return $result;
-	}
-	
-	protected static function __endString(&$encode, $position, &$pos) {
-		do {
-			$position = strpos($encode, '"', $position + 1);
-		}while($position !== false && PrisnaGWTFastJSON::__slashedChar($encode, $position - 1));
-		if($position === false)
-			trigger_error('', E_USER_WARNING);
-		return $position - $pos;
-	}
-	
-	protected static function __exit($str, $a, $b) {
-		exit($a.'FATAL: PrisnaGWTFastJSON decode method failure [malicious or incorrect JSON string]');
-	}
-	
-	protected static function __slashedChar(&$encode, $position) {
-		$pos = 0;
-		while($encode{$position--} === '\\')
-			$pos++;
-		return $pos % 2;
-	}
 }
 
 ?>

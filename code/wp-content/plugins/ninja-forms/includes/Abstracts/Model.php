@@ -120,6 +120,13 @@ class NF_Abstracts_Model
      */
     protected $_cache = TRUE;
 
+    /**
+     * A Flag for testing whether or not we've completed stage 1 of our db.
+     * 
+     * @var boolean
+     */
+    private $db_stage_1_complete = TRUE;
+
     //-----------------------------------------------------
     // Public Methods
     //-----------------------------------------------------
@@ -204,9 +211,10 @@ class NF_Abstracts_Model
             $return =  $this->_settings[ $setting ];
         } else {
             $return = $this->get_settings($setting);
+            if( is_array( $return ) && empty( $return ) ) $return = false;
         }
 
-        return ( $return ) ? $return : $default;
+        return ( $return !== false ) ? $return : $default;
     }
 
     /**
@@ -220,18 +228,55 @@ class NF_Abstracts_Model
         // If the ID is not set, then we cannot pull settings from the Database.
         if( ! $this->_id ) return $this->_settings;
 
-        $form_cache = get_option( 'nf_form_' . $this->_parent_id );
-        if( $form_cache ){
+        if( ! $this->_settings && 'field' == $this->_type ) {
+            global $wpdb;
+            $results = $wpdb->get_results(
+                "
+                SELECT Meta.key, Meta.value
+                FROM $this->_table_name as Object
+                JOIN $this->_meta_table_name as Meta
+                ON Object.id = Meta.parent_id
+                WHERE Object.id = '$this->_id'
+                "
+            , ARRAY_A );
 
-            if( 'field'== $this->_type ) {
+            foreach( $results as $result ) {
+                $key = $result[ 'key' ];
+                $this->_settings[ $key ] = $result[ 'value' ];
+            }
 
-                if (isset($form_cache[ 'fields' ])) {
+            $field = $wpdb->get_row(
+                "
+                SELECT `label`, `key`, `type`
+                FROM $this->_table_name
+                WHERE `id` = '$this->_id'
+                ",
+                ARRAY_A
+            );
 
-                    foreach ($form_cache[ 'fields' ] as $object) {
-                        if ($this->_id != $object[ 'id' ]) continue;
+            if( ! is_wp_error( $field ) ){
+                $this->_settings[ 'label' ] = $field[ 'label' ];
+                $this->_settings[ 'key' ] = $field[ 'key' ];
+                $this->_settings[ 'type' ] = $field[ 'type' ];
+                $this->_settings[ 'field_label' ] = $field[ 'label' ];
+                $this->_settings[ 'field_key' ] = $field[ 'key' ];
+            }
+        }
 
-                        $this->update_settings($object['settings']);
-                        break;
+        if( ! $this->_settings ) {
+            $form_cache = WPN_Helper::get_nf_cache( $this->_parent_id );
+            if ($form_cache) {
+
+                if ('field' == $this->_type) {
+
+                    if (isset($form_cache['fields'])) {
+
+                        foreach ($form_cache['fields'] as $object) {
+                            if ($this->_id != $object['id']) continue;
+
+                            $this->update_settings($object['settings']);
+                            break;
+                        }
                     }
                 }
             }
@@ -262,10 +307,13 @@ class NF_Abstracts_Model
                 }
             }
 
+            $meta_select_fields = "SELECT `key`, `value`";//, `meta_key`,
+	        //`meta_value`";
+
             // Query settings from the meta table.
             $meta_results = $this->_db->get_results(
+            	$meta_select_fields .
                 "
-                SELECT `key`, `value`
                 FROM   `$this->_meta_table_name`
                 WHERE  `parent_id` = $this->_id
                 "
@@ -273,7 +321,13 @@ class NF_Abstracts_Model
 
             // Assign settings to the settings property.
             foreach ($meta_results as $meta) {
-                $this->_settings[ $meta->key ] = $meta->value;
+                // If we don't already have a value from the main table...
+                // OR If that value was NULL...
+                if ( ! isset( $this->_settings[ $meta->key ] ) || NULL == $this->_settings[ $meta->key ] ) {
+                    // TODO: Update this logic after removal of original meta columns.
+                    // Set the value from meta.
+                    $this->_settings[ $meta->key ] = $meta->value;
+                }
             }
         }
 
@@ -437,10 +491,28 @@ class NF_Abstracts_Model
      */
     public function save()
     {
+
+        /**
+         * Check to see if we've completed stage 1 of our db update.
+         */
+
+        $sql = "SHOW COLUMNS FROM {$this->_db->prefix}nf3_fields LIKE 'field_key'";
+        $results = $this->_db->get_results( $sql );
+        /**
+         * If we don't have the field_key column, we need to remove our new columns.
+         *
+         * Also, set our db stage 1 tracker to false.
+         */
+        if ( empty ( $results ) ) {
+            $this->db_stage_1_complete = false;
+        }
+
+        $data = array ( 'updated_at' => current_time( 'mysql' ));
+
         // If the ID is not set, assign an ID
         if( ! $this->_id ){
 
-            $data = array( 'created_at' => time() );
+            $data[  'created_at' ] = current_time( 'mysql' ) ;
 
             if( $this->_parent_id ){
                 $data['parent_id'] = $this->_parent_id;
@@ -473,7 +545,7 @@ class NF_Abstracts_Model
 
     public function _insert_row( $data = array() )
     {
-        $data[ 'created_at' ] = time();
+        $data[ 'created_at' ] = current_time( 'mysql' );
 
         if( $this->_parent_id ){
             $data['parent_id'] = $this->_parent_id;
@@ -488,7 +560,7 @@ class NF_Abstracts_Model
 
     /**
      * Cache Flag
-     * 
+     *
      * @param string $cache
      * @return $this
      */
@@ -540,15 +612,49 @@ class NF_Abstracts_Model
         // If the setting is a column, save the settings to the model's table.
         if( in_array( $key, $this->_columns ) ){
 
-            return $this->_db->update(
-                $this->_table_name,
-                array(
-                    $key => $value
-                ),
-                array(
-                    'id' => $this->_id
-                )
-            );
+        	$format = null;
+        	if( in_array( $key, array( 'show_title', 'clear_complete', 'hide_complete', 'logged_in' ) ) ) {
+        		// gotta set the format for the columns that use bit type
+        		$format = '%d';
+	        }
+
+	        if( 'form' === $this->_type && 'title' == $key ) {
+		        $this->_db->update(
+			        $this->_table_name,
+			        array(
+				        'form_title' => $value
+			        ),
+			        array(
+				        'id' => $this->_id
+			        ),
+			        $format
+		        );
+	        }
+
+	        // Don't update the form_title. Duplicating issue for now
+	        if( 'form_title' !== $key ) {
+		        $update_model = $this->_db->update(
+			        $this->_table_name,
+			        array(
+				        $key => $value
+			        ),
+			        array(
+				        'id' => $this->_id
+			        ),
+			        $format
+		        );
+	        } else {
+        		return 1;
+	        }
+
+	        /*
+	         * if it's not a form, you can return, but we are still saving some
+	         * settings for forms in the form_meta table
+	         */
+        	if( 'form' != $this->_type
+	            || ( 'form' == $this->_type && 'title' == $key ) ) {
+        		return $update_model;
+	        }
         }
 
         $meta_row = $this->_db->get_row(
@@ -562,11 +668,19 @@ class NF_Abstracts_Model
 
         if( $meta_row ){
 
+        	$update_values = array(
+                'value' => $value,
+	        );
+
+        	// for forms we need to update the meta_key and meta_value columns
+        	if( 'form' == $this->_type || $this->db_stage_1_complete ) {
+        		$update_values[ 'meta_key' ] = $key;
+        		$update_values[ 'meta_value' ] = $value;
+	        }
+
             $result = $this->_db->update(
                 $this->_meta_table_name,
-                array(
-                    'value' => $value
-                ),
+                $update_values,
                 array(
                     'key' => $key,
                     'parent_id' => $this->_id
@@ -575,13 +689,21 @@ class NF_Abstracts_Model
 
         } else {
 
+        	$insert_values = array(
+		        'key' => $key,
+		        'value' => $value,
+		        'parent_id' => $this->_id
+	        );
+
+	        // for forms we need to update the meta_key and meta_value columns
+        	if( 'form' == $this->_type || $this->db_stage_1_complete ) {
+        		$insert_values[ 'meta_key' ] = $key;
+        		$insert_values[ 'meta_value' ] = $value;
+	        }
+
             $result = $this->_db->insert(
                 $this->_meta_table_name,
-                array(
-                    'key' => $key,
-                    'value' => $value,
-                    'parent_id' => $this->_id
-                ),
+                $insert_values,
                 array(
                     '%s',
                     '%s',
@@ -589,7 +711,6 @@ class NF_Abstracts_Model
                 )
             );
         }
-
 
         return $result;
     }
@@ -605,7 +726,7 @@ class NF_Abstracts_Model
     {
         if( ! $this->_settings ) return;
 
-        foreach( $this->_settings as $key => $value ){
+        foreach( $this->_settings as $key => $value ) {
             $value = maybe_serialize( $value );
             $this->_results[] = $this->_save_setting( $key, $value );
         }
@@ -636,7 +757,7 @@ class NF_Abstracts_Model
         );
 
         // If a relationship does not exists, then create one.
-        if( 0 == $this->_db->num_rows ){
+        if( 0 == $this->_db->num_rows ) {
 
             $this->_db->insert(
                 $this->_relationships_table,

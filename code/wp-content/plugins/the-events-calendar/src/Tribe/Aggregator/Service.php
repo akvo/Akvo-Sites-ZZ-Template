@@ -25,6 +25,11 @@ class Tribe__Events__Aggregator__Service {
 	private $service_messages = array();
 
 	/**
+	 * @var string
+	 */
+	public static $auth_transient = 'tribe_aggregator_has_eventbrite_authorized_response';
+
+	/**
 	 * API varibles stored in a single Object
 	 *
 	 * @var array $api {
@@ -307,25 +312,6 @@ class Tribe__Events__Aggregator__Service {
 	}
 
 	/**
-	 * Fetch Facebook Extended Token from the Service
-	 *
-	 * @return array
-	 */
-	public function get_facebook_token() {
-		$args = array(
-			'referral' => urlencode( home_url() ),
-		);
-		$response = $this->get( 'facebook/token', $args );
-
-		// If we have an WP_Error we return only CSV
-		if ( is_wp_error( $response ) ) {
-			return tribe_error( 'core:aggregator:invalid-facebook-token', array(), array( 'response' => $response ) );
-		}
-
-		return $response;
-	}
-
-	/**
 	 * Get Eventbrite Arguments for EA
 	 *
 	 * @since 4.6.18
@@ -360,11 +346,22 @@ class Tribe__Events__Aggregator__Service {
 
 		$args = $this->get_eventbrite_args();
 
+		$cached_response = get_transient( self::$auth_transient );
+
+		if ( false !== $cached_response ) {
+			return $cached_response;
+		}
+
 		$response = $this->get( 'eventbrite/validate', $args );
 
 		// If we have an WP_Error we return only CSV
-		if ( is_wp_error( $response ) ) {
-			return tribe_error( 'core:aggregator:invalid-eventbrite-token', array(), array( 'response' => $response ) );
+		if ( $response instanceof WP_Error ) {
+			$response = tribe_error( 'core:aggregator:invalid-eventbrite-token', array(), array( 'response' => $response ) );
+		}
+
+		if ( false === $cached_response && 'error' !== $response->status ) {
+			// Check this each 15 minutes.
+			set_transient( self::$auth_transient, $response, 900 );
 		}
 
 		return $response;
@@ -386,6 +383,8 @@ class Tribe__Events__Aggregator__Service {
 		// If we have an WP_Error we return only CSV
 		if ( is_wp_error( $response ) ) {
 			return tribe_error( 'core:aggregator:invalid-eventbrite-token', array(), array( 'response' => $response ) );
+		} else {
+			delete_transient( self::$auth_transient );
 		}
 
 		return $response;
@@ -443,6 +442,16 @@ class Tribe__Events__Aggregator__Service {
 		if ( ! empty( $licenses ) ) {
 			$args['licenses'] = $licenses;
 		}
+
+		/**
+		 * Allows filtering to add other arguments to be passed to the EA service.
+		 *
+		 * @since 4.6.24
+		 *
+		 * @param array $args   Arguments to queue the import.
+		 * @param self  $record Which record we are dealing with.
+		 */
+		$args = apply_filters( 'tribe_aggregator_service_post_import_args', $args, $this );
 
 		$request_args = array(
 			'body' => $args,
@@ -545,7 +554,19 @@ class Tribe__Events__Aggregator__Service {
 	 */
 	public function get_service_message( $key, $args = array(), $default = null ) {
 		if ( empty( $this->service_messages[ $key ] ) ) {
-			return ! empty( $default ) ? $default : $this->get_unknow_message();
+			// Get error message if this is a registered Tribe_Error key.
+			$error = tribe_error( $key );
+
+			if ( is_wp_error( $error ) && 'unknown' !== $error->get_error_code() ) {
+				return $error->get_error_message();
+			}
+
+			// Use default message if set.
+			if ( null !== $default ) {
+				return $default;
+			}
+
+			return $this->get_unknow_message();
 		}
 
 		return vsprintf( $this->service_messages[ $key ], $args );
@@ -618,7 +639,7 @@ class Tribe__Events__Aggregator__Service {
 	 * @return int
 	 */
 	public function get_limit_usage( $ignore_cache = false ) {
-		$limits = $this->get_usage( 'import', $ignore_cache );
+		$limits = (object) $this->get_usage( 'import', $ignore_cache );
 
 		if ( isset( $limits->used ) ) {
 			return $limits->used;
@@ -635,7 +656,7 @@ class Tribe__Events__Aggregator__Service {
 	 * @return int
 	 */
 	public function get_limit_remaining( $ignore_cache = false ) {
-		$limits = $this->get_usage( 'import', $ignore_cache );
+		$limits = (object) $this->get_usage( 'import', $ignore_cache );
 
 		if ( isset( $limits->remaining ) ) {
 			return $limits->remaining;
@@ -659,8 +680,6 @@ class Tribe__Events__Aggregator__Service {
 		$this->service_messages = array(
 			'error:create-import-failed' => __( 'Sorry, but something went wrong. Please try again.', 'the-events-calendar' ),
 			'error:create-import-invalid-params' => __( 'Events could not be imported. The import parameters were invalid.', 'the-events-calendar' ),
-			'error:fb-permissions' => __( 'Events cannot be imported because Facebook has returned an error. This could mean that the event ID does not exist, the event or source is marked as Private, or the event or source has been otherwise restricted by Facebook. You can <a href="https://theeventscalendar.com/knowledgebase/import-errors/" target="_blank">read more about Facebook restrictions in our knowledgebase</a>.', 'the-events-calendar' ),
-			'error:fb-no-results' => __( 'No upcoming Facebook events found.', 'the-events-calendar' ),
 			'error:eb-permissions' => __( 'Events cannot be imported because Eventbrite has returned an error. This could mean that the event ID does not exist, the event or source is marked as Private, or the event or source has been otherwise restricted by Eventbrite. You can <a href="https://theeventscalendar.com/knowledgebase/import-errors/" target="_blank">read more about Eventbrite restrictions in our knowledgebase</a>.', 'the-events-calendar' ),
 			'error:eb-no-results' => __( 'No upcoming Eventbrite events found.', 'the-events-calendar' ),
 			'error:fetch-404' => __( 'The URL provided could not be reached.', 'the-events-calendar' ),
@@ -677,7 +696,6 @@ class Tribe__Events__Aggregator__Service {
 			'queued' => __( 'The import will be starting soon.', 'the-events-calendar' ),
 			'success' => __( 'Success', 'the-events-calendar' ),
 			'success:create-import' => __( 'Import created', 'the-events-calendar' ),
-			'success:facebook-get-token' => __( 'Successfully fetched Facebook Token', 'the-events-calendar' ),
 			'success:eventbrite-get-token' => __( 'Successfully fetched Eventbrite Token', 'the-events-calendar' ),
 			'success:get-origin' => __( 'Successfully loaded import origins', 'the-events-calendar' ),
 			'success:import-complete' => __( 'Import is complete', 'the-events-calendar' ),
@@ -730,7 +748,6 @@ class Tribe__Events__Aggregator__Service {
 		$keys = array_combine( $keys, $keys );
 		$confirmation_args = array_intersect_key( $args, $keys );
 		$confirmation_args = array_merge( $confirmation_args, array(
-			'facebook_token'   => '1',
 			'eventbrite_token' => '1',
 			'meetup_api_key'   => '1',
 		) );
@@ -826,5 +843,28 @@ class Tribe__Events__Aggregator__Service {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Fetch Facebook Extended Token from the Service
+	 *
+	 * @deprecated 4.6.23
+	 *
+	 * @return array
+	 */
+	public function get_facebook_token() {
+		_deprecated_function( __FUNCTION__, '4.6.23', 'Importing from Facebook is no longer supported in Event Aggregator.' );
+
+		$args = array(
+			'referral' => urlencode( home_url() ),
+		);
+		$response = $this->get( 'facebook/token', $args );
+
+		// If we have an WP_Error we return only CSV
+		if ( is_wp_error( $response ) ) {
+			return tribe_error( 'core:aggregator:invalid-facebook-token', array(), array( 'response' => $response ) );
+		}
+
+		return $response;
 	}
 }

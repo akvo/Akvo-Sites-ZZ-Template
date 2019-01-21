@@ -1,3 +1,5 @@
+<?php defined('ABSPATH') or die("Cannot access pages directly."); ?>
+
 <div class="wpDataTables metabox-holder">
     <div id="wdtPreloadLayer" class="overlayed">
     </div>
@@ -11,7 +13,14 @@
 				<h2><?php _e('wpDataTables settings','wpdatatables'); ?></h2>
 				<form method="post" action="<?php echo WDT_ROOT_URL ?>" id="wpDataTablesSettings">
 				<div id="normal-sortables" class="meta-box-sortables ui-sortable">
-					<div class="postbox">
+					<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all settings">
+						<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all settings">
+							<li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active settings"><a href="#tabs-1" class="ui-tabs-anchor settings"><div class="dashicons dashicons-admin-tools"></div> <?php _e('Main settings','wpdatatables'); ?></a></li>
+							<li class="ui-state-default ui-corner-top settings"><a href="#tabs-2" class="ui-tabs-anchor settings"><div class="dashicons dashicons-art"></div> <?php _e('Color and font settings','wpdatatables'); ?></a></li>
+							<li class="ui-state-default ui-corner-top settings"><a href="#tabs-3" class="ui-tabs-anchor settings"><div class="dashicons dashicons-exerpt-view"></div> <?php _e('Custom JS and CSS','wpdatatables'); ?></a></li>
+						</ul>
+						<div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom settings">
+							<div class="postbox">
 						<div class="handlediv" title="<?php _e('Click to toggle','wpdatatables'); ?>"><br/></div>
 					    <h3 class="hndle">
 					    	<span><div class="dashicons dashicons-admin-tools"></div> <?php _e('Main settings','wpdatatables'); ?></span>
@@ -19,69 +28,18 @@
 					    <div class="inside">
 						    <table class="form-table wpDataTables">
 							<tbody>
+							<input type="hidden" id="wdtSettingsNonce" value="<?php echo wp_create_nonce( 'wdt_settings_nonce_' . get_current_user_id() ); ?>" />
+							<?php echo '<tr valign="top"><th scope="row"><label for="wdtSiteLink">'; _e("Show plugin credentials below tables","wpdatatables"); echo '</label></th><td><input type="checkbox" name="wdtSiteLink" id="wdtSiteLink"'; if($wdtSiteLink) { echo 'checked="checked"'; }; echo ' /><span class="description">'; _e("If you want to support our project, please, keep this checkbox as checked","wpdatatables"); echo'.</span></td></tr>' ?>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wpUseSeparateCon"><?php _e('Use separate MySQL connection','wpdatatables'); ?></label>
+								    <label for="wpUseSeparateCon"><?php _e('Use separate MySQL connection','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="checkbox" id="wpUseSeparateCon" name="wpUseSeparateCon" <?php if ($wpUseSeparateCon) { ?>checked="checked"<?php } ?> />
+								    <input type="checkbox" <?php echo ' class="full_version_option" ' ?> id="wpUseSeparateCon" name="wpUseSeparateCon" <?php if ($wpUseSeparateCon) { ?>checked="checked"<?php } ?> />
 								    <span class="description"><?php _e('If this checkbox is checked, wpDataTables will use its own connection to MySQL bases. In other case it will use the main WordPress MySQL connection.','wpdatatables'); ?></span>
 								</td>
 							    </tr>
-							    <tr class="wpMySQLParam">
-								<th scope="row">
-								    <label for="wpMySqlHost"><?php _e('MySQL host','wpdatatables');?></label>
-								</th>
-								<td>
-								    <input type="text" value="<?php echo $wpMySqlHost ?>" name="wpMySqlHost" id="wpMySqlHost" />
-								    <span class="description"><?php _e('MySQL host address','wpdatatables'); ?>.</span>
-								</td>
-							    </tr>
-							    <tr class="wpMySQLParam">
-								<th scope="row">
-								    <label for="wpMySqlDB"><?php _e('MySQL database','wpdatatables'); ?></label>
-								</th>
-								<td>
-								    <input type="text" value="<?php echo $wpMySqlDB ?>" name="wpMySqlDB" id="wpMySqlDB" />
-								    <span class="description"><?php _e('MySQL database name','wpdatatables'); ?>.</span>
-								</td>
-							    </tr>
-							    <tr class="wpMySQLParam">
-								<th scope="row">
-								    <label for="wpMySqlUser"><?php _e('MySQL user','wpdatatables'); ?></label>
-								</th>
-								<td>
-								    <input type="text" value="<?php echo $wpMySqlUser ?>" name="wpMySqlUser" id="wpMySqlUser" />
-								    <span class="description"><?php _e('MySQL username for the connection','wpdatatables'); ?>.</span>
-								</td>
-							    </tr>
-							    <tr class="wpMySQLParam">
-								<th scope="row">
-								    <label for="wpMySqlPwd"><?php _e('MySQL password','wpdatatables'); ?></label>
-								</th>
-								<td>
-								    <input type="password" value="<?php echo $wpMySqlPwd ?>" name="wpMySqlPwd" id="wpMySqlPwd" />
-								    <span class="description"><?php _e('MySQL password for the provided user','wpdatatables'); ?>.</span>
-								</td>
-							    </tr>
-							    <tr class="wpMySQLParam">
-								<th scope="row">
-								    <label for="wpMySqlPort"><?php _e('MySQL port','wpdatatables'); ?></label>
-								</th>
-								<td>
-								    <input type="text" value="<?php echo $wpMySqlPort ?>" name="wpMySqlPort" id="wpMySqlPort" />
-								    <span class="description"><?php _e('MySQL port for the connection (default: 3306)','wpdatatables'); ?>.</span>
-								</td>
-							    </tr>
-							    <tr class="wpMySQLParam">
-								<th scope="row">
-								    <label for="wpMySqlTest"><?php _e('Test connection','wpdatatables'); ?></label>
-								</th>
-								<td>
-                                                                    <button class="button" id="wpMySqlTest"><?php _e('Test MySQL settings', 'wpdatatables'); ?></button>
-								    <span class="description"><?php _e('Click this button to test if wpDataTables is able to connect to the MySQL server with the details you provided','wpdatatables'); ?>.</span>
-								</td>
-							    </tr>                                                            
+							<?php  ?>
 							    <tr>
 								<th scope="row">
 								    <label for="wpInterfaceLanguage"><?php _e('Interface language','wpdatatables'); ?></label>
@@ -156,6 +114,18 @@
 								    <span class="description"><?php _e('Pick the date format to use in date column type','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
+							<tr>
+								<th scope="row">
+									<label for="wdtTimeFormat"><?php _e('Time format','wpdatatables'); ?></label>
+								</th>
+								<td>
+									<select name="wdtTimeFormat" id="wdtTimeFormat">
+										<option value="h:i A" <?php if ($wdtTimeFormat == 'h:i A') { ?>selected="selected"<?php } ?> >1:25 PM (12h)</option>
+										<option value="H:i" <?php if ($wdtTimeFormat == 'H:i') { ?>selected="selected"<?php } ?> >13:25 (24h)</option>
+									</select>
+									<span class="description"><?php _e('Pick the time format to use in datetime and time column type','wpdatatables'); ?>.</span>
+								</td>
+							</tr>
 							    <tr>
 								<th scope="row">
 								    <label for="wdtNumberFormat"><?php _e('Number format','wpdatatables'); ?></label>
@@ -177,6 +147,15 @@
 								    <span class="description"><?php _e('Define the amount of decimal places for the float numbers','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
+								<tr>
+									<th scope="row">
+										<label for="wdtTimepickerRange"><?php _e('Timepicker step (min)','wpdatatables'); ?></label>
+									</th>
+									<td>
+										<input type="number" name="wdtTimepickerRange" id="wdtTimepickerRange" value="<?php echo $wdtTimepickerRange ?>" />
+										<span class="description"><?php _e('Define the minutes step for the timepicker based filters and editors.','wpdatatables'); ?>.</span>
+									</td>
+								</tr>
 							    <tr>
 								<th scope="row">
 								    <label for="wdtNumbersAlign"><?php _e('Align numbers to the right','wpdatatables'); ?></label>
@@ -206,17 +185,8 @@
 								    <span class="description"><?php _e('Here you can specify width (in pixels) will be treated as a mobile.','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
-                                                            
-							    <tr>
-								<th scope="row">
-								    <label for="wdtPurchaseCode"><?php _e('Purchase code','wpdatatables'); ?></label>
-								</th>
-								<td>
-                                                                    <input type="text" name="wdtPurchaseCode" id="wdtPurchaseCode" value="<?php echo $wdtPurchaseCode ?>" />
-								    <span class="description"><?php _e('Please enter your Envato purchase code to enable plugin auto-updates. Leave blank if you do not want the plugin to auto-update','wpdatatables'); ?>.</span>
-								</td>
-							    </tr>
-							    							    							    							    							    
+                                <?php  ?>
+
 							    <tr>
 								<td colspan="2">
 								    <input type="submit" name="submit" class="button-primary" value="<?php _e('Save options','wpdatatables'); ?>">
@@ -226,8 +196,9 @@
 						    </table>
 					    </div>
 					</div>
-				    
-					<div class="postbox">
+						</div>
+						<div id="tabs-2" class="ui-tabs-panel ui-widget-content ui-corner-bottom settings">
+							<div class="postbox">
 						<div class="handlediv" title="<?php _e('Click to toggle','wpdatatables'); ?>"><br/></div>
 					    <h3 class="hndle">
 				    		<div class="dashicons dashicons-art"></div> <?php _e('Color and font settings','wpdatatables'); ?>
@@ -238,208 +209,208 @@
 							<tbody>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtTableFontColor"><?php _e('Table font color','wpdatatables'); ?></label>
+								    <label for="wdtTableFontColor"><?php _e('Table font color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtTableFontColor" id="wdtTableFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtTableFontColor']) ? $wdtFontColorSettings['wdtTableFontColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtTableFontColor" id="wdtTableFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtTableFontColor']) ? $wdtFontColorSettings['wdtTableFontColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for the main font in table cells','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtHeaderBaseColor"><?php _e('Header background color','wpdatatables'); ?></label>
+								    <label for="wdtHeaderBaseColor"><?php _e('Header background color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtHeaderBaseColor" id="wdtHeaderBaseColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderBaseColor']) ? $wdtFontColorSettings['wdtHeaderBaseColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtHeaderBaseColor" id="wdtHeaderBaseColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderBaseColor']) ? $wdtFontColorSettings['wdtHeaderBaseColor'] : '') ?>" />
 								    <span class="description"><?php _e('The color is used for background of the table header','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtHeaderBorderColor"><?php _e('Header border color','wpdatatables'); ?></label>
+								    <label for="wdtHeaderBorderColor"><?php _e('Header border color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtHeaderBorderColor" id="wdtHeaderBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderBorderColor']) ? $wdtFontColorSettings['wdtHeaderBorderColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtHeaderBorderColor" id="wdtHeaderBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderBorderColor']) ? $wdtFontColorSettings['wdtHeaderBorderColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for the border in the table header','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>     
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtHeaderFontColor"><?php _e('Header font color','wpdatatables'); ?></label>
+								    <label for="wdtHeaderFontColor"><?php _e('Header font color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtHeaderFontColor" id="wdtHeaderFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderFontColor']) ? $wdtFontColorSettings['wdtHeaderFontColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtHeaderFontColor" id="wdtHeaderFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderFontColor']) ? $wdtFontColorSettings['wdtHeaderFontColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for the font in the table header','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtHeaderHoverColor"><?php _e('Header active and hover color','wpdatatables'); ?></label>
+								    <label for="wdtHeaderHoverColor"><?php _e('Header active and hover color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtHeaderActiveColor" id="wdtHeaderActiveColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderActiveColor']) ? $wdtFontColorSettings['wdtHeaderActiveColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtHeaderActiveColor" id="wdtHeaderActiveColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHeaderActiveColor']) ? $wdtFontColorSettings['wdtHeaderActiveColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used when you hover the mouse above the table header, or when you choose a column','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtTableInnerBorderColor"><?php _e('Table inner border color','wpdatatables'); ?></label>
+								    <label for="wdtTableInnerBorderColor"><?php _e('Table inner border color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtTableInnerBorderColor" id="wdtTableInnerBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtTableInnerBorderColor']) ? $wdtFontColorSettings['wdtTableOuterBorderColor'] : '') ?>"  />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtTableInnerBorderColor" id="wdtTableInnerBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtTableInnerBorderColor']) ? $wdtFontColorSettings['wdtTableOuterBorderColor'] : '') ?>"  />
 								    <span class="description"><?php _e('This color is used for the inner border in the table between cells','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>           
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtTableOuterBorderColor"><?php _e('Table outer border color','wpdatatables'); ?></label>
+								    <label for="wdtTableOuterBorderColor"><?php _e('Table outer border color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtTableOuterBorderColor" id="wdtTableOuterBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtTableOuterBorderColor']) ? $wdtFontColorSettings['wdtTableOuterBorderColor'] : '') ?>"  />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtTableOuterBorderColor" id="wdtTableOuterBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtTableOuterBorderColor']) ? $wdtFontColorSettings['wdtTableOuterBorderColor'] : '') ?>"  />
 								    <span class="description"><?php _e('This color is used for the outer border of the whole table body','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>           
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtEvenRowColor"><?php _e('Even row background color','wpdatatables'); ?></label>
+								    <label for="wdtEvenRowColor"><?php _e('Even row background color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtEvenRowColor" id="wdtEvenRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtEvenRowColor']) ? $wdtFontColorSettings['wdtEvenRowColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtEvenRowColor" id="wdtEvenRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtEvenRowColor']) ? $wdtFontColorSettings['wdtEvenRowColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for for background in even rows','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>           
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtOddRowColor"><?php _e('Odd row background color','wpdatatables'); ?></label>
+								    <label for="wdtOddRowColor"><?php _e('Odd row background color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtOddRowColor" id="wdtOddRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtOddRowColor']) ? $wdtFontColorSettings['wdtOddRowColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtOddRowColor" id="wdtOddRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtOddRowColor']) ? $wdtFontColorSettings['wdtOddRowColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for for background in odd rows','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>           
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtHoverRowColor"><?php _e('Hover row color','wpdatatables'); ?></label>
+								    <label for="wdtHoverRowColor"><?php _e('Hover row color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtHoverRowColor" id="wdtHoverRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHoverRowColor']) ? $wdtFontColorSettings['wdtHoverRowColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtHoverRowColor" id="wdtHoverRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtHoverRowColor']) ? $wdtFontColorSettings['wdtHoverRowColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for to highlight the row when you hover your mouse above it','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtActiveEvenCellColor"><?php _e('Cell color in active (sorted) columns for even rows','wpdatatables'); ?></label>
+								    <label for="wdtActiveEvenCellColor"><?php _e('Cell color in active (sorted) columns for even rows','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtActiveEvenCellColor" id="wdtActiveEvenCellColor" value="<?php echo (!empty($wdtFontColorSettings['wdtActiveEvenCellColor']) ? $wdtFontColorSettings['wdtActiveEvenCellColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtActiveEvenCellColor" id="wdtActiveEvenCellColor" value="<?php echo (!empty($wdtFontColorSettings['wdtActiveEvenCellColor']) ? $wdtFontColorSettings['wdtActiveEvenCellColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for background in cells which are in the active columns (columns used for sorting) in even rows','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>         
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtActiveOddCellColor"><?php _e('Cell color in active (sorted) columns for odd rows','wpdatatables'); ?></label>
+								    <label for="wdtActiveOddCellColor"><?php _e('Cell color in active (sorted) columns for odd rows','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtActiveOddCellColor" id="wdtActiveOddCellColor" value="<?php echo (!empty($wdtFontColorSettings['wdtActiveOddCellColor']) ? $wdtFontColorSettings['wdtActiveOddCellColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtActiveOddCellColor" id="wdtActiveOddCellColor" value="<?php echo (!empty($wdtFontColorSettings['wdtActiveOddCellColor']) ? $wdtFontColorSettings['wdtActiveOddCellColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for background in cells which are in the active columns (columns used for sorting) in odd rows','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>         
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtSelectedRowColor"><?php _e('Backround color for selected rows','wpdatatables'); ?></label>
+								    <label for="wdtSelectedRowColor"><?php _e('Backround color for selected rows','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtSelectedRowColor" id="wdtSelectedRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtSelectedRowColor']) ? $wdtFontColorSettings['wdtSelectedRowColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtSelectedRowColor" id="wdtSelectedRowColor" value="<?php echo (!empty($wdtFontColorSettings['wdtSelectedRowColor']) ? $wdtFontColorSettings['wdtSelectedRowColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for background in selected rows','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>         
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtButtonColor"><?php _e('Buttons background color','wpdatatables'); ?></label>
+								    <label for="wdtButtonColor"><?php _e('Buttons background color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtButtonColor" id="wdtButtonColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonColor']) ? $wdtFontColorSettings['wdtButtonColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtButtonColor" id="wdtButtonColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonColor']) ? $wdtFontColorSettings['wdtButtonColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for background in buttons','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>         
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtButtonBorderColor"><?php _e('Buttons border color','wpdatatables'); ?></label>
+								    <label for="wdtButtonBorderColor"><?php _e('Buttons border color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtButtonBorderColor" id="wdtButtonBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonBorderColor']) ? $wdtFontColorSettings['wdtButtonBorderColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtButtonBorderColor" id="wdtButtonBorderColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonBorderColor']) ? $wdtFontColorSettings['wdtButtonBorderColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for border in buttons','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>         
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtButtonColor"><?php _e('Buttons font color','wpdatatables'); ?></label>
+								    <label for="wdtButtonColor"><?php _e('Buttons font color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtButtonFontColor" id="wdtButtonFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonFontColor']) ? $wdtFontColorSettings['wdtButtonFontColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtButtonFontColor" id="wdtButtonFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonFontColor']) ? $wdtFontColorSettings['wdtButtonFontColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color is used for font in buttons','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>         
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtButtonBackgroundHoverColor"><?php _e('Buttons background hover color','wpdatatables'); ?></label>
+								    <label for="wdtButtonBackgroundHoverColor"><?php _e('Buttons background hover color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtButtonBackgroundHoverColor" id="wdtButtonBackgroundHoverColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonBackgroundHoverColor']) ? $wdtFontColorSettings['wdtButtonBackgroundHoverColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtButtonBackgroundHoverColor" id="wdtButtonBackgroundHoverColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonBackgroundHoverColor']) ? $wdtFontColorSettings['wdtButtonBackgroundHoverColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color will be used for button backgrounds when you hover above them','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtButtonFontHoverColor"><?php _e('Buttons hover font color','wpdatatables'); ?></label>
+								    <label for="wdtButtonFontHoverColor"><?php _e('Buttons hover font color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtButtonFontHoverColor" id="wdtButtonFontHoverColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonFontHoverColor']) ? $wdtFontColorSettings['wdtButtonFontHoverColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtButtonFontHoverColor" id="wdtButtonFontHoverColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonFontHoverColor']) ? $wdtFontColorSettings['wdtButtonFontHoverColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color will be used for buttons font when you hover above them','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtModalFontColor"><?php _e('Modals font color','wpdatatables'); ?></label>
+								    <label for="wdtModalFontColor"><?php _e('Modals font color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtModalFontColor" id="wdtModalFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtModalFontColor']) ? $wdtFontColorSettings['wdtModalFontColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtModalFontColor" id="wdtModalFontColor" value="<?php echo (!empty($wdtFontColorSettings['wdtModalFontColor']) ? $wdtFontColorSettings['wdtModalFontColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color will be used for wpDataTable popup (filter, datepicker) fonts','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtModalBackgroundColor"><?php _e('Modals background color','wpdatatables'); ?></label>
+								    <label for="wdtModalBackgroundColor"><?php _e('Modals background color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtModalBackgroundColor" id="wdtModalBackgroundColor" value="<?php echo (!empty($wdtFontColorSettings['wdtModalBackgroundColor']) ? $wdtFontColorSettings['wdtModalBackgroundColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtModalBackgroundColor" id="wdtModalBackgroundColor" value="<?php echo (!empty($wdtFontColorSettings['wdtModalBackgroundColor']) ? $wdtFontColorSettings['wdtModalBackgroundColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color will be used for wpDataTable popup (filter, datepicker) background','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtOverlayColor"><?php _e('Overlay background color','wpdatatables'); ?></label>
+								    <label for="wdtOverlayColor"><?php _e('Overlay background color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtOverlayColor" id="wdtOverlayColor" value="<?php echo (!empty($wdtFontColorSettings['wdtOverlayColor']) ? $wdtFontColorSettings['wdtOverlayColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtOverlayColor" id="wdtOverlayColor" value="<?php echo (!empty($wdtFontColorSettings['wdtOverlayColor']) ? $wdtFontColorSettings['wdtOverlayColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color will be used for overlay which appears below the plugin popups','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtButtonBorderHoverColor"><?php _e('Buttons hover border color','wpdatatables'); ?></label>
+								    <label for="wdtButtonBorderHoverColor"><?php _e('Buttons hover border color','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtButtonBorderHoverColor" id="wdtButtonBorderHoverColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonBorderHoverColor']) ? $wdtFontColorSettings['wdtButtonBorderHoverColor'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtButtonBorderHoverColor" id="wdtButtonBorderHoverColor" value="<?php echo (!empty($wdtFontColorSettings['wdtButtonBorderHoverColor']) ? $wdtFontColorSettings['wdtButtonBorderHoverColor'] : '') ?>" />
 								    <span class="description"><?php _e('This color will be used for button borders when you hover above them','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
 							    <tr valign="top">
 								<th scope="row">
-								    <label for="wdtBorderRadius"><?php _e('Buttons and inputs border radius (in px)','wpdatatables'); ?></label>
+								    <label for="wdtBorderRadius"><?php _e('Buttons and inputs border radius (in px)','wpdatatables'); ?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 								</th>
 								<td>
-								    <input type="text" name="wdtBorderRadius" id="wdtBorderRadius" value="<?php echo (!empty($wdtFontColorSettings['wdtBorderRadius']) ? $wdtFontColorSettings['wdtBorderRadius'] : '') ?>" />
+								    <input type="text" <?php echo ' class="full_version_option" ' ?> name="wdtBorderRadius" id="wdtBorderRadius" value="<?php echo (!empty($wdtFontColorSettings['wdtBorderRadius']) ? $wdtFontColorSettings['wdtBorderRadius'] : '') ?>" />
 								    <span class="description"><?php _e('This is a border radius for inputs in buttons. Default is 3px.','wpdatatables'); ?></span>
 								</td>
 							    </tr>         
@@ -467,9 +438,9 @@
 						    </table>    
 					    </div>
 			    	</div>
-			    	
-				    
-					<div class="postbox">
+						</div>
+						<div id="tabs-3" class="ui-tabs-panel ui-widget-content ui-corner-bottom settings">
+							<div class="postbox">
 						<div class="handlediv" title="<?php _e('Click to toggle','wpdatatables'); ?>"><br/></div>
 					    <h3 class="hndle">
 				    		<div class="dashicons dashicons-exerpt-view"></div> <?php _e('Custom JS and CSS','wpdatatables'); ?>
@@ -483,7 +454,7 @@
 								    <label for="wdtCustomJs"><?php _e('Custom wpDataTables JS','wpdatatables'); ?></label>
 								</th>
 								<td>
-								    <textarea name="wdtCustomJs" id="wdtCustomJs" style="width: 430px; height: 200px;"><?php echo (!empty($wdtCustomJs) ? stripslashes($wdtCustomJs) : '') ?></textarea><br/>
+								    <textarea name="wdtCustomJs" id="wdtCustomJs" style="width: 430px; height: 200px;"><?php echo (!empty($wdtCustomJs) ? $wdtCustomJs : '') ?></textarea><br/>
 								    <span class="description"><?php _e('This JS will be inserted as an inline script block on every page that has a wpDataTable','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
@@ -492,7 +463,7 @@
 								    <label for="wdtCustomCss"><?php _e('Custom wpDataTables CSS','wpdatatables'); ?></label>
 								</th>
 								<td>
-								    <textarea name="wdtCustomCss" id="wdtCustomCss" style="width: 430px; height: 200px;"><?php echo (!empty($wdtCustomCss) ? $wdtCustomCss : '') ?></textarea><br/>
+								    <textarea name="wdtCustomCss" id="wdtCustomCss" style="width: 430px; height: 200px;"><?php echo (!empty($wdtCustomCss) ? stripslashes($wdtCustomCss) : '') ?></textarea><br/>
 								    <span class="description"><?php _e('This CSS will be inserted as an inline style block on every page that has a wpDataTable','wpdatatables'); ?>.</span>
 								</td>
 							    </tr>
@@ -514,6 +485,7 @@
 							 </table>
 						</div>
 					</div>
+						</div>
 								    	
 			    	
 			    </div>
@@ -528,29 +500,7 @@
 </style>
 <script type="text/javascript">
     jQuery(document).ready(function(){
-	// exColorPicker
-	jQuery('#wdtHeaderBaseColor').wpColorPicker();
-	jQuery('#wdtHeaderActiveColor').wpColorPicker();
-	jQuery('#wdtHeaderFontColor').wpColorPicker();
-	jQuery('#wdtHeaderBorderColor').wpColorPicker();
-	jQuery('#wdtTableOuterBorderColor').wpColorPicker();
-	jQuery('#wdtTableInnerBorderColor').wpColorPicker();
-	jQuery('#wdtTableFontColor').wpColorPicker();
-	jQuery('#wdtHoverRowColor').wpColorPicker();
-	jQuery('#wdtOddRowColor').wpColorPicker();
-	jQuery('#wdtEvenRowColor').wpColorPicker();
-	jQuery('#wdtActiveOddCellColor').wpColorPicker();
-	jQuery('#wdtActiveEvenCellColor').wpColorPicker();
-	jQuery('#wdtSelectedRowColor').wpColorPicker();
-	jQuery('#wdtButtonColor').wpColorPicker();
-	jQuery('#wdtButtonBorderColor').wpColorPicker();
-	jQuery('#wdtButtonFontColor').wpColorPicker();
-	jQuery('#wdtButtonBackgroundHoverColor').wpColorPicker();
-	jQuery('#wdtButtonBorderHoverColor').wpColorPicker();
-	jQuery('#wdtButtonFontHoverColor').wpColorPicker();
-	jQuery('#wdtModalFontColor').wpColorPicker();
-	jQuery('#wdtModalBackgroundColor').wpColorPicker();
-	jQuery('#wdtOverlayColor').wpColorPicker();
+		<?php  ?>
 	
 	jQuery('.resetColorSettings').click(function(e){
 	    e.preventDefault();
@@ -567,6 +517,12 @@
 		}
 	});
 	jQuery('#wpUseSeparateCon').change();
+
+		<?php echo 'var full_version_title = "'; _e('Full version only!','wpdatatables'); echo '"; var full_version_text = "'; _e('Sorry, this function is available only in FULL version of wpDataTables along with many others! Please go to our <a href=\"http://wpdatatables.com/\">website</a> to see the full list and to purchase!'); echo '";
+var full_version_message = function() {
+	wdtAlertDialog(full_version_text, full_version_title);
+}
+jQuery(document).on("focus", ".full_version_option", full_version_message);' ?>
         
         /**
          * Test MySQL settings
@@ -611,20 +567,24 @@
 	    e.stopImmediatePropagation();
 	    var data = {
 			action: 'wdt_save_settings',
+			<?php echo 'wdtSiteLink: jQuery("#wdtSiteLink").is(":checked") ? 1 : 0,' ?>
 			wpUseSeparateCon: (jQuery('#wpUseSeparateCon').attr('checked') == 'checked'),
 			wpMySqlHost: jQuery('#wpMySqlHost').val(),
 			wpMySqlDB: jQuery('#wpMySqlDB').val(),
 			wpMySqlUser: jQuery('#wpMySqlUser').val(),
 			wpMySqlPwd: jQuery('#wpMySqlPwd').val(),
 			wpMySqlPort: jQuery('#wpMySqlPort').val(),
+			wdtSettingsNonce: jQuery('#wdtSettingsNonce').val(),
 			wpRenderFilter: jQuery('#wpRenderFilter').val(),
 			wpInterfaceLanguage: jQuery('#wpInterfaceLanguage').val(),
 			wpDateFormat: jQuery('#wpDateFormat').val(),
+			wdtTimeFormat: jQuery('#wdtTimeFormat').val(),
 			wpTopOffset: '',
 			wpLeftOffset: '',
 			wdtTablesPerPage: jQuery('#wdtTablesPerPage').val(),
 			wdtNumberFormat: jQuery('#wdtNumberFormat').val(),
 			wdtDecimalPlaces: jQuery('#wdtDecimalPlaces').val(),
+			wdtTimepickerRange: jQuery('#wdtTimepickerRange').val(),
 			wdtNumbersAlign: jQuery('#wdtNumbersAlign').is(':checked') ? 1 : 0,
 			wdtCustomJs: jQuery('#wdtCustomJs').val(),
 			wdtCustomCss: jQuery('#wdtCustomCss').val(),
@@ -670,7 +630,8 @@
 	});
     
 	applySelecter();
-    
+
+	jQuery( "#tabs" ).tabs();
     });
 
 </script>

@@ -11,11 +11,6 @@ class MC4WP_Form_Asset_Manager {
 	/**
 	 * @var bool
 	 */
-	protected $dummy_printed = false;
-
-	/**
-	 * @var bool
-	 */
 	protected $load_scripts = false;
 
 	/**
@@ -151,7 +146,6 @@ class MC4WP_Form_Asset_Manager {
 	public function get_javascript_config() {
 
 		$submitted_form = mc4wp_get_submitted_form();
-
 		if( ! $submitted_form ) {
 			return array();
 		}
@@ -159,8 +153,8 @@ class MC4WP_Form_Asset_Manager {
 		$config = array(
 			'submitted_form' => array(
 				'id' => $submitted_form->ID,
+				'event' => $submitted_form->last_event,
 				'data' => $submitted_form->get_data(),
-				'action' => $submitted_form->config['action'],
 				'element_id' => $submitted_form->config['element_id'],
 			)
 		);
@@ -192,18 +186,11 @@ class MC4WP_Form_Asset_Manager {
 	 * Load JavaScript files
 	 */
 	public function before_output_form() {
-
-		// only run once
-		if( $this->dummy_printed ) {
-			return;
-		}
-
 		// print dummy JS
 		$this->print_dummy_javascript();
 
 		// set flags
 		$this->load_scripts = true;
-		$this->dummy_printed = true;
 	}
 
 	/**
@@ -211,7 +198,7 @@ class MC4WP_Form_Asset_Manager {
 	 */
 	public function print_dummy_javascript() {
 		$file = dirname( __FILE__ ) . '/views/js/dummy-api.js';
-		echo '<script type="text/javascript">';
+		echo '<script>';
 		include $file;
 		echo '</script>';
 	}
@@ -240,7 +227,7 @@ class MC4WP_Form_Asset_Manager {
 		$wp_scripts->add_data( 'mc4wp-forms-placeholders', 'conditional', 'lte IE 9' );
 
 		// print inline scripts depending on printed fields
-		echo '<script type="text/javascript">';
+		echo '<script>';
 		echo '(function() {';
 		include dirname( __FILE__ ) . '/views/js/general-form-enhancements.js';
 		include dirname( __FILE__ ) . '/views/js/url-fields.js';

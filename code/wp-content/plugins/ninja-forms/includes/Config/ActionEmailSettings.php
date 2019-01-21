@@ -18,8 +18,23 @@ return apply_filters( 'ninja_forms_action_email_settings', array(
         'group' => 'primary',
         'label' => __( 'To', 'ninja-forms' ),
         'placeholder' => __( 'Email address or search for a field', 'ninja-forms' ),
+        'value' => '{wp:admin_email}',
+        'width' => 'one-half',
+        'use_merge_tags' => TRUE,
+    ),
+
+    /*
+     * Reply To
+     */
+
+    'reply_to' => array(
+        'name' => 'reply_to',
+        'type' => 'textbox',
+        'group' => 'primary',
+        'label' => __( 'Reply To', 'ninja-forms' ),
+        'placeholder' => '',
         'value' => '',
-        'width' => 'full',
+        'width' => 'one-half',
         'use_merge_tags' => TRUE,
     ),
 
@@ -33,7 +48,7 @@ return apply_filters( 'ninja_forms_action_email_settings', array(
         'group' => 'primary',
         'label' => __( 'Subject', 'ninja-forms' ),
         'placeholder' => __( 'Subject Text or seach for a field', 'ninja-forms' ),
-        'value' => '',
+        'value' => __( 'Ninja Forms Submission', 'ninja-forms' ),
         'width' => 'full',
         'use_merge_tags' => TRUE,
     ),
@@ -48,9 +63,13 @@ return apply_filters( 'ninja_forms_action_email_settings', array(
         'group' => 'primary',
         'label' => __( 'Email Message', 'ninja-forms' ),
         'placeholder' => '',
-        'value' => '',
+        'value' => '{fields_table}',
         'width' => 'full',
-        'use_merge_tags' => TRUE,
+        'use_merge_tags' => array(
+            'include' => array(
+                'calcs',
+            ),
+        ),
         'deps' => array(
             'email_format' => 'html'
         )
@@ -101,20 +120,6 @@ return apply_filters( 'ninja_forms_action_email_settings', array(
         'group' => 'advanced',
         'label' => __( 'From Address', 'ninja-forms' ),
         'placeholder' => __( 'One email address or field', 'ninja-forms' ),
-        'value' => '',
-        'use_merge_tags' => TRUE,
-    ),
-
-    /*
-     * Reply To
-     */
-
-    'reply_to' => array(
-        'name' => 'reply_to',
-        'type' => 'textbox',
-        'group' => 'advanced',
-        'label' => __( 'Reply To', 'ninja-forms' ),
-        'placeholder' => '',
         'value' => '',
         'use_merge_tags' => TRUE,
     ),

@@ -47,32 +47,145 @@ final class NF_Actions_Email extends NF_Abstracts_Action
 
     public function process( $action_settings, $form_id, $data )
     {
+        $action_settings = $this->sanitize_address_fields( $action_settings );
+
+        $errors = $this->check_for_errors( $action_settings );
+
         $headers = $this->_get_headers( $action_settings );
+
+        if ( has_filter( 'ninja_forms_get_fields_sorted' ) ) {
+            $fields_by_key = array();
+            foreach( $data[ 'fields' ] as $field ){
+                if( is_null( $field ) ) continue;
+                if( is_array( $field ) ){
+                    if( ! isset( $field[ 'key' ] ) ) continue;
+                    $key = $field[ 'key' ];
+                } else {
+                    $key = $field->get_setting('key');
+                }
+                $fields_by_key[ $key ] = $field;
+            }
+            $data[ 'fields' ] = apply_filters( 'ninja_forms_get_fields_sorted', array(), $data[ 'fields' ], $fields_by_key, $form_id );
+        }
 
         $attachments = $this->_get_attachments( $action_settings, $data );
 
         if( 'html' == $action_settings[ 'email_format' ] ) {
-            $message = $action_settings['email_message'];
+            $message = wpautop( $action_settings['email_message'] );
         } else {
             $message = $this->format_plain_text_message( $action_settings[ 'email_message_plain' ] );
         }
 
         $message = apply_filters( 'ninja_forms_action_email_message', $message, $data, $action_settings );
 
-        $sent = wp_mail(
-            $action_settings['to'],
-            $action_settings['email_subject'],
-            $message,
-            $headers,
-            $attachments
-        );
+        try {
+            /**
+             * Hook into the email send to override functionality.
+             * @return bool True if already sent. False to fallback to default behavior. Throw a new Exception if there is an error.
+             */
+            if( ! $sent = apply_filters( 'ninja_forms_action_email_send', false, $action_settings, $message, $headers, $attachments ) ){
+              $sent = wp_mail($action_settings['to'], $action_settings['email_subject'], $message, $headers, $attachments);
+            }
+        } catch ( Exception $e ){
+            $sent = false;
+            $errors[ 'email_not_sent' ] = $e->getMessage();
+        }
 
-        $data[ 'actions' ][ 'email' ][ 'to' ] = $action_settings['to'];
+        if( is_user_logged_in() && current_user_can( 'manage_options' ) ) {
+            $data[ 'actions' ][ 'email' ][ 'to' ] = $action_settings[ 'to' ];
+            $data[ 'actions' ][ 'email' ][ 'headers' ] = $headers;
+            $data[ 'actions' ][ 'email' ][ 'attachments' ] = $attachments;
+        }
+
         $data[ 'actions' ][ 'email' ][ 'sent' ] = $sent;
-        $data[ 'actions' ][ 'email' ][ 'headers' ] = $headers;
-        $data[ 'actions' ][ 'email' ][ 'attachments' ] = $attachments;
+
+        // Only show errors to Administrators.
+        if( $errors && current_user_can( 'manage_options' ) ){
+            $data[ 'errors' ][ 'form' ] = $errors;
+        }
+
+        if ( ! empty( $attachments ) ) {
+            $this->_drop_csv();
+        }
 
         return $data;
+    }
+
+    /**
+     * Sanitizes email address settings
+     * @since 3.2.2
+     *
+     * @param  array $action_settings
+     * @return array
+     */
+    protected function sanitize_address_fields( $action_settings )
+    {
+        // Build a look array to compare our email address settings to.
+        $email_address_settings = array( 'to', 'from_address', 'reply_to', 'cc', 'bcc' );
+
+        // Loop over the look up values.
+        foreach( $email_address_settings as $setting ) {
+            // If the loop up values are not set in the action settings continue.
+            if ( ! isset( $action_settings[ $setting ] ) ) continue;
+
+            // If action settings do not match the look up values continue.
+            if ( ! $action_settings[ $setting ] ) continue;
+
+            // This is the array that will contain the sanitized email address values.
+            $sanitized_array = array();
+
+            /*
+             * Checks to see action settings is array,
+             * if not explodes to comma delimited array.
+             */
+            if( is_array( $action_settings[ $setting ] ) ) {
+                $email_addresses = $action_settings[ $setting ];
+            } else {
+                $email_addresses = explode( ',', $action_settings[ $setting ] );
+            }
+
+            // Loop over our email addresses.
+            foreach( $email_addresses as $email ) {
+
+                // Updated to trim values in case there is a value with spaces/tabs/etc to remove whitespace
+                $email = trim( $email );
+                if ( empty( $email ) ) continue;
+
+                // Build our array of the email addresses.
+                $sanitized_array[] = $email;
+            }
+            // Sanitized our array of settings.
+            $action_settings[ $setting ] = implode( ',' ,$sanitized_array );
+        }
+        return $action_settings;
+    }
+
+    protected function check_for_errors( $action_settings )
+    {
+        $errors = array();
+
+        $email_address_settings = array( 'to', 'from_address', 'reply_to', 'cc', 'bcc' );
+
+        foreach( $email_address_settings as $setting ){
+            if( ! isset( $action_settings[ $setting ] ) ) continue;
+            if( ! $action_settings[ $setting ] ) continue;
+
+
+            $email_addresses = is_array( $action_settings[ $setting ] ) ? $action_settings[ $setting ] : explode( ',', $action_settings[ $setting ] );
+
+            foreach( (array) $email_addresses as $email ){
+                $email = trim( $email );
+                if ( false !== strpos( $email, '<' ) && false !== strpos( $email, '>' ) ) {
+                    preg_match('/(?:<)[^>]*(?:>)/', $email, $email);
+                    $email = $email[ 1 ];
+                }
+                if( ! is_email( $email ) ) {
+                    $errors[ 'invalid_email' ] = sprintf( __( 'Your email action "%s" has an invalid value for the "%s" setting. Please check this setting and try again.', 'ninja-forms'), $action_settings[ 'label' ], $setting );
+                }
+            }
+        }
+
+        return $errors;
     }
 
     private function _get_headers( $settings )
@@ -81,6 +194,7 @@ final class NF_Actions_Email extends NF_Abstracts_Action
 
         $headers[] = 'Content-Type: text/' . $settings[ 'email_format' ];
         $headers[] = 'charset=UTF-8';
+        $headers[] = 'X-Ninja-Forms:ninja-forms'; // Flag for transactional email.
 
         $headers[] = $this->_format_from( $settings );
 
@@ -135,7 +249,12 @@ final class NF_Actions_Email extends NF_Abstracts_Action
 
                 if( ! $email ) continue;
 
-                $headers[] = $this->_format_recipient($type, $email);
+                $matches = array();
+                if (preg_match('/^"?(?<name>[^<"]+)"? <(?<email>[^>]+)>$/', $email, $matches)) {
+                    $headers[] = $this->_format_recipient($type, $matches['email'], $matches['name']);
+                } else {
+                    $headers[] = $this->_format_recipient($type, $email);
+                }
             }
         }
 
@@ -157,12 +276,45 @@ final class NF_Actions_Email extends NF_Abstracts_Action
     {
         $csv_array = array();
 
+        // Get our current date.
+        $date_format = Ninja_Forms()->get_setting( 'date_format' );
+        $today = date( $date_format, current_time( 'timestamp' ) );
+        $csv_array[ 0 ][] = 'Date Submitted';
+        $csv_array[ 1 ][] = $today;
+
         foreach( $fields as $field ){
 
-            if( ! isset( $field[ 'label' ] ) ) continue;
+            $ignore = array(
+                'hr',
+                'submit',
+                'html',
+                'creditcardcvc',
+                'creditcardexpiration',
+                'creditcardfullname',
+                'creditcardnumber',
+                'creditcardzip',
+            );
 
-            $csv_array[ 0 ][] = $field[ 'label' ];
-            $csv_array[ 1 ][] = WPN_Helper::stripslashes( $field[ 'value' ] );
+            $ignore = apply_filters( 'ninja_forms_csv_ignore_fields', $ignore );
+
+            if( ! isset( $field[ 'label' ] ) ) continue;
+            if( in_array( $field[ 'type' ], $ignore ) ) continue;
+
+            $label = ( '' != $field[ 'admin_label' ] ) ? $field[ 'admin_label' ] : $field[ 'label' ];
+
+            $value = WPN_Helper::stripslashes( $field[ 'value' ] );
+            if ( empty( $value ) && ! isset( $value ) ) {
+                $value = '';
+            }
+            if ( is_array( $value ) ) {
+                $value = implode( ',', $value );
+            }
+
+            // add filter to add single quote if first character in value is '='
+            $value = apply_filters( 'ninja_forms_subs_export_field_value_' . $field[ 'type' ], $value, $field );
+
+            $csv_array[ 0 ][] = $label;
+            $csv_array[ 1 ][] = $value;
         }
 
         $csv_content = WPN_Helper::str_putcsv( $csv_array,
@@ -198,6 +350,23 @@ final class NF_Actions_Email extends NF_Abstracts_Action
         // move file
         rename( $dir.'/'.$basename, $dir.'/'.$new_name.'.csv' );
         return $dir.'/'.$new_name.'.csv';
+    }
+
+    /**
+     * Function to delete csv file from temp directory after Email Action has completed.
+     */
+    private function _drop_csv()
+    {
+        $upload_dir = wp_upload_dir();
+        $path = trailingslashit( $upload_dir['path'] );
+
+        // create name for file
+        $new_name = apply_filters( 'ninja_forms_submission_csv_name', 'ninja-forms-submission' );
+
+        // remove a file if it already exists
+        if( file_exists( $path.'/'.$new_name.'.csv' ) ) {
+            unlink( $path.'/'.$new_name.'.csv' );
+        }
     }
 
     /*
