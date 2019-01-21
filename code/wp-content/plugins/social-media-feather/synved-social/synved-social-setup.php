@@ -106,7 +106,9 @@ function synved_social_provider_settings()
 	return $providers_settings;
 }
 
-$synved_social_options = array(
+$terms_accepted = synved_option_get('synved_social', 'accepted_sharethis_terms');
+
+$synved_social_options    = array(
 'settings' => array(
 	'label' => 'Social Media',
 	'title' => 'Social Media Feather',
@@ -142,11 +144,11 @@ $synved_social_options = array(
 					'default' => __('Hey check this out', 'social-media-feather'), 'label' => __('Default Message', 'social-media-feather'),
 					'tip' => __('Specify the default message to use when sharing content, this is what gets replaced into the %%message%% variable', 'social-media-feather')
 				),
-				'accepted_sharethis_terms' => array(
-					'default' => false, 'label' => __('Extra Features', 'social-media-feather'),
-					'tip' => __('Allows extra social features provided using JavaScript by accepting <a href="http://socialmediafeather.com/privacy">the terms</a>.', 'social-media-feather'),
-					'hidden' => true
-				),
+//				'accepted_sharethis_terms' => array(
+//					'default' => false, 'label' => __('Extra Features', 'social-media-feather'),
+//					'tip' => __('Allows extra social features provided using JavaScript by accepting <a href="http://socialmediafeather.com/privacy">the terms</a>.', 'social-media-feather'),
+//					'hidden' => true
+//				),
 				'hide_sharethis_terms' => array(
 					'default' => false, 'label' => __('Hide Extra Features Prompt', 'social-media-feather'),
 					'tip' => __('Don\'t prompt for extra features.', 'social-media-feather'),
@@ -156,8 +158,15 @@ $synved_social_options = array(
 					'default' => '',
 					'label' => __( 'Facebook App ID', 'social-media-feather' ),
 				),
+				'accepted_sharethis_terms' => array(
+					'type' => 'custom',
+					'label' => __( 'Terms of Service', 'social-media-feather' ),
+					'tip' => __( 'Accept or decline <a target="_blank" href="https://www.sharethis.com/terms/">ShareThis Terms of Service</a> and <a target="_blank" href="https://www.sharethis.com/privacy/">Privacy Notice</a>', 'social-media-feather' ),
+					'render' => 'synved_social_accept_terms_switch'
+				),
 			)
 		),
+
 		'section_automatic_display' => array(
 			'label' => __('Automatic Display', 'social-media-feather'),
 			'tip' => __('Settings affecting automating appending of social buttons to post contents', 'social-media-feather'),
@@ -341,6 +350,17 @@ synved_option_register('synved_social', $synved_social_options);
 synved_option_include_module_addon_list('synved-social');
 
 
+function synved_social_accept_terms_switch() {
+
+	$out = '<label class="synved-switch">
+                            <input id="synved-disable" name="synved_social_settings[accepted_sharethis_terms]"
+                                   type="checkbox" value="'.(synved_social_are_terms_accepted()?1:0).'">
+							<div id="synved-slider" class="synved-slider round"></div>
+						</label>';
+
+    return $out;
+}
+
 function synved_social_provider_option_value_sanitize($value, $name, $id, $item)
 {
 	$default = synved_option_item_default($item);
@@ -353,30 +373,30 @@ function synved_social_provider_option_value_sanitize($value, $name, $id, $item)
 
 function synved_social_page_settings_tip($tip, $item)
 {
-	// if terms have just been accepted
-	if (isset($_GET['accept-terms']) && $_GET['accept-terms'] == "yes")
-	{
-		$tip .= '<div class="alert alert-success text-center">
+	$tip = '';
+
+	if (preg_match( '/page=synved_social_settings/i', $_SERVER[ 'REQUEST_URI' ] )) {
+
+		// if terms have just been accepted
+		if ( isset( $_GET['accept-terms'] ) && $_GET['accept-terms'] == "yes" ) {
+			$tip .= '<div class="alert alert-success text-center">
 			<p>Thank you, the update has been enabled!</p>
 		</div>';
-	}
-	elseif (!synved_option_get('synved_social', 'accepted_sharethis_terms') && synved_option_get('synved_social', 'hide_sharethis_terms'))
-	{
-		$tip .= '<div class="notice notice-warning">
-			<p>This update includes a host of new features, including FREE extra social share buttons and support for Facebook analytics, and requires an update to the <a href="http://socialmediafeather.com/privacy" target="_blank">privacy policy and terms of use</a> <a href="' . esc_url(add_query_arg( 'accept-terms', 'yes')) . '" class="button button-secondary">I accept</a></p>
-		</div>';
-	}
+		} elseif ( ! synved_option_get( 'synved_social',
+				'accepted_sharethis_terms' )
+		) {
+			$tip .= synved_social_sharethis_terms_notice( false, false );
+		}
 
 // 	if (!function_exists('synved_shortcode_version'))
 // 	{
 // 		$tip .= ' <div style="background:#f2f2f2;font-size:110%;color:#444;margin-right:270px;padding:10px 15px;"><b>' . __('Note', 'social-media-feather') . '</b>: ' . sprintf(__('The Social Media Feather plugin is fully compatible with the free <a target="_blank" href="%1$s">WordPress Shortcodes</a> plugin! WordPress Shortcodes will simplify adding Social Media shortcodes to your posts and pages. You can install it using your <a href="%2$s">plugin installer</a>.', 'social-media-feather'), 'http://synved.com/wordpress-shortcodes/', add_query_arg(array('tab' => 'search', 's' => 'synved shortcodes'), admin_url('plugin-install.php'))) . '</div>';
 // 	}
 
-	if (function_exists('synved_connect_support_social_follow_render'))
-	{
-		$tip .= synved_connect_support_social_follow_render();
+		if ( function_exists( 'synved_connect_support_social_follow_render' ) ) {
+			$tip .= synved_connect_support_social_follow_render();
+		}
 	}
-
 	return $tip;
 }
 
@@ -385,6 +405,7 @@ function synved_social_page_render_fragment($fragment, $out, $params)
 	if ($fragment == 'page-submit-tail')
 	{
 		$out .= '<div style="clear:both; margin-top: -12px;"><a target="_blank" href="http://wordpress.org/support/view/plugin-reviews/social-media-feather?rate=5#postform" style="font-size:120%"><b>We need your help!</b> If you like the plugin, you can help us by leaving a 5-stars review! It only takes a minute and it\'s free!</a></div>';
+		$out .= '<p>By using this plugin you are agreeing to the <a href="http://socialmediafeather.com/privacy/">Terms of service and Privacy Policy</a>.</p>';
 	}
 
 	return $out;
@@ -635,7 +656,7 @@ function synved_social_enqueue_scripts()
 
 	//wp_enqueue_style('synved-social-style');
 
-	if (synved_option_get('synved_social', 'accepted_sharethis_terms'))
+	if ( synved_social_are_terms_accepted() )
 	{
 
     if (is_ssl()) {
@@ -654,6 +675,13 @@ function synved_social_enqueue_scripts()
 
 		add_filter('script_loader_tag', 'synved_social_wp_script_loader_tag', 10, 2);
 	}
+}
+
+/**
+ * @return bool
+ */
+function synved_social_are_terms_accepted() {
+	return synved_option_get( 'synved_social', 'accepted_sharethis_terms' );
 }
 
 function synved_social_print_styles()
@@ -958,20 +986,43 @@ function synved_social_wp_the_content($content, $id = null)
 	return $content;
 }
 
-// Show ShareThis terms.
-function synved_social_sharethis_terms_notice()
+/**
+ * Renders ShareThis Terms of Service alert.
+ *
+ * @param bool $render_html
+ * @param bool $isDismissible
+ *
+ * @return string
+ */
+function synved_social_sharethis_terms_notice($render_html = true, $isDismissible = true)
 {
-?>
-    <div id="sharethis_terms_notice" class="notice-warning notice is-dismissible">
-        <p>This update includes a host of new features, including FREE extra social share buttons and support for Facebook analytics, and requires an update to the <a href="http://socialmediafeather.com/privacy" target="_blank">privacy policy and terms of use</a>.
-        <a href="<?php echo admin_url('options-general.php?page=synved_social_settings&accept-terms=yes'); ?>" class="button button-primary">I accept</a></p>
+    $out = '<div id="sharethis_terms_notice" class="notice-warning notice '.(!empty($isDismissible)?'is-dismissible':'').'">
+        <p>
+            To get the most out of Social Media Feather and to help enable its continued development,
+            please read the <a href="//sharethis.com/terms" target="_blank">ShareThis Terms of Service</a> and <a href="//sharethis.com/privacy" target="_blank">Privacy Notice</a>,
+            then <a href="'.admin_url('options-general.php?page=synved_social_settings&accept-terms=yes').'">click here to accept the terms</a>.
+        </p>
     </div>
-    <script type="text/javascript">
-    jQuery('#sharethis_terms_notice').on( 'click', '.notice-dismiss', function( event ) {
-        jQuery.post( ajaxurl, { action: 'feather_hide_terms' } );
-    });
-    </script>
-    <?php
+    <script language="JavaScript">
+    	jQuery(\'#sharethis_terms_notice\').on( \'click\', \'.notice-dismiss\', function( event ) {
+                jQuery.post( ajaxurl, { action: \'feather_hide_terms\' } );
+            });
+	</script>
+    ';
+
+    if ($render_html){
+        echo $out;
+    } else {
+        return $out;
+    }
+
+}
+
+/**
+ * Wrapper to be able to call this method within parameters by add_action
+ */
+function synved_social_sharethis_terms_notice_callback_admin_notice_wrapper() {
+	synved_social_sharethis_terms_notice(true, true);
 }
 
 // Hides the terms agreement at user's request.
@@ -1092,22 +1143,24 @@ function synved_social_init()
   	add_filter('the_content', 'synved_social_wp_the_content', 10, 2);
 	}
 
-	$connect_date = get_option('synved_connect_install_date');
-
-	if ($connect_date == false)
-		synved_option_set('synved_social', 'accepted_sharethis_terms', true);
-
 	if (is_admin())
 	{
 		if (current_user_can('manage_options'))
 		{
-			if (isset($_GET['accept-terms']) && $_GET['accept-terms'] == "yes")
-				synved_option_set('synved_social', 'accepted_sharethis_terms', true);
+			if (isset($_GET['accept-terms'])) {
+				synved_option_set( 'synved_social', 'accepted_sharethis_terms',
+                    ($_GET['accept-terms'] == "yes" ? true : false) );
+				wp_redirect(admin_url('options-general.php?page=synved_social_settings'));
+			}
 		}
 
-		if (!synved_option_get('synved_social', 'accepted_sharethis_terms') && !synved_option_get('synved_social', 'hide_sharethis_terms'))
+		$canShowShareThisAlert = ! synved_option_get( 'synved_social',
+				'accepted_sharethis_terms' ) &&
+		                         ! synved_option_get( 'synved_social', 'hide_sharethis_terms' ) &&
+		                         ! preg_match( '/page=synved_social_settings/i', $_SERVER['REQUEST_URI'] );
+		if ( $canShowShareThisAlert )
 		{
-		  add_action('admin_notices',           'synved_social_sharethis_terms_notice');
+		  add_action('admin_notices',           'synved_social_sharethis_terms_notice_callback_admin_notice_wrapper');
 		  add_action('wp_ajax_feather_hide_terms', 'synved_social_admin_hide_callback');
 		}
 	}

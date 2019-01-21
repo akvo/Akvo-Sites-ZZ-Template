@@ -60,7 +60,9 @@ body {
 {{ exclude_selector.empty.false:begin }}
 <script type="text/javascript">
 /*<![CDATA[*/
-jQuery("{{ exclude_selector }}").addClass("notranslate");
+jQuery(document).ready(function() {
+	jQuery("{{ exclude_selector }}").addClass("notranslate");
+});
 /*]]>*/
 </script>
 {{ exclude_selector.empty.false:end }}

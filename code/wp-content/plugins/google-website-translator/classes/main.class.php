@@ -30,6 +30,14 @@ class PrisnaGWT {
 
 		$settings = PrisnaGWTConfig::getSettingsValues();
 
+		if (!array_key_exists('from', $settings)) {
+			$from = PrisnaGWTConfig::getSetting('from');
+			$settings['from'] = array(
+				'value' => $from['value'],
+				'option_id' => $from['option_id']
+			);
+		}
+
 		$translator = new PrisnaGWTOutput((object) $settings);
 
 		return $translator->render(array(
@@ -175,9 +183,9 @@ class PrisnaGWTOutput extends PrisnaGWTItem {
 			$value = $value == 'true' || $value === true;
 			
 		if ($_id == 'layout')
-			$value = array('type' => 'literal', 'value' => $value);
+			return $value;
 
-		return PrisnaGWTFastJSON::encode($value);
+		return json_encode($value);
 		
 	}
 	

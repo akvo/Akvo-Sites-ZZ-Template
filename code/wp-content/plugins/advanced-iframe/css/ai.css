@@ -403,11 +403,10 @@ font-size:1.1em
 }
 
 
-#ai input[type="text"].ai-input-search {
+#ai .ai-input-search {
   width: 250px;
-  margin-top: 5px;
-  margin-bottom: 5px;
   float:left;
+  border-color: #00b600;
 }
 
 #ai .hide-setting {
@@ -422,10 +421,6 @@ font-size:1.1em
 
 #ai .ai-marked {
     background-color: yellow;
-}
-
-#ai .ai-input-search {   
-    float:left; 
 }
 
 #ai #ai-input-search-result {

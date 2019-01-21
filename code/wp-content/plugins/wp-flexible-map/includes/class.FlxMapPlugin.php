@@ -8,8 +8,6 @@ if (!defined('ABSPATH')) {
 * class for managing the plugin
 */
 class FlxMapPlugin {
-	public $urlBase;									// string: base URL path to files in plugin
-
 	protected $locale;									// locale of current website
 	protected $locales		= array();					// list of locales enqueued for localisation of maps
 	protected $mapTypes		= array();					// custom Google Maps map types to be loaded with maps, keyed by mapTypeId
@@ -30,12 +28,15 @@ class FlxMapPlugin {
 	}
 
 	/**
-	* hook the plug-in's initialise event to handle all post-activation initialisation
+	* hide the constructor
 	*/
 	private function __construct() {
-		// record plugin URL base
-		$this->urlBase = plugin_dir_url(FLXMAP_PLUGIN_FILE);
+	}
 
+	/**
+	* hook into WordPress actions and filters
+	*/
+	public function addHooks() {
 		add_action('init', array($this, 'init'));
 
 		if (is_admin()) {
@@ -85,23 +86,25 @@ class FlxMapPlugin {
 	public function enqueueScripts() {
 		$options = get_option(FLXMAP_PLUGIN_OPTIONS, array());
 
-		$args   = array('v' => '3.26');
-		if (!empty($options['apiKey'])) {
-			$args['key'] = $options['apiKey'];
-		}
-		$args   = apply_filters('flexmap_google_maps_api_args', $args);
+		if (empty($options['noAPI'])) {
+			$args   = array('v' => 'quarterly');
+			if (!empty($options['apiKey'])) {
+				$args['key'] = $options['apiKey'];
+			}
+			$args   = apply_filters('flexmap_google_maps_api_args', $args);
 
-		$apiURL = apply_filters('flexmap_google_maps_api_url', add_query_arg($args, 'https://maps.google.com/maps/api/js'));
-		if (!empty($apiURL)) {
-			wp_register_script('google-maps', $apiURL, false, null, true);
+			$apiURL = apply_filters('flexmap_google_maps_api_url', add_query_arg($args, 'https://maps.google.com/maps/api/js'));
+			if (!empty($apiURL)) {
+				wp_register_script('google-maps', $apiURL, false, null, true);
+			}
 		}
 
 		$min = SCRIPT_DEBUG ? '' : '.min';
 		$ver = SCRIPT_DEBUG ? time() : FLXMAP_PLUGIN_VERSION;
-		wp_register_script('flxmap', "{$this->urlBase}js/flexible-map$min.js", array('google-maps'), $ver, true);
+		wp_register_script('flxmap', plugins_url("js/flexible-map$min.js", FLXMAP_PLUGIN_FILE), array(), $ver, true);
 
 		// theme writers: you can remove this stylesheet by calling wp_dequeue_script('flxmap');
-		wp_enqueue_style('flxmap', $this->urlBase . 'css/styles.css', false, $ver);
+		wp_enqueue_style('flxmap', plugins_url('css/styles.css', FLXMAP_PLUGIN_FILE), false, $ver);
 	}
 
 	/**
@@ -120,9 +123,7 @@ class FlxMapPlugin {
 		$localise = array();
 
 		if (!empty($this->locales)) {
-			if (!class_exists('FlxMapLocalisation', false)) {
-				require FLXMAP_PLUGIN_ROOT . 'includes/class.FlxMapLocalisation.php';
-			}
+			require_once FLXMAP_PLUGIN_ROOT . 'includes/class.FlxMapLocalisation.php';
 			$localisation = new FlxMapLocalisation();
 			$i18n = $localisation->getLocalisations($this->locales);
 			if (!empty($i18n)) {
@@ -238,6 +239,10 @@ HTML;
 				$script .= " f.zoomControl = false;\n";
 			}
 
+			if (isset($attrs['hidefullscreen']) && self::isYes($attrs['hidefullscreen'])) {
+				$script .= " f.fullscreen = false;\n";
+			}
+
 			if (!empty($attrs['zoomstyle'])) {
 				$script .= " f.zoomControlStyle = \"{$this->str2js($attrs['zoomstyle'])}\";\n";
 			}
@@ -250,16 +255,21 @@ HTML;
 				$script .= " f.markerShowInfo = false;\n";
 			}
 
-			if (isset($attrs['scrollwheel']) && self::isYes($attrs['scrollwheel'])) {
-				$script .= " f.scrollwheel = true;\n";
+			if (isset($attrs['gesturehandling']) && preg_match('/cooperative|greedy|none|auto/i', $attrs['gesturehandling'])) {
+				$script .= sprintf(" f.gestureHandling = '%s';\n", strtolower(trim($attrs['gesturehandling'])));
 			}
+			else {
+				if (isset($attrs['scrollwheel']) && self::isYes($attrs['scrollwheel'])) {
+					$script .= " f.scrollwheel = true;\n";
+				}
 
-			if (isset($attrs['draggable']) && self::isNo($attrs['draggable'])) {
-				$script .= " f.draggable = false;\n";
-			}
+				if (isset($attrs['draggable']) && self::isNo($attrs['draggable'])) {
+					$script .= " f.draggable = false;\n";
+				}
 
-			if (isset($attrs['dblclickzoom']) && self::isNo($attrs['dblclickzoom'])) {
-				$script .= " f.dblclickZoom = false;\n";
+				if (isset($attrs['dblclickzoom']) && self::isNo($attrs['dblclickzoom'])) {
+					$script .= " f.dblclickZoom = false;\n";
+				}
 			}
 
 			if (isset($attrs['directions'])) {
@@ -285,6 +295,10 @@ HTML;
 
 			if (isset($attrs['directions']) && self::isNo($attrs['directions'])) {
 				$script .= " f.markerDirectionsInfo = false;\n";
+			}
+
+			if (isset($attrs['markeranimation']) && self::isMarkerAnimation($attrs['markeranimation'])) {
+				$script .= sprintf(" f.markerAnimation = '%s';\n", strtolower($attrs['markeranimation']));
 			}
 
 			if (isset($attrs['dirdraggable']) && self::isYes($attrs['dirdraggable'])) {
@@ -345,8 +359,8 @@ HTML;
 				}
 			}
 
-			// add map based on coordinates, with optional marker coordinates
-			if (isset($attrs['center']) && self::isCoordinates($attrs['center'])) {
+			// add map based on coordinates, with optional marker coordinates -- but not if KML source file is set
+			if (isset($attrs['center']) && self::isCoordinates($attrs['center']) && empty($attrs['src'])) {
 				$marker = self::str2js(self::getCoordinates($attrs['center']));
 				if (isset($attrs['marker']) && self::isCoordinates($attrs['marker']))
 					$marker = self::str2js(self::getCoordinates($attrs['marker']));
@@ -424,11 +438,16 @@ HTML;
 					$script .= " f.kmlcache = \"{$attrs['kmlcache']}\";\n";
 				}
 
+				if (isset($attrs['center']) && self::isCoordinates($attrs['center'])) {
+					$script .= sprintf(" f.kmlCentre = [%s];\n", self::str2js(self::getCoordinates($attrs['center'])));
+				}
+
 				$kmlfile = self::str2js($attrs['src']);
 				$script .= " f.showKML(\"$divID\", \"$kmlfile\"";
 
-				if (isset($attrs['zoom']))
+				if (isset($attrs['zoom'])) {
 					$script .= ', ' . preg_replace('/\D/', '', $attrs['zoom']);
+				}
 
 				$script .= ");\n";
 			}
@@ -476,6 +495,10 @@ HTML;
 		$html = apply_filters('flexmap_shortcode_html', $html, $attrs);
 
 		// enqueue scripts
+		$options = get_option(FLXMAP_PLUGIN_OPTIONS, array());
+		if (empty($options['noAPI'])) {
+			wp_enqueue_script('google-maps');
+		}
 		wp_enqueue_script('flxmap');
 		if ($this->locale != '' && $this->locale != 'en_US') {
 			$this->enqueueLocale($this->locale);
@@ -510,18 +533,28 @@ HTML;
 
 	/**
 	* get coordinate for given address
+	* @link https://developers.google.com/maps/documentation/geocoding/intro
 	* @param string $address
 	* @param string $region
 	* @return array|false
 	*/
 	protected static function getAddressCoordinates($address, $region) {
+		// only if we have an API key for server requests
+		$options = get_option(FLXMAP_PLUGIN_OPTIONS, array());
+		if (empty($options['apiServerKey'])) {
+			return false;
+		}
+
 		// try to get a cached answer first
 		$cacheKey = 'flxmap_' . md5("$address|$region");
 		$coords = get_transient($cacheKey);
 
 		if ($coords === false) {
 			// build Google Maps geocoding query
-			$args = array('address'	=> urlencode($address));
+			$args = array(
+				'address'	=> urlencode($address),
+				'key'		=> $options['apiServerKey'],
+			);
 			if (!empty($region)) {
 				$args['region'] = urlencode($region);
 			}
@@ -540,21 +573,27 @@ HTML;
 					throw new Exception("error decoding JSON\n" . $response['body']);
 				}
 
-				if ($result->status != 'OK') {
-					throw new Exception("error retrieving address: " . $result->status);
+				if ($result->status !== 'OK') {
+					if (!empty($result->error_message)) {
+						throw new Exception(sprintf("error retrieving address: %s; %s", $result->status, $result->error_message));
+					}
+					throw new Exception(sprintf("error retrieving address: %s", $result->status));
 				}
 
 				// success, return array with latitude and longitude
 				$location = $result->results[0]->geometry->location;
 				$coords = array($location->lat, $location->lng);
+
+				// save coordinates to prevent unnecessary requery
+				set_transient($cacheKey, $coords, MONTH_IN_SECONDS);
 			}
 			catch (Exception $e) {
 				$coords = "address: $address; " . $e->getMessage();
 				error_log(__METHOD__ . ': ' . $coords);
-			}
 
-			// save coordinates to prevent unnecessary requery
-			set_transient($cacheKey, $coords, WEEK_IN_SECONDS);
+				// save error to prevent unnecessary requery
+				set_transient($cacheKey, $coords, WEEK_IN_SECONDS);
+			}
 		}
 
 		// handle failure to map address to coordinates by returning false
@@ -591,6 +630,15 @@ HTML;
 	public static function isCoordinates($text) {
 		// TODO: handle degrees minutes seconds, degrees minutes.decimal, NSEW
 		return preg_match('/^-?[0-9]+(?:\.[0-9]+),\s*-?[0-9]+(?:\.[0-9]+)$/', $text);
+	}
+
+	/**
+	* test string to see if contents equate to a marker animation constant
+	* @param string $text
+	* @return boolean
+	*/
+	public static function isMarkerAnimation($text) {
+		return preg_match('/^(?:drop|bounce|none)$/i', $text);
 	}
 
 	/**

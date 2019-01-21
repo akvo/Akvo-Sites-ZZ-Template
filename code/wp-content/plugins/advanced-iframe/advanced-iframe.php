@@ -2,7 +2,7 @@
 /*
 Plugin Name: Advanced iFrame
 Plugin URI: http://www.tinywebgallery.com/blog/advanced-iframe
-Version: 7.5.7
+Version: 7.6
 Text Domain: advanced-iframe
 Domain Path: /languages
 Author: Michael Dempfle
@@ -25,7 +25,11 @@ define('_VALID_AI', '42');
 define('AIP_URL', plugin_dir_url( __FILE__ ));
 define('AIP_IMGURL',  AIP_URL.'img');
 
-
+if (isset($aip_standalone)) {
+define('AIP_URL_CUSTOM', plugins_url() . '/../advanced-iframe-custom/');
+} else {
+define('AIP_URL_CUSTOM', plugins_url() . '/advanced-iframe-custom/');
+}
 include dirname(__FILE__) . '/includes/advanced-iframe-main-helper.php';
 
 if (!class_exists('advancediFrame')) {
@@ -173,7 +177,8 @@ if (!class_exists('advancediFrame')) {
                 'enable_content_filter' => 'false', 'add_ai_external_local' => 'false',
                 'title' => '', 'check_iframes_when_save' => 'false',
                 'admin_was_loaded' => 'true', 'check_iframe_url_when_load' => 'true',
-                'modify_iframe_if_cookie' => 'false', 'allow' => ''
+                'modify_iframe_if_cookie' => 'false', 'allow' => '',
+                'safari_fix_url' => '', 'external_scroll_top' => '' 
             );
             return $iframeAdminOptions;
         }
@@ -213,6 +218,8 @@ if (!class_exists('advancediFrame')) {
          */
         function loadLanguage()
         {
+            // IE fix for cookies.
+            header('P3P: CP="ALL DSP NID CURa ADMa DEVa HISa OTPa OUR NOR NAV DEM"');
             load_plugin_textdomain('advanced-iframe', false, dirname(plugin_basename(__FILE__)) . '/languages');
             $options = $this->getAiAdminOptions();
             if ($options['load_jquery'] === 'true') {
@@ -485,7 +492,7 @@ if (!class_exists('advancediFrame')) {
             $new_content = str_replace('USE_POST_MESSAGE', ($devOptions['use_post_message'] != 'false') ? 'true':'false' , $new_content);
             $new_content = str_replace('DEBUG_POST_MESSAGE', ($devOptions['use_post_message'] == 'debug') ? 'true':'false' , $new_content);
             $new_content = str_replace('DATA_POST_MESSAGE', $devOptions['data_post_message'], $new_content);
-            $new_content = str_replace('PARAM_SEND_CONSOLE_LOG', ($devOptions['debug_js'] == 'true') ? 'true':'false' , $new_content);
+            $new_content = str_replace('PARAM_SEND_CONSOLE_LOG', ($devOptions['debug_js'] == 'bottom') ? 'true':'false' , $new_content);
 
             $asParts = parse_url(site_url()); // PHP function
             $home_url = $asParts['scheme'] . '://' . $asParts['host'];
@@ -495,6 +502,7 @@ if (!class_exists('advancediFrame')) {
             $new_content = str_replace('PARAM_ELEMENT_TO_MEASURE_OFFSET', $devOptions['element_to_measure_offset'], $new_content);
             $new_content = str_replace('PARAM_MODIFY_IFRAME_IF_COOKIE', $devOptions['modify_iframe_if_cookie'], $new_content);
             $new_content = str_replace('PARAM_ELEMENT_TO_MEASURE', $devOptions['element_to_measure'], $new_content);
+            $new_content = str_replace('PARAM_SCROLL_TO_TOP', $devOptions['external_scroll_top'], $new_content);
 
             $script_name = dirname(__FILE__) . '/js/ai_external.js';
             clearstatcache();
@@ -538,18 +546,18 @@ if (!class_exists('advancediFrame')) {
             $filenamedir = dirname(__FILE__) . '/../advanced-iframe-custom';
             if (!@file_exists($filenamedir)) {
                 if (!@mkdir($filenamedir)) {
-                    echo 'The directory "advanced-iframe-custom" could not be created in the plugin folder. Custom files are stored in this directory because Wordpress does delete the normal plugin folder during an update. Please create the folder manually.';
+                    echo 'The directory "advanced-iframe-custom" could not be created parallel to the advanced iframe plugin folder. Custom files are stored in this directory because Wordpress does delete the normal plugin folder during an update. Please create the folder manually.';
                     return false;
                 }
             }
             $customPluginName = 'advanced-iframe-custom.php'; 
             if (!file_exists($filenamedir . '/' . $customPluginName)) { 
                 $src = dirname(__FILE__) .'/custom/custom.txt'; 
-                copy($src, $filenamedir . '/' . $customPluginName);
+                @copy($src, $filenamedir . '/' . $customPluginName);
             }
             if (!file_exists($filenamedir . '/readme.txt')) {
                 $src = dirname(__FILE__) .'/custom/readme.txt'; 
-                copy($src, $filenamedir . '/readme.txt');
+                @copy($src, $filenamedir . '/readme.txt');
             }
         }
 

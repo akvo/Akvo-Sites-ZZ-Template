@@ -582,7 +582,7 @@ function printTextInputSrc($isPro,$options, $label, $id, $description, $type = '
       <th scope="row" '.$offset.'>' . $label . renderExampleIcon($url)  . renderExternalWorkaroundIcon($showSave). '</th>
       <td><span class="hide-print">
       <input name="' . $id . '" type="' . $type . '" id="' . $id . '" value="' . esc_attr($options[$id]) . '"  /><br></span>
-      <div class="manage-menus nounderline sub-domain-container hide-search ai-input-width">';     
+      <div class="hide-print manage-menus nounderline sub-domain-container hide-search ai-input-width">';     
       echo '<button style="float:right;" name="checkIframes" class="button-secondary" id="checkIframes" type="submit"><i class="ai-spinner"></i><span class="checkIframes-text">';
       echo __('Check all iframes', 'advanced-iframe'); 
       echo '<span></button>';
@@ -1169,6 +1169,8 @@ curl_setopt_array( $curl, array(
     CURLOPT_VERBOSE => true,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_TIMEOUT => 10,
+    CURLOPT_CONNECTTIMEOUT => 10,
     CURLOPT_USERAGENT =>  $agent,
     CURLOPT_URL => $url ) );   
     $headers = explode( "\n", curl_exec( $curl ) );

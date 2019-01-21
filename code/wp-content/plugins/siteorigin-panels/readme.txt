@@ -1,9 +1,9 @@
 === Page Builder by SiteOrigin ===
 Tags: page builder, responsive, widget, widgets, builder, page, admin, gallery, content, cms, pages, post, css, layout, grid
 Requires at least: 4.4
-Tested up to: 4.9
-Stable tag: 2.9.2
-Build time: 2018-11-09T13:01:10-08:00
+Tested up to: 5.0
+Stable tag: 2.10.0
+Build time: 2019-01-16T10:25:05-08:00
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Donate link: https://siteorigin.com/downloads/contribution/
@@ -95,6 +95,45 @@ Page Builder is actively developed and updated, so generally I'd recommend that 
 We've tried to ensure that Page Builder is compatible with most plugin widgets. It's best to just download Page Builder and test for yourself.
 
 == Changelog ==
+
+= 2.10.0 - 16 January 2018 =
+* Prevent syntax warning in PHP7.3
+* Add radio Style field type.
+* Layout block: Add button in block editor to add a SiteOrigin Layout Block.
+* Rerender row styles form on initializing a new dialog.
+* Change sidebar emulator 'id' key to avoid conflicts with widgets which already use 'id' as a key.
+* Validate post loop templates.
+* Layout block: Force raw widget processing for block editor previews.
+* Layout block: Ensure scripts load when Gutenberg plugin is active.
+* Support widgets registered using instances instead of class names.
+* Layout block: Add setting for whether to default to edit mode or preview mode.
+* Ensure style fields filter work as expected and hide styles sidebar when no fields are present.
+* Layout Block: Add 'page builder' as a keyword.
+
+= 2.9.7 - 14 December 2018 =
+* Add setting to use Classic Editor for new posts of types selected in Page Builder settings.
+* Prevent showing the 'Add New' dropdown for SO custom post types.
+* Display notice indicating how to disable Classic Editor for new Page Builder post types.
+
+= 2.9.6 - 10 December 2018 =
+* Default to Page Builder interface for post types set to use Page Builder in Settings.
+* Add check for WooCommerce 'product' type to prevent output of 'Add New' dropdown.
+
+= 2.9.5 - 6 December 2018 =
+* Layout block: Default to preview state if block has panels data.
+* Dropdown for 'Add New' with SiteOrigin Page Builder as an option.
+* Added a label to posts list to indicate which have a Page Builder layout.
+
+= 2.9.4 - 5 December 2018 =
+* Layout block: Set default state to edit mode.
+
+= 2.9.3 - 5 December 2018 =
+* Use front end i18n for block editor.
+* Ensure contextual menu works in dialogs.
+* Yoast compat: Check for panels style wrappers before doing widget content modifications.
+* Clone Layouts: Fix to allow for private posts and pages.
+* Block editor: Show preview initially when page is loaded.
+* Block editor: Show classic editor for existing pages containing Page Builder layout data.
 
 = 2.9.2 - 9 November 2018 =
 * Block editor: Call `enqueue_registered_widgets_scripts` which will reset global `$post`.

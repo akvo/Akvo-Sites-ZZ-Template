@@ -1,17 +1,17 @@
-=== Google Website Translator by Prisna.net ===
+=== Google Website Translator  ===
 Contributors: Prisna
-Tags: translation plugin, automatic translation, machine translation, automatic translate, google website translator, google translator, google language translator, language translate, language translator, multi language, translate, translation
-Stable tag: 1.2
+Tags: translate wordpress, multilingual, translate, translation, google translate, bilingual, automatic translate, google website translator, google translator, google language translator, language translate, language translator, multi language, translate, translation
+Stable tag: 1.4.2
 Requires at least: 3.3
-Tested up to: 4.6
+Tested up to: 5.0
 License: GPL2+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Translate your website into 90+ languages. This plugin includes the whole set of Google's Website Translator features, no disabled functionality.
+Easily translate your WordPress site into 100+ languages to make it multilingual. A simple and complete multilingual solution for WordPress.
 
 == Description ==
 
-This plugin brings the power of Google's automatic translation service to translate your website into 90+ languages. It also comes with a slick admin panel, so it can be installed into your client's website without losing the professional look and feel of your work.
+This plugin brings the power of Google's automatic translation service to translate your website into 100+ languages. A simple and complete multilingual solution for WordPress.
 
 = Features: =
 * Easy set up, including simple settings with inline help that everybody can understand.
@@ -81,6 +81,11 @@ Support includes:
 5. Go premium panel.
 
 == Changelog ==
+
+= 1.4 =
+Release date: September 20th, 2017
+
+* 13 new languages: Amharic, Corsican, Frisian, Hawaiian, Kurdish, Kyrgyz, Luxembourgish, Pashto, Samoan, Scots Gaelic, Shona, Sindhi and Xhosa.
 
 = 1.3 =
 Release date: April 26th, 2016

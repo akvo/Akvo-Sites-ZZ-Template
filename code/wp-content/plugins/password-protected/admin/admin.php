@@ -13,12 +13,28 @@ class Password_Protected_Admin {
 		global $wp_version;
 
 		add_action( 'admin_init', array( $this, 'password_protected_settings' ), 5 );
+		add_action( 'admin_init', array( $this, 'add_privacy_policy' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'password_protected_help_tabs', array( $this, 'help_tabs' ), 5 );
 		add_action( 'admin_notices', array( $this, 'password_protected_admin_notices' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
 		add_filter( 'plugin_action_links_password-protected/password-protected.php', array( $this, 'plugin_action_links' ) );
 		add_filter( 'pre_update_option_password_protected_password', array( $this, 'pre_update_option_password_protected_password' ), 10, 2 );
+
+	}
+
+	/**
+	 * Add Privacy Policy
+	 */
+	public function add_privacy_policy() {
+
+		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
+			return;
+		}
+
+		$content = _x( 'The Password Protected plugin stores a cookie on successful password login containing a hashed version of the entered password. It does not store any information about the user. The cookie stored is named <code>bid_n_password_protected_auth</code> where <code>n</code> is the blog ID in a multisite network', 'privacy policy content', 'password-protected' );
+
+		wp_add_privacy_policy_content( __( 'Password Protected Plugin', 'password-protected' ), wp_kses_post( wpautop( $content, false ) ) );
 
 	}
 
@@ -48,6 +64,7 @@ class Password_Protected_Admin {
 				?>
 				<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes' ) ?>"></p>
 			</form>
+			<?php do_settings_sections( 'password-protected-compat' ); ?>
 		</div>
 
 		<?php
@@ -129,12 +146,31 @@ class Password_Protected_Admin {
 			'password_protected'
 		);
 
+		add_settings_field(
+			'password_protected_remember_me',
+			__( 'Allow Remember me', 'password-protected' ),
+			array( $this, 'password_protected_remember_me_field' ),
+			$this->options_group,
+			'password_protected'
+		);
+
+		add_settings_field(
+			'password_protected_remember_me_lifetime',
+			__( 'Remember for this many days', 'password-protected' ),
+			array( $this, 'password_protected_remember_me_lifetime_field' ),
+			$this->options_group,
+			'password_protected'
+		);
+
 		register_setting( $this->options_group, 'password_protected_status', 'intval' );
 		register_setting( $this->options_group, 'password_protected_feeds', 'intval' );
+		register_setting( $this->options_group, 'password_protected_rest', 'intval' );
 		register_setting( $this->options_group, 'password_protected_administrators', 'intval' );
 		register_setting( $this->options_group, 'password_protected_users', 'intval' );
 		register_setting( $this->options_group, 'password_protected_password', array( $this, 'sanitize_password_protected_password' ) );
 		register_setting( $this->options_group, 'password_protected_allowed_ip_addresses', array( $this, 'sanitize_ip_addresses' ) );
+		register_setting( $this->options_group, 'password_protected_remember_me', 'boolval' );
+		register_setting( $this->options_group, 'password_protected_remember_me_lifetime', 'intval' );
 
 	}
 
@@ -227,6 +263,7 @@ class Password_Protected_Admin {
 		echo '<label><input name="password_protected_administrators" id="password_protected_administrators" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_administrators' ), false ) . ' /> ' . __( 'Allow Administrators', 'password-protected' ) . '</label>';
 		echo '<label><input name="password_protected_users" id="password_protected_users" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_users' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow Logged In Users', 'password-protected' ) . '</label>';
 		echo '<label><input name="password_protected_feeds" id="password_protected_feeds" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_feeds' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow RSS Feeds', 'password-protected' ) . '</label>';
+		echo '<label><input name="password_protected_rest" id="password_protected_rest" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_rest' ), false ) . ' style="margin-left: 20px;" /> ' . __( 'Allow REST API Access', 'password-protected' ) . '</label>';
 
 	}
 
@@ -247,6 +284,24 @@ class Password_Protected_Admin {
 
 		echo '<textarea name="password_protected_allowed_ip_addresses" id="password_protected_allowed_ip_addresses" rows="3" class="large-text" />' . get_option( 'password_protected_allowed_ip_addresses' ) . '</textarea>';
 		echo '<p class="description">' . esc_html__( 'Enter one IP address per line.', 'password-protected' ) . ' ' . esc_html( sprintf( __( 'Your IP is address %s.', 'password-protected' ), $_SERVER['REMOTE_ADDR'] ) ) . '</p>';
+
+	}
+
+	/**
+	 * Remember Me Field
+	 */
+	public function password_protected_remember_me_field() {
+
+		echo '<label><input name="password_protected_remember_me" id="password_protected_remember_me" type="checkbox" value="1" ' . checked( 1, get_option( 'password_protected_remember_me' ), false ) . ' /></label>';
+
+	}
+
+	/**
+	 * Remember Me lifetime field
+	 */
+	public function password_protected_remember_me_lifetime_field() {
+
+		echo '<label><input name="password_protected_remember_me_lifetime" id="password_protected_remember_me_lifetime" type="number" value="' . get_option( 'password_protected_remember_me_lifetime', 14 ) . '" /></label>';
 
 	}
 
@@ -288,7 +343,7 @@ class Password_Protected_Admin {
 
 		if ( 'password-protected/password-protected.php' == $plugin_file ) {
 			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'http://github.com/benhuson/password-protected', 'password-protected' ), __( 'GitHub', 'password-protected' ) );
-			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'https://www.transifex.com/projects/p/password-protected/resource/password-protected/', 'password-protected' ), __( 'Translate', 'password-protected' ) );
+			$plugin_meta[] = sprintf( '<a href="%s">%s</a>', __( 'https://translate.wordpress.org/projects/wp-plugins/password-protected', 'password-protected' ), __( 'Translate', 'password-protected' ) );
 		}
 
 		return $plugin_meta;
@@ -370,7 +425,7 @@ class Password_Protected_Admin {
 	 * Checks wether the admin is displaying a specific screen.
 	 *
 	 * @param   string|array  $screen_id  Admin screen ID(s).
-	 * @return  boolean 
+	 * @return  boolean
 	 */
 	public function is_current_screen( $screen_id ) {
 

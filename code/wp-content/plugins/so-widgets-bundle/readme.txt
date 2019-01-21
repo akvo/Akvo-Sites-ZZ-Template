@@ -1,9 +1,9 @@
 === SiteOrigin Widgets Bundle ===
 Tags: bundle, widget, button, slider, image, carousel, price table, google maps, tinymce, social links
 Requires at least: 4.2
-Tested up to: 4.9.1
-Stable tag: 1.13.3
-Build time: 2018-11-15T16:26:45-08:00
+Tested up to: 5.0
+Stable tag: 1.14.1
+Build time: 2019-01-09T13:17:13-08:00
 License: GPLv3 or later
 Contributors: gpriday, braam-genis
 Donate link: https://siteorigin.com/downloads/contribution/
@@ -64,6 +64,39 @@ The SiteOrigin Widgets Bundle is the perfect platform to build widgets for your 
 3. An example of the button widget.
 
 == Changelog ==
+
+= 1.14.1 - 9 January 2019 =
+* Icon field: Set correct value of currently selected icon for non-FA icons.
+* Icon field: Avoid requiring that third party icon families include a `filter.php` file.
+* Widget block: Use JS array reduce function instead of lodash.
+* Allow widgets registered by instance.
+* Multi-measurement field: Fix layout.
+* Block editor: Send widgetData when fetching widget forms.
+* Tinymce field: Prevent JS console errors for hidden fields.
+* Order field: Additional sanitization before rendering.
+
+= 1.14.0 - 4 January 2019 =
+* Accordion: allow multiple panels with the same title.
+* Actions when widgets' CSS files are created/deleted.
+* Compat fixes for PHP 7.3
+* Indicate when 'setup_widgets' is triggered for previews.
+* Accordion: Debounce window.location.hash updates to prevent incorrect states.
+* Don't remove FitText window listener to ensure previously set up FitText elements still work.
+* Icon field: Show loading indicator while icons are loading.
+* Widget documentation links.
+* Icons: Update to use latest FontAwesome icon sets.
+* Sliders: Resize slides when widgets are set up.
+* Elementor compat: Directly enqueue necessary scripts and styles for previews.
+* Allow widget headers to be translated.
+* Accordion: Keep the clicked panel in the viewport, if it moves out.
+* TinyMCE field: Check if tinymce is available before using.
+
+= 1.13.4 - 6 December 2018 =
+* Widget block: Fix Layout Slider not being editable.
+* Widget block: Correct used of i18n for block editor.
+* Widget block: Fix previews.
+* Google map: Move global API key override to `modify_instance` to ensure key is available in form.
+* Widget block: Prevent multiple API requests.
 
 = 1.13.3 - 15 November 2018 =
 * Contact: Fix checkboxes and radio alignment on android.

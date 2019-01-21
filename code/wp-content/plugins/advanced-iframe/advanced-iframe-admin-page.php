@@ -12,7 +12,7 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-functions.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-quickstart.php';
 
-$version = '7.5.7';
+$version = '7.6';
 $updated = false;
 $evanto = (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php"));
 if (is_user_logged_in() && is_admin()) {
@@ -128,7 +128,7 @@ if (is_user_logged_in() && is_admin()) {
             'enable_content_filter', 'add_ai_external_local', 'title', 
             'check_iframes_when_save','admin_was_loaded',
             'check_iframe_url_when_load','modify_iframe_if_cookie',
-            'allow'
+            'allow','safari_fix_url','external_scroll_top'
             );  
         if (!wp_verify_nonce($_POST['twg-options'], 'twg-options')) die('Sorry, your nonce did not verify.');
         

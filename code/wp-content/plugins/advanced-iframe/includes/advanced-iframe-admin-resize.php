@@ -15,6 +15,8 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
     <?php _e('PLEASE READ THIS FIRST:', 'advanced-iframe') ?>
     <p><?php _e('Only if the content from the iframe comes from the <strong>same domain</strong> it is possible that the onload attribute can execute Javascript directly which does e.g. resize the iframe to the height of the content or scroll the parent window to the top. <br /> If this is the case you can use the settings below. If you want to include an iframe from a <strong>different domain</strong> please go to the "<a id="external-workaround-link" href="#xss">External workaround</a>" where I explain how this can be done if you can modify the web site that should be included. So if you are on a different domain and cannot edit the external iframe page no interaction between parent and iframe is possible!', 'advanced-iframe') ?>
     </p>
+    <p><?php _e('Please read the <a href="http://www.tinywebgallery.com/blog/advanced-iframe-resize-to-content-summary" target="_blank">Resize to content summary</a> to know which settings you need to use optimal integration.', 'advanced-iframe') ?>        
+    </p>
     <?php _e('Please note: The resize implementation for the same domain is the same for the pro and the free version. But the external workaround of the PRO version has additional options like you can define the element to measure and it has some additional tricks that the measurements do work. So if you have problems with the auto height on the same domain try the external workaround with including ai_external.js!', 'advanced-iframe') ?>
      </div>
  

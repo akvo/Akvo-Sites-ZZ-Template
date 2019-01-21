@@ -4,6 +4,49 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.2.3] - 2019-01-10
+
+### Fixed
+- Restrict REST-API-access only if password protection is active.
+
+### Added
+- Added viewport meta tag to login page.
+- Added `password_protected_show_login` filter.
+
+### Changed
+- Cookie name is not editable in the admin so display just for reference.
+- Use default WordPress text domain for “Remember Me” and “Log In” buttons.
+
+## [2.2.2] - 2018-05-29
+
+### Changed
+- Change locked admin bar icon to green.
+
+### Fixed
+- Fix REST option and always allow access to REST API for logged in users.
+
+## [2.2.1] - 2018-05-27
+
+### Fixed
+- Fixed PHP error when calculating cookie expiration date.
+
+## [2.2] - 2018-05-25
+
+### Added
+- Admin bar icon to indicate wether password protection is enabled/disabled.
+- Option to show "Remember me" checkbox. Props [Christian Güdel](https://github.com/cguedel).
+- REST API access disabled if password not entered.
+- Admin option to allow REST API access.
+
+### Security
+- More robust checking of password hashes.
+
+## [2.1] - 2017-07-27
+
+### Added
+- Update caching notes for WP Engine and W3 Total Cache plugin.
+- Tested up to WordPress 4.8
+
 ## [2.0.3] - 2015-03-23
 
 ### Added
@@ -169,7 +212,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - First Release. If you spot any bugs or issues please [log them here](https://github.com/benhuson/password-protected/issues).
 
-[Unreleased]: https://github.com/benhuson/password-protected/compare/2.0.3...HEAD
+[Unreleased]: https://github.com/benhuson/password-protected/compare/2.2.3...HEAD
+[2.2.3]: https://github.com/benhuson/password-protected/compare/2.2.2...2.2.3
+[2.2.2]: https://github.com/benhuson/password-protected/compare/2.2.1...2.2.2
+[2.2.1]: https://github.com/benhuson/password-protected/compare/2.2...2.2.1
+[2.2]: https://github.com/benhuson/password-protected/compare/2.1...2.2
+[2.1]: https://github.com/benhuson/password-protected/compare/2.0.3...2.1
 [2.0.3]: https://github.com/benhuson/password-protected/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/benhuson/password-protected/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/benhuson/password-protected/compare/2.0...2.0.1

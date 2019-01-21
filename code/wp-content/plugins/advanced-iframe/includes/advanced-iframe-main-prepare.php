@@ -2,7 +2,7 @@
 defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 /**
  *  Prepares Javascript and values for the iframe
- */ 
+ */
 if ($include_scripts_in_content == 'true') {
     $html .= '<script type="text/javascript" src="' . plugins_url() . $aiPath . '/js/ai.js" ></script>';
 }  
@@ -68,6 +68,13 @@ if (version_compare(PHP_VERSION, '5.3.0') >= 0 && (!empty($iframe_zoom) || !empt
 if ($store_height_in_cookie == 'true') {
     $html .=  'var aiEnableCookie=true; aiId="' . $id . '";';
 }
+
+if ($onload_scroll_top !== 'false') {
+    $html .=  'var aiOnloadScrollTop="' . $onload_scroll_top . '";';   
+} else {
+    $html .=  'var aiOnloadScrollTop="true";';  
+}
+
 if ($additional_height != 0) {
     $html .=  'var aiExtraSpace=' . esc_html($additional_height) . ';';
 }
@@ -84,7 +91,6 @@ if (typeof aiReadyCallbacks === \'undefined\') {
     var aiReadyCallbacks = [];
 }';
 
-$html .= 'var onloadFired'.$id.' = false; '; 
 $html .= '    function aiShowIframeId(id_iframe) { jQuery("#"+id_iframe).css("visibility", "visible");';
 if (!empty($hide_part_of_iframe)) {
     $html .= '        jQuery("#wrapper-div-"+id_iframe).css("visibility", "visible");';
@@ -109,8 +115,52 @@ $html .= '    function aiResizeIframeHeight(height) { aiResizeIframeHeight(heigh
   $html .= 'aiResizeIframeHeightById(id,height);';
   $html .= '}';
   // end aiResizeIframeHeightId
+  
+  // this does hide the window after an initial page load when the iframe url changes.
+  // the onbeforeunload event is added on onload!
+  if ($hide_page_until_loaded  == 'true') {
+     $html .= 'var hide_iframe_loading_'.$id.' = function() {
+        jQuery("#'.$id.'").css("visibility","hidden");
+     };';
+     $html .= 'function ai_hide_iframe_loading_'.$id.'(element) {
+        try {
+          element.contentWindow.unload = hide_iframe_loading_'.$id.'; 
+        } catch (e) {}
+     }';
+  }
 $html .= '</script>';
 
+$src_orig = $src;
+if (!empty($map_parameter_to_url)) {
+    $parameters = explode(",", $map_parameter_to_url); 
+    foreach ($parameters as $parameter) {
+        // check for mapping parameter|value|url
+        $parameter_url_mapping = explode("|", $parameter);
+         if (count($parameter_url_mapping) == 3) {
+            $read_param_url = $this->param($parameter_url_mapping[0]);
+            if ($read_param_url == $parameter_url_mapping[1]) {
+                $src = $parameter_url_mapping[2]; 
+            }  
+         } else if (count($parameter_url_mapping) == 1) {
+            $src_url = $this->param($parameter_url_mapping[0]);
+            if (!empty($src_url)) { 
+                $src = urldecode($src_url);   
+                $prefix = urldecode($add_iframe_url_as_param_prefix);
+                if (!$this->ai_startsWith($src,"http")) {
+                   if ($this->ai_startsWith($src,"s|")) { 
+                     $src = "https://" . $prefix . substr($src,2);
+                   } else if ($this->ai_startsWith($src_orig,"https")) {
+                     $src = "https://" . $prefix . $src;
+                   } else {
+                     $src = "http://" . $prefix . $src;
+                   } 
+                }  
+            }
+         } else {
+            return $error_css . '<div class="errordiv">' . __('ERROR: map_parameter_to_url does not have the required 1 or 3 parameters', 'advanced-iframe') . '</div>';
+         }
+    }        
+}
 
 // add parameters
 if ($url_forward_parameter != '') {
@@ -151,37 +201,63 @@ if (!empty($pass_id_by_url)) {
 // This has to be done by the shortcode that is used
 $src = AdvancedIframeHelper::ai_replace_placeholders($src , $enable_replace, $aip_standalone);
 
-$src_orig = $src;
-if (!empty($map_parameter_to_url)) {
-    $parameters = explode(",", $map_parameter_to_url); 
-    foreach ($parameters as $parameter) {
-        // check for mapping parameter|value|url
-        $parameter_url_mapping = explode("|", $parameter);
-         if (count($parameter_url_mapping) == 3) {
-            $read_param_url = $this->param($parameter_url_mapping[0]);
-            if ($read_param_url == $parameter_url_mapping[1]) {
-                $src = $parameter_url_mapping[2]; 
-            }  
-         } else if (count($parameter_url_mapping) == 1) {
-            $src_url = $this->param($parameter_url_mapping[0]);
-            if (!empty($src_url)) { 
-                $src = urldecode($src_url);   
-                $prefix = urldecode($add_iframe_url_as_param_prefix);
-                if (!$this->ai_startsWith($src,"http")) {
-                   if ($this->ai_startsWith($src,"s|")) { 
-                     $src = "https://" . $prefix . substr($src,2);
-                   } else if ($this->ai_startsWith($src_orig,"https")) {
-                     $src = "https://" . $prefix . $src;
-                   } else {
-                     $src = "http://" . $prefix . $src;
-                   } 
-                }  
+// This is the safari cookie fix from http://vitr.github.io/safari-cookie-in-iframe/ 
+if (!empty($safari_fix_url)) {
+    $html_safari = '';
+    $safari_fix_url_message='';
+    $all_browsers = (strpos($safari_fix_url, 'all') !== false) ? true : false;
+    $sep = (strpos($src, '?') === false)? '?': "&";
+    $type = (strpos($safari_fix_url, 'message') !== false) ? 'message':'true'; 
+    $is_iframe = 'false';
+    if (strpos($safari_fix_url, 'src') !== false) {   
+        $safari_fix_url = $src . $sep . 'safari_cookie_fix=true';
+         // if aifixed is set and  aichecked not set yet then we use the safari_cookie_fix=message 
+        if ($type == 'message') {
+            if (isset($_COOKIE['aifixed']) && !isset($_COOKIE['aichecked'])) {
+                $src = $src . $sep . 'safari_cookie_fix=message';
             }
-         } else {
-            return $error_css . '<div class="errordiv">' . __('ERROR: map_parameter_to_url does not have the required 1 or 3 parameters', 'advanced-iframe') . '</div>';
-         }
-    }        
-}
+        }
+    } else {
+        // external settings
+         $is_iframe = 'true';
+         // remove all: message:   
+         $safari_fix_url = str_replace('all:', "", $safari_fix_url);
+         $safari_fix_url = str_replace('message:', "", $safari_fix_url);
+         $safari_fix_url_message = $safari_fix_url . '/_safari_fix_message.html';
+         $safari_fix_url .= '/_safari_fix.html';      
+    }
+    
+    // optimize this by checking the browser and cookies already on the server side to avoid rendering only the needed js
+
+    $html_safari .= '<script type="text/javascript">';
+    $html_safari .= 'var safari_cookie_fix_type="' . $type . '";'; 
+    $html_safari .= 'var safari_cookie_fix_iframe=' . $is_iframe . ';'; 
+    if ($all_browsers) {
+      $html_safari .= 'var is_safari = true;';
+    } else {
+      $html_safari .= 'var is_safari = navigator.userAgent.toLowerCase().indexOf("safari") > -1;
+        var is_chrome = navigator.userAgent.toLowerCase().indexOf("chrome") > -1;
+        if ((is_chrome) && (is_safari)) {is_safari = false;} 
+        ';     
+    }
+    $html_safari .= 'if (is_safari) {
+        if (!document.cookie.match(/^(.*;)?\s*aifixed\s*=\s*[^;]+(.*)?$/)) {
+            document.cookie = "aifixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
+            window.location.replace("'.$safari_fix_url.'");
+        } else if (safari_cookie_fix_type == "message") {
+            // we call the message check url once
+            if (!document.cookie.match(/^(.*;)?\s*aichecked\s*=\s*[^;]+(.*)?$/)) {
+                document.cookie = "aichecked=checked; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
+                if (safari_cookie_fix_iframe) {
+                   // create a iframe in external mode
+                   document.write(\'<iframe src="' . $safari_fix_url_message. '" width="0" height="0" border="0" style="visibility:hidden"></iframe>\'); 
+                }
+            }
+        }           
+    }  
+</script>';
+    echo $html_safari; 
+} 
 
 // pdf
 if ($this->ai_endsWith($src, '.pdf')) {

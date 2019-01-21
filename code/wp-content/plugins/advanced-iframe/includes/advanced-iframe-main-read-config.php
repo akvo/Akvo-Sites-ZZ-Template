@@ -163,6 +163,7 @@ extract(array('securitykey' => 'not set',
   'include_scripts_in_content'  => $options['include_scripts_in_content'],
   'title' => $options['title'],
   'allow' => $options['allow'],
+  'safari_fix_url' => $options['safari_fix_url'],
    $atts));
 }
 
@@ -330,9 +331,8 @@ if ($options['shortcode_attributes'] == 'true') {
       'parent_content_css'  => $options['parent_content_css'],
       // this setting is only available in the shortcode as it is only needed in the special case if no footer is rendered.
       'include_scripts_in_content'  => $options['include_scripts_in_content'],
-      'debug_js'  => $debug_js,
-      'title' => $options['title'],
-      'allow' => $options['allow']
+      'debug_js'  => $debug_js, 'title' => $options['title'],
+      'allow' => $options['allow'], 'safari_fix_url' => $options['safari_fix_url']
        )
       , $atts));
 
@@ -406,6 +406,7 @@ if ($enable_external_height_workaround == "true") {
   $additional_js_file_iframe = '';
   $additional_css_file_iframe = '';
   $add_css_class_iframe = 'false';
+  $hide_page_until_loaded = 'false';
 }
 
 // check if the iframe is called inside wp-admin. if this is the case we
@@ -459,7 +460,7 @@ if (!file_exists(dirname(__FILE__) . "/class-cw-envato-api.php")) {
   $add_css_class_iframe = $hide_content_until_iframe_color = '';
   $include_html = $show_iframe_as_layer = '';
   $enable_ios_mobile_scolling = $add_document_domain = 'false';
-  $parent_content_css = '';
+  $parent_content_css = $safari_fix_url = '';
 } else { $default_options = 0; }
 
 if (!empty($iframe_zoom)) {

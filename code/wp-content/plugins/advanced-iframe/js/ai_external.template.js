@@ -1,5 +1,5 @@
 /**
- *  Advanced iframe external workaround file v7.5.x free 
+ *  Advanced iframe external workaround file v7.6.x free 
  *  Created: PARAM_TIMESTAMP  
 */ 
 
@@ -55,6 +55,8 @@ function aiExecuteWorkaround_PARAM_ID() {
         
         // get the height of the element right below the body - Using this solution allows that the iframe shrinks also.
         var wrapperElement = document.body.children[0];
+        //  margins top and bottom are set to 0 because the wrapper is not always used. 
+        wrapperElement.style.marginTop = wrapperElement.style.marginBottom = 0;
         var newHeight = parseInt(wrapperElement.offsetHeight,10);
     
         //  Get the height from the body. The problem with this solution is that an iframe can not shrink anymore.
