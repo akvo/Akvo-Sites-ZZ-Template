@@ -42,11 +42,19 @@
                                     name: 'wpdatatable_select', 
                                     label: 'wpDataTable',
                                     values: selectboxValues
+                                },
+                                {
+                                    type: 'listbox',
+                                    name: 'table_view_select',
+                                    label: 'Table view',
+                                    values: [{value: 'regular', text: 'Regular wpDataTable'}, {value: 'excel', text: 'Excel-like table'}]
                                 }
                             ],
+                            width: 700,
+                            height: 100,
                             onsubmit: function(e){
                                 ed.focus();
-                                ed.execCommand( 'mceInsertContent', 0, '[wpdatatable id='+e.data.wpdatatable_select+']' )
+                                ed.execCommand( 'mceInsertContent', 0, '[wpdatatable id='+e.data.wpdatatable_select+' table_view='+ e.data.table_view_select+']' )
                             }
                         });
                     }

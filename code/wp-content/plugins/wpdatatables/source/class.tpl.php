@@ -1,4 +1,7 @@
 <?php
+
+defined('ABSPATH') or die("Cannot access pages directly.");
+
 /**
  * Class PDTTpl is an extremely lightweight templater used to render tables
  * for the WPDataTables module.

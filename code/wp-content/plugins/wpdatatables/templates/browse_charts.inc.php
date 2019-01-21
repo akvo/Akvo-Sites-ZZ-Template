@@ -1,3 +1,5 @@
+<?php defined('ABSPATH') or die("Cannot access pages directly."); ?>
+
 <div id="wdtPreloadLayer" class="overlayed">
 </div>
 

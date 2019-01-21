@@ -1,6 +1,9 @@
 .toplevel_page_wpdatatables-administration .wp-list-table .column-id, .wpdatatables_page_wpdatatables-charts .wp-list-table .column-id { width: 5%; }
 
 .toplevel_page_wpdatatables-administration .wp-list-table .column-title { width: 45%; }
+.toplevel_page_wpdatatables-administration .wp-list-table .column-table_type { width: 10%; }
+.toplevel_page_wpdatatables-administration .wp-list-table .column-shortcode { width: 10%; }
+.toplevel_page_wpdatatables-administration .wp-list-table button.button { margin: 3px; }
 
 .toplevel_page_wpdatatables-administration .wrap > h2,
 .toplevel_page_wpdatatables-administration #wpDataTablesSettings > h3 {
@@ -802,4 +805,93 @@ div.wdt_addon_title h3 a {
 div.wdt_addon_title h3 a:hover {
     color: #ddd;
     text-decoration: underline;
+}
+
+/* @Miljko */
+
+div.dt-button-info {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    margin-top: -100px;
+    margin-left: -200px;
+    background-color: white;
+    border: 2px solid #111;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    text-align: center;
+    z-index: 21;
+}
+div.dt-button-info h2 {
+    padding: 0.5em;
+    margin: 0;
+    font-weight: normal;
+    border-bottom: 1px solid #ddd;
+    background-color: #f3f3f3;
+}
+div.dt-button-info > div {
+    padding: 1em;
+}
+
+div.ui-tabs.ui-widget.ui-widget-content.ui-corner-all.settings {
+    background:none;
+    background-image: none;
+    border-radius: 0;
+    border:none;
+}
+div.ui-tabs-panel.ui-widget-content.ui-corner-bottom.settings {
+    padding: 1em 0;
+}
+ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all.settings {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    margin: 0;
+    padding-top: 9px;
+    padding-bottom: 0;
+    line-height: inherit;
+    background: none;
+}
+
+li.ui-state-default.ui-corner-top.settings.ui-tabs-active{
+    background: #f1f1f1;
+    color: #000;
+    border: 1px solid #d3d3d3;
+    border-bottom: 1px solid #f1f1f1;
+}
+li.ui-state-default.ui-corner-top.settings.ui-state-hover {
+    border: 1px solid #d3d3d3;
+}
+li.ui-state-default.ui-corner-top.settings {
+    float: left;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-left: .5em;
+    line-height: 24px;
+    background: #e5e5e5;
+    border-bottom:1px solid  #e5e5e5;
+
+}
+.ui-state-default.settings a, .ui-state-default.settings a:link, .ui-state-default.settings a:visited {
+    color: #555;
+}
+.ui-state-active.settings a, .ui-state-active.settings a:link, .ui-state-active.settings a:visited {
+    color: #000;
+}
+div.wdtDuplicateTableName {
+    margin: 30px 0;
+}
+div.manual_duplicate {
+    margin: 20px  0;
+}
+.manual_duplicate>.dashicons-info {
+    cursor: pointer;
+}
+
+.duplicate_explain {
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    padding: 0px 10px;
+    margin-top: 20px;
+    text-align: justify;
 }

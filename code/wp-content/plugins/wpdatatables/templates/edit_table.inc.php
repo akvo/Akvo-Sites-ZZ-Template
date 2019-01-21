@@ -1,3 +1,5 @@
+<?php defined('ABSPATH') or die("Cannot access pages directly."); ?>
+
 <div class="wpDataTables metabox-holder toplevel_page_wpdatatables-administration">
 	<div id="wdtPreloadLayer" class="overlayed">
 	</div>
@@ -10,12 +12,13 @@
 					<h2>
 						<?php echo $wpShowTitle ?>
 						<?php if (!empty($table_id)) { ?>
-							<a href="admin.php?page=wpdatatables-administration&action=delete&table_id=<?php echo $table_id ?>" class="add-new-h2 submitdelete"><?php _e('Delete','wpdatatables');?></a>
+							<a href="<?php echo wp_nonce_url('admin.php?page=wpdatatables-administration&action=delete&table_id=' . $table_id . '', 'wdtDeleteTableNonce', 'wdtNonce' ) ?>" class="add-new-h2 submitdelete"><?php _e('Delete','wpdatatables');?></a>
 						<?php } ?>
 					</h2>
 					<div id="message" class="updated" <?php if (empty($table_id)) { ?>style="display: none;"<?php } ?> >
 						<p id="wdtScId"><?php _e('To insert the table on your page use the shortcode','wpdatatables');?>: <strong>[wpdatatable id=<?php if (!empty($table_id)) {echo $table_id; } ?>]</strong></p>
 					</div>
+					<input type="hidden" id="wdtSaveTableNonce" value="<?php echo wp_create_nonce( 'wdt_save_table_nonce_' . get_current_user_id() ); ?>" />
 					<input type="hidden" id="wdt_date_format" value="<?php echo $wdtDateFormat; ?>" />
 					<input type="hidden" id="wpdatatable_id" value="<?php if (!empty($table_id)) { echo $table_id; } ?>" />
 					<input type='hidden' id='wdt_table_manual' value='<?php if( isset($table_data['table_type']) && ($table_data['table_type'] == 'manual') ) { echo '1'; } else { echo '0'; } ?>' />
@@ -76,10 +79,13 @@
 												<td>
 													<select name="wpTableType" id="wpTableType" class="wpDataTables">
 														<option value=""><?php _e('Select a table type...','wpdatatables');?></option>
-														<option value="mysql" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'mysql') { ?>selected="selected"<?php } ?>><?php _e('MySQL query','wpdatatables');?></option>
+														<option <?php echo ' class="full_version_option" ' ?> value="mysql" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'mysql') {
+															?>selected="selected"<?php } ?>><?php _e('MySQL
+														query','wpdatatables');?><?php echo ' (full version)'; ?></option>
 														<option value="csv" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'csv') { ?>selected="selected"<?php } ?>><?php _e('CSV file','wpdatatables');?></option>
 														<option value="xls" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'xls') { ?>selected="selected"<?php } ?>><?php _e('Excel file','wpdatatables');?></option>
-														<option value="google_spreadsheet" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'google_spreadsheet') { ?>selected="selected"<?php } ?>><?php _e('Google spreadsheet','wpdatatables');?></option>
+														<option <?php echo ' class="full_version_option" ' ?> value="google_spreadsheet" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'google_spreadsheet') {
+														?>selected="selected"<?php } ?>><?php _e('Google spreadsheet','wpdatatables');?><?php echo ' (full version)'; ?></option>
 														<option value="xml" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'xml') { ?>selected="selected"<?php } ?>><?php _e('XML file','wpdatatables');?></option>
 														<option value="json" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'json') { ?>selected="selected"<?php } ?>><?php _e('JSON file','wpdatatables');?></option>
 														<option value="serialized" <?php if (!empty($table_data['table_type']) && $table_data['table_type'] == 'serialized') { ?>selected="selected"<?php } ?>><?php _e('Serialized PHP array','wpdatatables');?></option>
@@ -94,6 +100,7 @@
 												</th>
 												<td>
 													<a href="admin.php?page=wpdatatables-editor&table_id=<?php echo $table_id ?>" class="button-primary"><?php _e('Go to editor', 'wpdatatables'); ?></a><br/><br/>
+													<a href="admin.php?page=wpdatatables-editor&table_id=<?php echo $table_id ?>&table_type=excel" class="button-primary"><?php _e('Go to Excel-like editor', 'wpdatatables'); ?></a><br/><br/>
 													<span class="description"><?php _e('Open the table in back-end editor to modify table data','wpdatatables');?>.</span>
 												</td>
 											</tr>
@@ -170,10 +177,12 @@
 										</tr>
 										<tr valign="top" class="table_editable_row step1_row">
 											<th scope="row">
-												<label for="wpTableEditable"><?php _e('Front-end editing','wpdatatables');?></label>
+												<label for="wpTableEditable"><?php _e('Front-end editing','wpdatatables');?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 											</th>
 											<td>
-												<input type="checkbox" <?php if( empty( $table_id ) ) { ?>disabled="disabled"<?php } ?> id="wpTableEditable" name="wpTableEditable" <?php if (!empty($table_data['editable']) && ($table_data['editable'] == '1')) { ?>checked="checked"<?php } ?> />
+												<input type="checkbox" <?php echo ' class="full_version_option" ' ?> <?php if( empty( $table_id ) ) { ?>disabled="disabled"<?php } ?> id="wpTableEditable"
+													name="wpTableEditable" <?php if (!empty
+												($table_data['editable']) && ($table_data['editable'] == '1')) { ?>checked="checked"<?php } ?> />
 												<span class="description"><?php _e('Make table editable from the front-end','wpdatatables');?>.<br/><b><?php _e('Works only for MySQL-based tables with server-side processing, and can only update one table on MySQL side','wpdatatables');?></b>.</span><br/>
 												<?php if( empty( $table_id ) ) { ?><span class="description"><?php _e('Please save the table first so wpDataTables would read the columns data so that feature would become available.','wpdatatables');?></span><?php } ?>
 											</td>
@@ -227,7 +236,7 @@
 												<span class="description"><?php _e('Check this checkbox if you would like to get the New, Edit and Delete buttons in a popover on click on a table row, instead of in TableTools block above the table','wpdatatables'); ?></span>
 											</td>
 										</tr>
-										<tr valign="top" class="editing_own_rows_row step1_row">
+										<?php do_action('wpdatatables_additional_option', !empty( $table_id ) ? $table_id : 0, $table_data); ?>										<tr valign="top" class="editing_own_rows_row step1_row">
 											<th scope="row">
 												<label for="wpTableEditingOwnRowsOnly"><?php _e('Users see and edit only their data','wpdatatables');?></label>
 											</th>
@@ -270,10 +279,11 @@
 										</tr>
 										<tr valign="top" class="step1_row serverside_row">
 											<th scope="row">
-												<label for="wpServerSide"><?php _e('Server-side processing','wpdatatables');?></label>
+												<label for="wpServerSide"><?php _e('Server-side processing','wpdatatables');?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 											</th>
 											<td>
-												<input type="checkbox" id="wpServerSide" <?php if (isset($table_data['server_side']) && $table_data['server_side']) { ?>checked="checked"<?php } ?> />
+												<input type="checkbox" <?php echo ' class="full_version_option" ' ?> id="wpServerSide" <?php if (isset($table_data['server_side']) && $table_data['server_side']) {
+												?>checked="checked"<?php } ?> />
 												<span class="description"><?php _e('Server-side processing for MySQL-based tables. Required for front-end editing','wpdatatables');?>.</span>
 											</td>
 										</tr>
@@ -288,10 +298,11 @@
 										</tr>
 										<tr valign="top" class="step1_row">
 											<th scope="row">
-												<label for="wdtResponsive"><?php _e('Responsive','wpdatatables');?></label>
+												<label for="wdtResponsive"><?php _e('Responsive','wpdatatables');?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 											</th>
 											<td>
-												<input type="checkbox" id="wdtResponsive" <?php if (isset($table_data['responsive']) && $table_data['responsive']) { ?>checked="checked"<?php } ?> />
+												<input type="checkbox" <?php echo ' class="full_version_option" ' ?> id="wdtResponsive" <?php if (isset($table_data['responsive']) && $table_data['responsive']) {
+												?>checked="checked"<?php } ?> />
 												<span class="description"><?php _e('Check this checkbox if you would like this table to be responsive - display differently on desktops, tablets and mobiles','wpdatatables');?>.</span>
 											</td>
 										</tr>
@@ -315,19 +326,22 @@
 										</tr>
 										<tr valign="top" class="step1_row">
 											<th scope="row">
-												<label for="wpAdvancedFilter"><?php _e('Advanced filtering','wpdatatables');?></label>
+												<label for="wpAdvancedFilter"><?php _e('Advanced filtering','wpdatatables');?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 											</th>
 											<td>
-												<input type="checkbox" id="wpAdvancedFilter" <?php if (!isset($table_data['filtering']) || $table_data['filtering']) { ?>checked="checked"<?php } ?> />
+												<input type="checkbox" <?php echo ' class="full_version_option" ' ?> id="wpAdvancedFilter" <?php if (!isset($table_data['filtering']) || $table_data['filtering']) {
+												
+												 } ?> />
 												<span class="description"><?php _e('Check this checkbox if you would like to have a filter below each column','wpdatatables');?>.</span>
 											</td>
 										</tr>
 										<tr valign="top" class="step1_row">
 											<th scope="row">
-												<label for="wpAdvancedFilterForm"><?php _e('Filter in form','wpdatatables');?></label>
+												<label for="wpAdvancedFilterForm"><?php _e('Filter in form','wpdatatables');?><?php echo '<br /><small><a href="http://wpdatatables.com" target="_blank">FULL version</a></small>' ?></label>
 											</th>
 											<td>
-												<input type="checkbox" id="wpAdvancedFilterForm" <?php if (isset($table_data['filtering_form']) && $table_data['filtering_form']) { ?>checked="checked"<?php } ?> />
+												<input type="checkbox" <?php echo ' class="full_version_option" ' ?> id="wpAdvancedFilterForm" <?php if (isset($table_data['filtering_form']) &&
+												$table_data['filtering_form']) { ?>checked="checked"<?php } ?> />
 												<span class="description"><?php _e('Check this checkbox if you would like to have the advanced filter in a form','wpdatatables');?></span>
 											</td>
 										</tr>
@@ -465,68 +479,13 @@
 
 </div>
 
-<div id="wdtUserRoles" title="<?php _e('Editor roles','wpdatatables'); ?>">
-	<p><?php _e('Choose user roles allowed to edit this table (leave blank to alllow editing for everyone):','wpdatatables'); ?></p>
-	<?php if(isset($table_data)){ ?>
-		<?php $wdtUserRolesArr = explode(',',$table_data['editor_roles']); ?>
-		<?php foreach($wdtUserRoles as $userRole){ ?>
-			<div class="wdtUserRoleBlock">
-				<input class="wdtRoleCheckbox" type="checkbox" id="wdtRole_<?php echo $userRole['name']?>" value="<?php echo $userRole['name']?>" <?php if(in_array($userRole['name'],$wdtUserRolesArr)) { ?>checked="checked"<?php } ?>  />
-				<label for="wdtRole_<?php echo $userRole['name']?>">
-					<?php echo $userRole['name']?>
-				</label>
-			</div>
-		<?php } ?>
-	<?php } ?>
-</div>
-
-<div id="wdtFormulaBuilderDialog" style="display: none" title="<?php _e('Formula editor','wpdatatables');?>">
-	<p><?php _e('Use this dialog to construct formulas and see a preview of the result. You can use columns (values for each cell will be inserted), or number values. Only numeric columns allowed (non-numeric will be parsed as 0). Basic math operations and brackets are supported. Example: col1*((col2+2)-col3*sin(col4-3)).','wpdatatables'); ?></p>
-	<div id="wdt_formula_editor_block">
-		<div id="wdt_formula_editor_columns">
-			<b><?php _e('Columns to use','wpdatatables'); ?></b>
-			<div class="columns_container">
-				<div class="column_block">Column 1</div>
-				<div class="column_block">Column 2</div>
-			</div>
-		</div>
-		<div id="wdt_formula_editor_operators">
-			<button class="button formula_plus">+</button>
-			<button class="button formula_minus">-</button>
-			<button class="button formula_mult">*</button>
-			<button class="button formula_div">/</button>
-			<button class="button formula_brackets">()</button>
-			<button class="button formula_sin">sin()</button>
-			<button class="button formula_cos">cos()</button>
-			<button class="button formula_tan">tan()</button>
-			<button class="button formula_tan">cot()</button>
-			<button class="button formula_sec">sec()</button>
-			<button class="button formula_csc">csc()</button>
-		</div>
-		<div id="wdt_formula_editor_textblock">
-			<b><?php _e('Formula','wpdatatables'); ?></b>
-			<textarea id="wdt_formula_edit"></textarea>
-		</div>
-	</div>
-	<div id="wdt_formula_preview_block">
-		<button class="button preview_formula_result"><?php _e('Preview result for first 5 rows','wpdatatables');?></button>
-		<div class="preview_container">
-
-		</div>
-	</div>
-</div>
-
-<div id="wdtConditionalFormattingDialog" title="<?php _e('Formatting rules','wpdatatables'); ?>" style="display: none">
-	<div id="formattingRules">
-		<?php _e('No formatting rules for this column yet.','wpdatatables'); ?>
-	</div>
-	<button class="button addFormattingRuleBlock"><span class="dashicons dashicons-plus" style="margin-top:3px"></span> <?php _e('Add a formatting rule','wpdatatables'); ?></button>
-</div>
+<?php  ?>
 
 <div id="merge-possible-values" title="<?php _e('Merge values','wpdatatables'); ?>?" style="display: none;">
 	<p><?php _e('There are already defined possible values.','wpdatatables'); ?><br />
 		<?php _e('Do you want to merge new values with existing?','wpdatatables'); ?></p>
 </div>
+
 
 <script type="text/javascript">
 
@@ -552,6 +511,7 @@
 </script>
 
 <script id="columnBlockTmpl" type="text/x-jsrender">
+	<input type="hidden" id="wdtColumnsNonce" value="<?php echo wp_create_nonce( 'wdt_columns_nonce_' . get_current_user_id() ); ?>" />
 	<td data-column_id="{{>id}}" data-column_key="{{>display_header}}">
 		<table class="column_table {{if column_type == 'formula'}}formula_column{{/if}}" rel="{{>id}}" data-table_id="{{>table_id}}">
 			<tr class="columnHeaderRow">
@@ -582,10 +542,12 @@
 					<b><?php _e('Possible values','wpdatatables');?></b>:
 					<button class="button button-primary showHint">?</button><br/>
 					<small class="hint" style="display: none"><?php _e('Separate with','wpdatatables');?> "|". <?php _e('Used in advanced filterdropdown and in the editor dialog','wpdatatables');?>.</small>
+
 					{{if ~tableType=='mysql' || ~tableType=='manual'}}
 					<p><button class="button generatePossibleValues"><?php _e('Create from column values','wpdatatables');?></button></p>
 					<p><button class="button clearPossibleValues"><?php _e('Clear values','wpdatatables');?></button></p>
 					{{/if}}
+
 				</td>
 				<td>
 					<input type="text" class="possibleValues" value="{{>possible_values}}" style="display: none !important;" />
@@ -704,6 +666,7 @@
 					</fieldset>
 				</td>
 			</tr>
+
 			<tr class="sum_row">
 				<td>
 					<b><?php _e('Show a total for this column in footer','wpdatatables');?></b>:
@@ -727,6 +690,7 @@
 					</fieldset>
 				</td>
 			</tr>
+
 			<tr>
 				<td>
 					<b><?php _e('Column position','wpdatatables');?></b>:
@@ -780,6 +744,7 @@
 					</fieldset>
 				</td>
 			</tr>
+
 			<tr>
 				<td>
 					<b><?php _e('Conditional formatting','wpdatatables');?></b>:
@@ -791,6 +756,7 @@
 					<button class="button define_formatting_rules"><?php _e('Define rules','wpdatatables');?></button>
 				</td>
 			</tr>
+
 		</table>
 	</td>
 </script>
