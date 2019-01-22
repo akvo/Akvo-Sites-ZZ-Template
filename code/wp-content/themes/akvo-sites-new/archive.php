@@ -1,7 +1,7 @@
 <?php get_header();?>
 <?php 
 	
-	global $post, $akvo_filters, $akvo_card, $wp_query;		/* GLOBAL PARAMTERS */ 
+	global $post, $akvo_filters, $akvo_card, $akvo_list, $wp_query;		/* GLOBAL PARAMTERS */ 
 	
 	$post_type = get_post_type( $post );					/* GET POST TYPE */
 	
@@ -66,7 +66,7 @@
         						
 						/* UPDATE TYPES PARAMETER IN SHORTCODE */
 						if( $template == 'list' && $post_type == 'media' ){
-							$shortcode .= 'type="'.$akvo_card->get_media_term_types( $post_id ).'"';
+							$shortcode .= 'type="'.$akvo_list->get_media_term_types( $post_id ).'"';
 						}
 						else{
 							$shortcode .= 'type="'.$post_type.'"';
