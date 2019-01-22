@@ -11,13 +11,14 @@
 				$atts['types'] = array();
 				
 				if( $atts['type'] == 'media' ){			/* ONLY FOR MEDIA POSTS, GET EXTRA TYPES FROM TAXONOMY */
-					$atts['types'] = $this->get_media_term_types( $atts['post_id'] );	
+					global $akvo_list;
+					$atts['types'] = $akvo_list->get_media_term_types( $atts['post_id'] );	
 				}
 				else{
 					$atts['types'] = $atts['type'];
 				}
 			?>
-			<?php if( count( $atts['types'] ) ):?>
+			<?php if( count( $atts['types'] ) && is_array( $atts['types'] ) ):?>
 			<ul class="small list-inline">
 				<?php foreach( $atts['types'] as $type ): ?>
 				<li><span class='badge'><?php _e( $type );?></span></li>
