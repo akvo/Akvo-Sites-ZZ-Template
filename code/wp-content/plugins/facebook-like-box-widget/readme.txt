@@ -3,7 +3,7 @@ Contributors: sunwu2007
 Donate link: http://bit.ly/9Njzpo
 Tags: facebook, facebook like, facebook badge, facebook button, facebook like button, fb like, facebook like box, badge, social network, seo, increase traffic, BuddyPress
 Requires at least: 2.8.6
-Tested up to: 4.2.1
+Tested up to: 4.7.2
 Stable tag: trunk
 
 == Description ==
@@ -102,3 +102,6 @@ Removed support for iFrame per Wordpress Team feedback
 = v2.8 04.29.2015 =
 * Introduce Facebook Page Plugin (The Page Plugin lets you easily embed and promote any Facebook Page on your website. Just like on Facebook, your visitors can like and share the Page without having to leave your site)
 * Deprecated Facebook Like Box - If you still continue use Facebook Like Box, it will automatically fall back to the Page Plugin by June 23rd 2015 - quoted from Facebook Developer's page
+
+= v2.9 02.22.2017 =
+* Tested on Wordpress 4.7.2

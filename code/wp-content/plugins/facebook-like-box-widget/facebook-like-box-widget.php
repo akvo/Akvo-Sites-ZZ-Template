@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Facebook Like Box
- * Version: 2.8
+ * Version: 2.9
  * Plugin URI: http://wordpress.org/extend/plugins/facebook-like-box-widget/
  * Description: Facebook Like Box Widget is a social plugin that enables Facebook Page owners to attract and gain Likes from their own website. The Like Box enables users to: see how many users already like this page, and which of their friends like it too, read recent posts from the page and Like the page with one click, without needing to visit the page. 
  Updated: With the release of Graph API v.2.3 the Like Box plugin is deprecated => Facebook: https://developers.facebook.com/docs/plugins/like-box-for-pages 
@@ -767,7 +767,7 @@ class FacebookLikeBoxWidget extends WP_Widget
 		  <li><a title="Twitter QR Code for Wordpress" href="http://wordpress.org/extend/plugins/twitter-qr-code-signatures/" target="_blank">Twitter QR Code Widget</a></li>
 		  <li><a title="Twitter Signature for Wordpress" href="http://wordpress.org/extend/plugins/twitter-signature/" target="_blank">Twitter Signature for Wordpress</a></li>
 		</ul></p>';
-		
+		echo '<p style="text-align:left;"><a title="Download Free Mobile App" href="http://vivociti.com/content/view/116/107/" target="_blank"><img src="' . plugins_url( 'facebook-like-box-widget/facebook.png', dirname(__FILE__) ) . '" border="0"></a>&nbsp;<a href="http://vivociti.com/content/view/117/107/" style="text-decoration:none;"  target="_blank"><img src="' . plugins_url( 'facebook-like-box-widget/instagram.png', dirname(__FILE__) ) . '" alt="" style="border:0;"/></a>&nbsp;';
 	
 	} //end of form
 
