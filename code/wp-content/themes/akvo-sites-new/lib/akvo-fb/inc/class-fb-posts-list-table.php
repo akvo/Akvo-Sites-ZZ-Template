@@ -22,9 +22,11 @@
 		function column_default( $item, $column_name ) {
 			switch( $column_name ) {
 				case 'name':
-					return $item['name'];
+					$name = isset( $item['name'] ) ? $item['name'] : 'Untitled';
+					return $name;
 				case 'desc':
-					return $item['description'];
+					$desc = isset( $item['description'] ) ? $item['description'] : $item['message'];
+					return $desc;
 				case 'post-date':
 					$post_date = strtotime( $item['created_time'] );
 					return date("D, d-m-Y", $post_date);
