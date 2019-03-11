@@ -86,6 +86,8 @@ class FB_API extends SINGLETON{
 	
 	function callAPI( $partialURL ){
 		
+		$partialURL .= "&access_token=".$this->getAccessToken();
+		
 		$transient = get_transient( $partialURL );
 		
 		if( ! empty( $transient ) ) {
@@ -97,7 +99,7 @@ class FB_API extends SINGLETON{
 		} else {
 			
 			// APPEND GRAPH API AND ACCESS TOKEN
-			$apiLink = $this->graphAPI().$partialURL."&access_token=".$this->getAccessToken();
+			$apiLink = $this->graphAPI().$partialURL;
 			
 			$data = json_decode( file_get_contents( $apiLink ), true );
 			

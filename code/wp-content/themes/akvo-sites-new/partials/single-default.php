@@ -28,9 +28,14 @@
 					</div>
 					<div class='content'>
 						<?php the_content();?>
-						<?php if($type == 'media'){	
-							get_template_part('partials/content', 'media');
-						}?>
+						<?php 
+							if( $type == 'media' ){	
+								get_template_part('partials/content', 'media');
+							}
+							elseif( $type == 'fb_post' ){
+								get_template_part('partials/content', 'fb');
+							}
+						?>
 					</div>	
 					<div class="clearfix"></div>
 					<?php if ($type == 'post' || $type == 'blog' || $type == 'news'){
