@@ -16,25 +16,9 @@ $inc_files = array(
 	'inc/class-fb-admin.php',
 );
 
-$flag = false;
-
-/*
-* ENABLE ONLY FOR FOOTBALL FOR WATER
-*/
-if ( is_multisite() ) {
-	$current_site = get_current_site();
-	if( isset($current_site->domain) && $current_site->domain == "footballforwater.org" ) {
-		$flag = true;
-	}
-}
-else{
-	$flag = true;
+foreach( $inc_files as $inc_file ){
+	require_once( $inc_file );
 }
 
-if( $flag ){
-	foreach( $inc_files as $inc_file ){
-		require_once( $inc_file );
-	}
-}
 
 
