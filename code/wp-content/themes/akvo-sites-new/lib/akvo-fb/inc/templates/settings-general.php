@@ -30,6 +30,7 @@
 		<li>On the pop up, click <em>"Continue as..."</em> button. Click <em>"OK"</em> button.</li>
 		<li>Click <em>"Get Token"</em> drop-down again, under the <em>"Page Access Token"</em> section, click the Facebook page you want to use.</li>
 		<li>Copy the generated page access token on the <em>"Access Token"</em> field.</li>
+		<li>To extend the access token, submit the token in the <a href="https://developers.facebook.com/tools/debug/accesstoken/">form here.</a></li>
 	</ol>
 	<p class='submit'><input type="submit" name="submit" class="button button-primary" value="Save Settings"><p>
 </form>
