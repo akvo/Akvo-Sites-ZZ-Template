@@ -68,6 +68,15 @@ class DefaultRestService implements RestService
 		}
 		exit(0);
 	}
+	
+	public function flushCache(){
+		
+		$item = $_GET['item_name'];
+		
+		$this->cache->flush( $item );
+		
+		wp_die();
+	}
 
 	private function sendHeaders()
 	{

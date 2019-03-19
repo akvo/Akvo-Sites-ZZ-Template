@@ -97,6 +97,15 @@
                         url: function() {
                                 return ajaxurl + '?action=datafeed_service&item_name=' + encodeURIComponent(this.get('name')) ;
                         },
+						flush: function( options ){
+							
+							options = options ? _.clone(options) : {};
+							
+							options.url = ajaxurl + '?action=datafeed_flush_cache&item_name=' + encodeURIComponent(this.get('name'));
+							
+							jQuery.ajax( options );
+							
+						},
                         idAttribute: 'name'
                 });
 
@@ -106,7 +115,7 @@
                 });
 
                 var DataFeedView = Backbone.View.extend({
-                        template: _.template('<dl><lh class="datafeed-info-item">Data feed - <%- name %><span class="datafeed-info-item datafeed-info-remove-item"><a href="#">Remove</a></span></lh>' +
+                        template: _.template('<dl><lh class="datafeed-info-item">Data feed - <%- name %><span class="datafeed-info-item datafeed-info-remove-item"><a href="#">Remove</a></span><span class="datafeed-info-item datafeed-info-refresh-item"><a href="#">Flush</a></span></lh>' +
                                              '<dt>Note</dt><dd class="datafeed-info-item datafeed-info-note-item">&nbsp;</dd></dl>' +
                                              '<dt>URL</dt><dd class="datafeed-info-item"><%- url %></dd>' +
                                              '<dt>URL override</dt><dd class="datafeed-info-item datafeed-info-editable-item"><%- o_url %></dd>' +
@@ -154,11 +163,31 @@
                                                 model.save();
                                         });
                                 });
-
+								
+								/*
+								* FLUSH THE CACHE FOR THE SERVER TO PULL THE DATA AGAIN FROM THE API
+								*/
+								this.$el.find('.datafeed-info-refresh-item > a').click(function (e) {
+										e.preventDefault();
+										
+										var $target = jQuery( e.target );
+										
+										if( confirm( 'Are you sure you want to delete this feed?' ) ){
+												$target.html('Flushing...');
+												model.flush( { success: function(){
+													$target.html('Flush');
+												}} );
+										}
+								});
+								
+								// DELETE BUTTON CLICKED
                                 this.$el.find('.datafeed-info-remove-item > a').click(function (e) {
-                                        model.destroy({ wait: true });
-                                        e.preventDefault();
-                                })
+										e.preventDefault();
+										
+										if( confirm( 'Are you sure you want to delete this feed?' ) ){
+												model.destroy({ wait: true });
+										}
+								});
                                 return this;
                         },
                         initialize: function() {

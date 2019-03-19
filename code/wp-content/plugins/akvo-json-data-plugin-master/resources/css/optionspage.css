@@ -11,7 +11,7 @@
     text-decoration: none;
 }
 
-span.datafeed-info-remove-item {
+span.datafeed-info-remove-item, span.datafeed-info-refresh-item {
     font-weight: normal;
     float: right;
 }
