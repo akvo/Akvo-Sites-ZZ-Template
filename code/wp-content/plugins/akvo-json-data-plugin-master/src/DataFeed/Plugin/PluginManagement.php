@@ -44,11 +44,17 @@ class PluginManagement
 	{
 		DataFeed::component( DataFeed::REST_SERVICE )->handle();
 	}
-
+	
+	public static function datafeed_flush_cache()
+	{
+		DataFeed::component( DataFeed::REST_SERVICE )->flushCache();
+	}
+	
 	public static function plugins_loaded()
 	{
 		\load_plugin_textdomain( 'data-feed', false, DATA_FEED_PLUGIN_DIR . '/i18n' );
 		\add_action( 'wp_ajax_datafeed_service', 'DataFeed\Plugin\PluginManagement::datafeed_service' );
+		\add_action( 'wp_ajax_datafeed_flush_cache', 'DataFeed\Plugin\PluginManagement::datafeed_flush_cache' );
 	}
 
 	public static function widgets_init() {
