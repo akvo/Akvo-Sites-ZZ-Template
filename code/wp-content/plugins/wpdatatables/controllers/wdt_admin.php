@@ -157,6 +157,12 @@ function wdtEditEnqueue() {
         case "aqua":
             $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/aqua.css';
             break;
+        case "purple":
+            $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/purple.css';
+            break;
+        case "dark":
+            $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/dark.css';
+            break;
         default:
             $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/material.css';
             break;

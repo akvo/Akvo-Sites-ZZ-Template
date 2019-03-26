@@ -5,7 +5,7 @@
 Plugin Name: wpDataTables
 Plugin URI: http://tms-plugins.com
 Description: Add interactive tables easily from any input source
-Version: 2.0.6 Lite
+Version: 2.0.7 Lite
 Author: TMS-Plugins
 Author URI: http://tms-plugins.com
 Text Domain: wpdatatables

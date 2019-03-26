@@ -1374,6 +1374,12 @@ class WPDataTable {
             case "aqua":
                 $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/aqua.css';
                 break;
+            case "purple":
+                $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/purple.css';
+                break;
+            case "dark":
+                $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/dark.css';
+                break;
             default:
                 $renderSkin = WDT_ASSETS_PATH . 'css/wdt-skins/material.css';
                 break;
@@ -1852,10 +1858,11 @@ class WPDataTable {
         }
 
         $currentSkin = get_option('wdtBaseSkin');
+        $skinsWithNewTableToolsButtons = ['aqua','purple','dark'];
 
         if ($this->TTEnabled()) {
             (!isset($obj->dataTableParams->buttons)) ? $obj->dataTableParams->buttons = array() : '';
-            if ($currentSkin == 'aqua'){
+            if (in_array($currentSkin, $skinsWithNewTableToolsButtons)){
 
                 if (!empty($this->_tableToolsConfig['columns'])) {
                     $obj->dataTableParams->buttons[] =
@@ -1988,7 +1995,7 @@ class WPDataTable {
             }
         }
 
-        if ($currentSkin == 'aqua') {
+        if (in_array($currentSkin, $skinsWithNewTableToolsButtons)) {
 
             if (!isset($obj->dataTableParams->oLanguage)) {
                 $obj->dataTableParams->oLanguage = new stdClass();

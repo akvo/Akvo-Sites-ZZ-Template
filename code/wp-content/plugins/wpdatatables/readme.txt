@@ -4,9 +4,9 @@ Author URI: http://tms-plugins.com/
 Plugin URI: http://wpdatatables.com/
 Tags: wordpress table plugin, tables, wpdatatables, tables from excel, tables from CSV, datatables
 Requires at least: 4.0
-Tested up to: 5.0
+Tested up to: 5.1
 Requires PHP: 5.4
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,6 +162,11 @@ This can be changed from the “Number format” drop-down menu in the wpDataTab
 7. Plugin settings
 
 == Changelog ==
+
+= 2.0.7 =
+* New skins and new UI elements – a new Dark and Purple-style skins for tables front-end, new UI elements;
+* Bug fixes and stability improvements.
+* Compatibility with WordPress 5.1 approved.
 
 = 2.0.6 =
 * New skin and new UI elements – a new Aqua-style skin for tables front-end, new UI elements;
