@@ -110,6 +110,8 @@
                             <option value="skin1"><?php _e('Light', 'wpdatatables'); ?></option>
                             <option value="skin2"><?php _e('Graphite', 'wpdatatables'); ?></option>
                             <option value="aqua"><?php _e('Aqua', 'wpdatatables'); ?></option>
+                            <option value="purple"><?php _e('Purple', 'wpdatatables'); ?></option>
+                            <option value="dark"><?php _e('Dark', 'wpdatatables'); ?></option>
                         </select>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 Plugin Name: Page Builder by SiteOrigin
 Plugin URI: https://siteorigin.com/page-builder/
 Description: A drag and drop, responsive page builder that simplifies building your website.
-Version: 2.10.0
+Version: 2.10.2
 Author: SiteOrigin
 Author URI: https://siteorigin.com
 License: GPL3
@@ -11,12 +11,12 @@ License URI: http://www.gnu.org/licenses/gpl.html
 Donate link: http://siteorigin.com/page-builder/#donate
 */
 
-define( 'SITEORIGIN_PANELS_VERSION', '2.10.0' );
+define( 'SITEORIGIN_PANELS_VERSION', '2.10.2' );
 if ( ! defined( 'SITEORIGIN_PANELS_JS_SUFFIX' ) ) {
 	define( 'SITEORIGIN_PANELS_JS_SUFFIX', '.min' );
 }
 define( 'SITEORIGIN_PANELS_CSS_SUFFIX', '.min' );
-define( 'SITEORIGIN_PANELS_VERSION_SUFFIX', '-2100' );
+define( 'SITEORIGIN_PANELS_VERSION_SUFFIX', '-2102' );
 
 require_once plugin_dir_path( __FILE__ ) . 'inc/functions.php';
 
@@ -38,11 +38,17 @@ class SiteOrigin_Panels {
 		add_filter( 'siteorigin_panels_data', array( $this, 'process_panels_data' ), 5 );
 		add_filter( 'siteorigin_panels_widget_class', array( $this, 'fix_namespace_escaping' ), 5 );
 
+		if (
+			is_admin() ||
+			( wp_doing_ajax() && isset($_REQUEST['action']) && $_REQUEST['action'] == 'inline-save' )
+		) {
+			SiteOrigin_Panels_Admin::single();
+		}
+
 		if ( is_admin() ) {
 			// Setup all the admin classes
 			SiteOrigin_Panels_Settings::single();
 			SiteOrigin_Panels_Revisions::single();
-			SiteOrigin_Panels_Admin::single();
 		}
 
 		// Include the live editor file if we're in live editor mode.
