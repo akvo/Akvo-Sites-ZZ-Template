@@ -58,7 +58,17 @@
 
 							$shortcode .= 'title="'.get_the_title().'" ';					// POST TITLE
         			$shortcode .= 'date="'.get_the_date().'" ';						// POST DATE
-        			$shortcode .= 'content="'.get_the_excerpt().'" ';			// POST EXCERPT
+
+							// #477 - removing html tags and shortcodes from the excerpt
+							$excerpt = '';
+							if( $post->post_excerpt ){
+								$excerpt = $post->post_excerpt;
+							}
+							else{
+								$excerpt = wp_trim_excerpt();
+							}
+
+							$shortcode .= 'content="'.$excerpt.'" ';			// POST EXCERPT
         			$shortcode .= 'link="'.get_the_permalink().'" ';			// POST PERMALINK
 
 							/* UPDATE TYPES PARAMETER IN SHORTCODE */
