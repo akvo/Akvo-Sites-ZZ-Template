@@ -9,7 +9,7 @@ defined('ABSPATH') or die("Cannot access pages directly.");
 
 // Current version
 
-define('WDT_CURRENT_VERSION', '2.0.7');
+define('WDT_CURRENT_VERSION', '2.0.8');
 define('WDT_TIMEOUT_FACTOR', 5);
 
 /**
@@ -37,6 +37,10 @@ define('WDT_JS_PATH', WDT_ROOT_URL . 'assets/js/'); // path to wpDataTables java
  * (if user already has them included in the page)
  */
 define('WDT_INCLUDE_DATATABLES_CORE', true); // Whether to include link to jQuery DataTables plugin javascript to the generated page. Set to false if you already have DataTables included in your project (version used in wpDataTables is 1.9.1, newer version will be provided with updates).
+
+/** Store URL */
+define('WDT_STORE_URL', 'https://store.tms-plugins.com/');
+define('WDT_STORE_API_URL', 'https://store.tms-plugins.com/api/');
 
 define('WDT_VALIDATE_COEFFICIENT', 30);
 

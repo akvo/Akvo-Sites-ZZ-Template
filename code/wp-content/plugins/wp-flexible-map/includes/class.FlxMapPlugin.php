@@ -366,7 +366,7 @@ HTML;
 					$marker = self::str2js(self::getCoordinates($attrs['marker']));
 
 				if (isset($attrs['zoom']))
-					$script .= " f.zoom = " . preg_replace('/\D/', '', $attrs['zoom']) . ";\n";
+					$script .= ' f.zoom = ' . preg_replace('/\D/', '', $attrs['zoom']) . ";\n";
 
 				if (!empty($attrs['title']))
 					$script .= " f.markerTitle = \"{$this->unhtml($attrs['title'])}\";\n";
@@ -404,7 +404,7 @@ HTML;
 			// add map based on address query
 			else if (isset($attrs['address'])) {
 				if (isset($attrs['zoom']))
-					$script .= " f.zoom = " . preg_replace('/\D/', '', $attrs['zoom']) . ";\n";
+					$script .= ' f.zoom = ' . preg_replace('/\D/', '', $attrs['zoom']) . ";\n";
 
 				if (!empty($attrs['title']))
 					$script .= " f.markerTitle = \"{$this->unhtml($attrs['title'])}\";\n";
@@ -575,9 +575,9 @@ HTML;
 
 				if ($result->status !== 'OK') {
 					if (!empty($result->error_message)) {
-						throw new Exception(sprintf("error retrieving address: %s; %s", $result->status, $result->error_message));
+						throw new Exception(sprintf('error retrieving address: %s; %s', $result->status, $result->error_message));
 					}
-					throw new Exception(sprintf("error retrieving address: %s", $result->status));
+					throw new Exception(sprintf('error retrieving address: %s', $result->status));
 				}
 
 				// success, return array with latitude and longitude
@@ -629,7 +629,7 @@ HTML;
 	*/
 	public static function isCoordinates($text) {
 		// TODO: handle degrees minutes seconds, degrees minutes.decimal, NSEW
-		return preg_match('/^-?[0-9]+(?:\.[0-9]+),\s*-?[0-9]+(?:\.[0-9]+)$/', $text);
+		return preg_match('/^-?[0-9]+(?:\.[0-9]+)\s*,\s*-?[0-9]+(?:\.[0-9]+)$/', $text);
 	}
 
 	/**

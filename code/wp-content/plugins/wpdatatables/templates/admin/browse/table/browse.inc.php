@@ -31,6 +31,10 @@
                                 <i class="zmdi zmdi-plus"></i>
                                 <?php _e('Add New', 'wpdatatables'); ?>
                             </button>
+                          <button class="btn bgm-green waves-effect tms-store-checkout-wpdatatables">
+                            <i class="zmdi zmdi-shopping-cart"></i>
+                              <?php _e('Buy Full Version', 'wpdatatables'); ?>
+                          </button>
                         </li>
                     </ul>
                 </div>

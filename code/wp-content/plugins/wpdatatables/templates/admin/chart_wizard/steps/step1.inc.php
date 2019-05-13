@@ -4,7 +4,7 @@
 
     <?php echo '<div class="alert alert-warning alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        This feature is available in the <a href="https://codecanyon.net/item/wpdatatables-tables-and-charts-manager-for-wordpress/3958969">full version of wpDataTables.</a>
+        This feature is available in the <a class="tms-store-checkout-wpdatatables">full version of wpDataTables.</a>
     </div>' ?>
 
     <!-- .col-sm-4 -->
