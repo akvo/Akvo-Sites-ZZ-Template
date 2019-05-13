@@ -29,7 +29,7 @@
 					<div class='content'>
 						<?php the_content();?>
 						<?php 
-							if( $type == 'media' ){	
+							if($type == 'media'){	
 								get_template_part('partials/content', 'media');
 							}
 							elseif( $type == 'fb_post' ){

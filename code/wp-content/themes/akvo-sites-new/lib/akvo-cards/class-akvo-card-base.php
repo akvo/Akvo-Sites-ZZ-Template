@@ -93,17 +93,23 @@
 			global $akvo_rsr;
 			
 			$data = array();
-			$jsondata = $akvo_rsr->get_json_data( $atts['rsr-id'] );														// GET JSON DATA FROM DATA FEED
+			$jsondata = $akvo_rsr->get_json_data( $atts['rsr-id'] );
+			
+			//print_r($jsondata);
+			
+			// GET JSON DATA FROM DATA FEED
 			
 			
-			if( !isset( $jsondata->results ) ){																 
+			if( !isset( $jsondata->results ) ){	
+				//print_r( $jsondata );															 
 				/* SINGULAR DATA */
 				$temp = $akvo_rsr->parse_rsr( $jsondata, $akvo_card_options, $akvo_date_format, $type );					// PARSE JSON 
 				$temp = self::add_extra_params($temp, $atts);																// adding extra params 
 				
 				array_push($data, $temp);																					// ADD TO FINAL DATA 
 			}
-			else{																							
+			else{		
+																				
 				/* MULTIPLE VALUES */
 				$offset = self::get_offset( $atts );																		// GET OFFSET						
 				

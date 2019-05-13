@@ -41,7 +41,7 @@ class PRIVACY_POLICY_PAGE{
 		* And if signed direct the use to dashboard
 		*/
 		
-		if( $_SERVER['PHP_SELF'] != '/wp-admin/admin-ajax.php' ){	// CHECK IF THE CURRENT ADMIN REQUEST IS NOT FOR AJAX ACTIONS
+		if( $_SERVER['PHP_SELF'] != '/wp-admin/admin-ajax.php' ){
 		
 			$privacy_policy = $this->get_privacy_policy();
 			$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
@@ -50,7 +50,7 @@ class PRIVACY_POLICY_PAGE{
 				wp_redirect(admin_url('admin.php?page=options_page_slug'));  // or whatever success page
 				exit;
 			}
-			
+		
 			/* 	Update user meta table
 			* 	@return datetime to database table
 			*/
