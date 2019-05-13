@@ -95,7 +95,7 @@ class WDTBrowseChartsTable extends WP_List_Table {
                 )
             )
             ) {
-                $query .= " ORDER BY " . $_GET['orderby'];
+                $query .= " ORDER BY " . sanitize_text_field($_GET['orderby']);
                 if ($_REQUEST['order'] == 'desc') {
                     $query .= " DESC ";
                 } else {

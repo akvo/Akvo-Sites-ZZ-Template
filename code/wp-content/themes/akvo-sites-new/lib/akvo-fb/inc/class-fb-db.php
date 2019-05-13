@@ -153,7 +153,7 @@ class FB_DB extends SINGLETON{
 			// CREATE ARRAY OF ARGS FROM THE FACEBOOK POST
 			$args = array(
 				'post_title'	=> isset( $fbPost['name'] ) ? $fbPost['name'] : '',
-				'post_content'	=> isset( $fbPost['description'] ) ? $fbPost['description'] : ( isset( $fbPost['message'] ) ? $fbPost['message'] : '' ),
+				'post_content'	=> isset( $fbPost['description'] ) ? $fbPost['description'] : ( isset( $fbPost['name'] ) ? $fbPost['name'] : '' ),
 				'post_status'   => 'publish',
 				'post_type'    	=> 'Fb_post',
 				'post_date'		=> $fbPost['created_time']

@@ -4,7 +4,7 @@
 }
 
 /* Card header */
-.wdt-datatables-admin-wrap .card.wdt-browse-table .card-header .actions .wdt-add-new {
+.wdt-datatables-admin-wrap .card.wdt-browse-table .card-header .actions .wdt-add-new, .wdt-datatables-admin-wrap .card.wdt-browse-table .card-header .actions .tms-store-checkout-wpdatatables {
     font-size: 14px;
     font-weight: 400;
     padding: 12px 16px;
@@ -295,4 +295,56 @@
 .wdt-datatables-admin-wrap .card.wdt-browse-table .pagination > li.next a:before {
     font-family: WPDataTablesIcons;
     content:"\e001";
+}
+
+/** STORE FONTS */
+@font-face {
+    font-family: 'graphik-medium';
+    src: url('../../fonts/Graphik-Medium-Web.eot');
+    src: url('../../fonts/Graphik-Medium-Web.eot?#iefix') format('embedded-opentype'), url('../../fonts/Graphik-Medium-Web.woff2') format('woff2'), url('../../fonts/Graphik-Medium-Web.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+}
+
+@font-face {
+    font-family: 'graphik-regular';
+    src: url('../../fonts/Graphik-Regular-Web.eot');
+    src: url('../../fonts/Graphik-Regular-Web.eot?#iefix') format('embedded-opentype'), url('../../fonts/Graphik-Regular-Web.woff2') format('woff2'), url('../../fonts/Graphik-Regular-Web.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+}
+
+@font-face {
+    font-family: 'graphik-light';
+    src: url('../../fonts/Graphik-Light-Web.eot');
+    src: url('../../fonts/Graphik-Light-Web.eot?#iefix') format('embedded-opentype'), url('../../fonts/Graphik-Light-Web.woff2') format('woff2'), url('../../fonts/Graphik-Light-Web.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+}
+
+@font-face {
+    font-family: "DIN-Light-Italic";
+    src: url("../../fonts/a819beca-e31b-40b3-bc54-23a8a4a8444d.eot?#iefix");
+    src: url("../../fonts/a819beca-e31b-40b3-bc54-23a8a4a8444d.eot?#iefix") format("eot"), url("../../fonts/432c9e2a-ea2e-479f-8920-a944904adff2.woff2") format("woff2"), url("../../fonts/a062545d-8a1d-4a8c-88ce-48870c7cb3ca.woff") format("woff"), url("../../fonts/e157e6e0-4dd1-4632-9846-e2534d9e08d0.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "DIN-Regular";
+    src: url("../../fonts/936930ba-a8da-4765-9e89-0f35cdff223f.eot?#iefix");
+    src: url("../../fonts/936930ba-a8da-4765-9e89-0f35cdff223f.eot?#iefix") format("eot"), url("../../fonts/6b4d4830-9c7d-43d2-b5d3-c73f739561b9.woff2") format("woff2"), url("../../fonts/ccf25ada-6d2a-4133-95dc-deb039e22999.woff") format("woff"), url("../../fonts/126195b4-2fa0-4b95-b5cf-ad9bf10193f0.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "DIN-Medium";
+    src: url("../../fonts/c6dbdd54-50f5-472a-8b74-0e98ef77e33e.eot?#iefix");
+    src: url("../../fonts/c6dbdd54-50f5-472a-8b74-0e98ef77e33e.eot?#iefix") format("eot"), url("../../fonts/afabdfcf-432c-49b4-a496-0e5051e87fa9.woff2") format("woff2"), url("../../fonts/611ea865-db7e-4c05-94b8-bd1675c90576.woff") format("woff"), url("../../fonts/e65314e4-c389-45b8-99a9-26ab6aef066c.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "DIN-Bold";
+    src: url("../../fonts/fa5ed46b-792d-4f47-894e-fa587cf4e1cf.eot?#iefix");
+    src: url("../../fonts/fa5ed46b-792d-4f47-894e-fa587cf4e1cf.eot?#iefix") format("eot"), url("../../fonts/03008527-67bd-478e-98e3-3b56dd9a6520.woff2") format("woff2"), url("../../fonts/557f817d-9c25-4a23-baaf-a3cf84a7cd7c.woff") format("woff"), url("../../fonts/92ed1479-1d40-4a94-8baf-6abd88b17afa.ttf") format("truetype");
 }

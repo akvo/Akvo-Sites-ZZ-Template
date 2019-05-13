@@ -28,7 +28,7 @@
 		}
 		
 		function ajax(){
-			
+
 			$instance = wp_parse_args( (array) $_GET, $this->get_default_atts() );	/* init instance arguments */
 			
 			$data = $this->get_data_based_on_type( $instance );						/* GET DATA BASED IN TYPE OF DATA SELECTED */

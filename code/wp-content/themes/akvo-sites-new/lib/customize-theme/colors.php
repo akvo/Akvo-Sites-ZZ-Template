@@ -187,6 +187,7 @@
 					'background'	=> 'light_bg'
 				)
 			),
+			
 			array(
 				'selector'	=> '.clickable:hover .text',
 				'styles'	=> array(

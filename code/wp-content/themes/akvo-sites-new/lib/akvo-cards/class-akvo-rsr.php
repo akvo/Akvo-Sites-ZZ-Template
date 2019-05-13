@@ -4,11 +4,18 @@
 		
 		function get_json_data( $data_feed_id ){
 			
-			//$data = do_shortcode('[data_feed name="'.$data_feed_id.'"]'); 		/* Dependancy on the Data Feed Plugin */
+			$data = do_shortcode('[data_feed name="'.$data_feed_id.'"]'); 		/* Dependancy on the Data Feed Plugin */
 			
-			//return json_decode( str_replace('&quot;', '"', $data) );
+			return json_decode( str_replace('&quot;', '"', $data) );
 			
-			return $this->get_data_feed_response( $data_feed_id );
+
+			//$data = $this->get_feed_api( 'https://rsr.akvo.org/rest/v1/project_update/?format=json&project=6892&image_thumb_name=big' );
+			
+			//return $this->get_data_feed_response( $data_feed_id );
+			
+			//print_r( $data );
+			
+			//return $data;
 				
 		}
 		
@@ -36,6 +43,7 @@
 			$rows = $wpdb->get_results( "SELECT df_url FROM " . $wpdb->prefix . "data_feeds WHERE df_name='" . $data_feed_id . "' LIMIT 0,1;" );
 			
 			foreach( $rows as $row ){
+
 				return $row->df_url;
 			}
 			
@@ -76,6 +84,10 @@
 			
 			$body = false;
 			
+			//$url = $this->get_data_feed_url( $data_feed_id );
+			
+			//echo $url;
+			
 			try{
 				$request = wp_remote_get( $url );
 				
@@ -89,6 +101,8 @@
 			}
 			return $body;
 		}
+		
+		
 		
 		function get_base_url( $akvo_card_options ){
 			$base_url = 'http://rsr.akvo.org';
