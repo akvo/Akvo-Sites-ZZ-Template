@@ -1,7 +1,7 @@
-/* 
-	Theme Name: Akvo-Sites Base
+/*
+	Theme Name: Akvo-Sites 2019
 	Theme URI: http://akvo.org
-	Description: Skeletal theme with 3 column footer
+	Description: Rework from the old theme
 	Author: Samuel Thomas
 	Version: 1.0
 */
@@ -12,7 +12,7 @@ body {
     font-size: 16px;
     line-height: 1.7;
     padding-top: 20px;
-    
+
 }
 
 .top-row {
@@ -63,7 +63,7 @@ nav.navbar-collapse{
 		border-right:1px solid #fff;
 		border-bottom: 0;
 	}
-	
+
 }
 
 .menu-mobile {
@@ -136,7 +136,7 @@ nav ul.navbar-nav .dropdown-menu li {
 }
 
 .footer .newsletter {
-	background:#1e73be; 
+	background:#1e73be;
 }
 
 .footer .fixed {
@@ -149,4 +149,3 @@ nav ul.navbar-nav .dropdown-menu li {
     font-size: 2em;
     text-decoration: none;
 }
-
