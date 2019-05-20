@@ -3,7 +3,7 @@
 	class AKVO_RSR{
 
 		function __construct(){
-			add_shortcode( 'akvo_rsr_project_field', array( $this, 'display_project_field' ) );
+			//add_shortcode( 'akvo_rsr_project_field', array( $this, 'display_project_field' ) );
 		}
 
 		function display_project_field( $atts ){
