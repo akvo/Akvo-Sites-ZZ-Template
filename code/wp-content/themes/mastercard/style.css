@@ -8,15 +8,19 @@
 */
 
 body{
-  font-family: 'MarkForMCMed',Helvetica Neue,Helvetica,Arial,sans-serif !important;
+  font-family: 'MarkForMCLt',Helvetica Neue,Helvetica,Arial,sans-serif !important;
 }
 
 h1, h2, h3, h4, h5, h6{
   font-family: 'MarkForMCMed',Helvetica Neue,Helvetica,Arial,sans-serif !important;
 }
 
-.light-font{
+.extra-light-font{
   font-family: 'MarkForMCExtraLt',Helvetica Neue,Helvetica,Arial,sans-serif !important;
+}
+
+.light-font{
+  font-family: 'MarkForMCLt',Helvetica Neue,Helvetica,Arial,sans-serif !important;
 }
 
 .list-rsr-updates li.rsr-update{
