@@ -1,13 +1,48 @@
 <?php
 
-	add_action( 'wp_enqueue_scripts', function(){
-		//wp_enqueue_style( 'parent-style', get_template_directory_uri().'/style.css', false, '3.0.1' );
-   	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('sage_css'), '1.0.2');
+	function getCustomFonts(){
 
-		wp_enqueue_script( 'mastercard', get_stylesheet_directory_uri() . '/js/main.js', array('jquery'), '1.0.0');
+		return $markFonts = array(
+			'MarkForMCExtraLt',
+			//'MarkForMCExtraLtIt',
+			'MarkForMCLt',
+			//'MarkForMCLtIt',
+			//'MarkForMCBookIt',
+			//'MarkForMCBookIt',
+			'MarkForMCMed',
+			//'MarkForMCMedIt.ttf',
+			//'MarkForMCBold.ttf',
+			//'MarkForMCBoldIt'
+		);
+	}
+
+	function getFontURL( $font ){
+		return get_stylesheet_directory_uri().'/fonts/'.$font.'.ttf';
+	}
+
+	add_action( 'akvo_sites_css', function(){
+		$fonts = getCustomFonts();
+		foreach( $fonts as $font ){
+			_e("@font-face {	font-family: '".$font."'; src: url('".getFontURL( $font )."');}");
+			echo "\r\n";
+		}
 
 	} );
 
+	add_action( 'wp_enqueue_scripts', function(){
+		//wp_enqueue_style( 'parent-style', get_template_directory_uri().'/style.css', false, '3.0.1' );
+   	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('sage_css'), '1.0.4');
+
+		wp_enqueue_script( 'mastercard', get_stylesheet_directory_uri() . '/js/main.js', array('jquery'), '1.0.0');
+
+		$fonts = getCustomFonts();
+		foreach( $fonts as $font ){
+			wp_enqueue_style( $font, getFontURL( $font ), false, null );
+		}
+
+	} );
+
+	/*
 	add_filter('akvo_fonts', function($fonts){
 
 		$markFonts = array(
@@ -33,6 +68,7 @@
 
 		return $fonts;
 	});
+	*/
 
 	add_shortcode( 'akvo_rsr_project_field', function( $atts ){
 		global $akvo_rsr;

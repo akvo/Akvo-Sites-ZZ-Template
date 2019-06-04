@@ -1,24 +1,24 @@
 <?php
-	
+
 	class AKVO_FONTS{
-		
+
 		function __construct(){
-		
+
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_fonts' ), 100 );
-			
+
 			add_action( 'customize_register', array( $this, 'customize_register' ) );
-			
+
 			add_action( 'akvo_sites_css', array( $this, 'css' ) );
-			
+
 		}
-		
+
 		function css(){
-			
+
 			$fonts = $this->customize_fonts();
-			
+
 			/* LIST OF ALL THE FONTS */
 			$all_fonts = $this->fonts();
-			
+
 			// ADD FONT FACE FOR CUSTOM ONES
 			foreach( $all_fonts as $font ){
 				if( isset( $font['url'] ) && $font['url'] && ! ( strpos( $font['url'], 'google' ) !== false ) ) {
@@ -26,7 +26,7 @@
 					echo "\r\n";
 				}
 			}
-			
+
 			$items = array(
 				array(
 					'selector'	=> 'h1,h2,h3,h4,h5,h6',
@@ -46,22 +46,22 @@
 						'font-family'	=> 'nav'
 					)
 				),
-				
+
 			);
-			
+
 			global $akvo;
 			$akvo->print_css( $fonts, $items );
-			
+
 		}
-		
+
 		function load_fonts(){
-			
+
 			/* SELECTED FONTS FROM THE CUSTOMIZE */
 			$font_face = $this->selected_fonts();
-			
+
 			/* LIST OF ALL THE FONTS */
 			$google_fonts = $this->fonts();
-		
+
 			// ENQUEUE FONTS THAT ARE SELECTED
 			foreach( $google_fonts as $google_font ){
 				if( in_array( $google_font['name'], $font_face ) ){
@@ -70,43 +70,43 @@
 					}
 				}
 			}
-			
+
 		}
-		
+
 		function customize_fonts(){
 			$fonts = array(
 				'body'	=>  get_option('akvo_font') ? get_option('akvo_font') : ( get_theme_mod('akvo_font') ? get_theme_mod('akvo_font') : "Open Sans" ),
 				'nav'	=> 	get_option('akvo_font_nav') ? get_option('akvo_font_nav') : ( get_theme_mod('akvo_font_nav') ? get_theme_mod('akvo_font_nav') : "Open Sans" ),
 				'head'	=> 	get_option('akvo_font_head') ? get_option('akvo_font_head') : ( get_theme_mod('akvo_font_head') ? get_theme_mod('akvo_font_head') : "Open Sans" ),
 			);
-			
+
 			return $fonts;
 		}
-		
+
 		function selected_fonts(){
-			
+
 			// GET FONTS SELECTED THROUGH CUSTOMIZE
 			$custom_akvo_fonts = $this->customize_fonts();
-			
+
 			$font_face = array();
-			
+
 			foreach( $custom_akvo_fonts as $font ){
-				
+
 				// CHECK IF FONT IS EMPTY
 				if( $font ){ $font_face[] = $font; }
-			
+
 			}
-			
+
 			// DEFAULT FONT IF NONE IS SELECTED THROUGH CUSTOMIZE
 			if( ! count( $font_face ) ){
 				$font_face[] = "Open Sans";
 			}
-			
+
 			return $font_face;
 		}
-		
+
 		function fonts(){
-			
+
 			$fonts_arr = array(
   				array(
   					'slug'	=> 'opensans',
@@ -174,48 +174,48 @@
   					'url'	=> '//fonts.googleapis.com/css?family=Maven+Pro:400,500,700,900'
   				),
 	  		);
-	  		
+
 	  		$fonts_arr = apply_filters('akvo_fonts', $fonts_arr);
-	  		
+
 	  		return $fonts_arr;
-	  		
+
 		}
-		
+
 		function customize_register($wp_customize){
-		
+
 			global $akvo_customize;
-			
+
 			$akvo_customize->section( $wp_customize, 'akvo_theme_panel', 'akvo_font_section', 'Font Family', 'Select site typography');
-			
+
 			// FONT FAMILIES
-			
+
 			$google_fonts = $this->fonts();
-			
+
 			$fonts_arr = array();
-			
+
 			foreach( $google_fonts as $google_font ){
 				$fonts_arr[$google_font['name']] = $google_font['name'];
 			}
-			
-			
+
+
 			$font_locations = array(
 				'akvo_font_head'	=> 'Header Font',
 				'akvo_font_nav'		=> 'Navigation Font',
 				'akvo_font'			=> 'Body Font'
 			);
-			
-			
+
+
 			foreach( $font_locations as $location_id => $label ){
 				$akvo_customize->ajax_dropdown( $wp_customize, 'akvo_font_section', $location_id, $label, 'Open Sans', $fonts_arr);
 			}
-			
+
 			//$wp_customize->remove_section( 'nav');
 			$wp_customize->remove_section( 'static_front_page');
-		
+
 		}
-		
+
 	}
-	
+
 	global $akvo_fonts;
-	
+
 	$akvo_fonts = new AKVO_FONTS;

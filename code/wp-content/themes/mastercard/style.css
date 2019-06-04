@@ -7,6 +7,22 @@
 	Version: 1.0
 */
 
+body{
+  font-family: 'MarkForMCLt',Helvetica Neue,Helvetica,Arial,sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6{
+  font-family: 'MarkForMCMed',Helvetica Neue,Helvetica,Arial,sans-serif !important;
+}
+
+.extra-light-font{
+  font-family: 'MarkForMCExtraLt',Helvetica Neue,Helvetica,Arial,sans-serif !important;
+}
+
+.light-font{
+  font-family: 'MarkForMCLt',Helvetica Neue,Helvetica,Arial,sans-serif !important;
+}
+
 .list-rsr-updates li.rsr-update{
   display: grid;
   grid-template-columns: 50px 1fr;
@@ -16,6 +32,7 @@
 
 .header4 nav.navbar-fixed-top{
   background: transparent;
+  font-family: 'MarkForMCExtraLt',Helvetica Neue,Helvetica,Arial,sans-serif;
 }
 .header4 nav.navbar-fixed-top.scrolled{
   display: none;
@@ -25,7 +42,10 @@
   width: 100px;
   height: auto;
   margin-bottom: 20px;
+  margin-top: 5px;
 }
+
+
 
 .header4 nav.navbar-fixed-top a[href]{
   color: #fff;
@@ -34,4 +54,16 @@
 
 #main-page-container{
   margin-top: 0;
+}
+
+@media( min-width: 769px ){
+  .header4 nav.navbar-fixed-top .navbar-container{
+    border-bottom: #777 solid 1px;
+  }
+  .header4 nav.navbar-fixed-top #navbar{
+    padding-top: 30px;
+  }
+  .header4 nav.navbar-fixed-top .logobrand img{
+    margin-left: -15px;
+  }
 }
