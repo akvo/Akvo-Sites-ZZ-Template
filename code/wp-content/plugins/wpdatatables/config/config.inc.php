@@ -9,7 +9,7 @@ defined('ABSPATH') or die("Cannot access pages directly.");
 
 // Current version
 
-define('WDT_CURRENT_VERSION', '2.0.8');
+define('WDT_CURRENT_VERSION', '2.0.9');
 define('WDT_TIMEOUT_FACTOR', 5);
 
 /**

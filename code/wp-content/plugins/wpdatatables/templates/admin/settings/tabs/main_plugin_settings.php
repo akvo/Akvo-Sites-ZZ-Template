@@ -394,5 +394,17 @@
                 <label for="wdt-site-link" class="ts-helper"></label>
             </div>
         </div>
+        <div class="col-sm-4 wdt-prevent-deleting-tables-block">
+            <h4 class="c-black m-b-20">
+                <?php _e('Prevent deleting tables in database', 'wpdatatables'); ?>
+                <i class="zmdi zmdi-help-outline" data-toggle="tooltip" data-placement="right"
+                   title="<?php _e('It is recommended to leave this optiosn as checked if you what to keep your tables in database after deleting plugin from Plugins page. If you uncheck this option, it will be deleted all tables in database after deleting plugin', 'wpdatatables'); ?>"></i>
+            </h4>
+            <div class="toggle-switch" data-ts-color="blue">
+                <label for="wdt-prevent-deleting-tables" class="ts-label">Prevent deleting tables in database after deleting plugin from Plugins page</label>
+                <input type="checkbox" name="wdt-prevent-deleting-tables" id="wdt-prevent-deleting-tables"/>
+                <label for="wdt-prevent-deleting-tables" class="ts-helper"></label>
+            </div>
+        </div>
     </div>
 </div>

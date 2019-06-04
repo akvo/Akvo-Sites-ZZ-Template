@@ -4,9 +4,9 @@ Author URI: http://tms-plugins.com/
 Plugin URI: http://wpdatatables.com/
 Tags: wordpress table plugin, tables, wpdatatables, tables from excel, tables from CSV, datatables
 Requires at least: 4.0
-Tested up to: 5.1.1
+Tested up to: 5.2.1
 Requires PHP: 5.4
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,6 +162,12 @@ This can be changed from the “Number format” drop-down menu in the wpDataTab
 7. Plugin settings
 
 == Changelog ==
+
+= 2.0.9 =
+* Feature: Added Gutenberg block – the plugin is now Gutenberg optimized.
+* Feature: Added option to choose whether you want to keep the tables after deleting the plugin from the Plugins page (by default the tables will be saved in database after deleting the plugin).
+* Bug fixes and stability improvements.
+* Compatibility with WordPress 5.2.1 approved.
 
 = 2.0.8 =
 * Bug fixes and stability improvements.

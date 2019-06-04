@@ -54,6 +54,7 @@ class WDTSettingsController {
 			'wdtPurchaseCode'           => get_option('wdtPurchaseCode'),
 			'wdtIncludeBootstrap'       => get_option('wdtIncludeBootstrap'),
             'wdtIncludeBootstrapBackEnd'=> get_option('wdtIncludeBootstrapBackEnd'),
+            'wdtPreventDeletingTables'  => get_option('wdtPreventDeletingTables'),
 			'wdtParseShortcodes'        => get_option('wdtParseShortcodes'),
 			'wdtNumbersAlign'           => get_option('wdtNumbersAlign'),
 			'wdtUseSeparateCon'         => get_option('wdtUseSeparateCon'),

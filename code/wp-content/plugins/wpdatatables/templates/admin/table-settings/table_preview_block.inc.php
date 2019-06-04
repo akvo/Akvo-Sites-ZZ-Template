@@ -43,11 +43,11 @@
         <div class="col-sm-12 p-0 wdt-edit-buttons hidden">
             <span class="pull-right"><?php _e('Switch View:', 'wpdatatables'); ?>
                 <?php if (isset($_GET['table_view']) && $_GET['table_view'] == 'excel') { ?>
-                    <a href="<?php echo admin_url(isset($_GET['table_id']) ? 'admin.php?page=wpdatatables-constructor&source&table_id=' . $_GET['table_id'] : ''); ?>"><?php _e('STANDARD', 'wpdatatables'); ?></a> |
+                    <a href="<?php echo admin_url(isset($_GET['table_id']) ? 'admin.php?page=wpdatatables-constructor&source&table_id=' . (int)$_GET['table_id'] : ''); ?>"><?php _e('STANDARD', 'wpdatatables'); ?></a> |
                     <?php _e('EXCEL-LIKE', 'wpdatatables'); ?>
                 <?php } else { ?>
                     <?php _e('STANDARD', 'wpdatatables'); ?> |
-                    <a href="<?php echo admin_url(isset($_GET['table_id']) ? 'admin.php?page=wpdatatables-constructor&source&table_id=' . $_GET['table_id'] . '&table_view=excel' : ''); ?>"><?php _e('EXCEL-LIKE', 'wpdatatables'); ?></a>
+                    <a href="<?php echo admin_url(isset($_GET['table_id']) ? 'admin.php?page=wpdatatables-constructor&source&table_id=' . (int)$_GET['table_id'] . '&table_view=excel' : ''); ?>"><?php _e('EXCEL-LIKE', 'wpdatatables'); ?></a>
                 <?php } ?>
             </span>
         </div>

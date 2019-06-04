@@ -5,7 +5,7 @@
 Plugin Name: wpDataTables
 Plugin URI: http://tms-plugins.com
 Description: Add interactive tables easily from any input source
-Version: 2.0.8 Lite
+Version: 2.0.9 Lite
 Author: TMS-Plugins
 Author URI: http://tms-plugins.com
 Text Domain: wpdatatables
@@ -52,6 +52,7 @@ function wpdatatables_load() {
     
     require_once(WDT_ROOT_PATH . 'source/class.wdtbrowsetable.php');
     require_once(WDT_ROOT_PATH . 'source/class.wdtbrowsechartstable.php');
+    require_once(WDT_ROOT_PATH . 'source/WpDataTablesGutenbergBlock.php');
 
     add_action('plugins_loaded', 'wdtLoadTextdomain');
 }
