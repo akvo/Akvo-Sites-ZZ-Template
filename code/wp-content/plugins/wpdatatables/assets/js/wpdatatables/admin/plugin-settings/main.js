@@ -110,7 +110,12 @@
             wpdatatable_plugin_config.setIncludeBootstrap( $(this).is(':checked') ? 1 : 0 );
         });
 
-        
+        /**
+         * Set Prevent deleting tables in database
+         */
+        $('#wdt-prevent-deleting-tables').change(function (e) {
+            wpdatatable_plugin_config.setPreventDeletingTables($(this).is(':checked') ? 1 : 0);
+        });
 
         /**
          * Toggle Parse shortcodes in strings
@@ -185,7 +190,7 @@
          */
         wpdatatable_plugin_config.setSeparateConnection ( wdt_current_config.wdtUseSeparateCon == 1 ? 1 : 0 );
 
-        
+
 
         wpdatatable_plugin_config.setLanguage           ( wdt_current_config.wdtInterfaceLanguage );
         wpdatatable_plugin_config.setDateFormat         ( wdt_current_config.wdtDateFormat );
@@ -204,6 +209,7 @@
         wpdatatable_plugin_config.setPurchaseCode       ( wdt_current_config.wdtPurchaseCode );
         wpdatatable_plugin_config.setIncludeBootstrap   ( wdt_current_config.wdtIncludeBootstrap == 1 ? 1 : 0 );
         wpdatatable_plugin_config.setIncludeBootstrapBackEnd   ( wdt_current_config.wdtIncludeBootstrapBackEnd == 1 ? 1 : 0 );
+        wpdatatable_plugin_config.setPreventDeletingTables(wdt_current_config.wdtPreventDeletingTables == 1 ? 1 : 0);
         wpdatatable_plugin_config.setParseShortcodes    ( wdt_current_config.wdtParseShortcodes == 1 ? 1 : 0 );
         wpdatatable_plugin_config.setAlignNumber        ( wdt_current_config.wdtNumbersAlign == 1 ? 1 : 0  );
         wpdatatable_plugin_config.setCustomCss          ( wdt_current_config.wdtCustomCss );

@@ -185,13 +185,68 @@ function wdtActivationCreateTables() {
     if (get_option('wdtIncludeBootstrap') === false) {
         update_option('wdtIncludeBootstrap', true);
     }
-    if (get_option('wdtIncludeBootstrapBackEnd')  === false) {
+    if (get_option('wdtIncludeBootstrapBackEnd') === false) {
         update_option('wdtIncludeBootstrapBackEnd', true);
     }
-    if (get_option('wdtSiteLink')  === false) {
+    if (get_option('wdtPreventDeletingTables') === false) {
+        update_option('wdtPreventDeletingTables', true);
+    }
+    if (get_option('wdtSiteLink') === false) {
         update_option('wdtSiteLink', true);
     }
+    if (get_option('wdtInstallDate') === false) {
+        update_option('wdtInstallDate', date( 'Y-m-d' ));
+    }
+    if (get_option('wdtRatingDiv') === false) {
+        update_option('wdtRatingDiv', 'no' );
+    }
+    if (get_option('wdtTempFutureDate') === false) {
+        update_option('wdtTempFutureDate', date( 'Y-m-d'));
+    }
 }
+
+/**
+ * Add rating massage on all admin pages after 2 weeks of using
+ */
+function wdtAdminRatingMessages() {
+
+    $installDate = get_option( 'wdtInstallDate' );
+    $currentDate = date( 'Y-m-d' );
+    $tempIgnoreDate = get_option( 'wdtTempFutureDate' );
+
+    $tempIgnore = strtotime($currentDate) >= strtotime($tempIgnoreDate) ? true : false;
+    $datetimeInstallDate = new DateTime( $installDate );
+    $datetimeCurrentDate = new DateTime( $currentDate );
+    $diffIntrval = round( ($datetimeCurrentDate->format( 'U' ) - $datetimeInstallDate->format( 'U' )) / (60 * 60 * 24) );
+    if( $diffIntrval >= 14 && get_option( 'wdtRatingDiv' ) == "no" && $tempIgnore) {
+        include WDT_TEMPLATE_PATH . 'admin/common/ratingDiv.inc.php';
+    }
+}
+
+add_action( 'admin_notices', 'wdtAdminRatingMessages' );
+
+/**
+ * Remove rating message
+ */
+function wpdtHideRatingDiv() {
+    update_option( 'wdtRatingDiv', 'yes' );
+    echo json_encode( array("success") );
+    exit;
+}
+
+add_action( 'wp_ajax_wdtHideRating', 'wpdtHideRatingDiv' );
+
+/**
+ * Temperary hide rating message for 7 days
+ */
+function wpdtTempHideRatingDiv() {
+    $date = strtotime("+7 day");
+    update_option('wdtTempFutureDate', date( 'Y-m-d', $date));
+    echo json_encode( array("success") );
+    exit;
+}
+
+add_action( 'wp_ajax_wdtTempHideRating', 'wpdtTempHideRatingDiv' );
 
 function wdtDeactivation() {
 
@@ -202,48 +257,50 @@ function wdtDeactivation() {
  */
 function wdtUninstallDelete() {
     global $wpdb;
+    if (get_option('wdtPreventDeletingTables') == false) {
+        delete_option('wdtUseSeparateCon');
+        delete_option('wdtTimepickerRange');
+        delete_option('wdtTimeFormat');
+        delete_option('wdtTabletWidth');
+        delete_option('wdtTablesPerPage');
+        delete_option('wdtSumFunctionsLabel');
+        delete_option('wdtRenderFilter');
+        delete_option('wdtRenderCharts');
+        delete_option('wdtPurchaseCode');
+        delete_option('wdtIncludeBootstrap');
+        delete_option('wdtIncludeBootstrapBackEnd');
+        delete_option('wdtPreventDeletingTables');
+        delete_option('wdtParseShortcodes');
+        delete_option('wdtNumbersAlign');
+        delete_option('wdtNumberFormat');
+        delete_option('wdtMySqlUser');
+        delete_option('wdtMySqlPwd');
+        delete_option('wdtMySqlPort');
+        delete_option('wdtMySqlHost');
+        delete_option('wdtMySqlDB');
+        delete_option('wdtMobileWidth');
+        delete_option('wdtMinifiedJs');
+        delete_option('wdtMinFunctionsLabel');
+        delete_option('wdtMaxFunctionsLabel');
+        delete_option('wdtLeftOffset');
+        delete_option('wdtTopOffset');
+        delete_option('wdtInterfaceLanguage');
+        delete_option('wdtGeneratedTablesCount');
+        delete_option('wdtFontColorSettings');
+        delete_option('wdtDecimalPlaces');
+        delete_option('wdtCSVDelimiter');
+        delete_option('wdtDateFormat');
+        delete_option('wdtCustomJs');
+        delete_option('wdtCustomCss');
+        delete_option('wdtBaseSkin');
+        delete_option('wdtAvgFunctionsLabel');
 
-    delete_option('wdtUseSeparateCon');
-    delete_option('wdtTimepickerRange');
-    delete_option('wdtTimeFormat');
-    delete_option('wdtTabletWidth');
-    delete_option('wdtTablesPerPage');
-    delete_option('wdtSumFunctionsLabel');
-    delete_option('wdtRenderFilter');
-    delete_option('wdtRenderCharts');
-    delete_option('wdtPurchaseCode');
-    delete_option('wdtIncludeBootstrap');
-    delete_option('wdtIncludeBootstrapBackEnd');
-    delete_option('wdtParseShortcodes');
-    delete_option('wdtNumbersAlign');
-    delete_option('wdtNumberFormat');
-    delete_option('wdtMySqlUser');
-    delete_option('wdtMySqlPwd');
-    delete_option('wdtMySqlPort');
-    delete_option('wdtMySqlHost');
-    delete_option('wdtMySqlDB');
-    delete_option('wdtMobileWidth');
-    delete_option('wdtMinifiedJs');
-    delete_option('wdtMinFunctionsLabel');
-    delete_option('wdtMaxFunctionsLabel');
-    delete_option('wdtLeftOffset');
-    delete_option('wdtTopOffset');
-    delete_option('wdtInterfaceLanguage');
-    delete_option('wdtGeneratedTablesCount');
-    delete_option('wdtFontColorSettings');
-    delete_option('wdtDecimalPlaces');
-    delete_option('wdtCSVDelimiter');
-    delete_option('wdtDateFormat');
-    delete_option('wdtCustomJs');
-    delete_option('wdtCustomCss');
-    delete_option('wdtBaseSkin');
-    delete_option('wdtAvgFunctionsLabel');
+        delete_option('wdtSiteLink');
 
-    delete_option('wdtSiteLink');
-
-    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wpdatatables");
-    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wpdatatables_columns");
-    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wpdatacharts");
+        $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wpdatatables");
+        $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wpdatatables_columns");
+        $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wpdatacharts");
+    }
 }
 
 /**
@@ -581,6 +638,28 @@ function wdtSanitizeQuery($query) {
     $query = stripslashes($query);
 
     return $query;
+}
+
+function initGutenbergBlocks (){
+    WpDataTablesGutenbergBlock::init();
+    add_filter( 'block_categories', 'addWpDataTablesBlockCategory', 10, 2);
+}
+
+add_action('plugins_loaded', 'initGutenbergBlocks');
+
+/**
+ * Creating Amelia block category in Gutenberg
+ */
+function addWpDataTablesBlockCategory ($categories, $post) {
+    return array_merge(
+        array(
+            array(
+                'slug' => 'wpdatatables-blocks',
+                'title' => 'wpDataTables',
+            ),
+        ),
+        $categories
+    );
 }
 
 /**

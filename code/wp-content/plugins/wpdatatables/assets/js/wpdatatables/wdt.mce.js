@@ -13,12 +13,7 @@
                 title : 'Insert a wpDataTable',
                 cmd : 'wpdatatable'
             });
-            
-            ed.addButton('wpdatachart', {
-                title : 'Insert a wpDataChart',
-                cmd : 'wpdatachart'
-            });
-            
+
             ed.addCommand( 'wpdatatable', function(){
                 jQuery.ajax({
                     url: ajaxurl,
@@ -64,40 +59,6 @@
                 });
             });
             
-            ed.addCommand( 'wpdatachart', function(){
-                jQuery.ajax({
-                    url: ajaxurl,
-                    dataType: 'json',
-                    data: {
-                        action: 'wpdatatable_list_all_charts'
-                    },
-                    success: function( charts ){
-                        
-                        var selectboxValues = [];
-                        
-                        for( var i in charts ){
-                            selectboxValues.push({ value: charts[i].id, text: charts[i].title+' (id: '+charts[i].id+')' })
-                        }
-                        
-                        ed.windowManager.open({
-                            title: 'wpDataChart',
-                            body: [
-                                {
-                                    type: 'listbox', 
-                                    name: 'wpdatachart_select', 
-                                    label: 'wpDataChart',
-                                    values: selectboxValues
-                                }
-                            ],
-                            onsubmit: function(e){
-                                ed.focus();
-                                ed.execCommand( 'mceInsertContent', 0, '[wpdatachart id='+e.data.wpdatachart_select+']' )
-                            }
-                        });
-                    }
-                });
-            });
-            
         },
  
         /**
@@ -124,8 +85,8 @@
             return {
                 longname : 'wpdatatables',
                 author : 'touchmesoft',
-                authorurl : 'http://touchmesoft.net',
-                infourl : 'http://wpdatatables.com',
+                authorurl : 'https://touchmesoft.net',
+                infourl : 'https://wpdatatables.com',
                 version : "1.6.2"
             };
         }

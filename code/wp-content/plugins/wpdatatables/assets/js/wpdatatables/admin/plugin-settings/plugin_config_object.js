@@ -188,6 +188,13 @@ var wpdatatable_plugin_config = {
         }
     },
 
+    setPreventDeletingTables: function (preventDeletingTables) {
+        wdt_current_config.wdtPreventDeletingTables = preventDeletingTables;
+        if( jQuery('#wdt-prevent-deleting-tables').val() != preventDeletingTables ){
+            jQuery('#wdt-prevent-deleting-tables').prop( 'checked', preventDeletingTables );
+        }
+    },
+
     setParseShortcodes: function ( wdtParseShortcodes ) {
         wdt_current_config.wdtParseShortcodes = wdtParseShortcodes;
         if( jQuery('#wdt-parse-shortcodes').val() != wdtParseShortcodes ){

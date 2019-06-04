@@ -13,3 +13,25 @@
   grid-gap: 10px;
   margin-bottom: 20px;
 }
+
+.header4 nav.navbar-fixed-top{
+  background: transparent;
+}
+.header4 nav.navbar-fixed-top.scrolled{
+  display: none;
+}
+
+.header4 nav.navbar-fixed-top .logobrand img{
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.header4 nav.navbar-fixed-top a[href]{
+  color: #fff;
+}
+
+
+#main-page-container{
+  margin-top: 0;
+}
