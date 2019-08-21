@@ -31,7 +31,7 @@
 
 	add_action( 'wp_enqueue_scripts', function(){
 		//wp_enqueue_style( 'parent-style', get_template_directory_uri().'/style.css', false, '3.0.1' );
-   	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('sage_css'), '1.0.4');
+   	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('sage_css'), '1.0.8');
 
 		wp_enqueue_script( 'mastercard', get_stylesheet_directory_uri() . '/js/main.js', array('jquery'), '1.0.0');
 
@@ -90,23 +90,50 @@
 		global $akvo_rsr;
 		$atts = shortcode_atts( array(
 			'feed'	=> 'Sample',
-			'limit'	=> 5
+			'limit'	=> 3
 		), $atts, 'akvo_rsr_project_updates' );
 
-		$json_data = $akvo_rsr->get_data_feed_response( $atts['feed'] );
+		$api_key = "a6a0e042562bdb3c293d8df3874f84f9f55f9c7f";
+
+		$json_data = $akvo_rsr->get_data_feed_response( $atts['feed'], $api_key );
+
+
 
 		ob_start();
 
-		$base_url = "https://rsr.akvo.org";
+		$base_url = "https://mcf.akvoapp.org"; //https://rsr.akvo.org
+
+
 
 		if( isset( $json_data->results ) ){
 			echo "<ul class='list-unstyled list-rsr-updates'>";
 			for( $i = 0; $i < $atts['limit']; $i++ ){
 				if( isset( $json_data->results[ $i ] ) ){
-					echo "<li class='rsr-update'>";
-					echo "<img src='".$base_url.$json_data->results[ $i]->photo."' />";
-					echo "<div class='title'>".$json_data->results[ $i ]->title."</div>";
-					echo "</li>";
+
+					$akvo_date = date( "d M Y", strtotime( $json_data->results[$i]->created_at ) );
+
+					$link = $base_url.$json_data->results[$i]->absolute_url;
+
+					$photo_url = "";
+					if( isset( $json_data->results[ $i]->photo->original ) ){
+						$photo_url = $base_url.$json_data->results[ $i]->photo->original;
+					}
+					else{
+						$photo_url = $base_url.$json_data->results[ $i]->photo;
+					}
+
+					?>
+
+					<li class='rsr-update'>
+						<a href='<?php _e( $link );?>'>
+							<div class="bg-image" style="background-image:url('<?php _e( $photo_url );?>');"></div>
+							<h4><?php _e( $json_data->results[ $i ]->title );?></h4>
+							<div class='date'><?php _e( "Published on ". $akvo_date );?></div>
+						</a>
+					</li>
+
+					<?php
+
 				}
 			}
 			echo "</ul>";
