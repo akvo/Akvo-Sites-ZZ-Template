@@ -63,7 +63,7 @@
 			return false;
 		}
 
-		function get_data_feed_response( $data_feed_id ){
+		function get_data_feed_response( $data_feed_id, $api_key = false ){
 
 			$json_key = 'df'.$data_feed_id;
 			$_json_expiration = 60 * 5; // 5 minutes
@@ -75,7 +75,15 @@
 
 				$url = $this->get_data_feed_url( $data_feed_id );
 
-				$request = wp_remote_get( $url );
+				$args = array( 'headers' => array() );
+
+				if( $api_key ){
+					$args['headers'] = array(
+						'Authorization' => 'Token ' . $api_key,
+					);
+				}
+
+				$request = wp_remote_get( $url, $args );
 
 				if( ! is_wp_error( $request ) ) {
 					$body = wp_remote_retrieve_body( $request );
