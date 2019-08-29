@@ -70,7 +70,7 @@
 			$key = $json_key . md5($json_key );
 
 			$data = array();
-
+			
 			if ( ! ( $data = get_transient($key) ) ) {
 
 				$url = $this->get_data_feed_url( $data_feed_id );
