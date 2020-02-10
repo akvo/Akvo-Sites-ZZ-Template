@@ -31,7 +31,7 @@
 
 	add_action( 'wp_enqueue_scripts', function(){
 		//wp_enqueue_style( 'parent-style', get_template_directory_uri().'/style.css', false, '3.0.1' );
-   	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('sage_css'), '1.0.8');
+   	wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array('sage_css'), '1.0.9');
 
 		wp_enqueue_script( 'mastercard', get_stylesheet_directory_uri() . '/js/main.js', array('jquery'), '1.0.0');
 
@@ -86,24 +86,64 @@
 		}
 	} );
 
-	add_shortcode( 'akvo_rsr_project_updates', function( $atts ){
+	function mf_rsr_api( $feed ){
+		$api_key = "a6a0e042562bdb3c293d8df3874f84f9f55f9c7f";
 		global $akvo_rsr;
+		return $akvo_rsr->get_data_feed_response( $feed, $api_key );
+	}
+
+	add_shortcode( 'akvo_rsr_results', function( $atts ){
+		ob_start();
+
+		$atts = shortcode_atts( array(
+			'feed'	=> 'Sample',
+		), $atts, 'akvo_rsr_result' );
+
+		$json_data = mf_rsr_api( $atts['feed'] );
+
+		echo "<pre>";
+		print_r( $json_data );
+		echo "</pre>";
+
+		return ob_get_clean();
+	} );
+
+	add_shortcode( 'akvo_rsr_result', function( $atts ){
+
+		$atts = shortcode_atts( array(
+			'feed'					=> 'Sample',
+			'index'					=> 0,
+			'period_index'	=> 0
+		), $atts, 'akvo_rsr_result' );
+
+		$index = $atts['index'];
+		$period_index = $atts['period_index'];
+
+		ob_start();
+
+		$json_data = mf_rsr_api( $atts['feed'] );
+
+		if( isset( $json_data->indicators ) && isset( $json_data->indicators[$index] ) && isset( $json_data->indicators[$index]->periods )
+			&& isset( $json_data->indicators[$index]->periods[$period_index] ) && isset( $json_data->indicators[$index]->periods[$period_index]->actual_value )
+		){
+			echo "<div class='mf-indicator'>" . number_format( $json_data->indicators[$index]->periods[$period_index]->actual_value ) . "</div>";
+		}
+
+		return ob_get_clean();
+	} );
+
+	add_shortcode( 'akvo_rsr_project_updates', function( $atts ){
+
 		$atts = shortcode_atts( array(
 			'feed'	=> 'Sample',
 			'limit'	=> 3
 		), $atts, 'akvo_rsr_project_updates' );
 
-		$api_key = "a6a0e042562bdb3c293d8df3874f84f9f55f9c7f";
-
-		$json_data = $akvo_rsr->get_data_feed_response( $atts['feed'], $api_key );
-
-
+		$json_data = mf_rsr_api( $atts['feed'] );
 
 		ob_start();
 
 		$base_url = "https://mcf.akvoapp.org"; //https://rsr.akvo.org
-
-
 
 		if( isset( $json_data->results ) ){
 			echo "<ul class='list-unstyled list-rsr-updates'>";

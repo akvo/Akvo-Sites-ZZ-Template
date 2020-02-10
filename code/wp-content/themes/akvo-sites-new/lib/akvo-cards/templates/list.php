@@ -7,11 +7,11 @@
 		<div class='col-sm-6'>
 			<div style="min-height: 50px;"><?php echo truncate($atts['content'], 130);?></div>
 			<?php
-				
+
 				$atts['types'] = array();
-				
+
 				if( $atts['type'] == 'media' ){			/* ONLY FOR MEDIA POSTS, GET EXTRA TYPES FROM TAXONOMY */
-					$atts['types'] = $this->get_media_term_types( $atts['post_id'] );	
+					$atts['types'] = $this->get_media_term_types( $atts['post_id'] );
 				}
 				else{
 					$atts['types'] = $atts['type'];
@@ -20,11 +20,10 @@
 			<?php if( count( $atts['types'] ) ):?>
 			<ul class="small list-inline">
 				<?php foreach( $atts['types'] as $type ): ?>
-				<li><span class='badge'><?php _e( $type );?></span></li>
+				<li><span class='badge <?php _e( $this->slugify( $type ) );?>'><?php _e( $type );?></span></li>
 				<?php endforeach;?>
 			</ul>
 			<?php endif; ?>
 		</div>
-	</div>	
-</div>	
-
+	</div>
+</div>
