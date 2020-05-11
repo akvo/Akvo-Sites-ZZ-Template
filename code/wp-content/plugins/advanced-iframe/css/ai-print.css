@@ -1,3 +1,7 @@
+/**
+ *  This file contains the print css file to get a nice printable version of 
+ *  the administration. 
+ */
 #adminmenuwrap, #wpadminbar, #wpfooter, .hide-print, .wp-core-ui .button-primary, #adminmenuback {
 display: none;
 }

@@ -3,7 +3,7 @@ Contributors: mdempfle
 Donate link: http://www.tinywebgallery.com
 Tags: iframe, embed, resize, zoom, content, advanced, shortcode, modify css, widget 
 Requires at least: 3.2
-Tested up to: 4.9.8
+Tested up to: 5.3.2
 Stable tag: 1.0
 Requires PHP: 5.3
 License: GPLv2 or later

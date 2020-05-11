@@ -12,19 +12,21 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-functions.php';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-quickstart.php';
 
-$version = '7.6';
+$version = '2020.2.1';
 $updated = false;
 $evanto = (file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php"));
 if (is_user_logged_in() && is_admin()) {
     $scrollposition = 0;
     $devOptions = $this->getAiAdminOptions();
-    if ($devOptions['admin_was_loaded'] == false) {
+    
+    if ($devOptions['admin_was_loaded'] === false) {
         // we disable the check of the src.
         $devOptions['check_iframe_url_when_load'] = 'false';
         echo '<div class="error"><p><strong>';
         _e('The administration was not loaded until the end last time. It seems the integrated check of the "Url" field failed and therefore "Check Url on load" and "Check iframes on save" are now disabled. You can enable this again on the "Options" tab. Check the description of this options what maybe caused this problem.', 'advanced-iframe');  
         echo '</strong></p></div>';      
     } 
+    
     $devOptions['admin_was_loaded'] = false;    
     update_option($this->adminOptionsName, $devOptions);
     
@@ -43,7 +45,7 @@ if (is_user_logged_in() && is_admin()) {
     if ($evanto) {
       $latest_version = ai_getlatestVersion(); 
       if ($latest_version != -1) {
-        if (version_compare ($latest_version,$version) == 1) { 
+        if (version_compare ($latest_version,$version) === 1) { 
            printMessage(__('Version ', 'advanced-iframe')  .$latest_version. __(' of Advanced iFrame Pro is available. See the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">history</a> for details.<br /><br />Please download the latest version from your download page of codecanyon. The easiest way to update is to overwrite all files with FTP.', 'advanced-iframe'));
            $is_latest = false;   
         }  
@@ -128,47 +130,54 @@ if (is_user_logged_in() && is_admin()) {
             'enable_content_filter', 'add_ai_external_local', 'title', 
             'check_iframes_when_save','admin_was_loaded',
             'check_iframe_url_when_load','modify_iframe_if_cookie',
-            'allow','safari_fix_url','external_scroll_top'
-            );  
+            'allow','safari_fix_url','external_scroll_top',
+            'change_iframe_links_href','delete_options_db',
+			'inline_config_file', 'replace_iframe_tags',
+			'check_iframe_batch_size', 'check_iframe_cronjob_email_always',
+			'remove_elements_from_height'
+            );                                                  
         if (!wp_verify_nonce($_POST['twg-options'], 'twg-options')) die('Sorry, your nonce did not verify.');
         
         if (!isset($_POST['action']) || $_POST['action'] !== 'reset') {
           foreach ($adminSettings as $item) {
-             if ($item == 'version_counter') {
+             if ($item === 'version_counter') {
                 $text = rand(100000, 999999);
-             } else if ($item == 'additional_height') {
+             } else if ($item === 'additional_height') {
                  $text = trim(trim($_POST[$item]),'px%emt'); // remove px...
              } else {
                  if (isset($_POST[$item])) {
                      $text = trim($_POST[$item]);
                  } else {  
-                     if ($item == 'show_part_of_iframe' || $item == 'show_part_of_iframe_next_viewports_loop'
-                       || $item == 'show_iframe_loader' || $item == 'enable_lazy_load_manual' 
-                       || $item == 'show_part_of_iframe_next_viewports_hide' || $item == 'write_css_directly' 
-                       || $item == 'enable_responsive_iframe' || $item == 'enable_lazy_load'   
-                       || $item == 'accordeon_menu' || $item == 'single_save_button'
-                       || $item == 'show_iframe_as_layer' || $item == 'add_iframe_url_as_param'
-                       || $item == 'auto_zoom' || $item == 'show_part_of_iframe_zoom'
-                       || $item == 'demo' ||  $item == 'enable_ios_mobile_scolling'
-                       || $item == 'store_height_in_cookie' || $item == 'show_iframe_as_layer_full'
-                       || $item == 'use_post_message' || $item == 'multi_domain_enabled'
-                       || $item == 'enable_content_filter' || $item == 'add_ai_external_local' 
-                       || $item == 'check_iframe_cronjob' ||  $item == 'modify_iframe_if_cookie') {
+                     if ($item === 'show_part_of_iframe' || $item === 'show_part_of_iframe_next_viewports_loop'
+                       || $item === 'show_iframe_loader' || $item === 'enable_lazy_load_manual' 
+                       || $item === 'show_part_of_iframe_next_viewports_hide' || $item === 'write_css_directly' 
+                       || $item === 'enable_responsive_iframe' || $item === 'enable_lazy_load'   
+                       || $item === 'accordeon_menu' 
+                       || $item === 'show_iframe_as_layer' || $item === 'add_iframe_url_as_param'
+                       || $item === 'auto_zoom' || $item === 'show_part_of_iframe_zoom'
+                       || $item === 'demo' ||  $item === 'enable_ios_mobile_scolling'
+                       || $item === 'store_height_in_cookie' || $item === 'show_iframe_as_layer_full'
+                       || $item === 'use_post_message' || $item === 'multi_domain_enabled'
+                       || $item === 'enable_content_filter' || $item === 'add_ai_external_local'
+                       || $item === 'check_iframe_cronjob' ||  $item === 'modify_iframe_if_cookie') {
                           $text = 'false';
-                     } else if ($item == 'show_menu_link' || $item == 'resize_on_ajax_jquery' 
-                       || $item == 'show_iframe_as_layer_keep_content' ||  $item == 'admin_was_loaded' ) {
+                     } else if ($item === 'show_menu_link' || $item === 'resize_on_ajax_jquery' 
+                       || $item === 'show_iframe_as_layer_keep_content' ||  $item === 'admin_was_loaded' 
+					   || $item === 'single_save_button' ) {
                          $text = 'true';
-                     } else if ($item == 'resize_on_element_resize_delay') {
+                     } else if ($item === 'resize_on_element_resize_delay') {
                          $text = '250';
-                     } else if ($item == 'show_iframe_as_layer_header_height') {
+                     } else if ($item === 'show_iframe_as_layer_header_height') {
                          $text = '100';
-                     } else if ($item == 'show_iframe_as_layer_header_position') {
+                     } else if ($item === 'show_iframe_as_layer_header_position') {
                          $text = 'top';
-                     } else if ($item == 'external_height_workaround_delay' || $item == 'element_to_measure_offset' )  {
+                     } else if ($item === 'external_height_workaround_delay' || $item === 'element_to_measure_offset' )  {
                          $text = '0';
-                     } else if ($item == 'element_to_measure' )  {
+                     } else if ($item === 'element_to_measure' )  {
                          $text = 'default';
-                     } else if ($item == 'roles' )  {
+                     } else if ($item === 'check_iframe_batch_size' )  {
+                         $text = '100';
+                     } else if ($item === 'roles' || $item === 'inline_config_file')  {
                          $text = 'none';
                      } else {
                          $text = '';
@@ -178,24 +187,27 @@ if (is_user_logged_in() && is_admin()) {
              
              // Mixed signle and double quotes are only allowed for the parameters below because they do support 
              // shortcodes as input where both quotes are used.
-             if ($item != 'src')  {
-                $text = str_replace("'", '"' ,$text);
-             }
-             if ($item == 'roles') {
+             if ($item != 'src')  {  
+                 $text = str_replace("'", '"' ,$text);
+             } else if ($devOptions['src'] !== $text) {
+		         delete_transient( 'aip_cache_check_' . $devOptions['src']);
+			 }
+			 
+             if ($item === 'roles') {
                 // roles can only be changed by administrators!
                 $user = wp_get_current_user();
                 if ( in_array( 'administrator', (array) $user->roles ) ) {
                     $devOptions[$item] = stripslashes($text);
                 }
              // replace ' with " 
-              } else if ($item == 'include_url' || $item == 'src') {
+              } else if ($item === 'include_url' || $item === 'src') {
                 $text = str_replace('{', '__BRACKETS_OPEN__' ,$text);
                 $text = str_replace('}', '__BRACKETS_CLOSE__' ,$text);
                 $text = esc_url($text);
                 $text = str_replace('__BRACKETS_OPEN__', '{' ,$text);
                 $text = str_replace('__BRACKETS_CLOSE__' , '}' ,$text);
                 $devOptions[$item] = stripslashes($text);
-             } else if ($item == 'include_html') {
+             } else if ($item === 'include_html') {
                 $text = wp_kses( $text, array(
                     'strong' => array(),
                     'br' => array(),
@@ -212,7 +224,7 @@ if (is_user_logged_in() && is_admin()) {
              } else {
                 $devOptions[$item] = stripslashes($text);
              }
-             if ($item == 'id') {
+             if ($item === 'id') {
                 $devOptions[$item] =  preg_replace("/\W/", "_", $text);
                 // remove trailing numbers
                 $devOptions[$item] = preg_replace('/^[0-9]+/', '', $devOptions[$item]);
@@ -224,25 +236,24 @@ if (is_user_logged_in() && is_admin()) {
                 printError(__('You have set "Allow shortcode attributes" to "No" and "Use shortcode attributes only" to "Yes". This combination is not valid. "Allow shortcode attributes" was set to "Yes". Please check if this is what you  want. "Allow shortcode attributes" overrules "Use shortcode attributes only" if you set "Use shortcode attributes only" directly in the shortcode with use_shortcode_attributes_only="true".', "advanced-iframe"));
                 $scrollposition = 0;
              }
-             
-          
-             
           }
         } else {
-          $securityKey = $devOptions['securitykey'];
+          $securitykey = $devOptions['securitykey'];
           $it = $devOptions['install_date'];
           $devOptions = advancediFrame::iframe_defaults();
-          $devOptions['securitykey'] = $securityKey;
+          $devOptions['securitykey'] = $securitykey;
           $devOptions['install_date'] = $it;  
+		  $current_user = wp_get_current_user();
+          delete_user_meta( $current_user->ID, 'closedpostboxes_toplevel_page_advanced-iframe');
         }
-                                                                                                                                                                                                                                                              if ($evanto && empty($devOptions['install_date'])) {$devOptions['install_date'] = time();}
+                                                                                                                                                                                                                                                                                                                                                          if ($evanto && empty($devOptions['install_date'])) {    $devOptions['install_date'] = time();}
         update_option($this->adminOptionsName, $devOptions);
 
         // create the external js file with the url of the wordpress installation
         $this->saveExternalJsFile();
         
         ?>
-<?php if ($devOptions['single_save_button'] == 'false') { ?> 
+<?php if ($devOptions['single_save_button'] === 'false') { ?> 
 <div class="updated">
   <p>
      <strong>
@@ -262,35 +273,33 @@ if (is_user_logged_in() && is_admin()) {
   }
 }
 
+// read closed postboxes;
+$current_user = wp_get_current_user();
+$closedArray = get_user_meta( $current_user->ID, 'closedpostboxes_toplevel_page_advanced-iframe', true );
+if (empty($closedArray)) {
+    $closedArray = array();
+}	
+
 // needs to be set after the save again.
 if ($evanto) {
     $devOptions['demo'] = 'false';
 }
-$isDemo =  $devOptions['demo'] == 'true';
+$isDemo =  $devOptions['demo'] === 'true';
     
-if ($isDemo) { ?>
-<div class="updated top-10">
-  <p>
-     <strong>
-      <?php _e('The administration is running in the pro modus. Please note that the blue settings of the pro version are not working. They only show what is possible!', 'advanced-iframe'); ?>
-     </strong>
-  </p>
-</div>
-<?php
-}
     if ($evanto && clearstatscache($devOptions)) {
       printError(__('Yo'+'ur ver'+'sion of Adv'+'anced iFr'+'ame Pro s'+'eems to be an ill'+'egal co'+'py and is now wo'+'rking in the fr'+ 'eeware m'+'ode ag'+'ain.<br />Ple'+'ase get the of'+'fical v'+'ersion from co'+'decanyon or co'+'ntact the au'+'thor thr'+'ough code'+'canyon if you th'+'ink this is a fa'+'lse al'+'arm.', 'advanced-iframe'));
     }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              if (clearstatscache($devOptions)) {$evanto = false; }
     ?>
-<style type="text/css">table th {text-align: left;}
-</style>
 <div id="ai" class="wrap">
   <!-- options-general.php?page=advanced-iframe.php -->
   <form id="ai_form" name="ai_form" method="post" action="options-general.php?page=advanced-iframe.php">
     <input type="hidden" id="current_tab" name="current_tab" value="<?php echo $current_tab; ?>">
     <input type="hidden" id="current_open_sections" name="current_open_sections" value="">
     
-    <?php wp_nonce_field('twg-options', 'twg-options'); ?>
+    <?php 
+	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+	wp_nonce_field('twg-options', 'twg-options'); 
+	?>
 
       <div id="icon-options-general" class="icon_ai show-always">
       <br />
@@ -305,29 +314,59 @@ if ($isDemo) { ?>
           if ($is_latest) {
             echo ' <small class="hide-print"><small><small>' . __('(Your installation is up to date - <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">view history</a>)', 'advanced-iframe') . '</small></small></small>';  
           } else {
-             echo ' <small class="hide-print"><small><small>' . __('(<a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">Version '.$latest_version.'</a> is available. <a href="http://codecanyon.net/downloads" target="_blank">Download</a> it from CodeCanyon and follow the <a href="http://codecanyon.net/item/advanced-iframe-pro/5344999?ref=mdempfle#item-description__upgrade" _target="blank">update instructions</a>!', 'advanced-iframe') . '</small></small></small>';
+             echo ' <small class="hide-print"><small><small>' . __('(<a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">Version '.$latest_version.'</a> is available. <a href="http://codecanyon.net/downloads" target="_blank">Download</a> it from CodeCanyon and follow the <a href="https://1.envato.market/WQJ3O#item-description__upgrade" _target="blank">update instructions</a>!', 'advanced-iframe') . '</small></small></small>';
           }
         } else {
            echo ' <small class="hide-print"><small><small>' . __('(<a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-history" target="_blank">view history</a>)', 'advanced-iframe') . '</small></small></small>';  
         }
-        if (!$evanto && !$isDemo) {  
-            echo '<div class="pro-hint">' . __('Test the pro administration:<br />Enable it on the options tab', 'advanced-iframe') . '</div>';
-        }
-        echo '<div class="header-help">' . __('If you start using advanced iframe please read the quickstart guide on the options tab first. After that continue with an iframe like described on the basic tab. Only if the iframe appears add additional features. Go to the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0" target="_blank">free</a> and the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo" target="_blank">pro demos</a> page for running examples.', 'advanced-iframe') . '</div>';     
-        
-        ?><span id="help-header">&nbsp;<?php __('attribute help', 'advanced-iframe'); ?></span></h1>
-<?php if (!$isDemo) { ?>
-<br />
-<?php }
+		?>
+       </h1>
+        <?php
+ if ($isDemo) { ?>
+<div class="notice notice-success">
+  <p>
+     <strong>
+      <?php _e('The administration is running in the pro modus. Please note that the blue settings of the <a target="_blank" href="https://1.envato.market/4nR50">pro version</a> are not working. They only show what is possible! Get the pro version at <a target="_blank" href="https://1.envato.market/4nR50">codecanyon</a>.', 'advanced-iframe'); ?>
+     </strong>
+  </p>
+</div>
+<?php
+}
 
-_e('<input type="search" class="ai-input-search" placeholder="Search for settings" />
-<div id="ai-input-search-result">
-No settings found for this search term.
-</div><div id="ai-input-search-result-show">&nbsp;</div>
-<div style="clear:left;"></div>
-<div id="ai-input-search-help">
-The search does look for the search term in the label and the description of each setting on all tabs. Tabs with findings are marked yellow. It does not search in the additional documentation that does exist in each section. Please use the browser search for a full text of this page.
-</div>', 'advanced-iframe');
+$showProMessage = !(isset($devOptions['closed_messages']) &&  isset($devOptions['closed_messages']['test-pro-admin']));
+
+if (!$evanto && !$isDemo && $showProMessage) {  
+	echo '<div id="test-pro-admin" class="notice notice-success is-dismissible is-permanent-closable"><p><strong>';
+	echo  __('Test the pro administration: Enable it on the options tab', 'advanced-iframe');
+	echo '</strong></p></div>';
+}     
+	
+	aiPostboxOpen("id-search", "Read this first", $closedArray, '48%', " show-always postbox-container-space"); 	   
+	echo __('If you start using advanced iframe please read the quickstart guide on the options tab first. After that continue with an iframe like described on the basic tab. Only if the iframe appears add additional features. Go to the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/demo-advanced-iframe-2-0" target="_blank">free</a> and the <a href="http://www.tinywebgallery.com/blog/advanced-iframe/advanced-iframe-pro-demo" target="_blank">pro demos</a> page for running examples.', 'advanced-iframe');
+
+	echo '<p>';
+	echo renderExampleIcon("javascript:void();");
+	echo  __(' links to a working example of the feature. ', 'advanced-iframe');
+	echo '<br>';
+	echo renderExternalWorkaroundIcon(true);
+	echo  __(' shows that this setting is rendered in the ai_external.js. See the "<a id="external-workaround-link" href="#xss">External workaround</a>" tab for details.', 'advanced-iframe');
+	echo '</p>';
+	aiPostboxClose();   
+
+	
+	aiPostboxOpen("id-search", "Search", $closedArray, '48%', " show-always");  
+	_e('<input type="search" class="ai-input-search" placeholder="Search for settings" />
+	<div id="ai-input-search-result">
+	No settings found.
+	</div><div id="ai-input-search-result-show">&nbsp;</div>
+	<div style="clear:left;"></div>
+	<div id="ai-input-search-help">
+	The search does look for the search term in the label and the description of each setting on all tabs. Tabs with findings are marked yellow. Please use the browser search to search in the additional documentation that does exist in each section.
+	</div>', 'advanced-iframe');
+	aiPostboxClose();	
+
+	echo '<div class="clear"></div>';   
+	
 
 _e('<h2 class="nav-tab-wrapper show-always">', 'advanced-iframe');
 if ($devOptions['donation_bottom'] === 'false') {
@@ -353,9 +392,10 @@ _e('
 <div style="clear:both;"></div>
 <div id="tab_wrapper">
 <?php
+
 if ($devOptions['donation_bottom'] === 'false') {
   echo '<section id="section-quickstart" class="tab_0">';
-  printDonation($devOptions, $evanto);
+  printDonation($devOptions, $evanto, $closedArray);
   echo "</div>";
   echo '</section>';
 }
@@ -364,10 +404,10 @@ echo '<section id="section-default" class="tab_1">';
 include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-default.php';
 echo '</section><section id="section-advanced" class="tab_2">';
 
-if ($devOptions['accordeon_menu'] == 'false') { ?>
+if ($devOptions['accordeon_menu'] === 'false') { ?>
 <div id="acc">
 <?php } else { 
-_e('<p>Please open the section where you want to change a default setting. Please note that some of the advanced features require basic html/css knowhow! You can open several sections at once for easier navigation.</p>', 'advanced-iframe');
+_e('<p>Please note that some of the advanced features require basic html/css knowhow!</p>', 'advanced-iframe');
 ?>
 <div id="accordion">
 <?php }
@@ -399,24 +439,20 @@ include_once dirname(__FILE__) . '/includes/advanced-iframe-admin-twg.php';
 echo '</section>';
 if ($devOptions['donation_bottom'] === 'true') {
   echo '<section id="section-quickstart" class="tab_0">';
-  printDonation($devOptions, $evanto);
+  printDonation($devOptions, $evanto, $closedArray);
   echo "</div>";
   echo '</section>';
 }
 ?>
 </div>
-<?php if ($devOptions['single_save_button'] == 'true') { ?>    
+<?php if ($devOptions['single_save_button'] === 'true') { ?>    
 <div id="wpadminbar" class="wp-core-ui ai-save-bar">
         <div>
-        <?php 
-        if ($updated) { 
-          $updated_display_text = "visible";
-          echo '<script type="text/javascript">setTimeout(function() { jQuery("#updated_text").css("visibility","hidden")}, 4000);</script>'; 
-        } else {
-          $updated_display_text = "hidden";
-        }
+        <input id="wpbarbutton" class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/> <input id="wpresetbutton" class="button-secondary confirmation" name="update_iframe-loader" onclick="aiResetAiSettings();" type="submit" value="<?php _e('Reset Settings', 'advanced-iframe') ?>" />
+		<?php 
+            $updated_display_text = ($updated) ? 'visible' : 'hidden';
         ?>
-           <div id="updated_text" style="visibility:<?php echo $updated_display_text; ?>;"><?php
+           <div id="ai-updated-text" style="visibility:<?php echo $updated_display_text; ?>;"><?php
            if (!isset($_POST['action']) ||  $_POST['action'] !== 'reset') {
                _e("Settings updated.", "advanced-iframe");
            } else {
@@ -424,10 +460,8 @@ if ($devOptions['donation_bottom'] === 'true') {
            }
            ?></div> 
         <input type="hidden" name="action" id="action" value="update">
-        <input id="wpbarbutton" class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>  <input id="wpresetbutton" class="button-secondary confirmation" name="update_iframe-loader" onclick="resetAiSettings();" type="submit" value="<?php _e('Reset Settings', 'advanced-iframe') ?>" />
-        </div>
-        
-      
+          
+        </div>     
 </div> 
 <input type="hidden" id="scrollposition" name="scrollposition" value="0">   
 <?php } ?>
@@ -441,14 +475,20 @@ if ($devOptions['accordeon_menu'] != 'false' && !empty($current_open_sections)) 
 ?>
 <script type="text/javascript">
 jQuery(function() {
-  initAdminConfiguration(<?php echo ($evanto) ? "true" : "false"; ?>,<?php echo '"' .$devOptions['accordeon_menu'] . '"'; ?>);  
+  if (typeof aiInitAdminConfiguration == 'function') { 
+    aiInitAdminConfiguration(<?php echo ($evanto) ? "true" : "false"; ?>,<?php echo '"' .$devOptions['accordeon_menu'] . '"'; ?>);  
+  } else {
+	 setTimeout(function() {
+	   aiInitAdminConfiguration(<?php echo ($evanto) ? "true" : "false"; ?>,<?php echo '"' .$devOptions['accordeon_menu'] . '"'; ?>);  
+     }, 100); 
+  }
   <?php if (!empty($current_open_sections)) { ?>
      jQuery('<?php echo $current_open_sections; ?>').click();
   <?php } ?>
   document.getElementById('tab_<?php echo $current_tab; ?>').click(); 
   setTimeout(function() {
     jQuery(document).scrollTop(<?php echo $scrollposition; ?>);
-    accTime = 400;
+    aiAccTime = 400;
   }, 100);
 });
 </script>

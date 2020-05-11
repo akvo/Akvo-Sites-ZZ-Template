@@ -81,8 +81,8 @@ class AdvancedIframeHelper {
             foreach ($match[1] as $result_key) {
                 // we check if we have a default value
                 $userinfo_elements = explode(",", $result_key);
-                $result_value =  ($value == '') ? '' :  $current_user->$value;
-                if (count($userinfo_elements) == 2 && empty($result_value)) {
+                $result_value =  ($value === '') ? '' :  $current_user->$value;
+                if (count($userinfo_elements) === 2 && empty($result_value)) {
                     $result_value = trim($userinfo_elements[1]);
                 }
                 $str_input = str_replace('{'.$result_key.'}', urlencode($result_value), $str_input);
@@ -96,17 +96,12 @@ class AdvancedIframeHelper {
             $current_user = wp_get_current_user();
             
             $str_input = AdvancedIframeHelper::replace_key_with_default('userid', 'ID', $str_input,$current_user);
-            // $str_input = str_replace('{userid}', urlencode($current_user->ID), $str_input);
             if (empty($current_user->ID)) {
                 $str_input = AdvancedIframeHelper::replace_key_with_default('username', '', $str_input,$current_user);
-                // $str_input = str_replace('{username}', '', $str_input);
                 $str_input = AdvancedIframeHelper::replace_key_with_default('useremail', '', $str_input,$current_user);
-                // $str_input = str_replace('{useremail}', '', $str_input);
             } else {
                 $str_input = AdvancedIframeHelper::replace_key_with_default('username', 'user_login', $str_input,$current_user);
-                // $str_input = str_replace('{username}', urlencode($current_user->user_login), $str_input);
                 $str_input = AdvancedIframeHelper::replace_key_with_default('useremail', 'user_email', $str_input,$current_user);
-                // $str_input = str_replace('{useremail}', urlencode($current_user->user_email), $str_input);
                 
                 // dynamic $propertyName = 'id'; print($phpObject->{$propertyName});
                 if (strpos($str_input,'{userinfo') !== false) {
@@ -117,7 +112,7 @@ class AdvancedIframeHelper {
                             $key = substr($hits, 9);
                             // we check if we have a default value
                             $userinfo_elements = explode(",", $key);
-                            if (count($userinfo_elements) == 2) {
+                            if (count($userinfo_elements) === 2) {
                                 $value = $current_user->trim($userinfo_elements[0]);
                                 if (empty($value)) {
                                     $value = trim($userinfo_elements[1]);
@@ -125,7 +120,7 @@ class AdvancedIframeHelper {
                             } else {
                                 $value = $current_user->trim($key);
                             }
-                            $str_input = str_replace('{'.$hits.'}', urlencode($value), $str_input);
+							$str_input = str_replace('{'.$hits.'}', urlencode($value), $str_input);
                         }
                     }
                 }
@@ -138,7 +133,7 @@ class AdvancedIframeHelper {
                             $key = substr($hits, 9);    
                              // we check if we have a default value
                             $usermeta_elements = explode(",", $key);
-                            if (count($userinfo_elements) == 2) {
+                            if (count($usermeta_elements) === 2) {
                                 $value = get_user_meta( $current_user->ID, trim($usermeta_elements[0]), true );
                                 if (empty($value)) {         
                                     $value = trim($usermeta_elements[1]);
@@ -146,7 +141,6 @@ class AdvancedIframeHelper {
                             } else {
                                 $value = get_user_meta( $current_user->ID, trim($key), true );
                             }
-                            
                             $str_input = str_replace('{'.$hits.'}', urlencode($value), $str_input);
                         }
                     }
@@ -157,7 +151,7 @@ class AdvancedIframeHelper {
 
        static function replace_full_url_data($str_input) {
             if (strpos($str_input,'{href}') !== false) {
-                $location = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+                $location = (@$_SERVER["HTTPS"] === "on") ? "https://" : "http://";
                 if ($_SERVER["SERVER_PORT"] != "80" && $_SERVER["SERVER_PORT"] != "443" ) {
                     $location .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
                 } else {
@@ -176,7 +170,7 @@ class AdvancedIframeHelper {
                     foreach ($match[1] as $hits) {
                        $key = substr($hits, 6);
                        $query_elements = explode(",", $key);
-                          if (count($query_elements) == 2) {
+                          if (count($query_elements) === 2) {
                                $value = advancediFrame::param(trim($query_elements[0]));
                               if (empty($value)) {
                                   $value = trim($query_elements[1]);
@@ -212,6 +206,26 @@ class AdvancedIframeHelper {
         }
         return $str_input;
     }
+	
+	static function check_shortcode_enabled($check_shortcode) {    
+		return (isset($_GET['aiEnableCheckShortcode'])) ? 'true' : $check_shortcode;
+	}
+	
+	static function check_debug_enabled($debug_js) {    
+		return (isset($_COOKIE['aiEnableDebugConsole'])) ? 'bottom' : $debug_js;
+	}
+	
+	static function check_debug_get_parameter() {
+		 if (isset($_GET['aiEnableDebugConsole'])) {
+			if ($_GET['aiEnableDebugConsole'] === 'true') {
+			  setcookie('aiEnableDebugConsole', 'bottom', 0, '/');
+			  $_COOKIE['aiEnableDebugConsole'] = 'bottom';
+			} else {
+			  unset($_COOKIE['aiEnableDebugConsole']);	
+			  setcookie('aiEnableDebugConsole', 'bottom', 1, '/');		  
+			}
+		}
+	}	
 }
 
 ?>

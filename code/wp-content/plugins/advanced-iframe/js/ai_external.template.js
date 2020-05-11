@@ -1,7 +1,9 @@
 /**
- *  Advanced iframe external workaround file v7.6.x free 
+ *  Advanced iframe external workaround file v2020.x free 
  *  Created: PARAM_TIMESTAMP  
 */ 
+
+/* PARAM_INLINE_CONFIG_FILE */
 
 var domain_PARAM_ID = 'PLUGIN_URL'; // Check if this is your wordpress directory of ai
  

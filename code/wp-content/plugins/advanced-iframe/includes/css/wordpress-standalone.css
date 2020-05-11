@@ -1,4 +1,7 @@
-
+/**
+ *  This file is needed for the area selector to also get the wordpress look 
+ *  outside Wordpress
+ */
 .wp-admin #wpadminbar #wp-admin-bar-site-name > .ab-item::before { content: '?'; }
 #wpadminbar #adminbarsearch .adminbar-button, .customize-support .hide-if-customize, .customize-support .wp-core-ui .hide-if-customize, .customize-support.wp-core-ui .hide-if-customize, .no-customize-support .hide-if-no-customize, .no-customize-support .wp-core-ui .hide-if-no-customize, .no-customize-support.wp-core-ui .hide-if-no-customize { display: none; }
 #wpwrap { height: auto; min-height: 100%; width: 100%; position: relative; -webkit-font-smoothing: subpixel-antialiased; }

@@ -36,6 +36,12 @@ if (isset($aip_standalone)) {
   }
 
 } else {
+// all $atts are checked if they contain invalid double quotes
+// if they do it will be removed
+$search = array("“","”","‘","’");
+foreach($atts as $key => $value) {          
+    $atts[$key] = str_replace($search, '', $value);
+} 
 
 $aiPath="/advanced-iframe";
 $options = get_option('advancediFrameAdminOptions');
@@ -50,20 +56,21 @@ if (!isset ($options[$key])) { $options[$key] = $option; }
 // check if defaults from confg should be read
 extract(shortcode_atts(array('use_shortcode_attributes_only' => 'not set'), $atts));
 // if not set in shortcode we look in the config
-if ($use_shortcode_attributes_only == 'not set') {
+if ($use_shortcode_attributes_only === 'not set') {
  $use_shortcode_attributes_only = $options['use_shortcode_attributes_only'];
 }
 
 // version is always read.
 $version_counter = $options['version_counter'];
 $alternative_shortcode = $options['alternative_shortcode'];
-$check_shortcode = $options['check_shortcode'];
 $use_post_message = $options['use_post_message'];
 $multi_domain_enabled = $options['multi_domain_enabled'];
-$debug_js = $options['debug_js'];
+
+$debug_js = AdvancedIframeHelper::check_debug_enabled($options['debug_js']);
+$check_shortcode = AdvancedIframeHelper::check_shortcode_enabled($options['check_shortcode']);
 
 // defaults from main config
-if ($use_shortcode_attributes_only == 'false' || $options['shortcode_attributes'] == 'false') {  //
+if ($use_shortcode_attributes_only === 'false' || $options['shortcode_attributes'] === 'false') {  //
 extract(array('securitykey' => 'not set',
   'src' => $options['src'], 'height' => $options['height'], 'width' => $options['width'],
   'frameborder' => $options['frameborder'], 'scrolling' => $options['scrolling'],
@@ -114,6 +121,7 @@ extract(array('securitykey' => 'not set',
   'change_parent_links_target'  => $options['change_parent_links_target'],
   'change_iframe_links'  => $options['change_iframe_links'],
   'change_iframe_links_target'  => $options['change_iframe_links_target'],
+  'change_iframe_links_href'  => $options['change_iframe_links_href'],
   'browser'  => $options['browser'],
   'show_part_of_iframe_style'  => $options['show_part_of_iframe_style'],
   'map_parameter_to_url'  => $options['map_parameter_to_url'],
@@ -164,6 +172,7 @@ extract(array('securitykey' => 'not set',
   'title' => $options['title'],
   'allow' => $options['allow'],
   'safari_fix_url' => $options['safari_fix_url'],
+  'remove_elements_from_height' => $options['remove_elements_from_height'],
    $atts));
 }
 
@@ -171,7 +180,7 @@ extract(array('include_scripts_in_footer' => $options['include_scripts_in_footer
    $atts));
 
 // read the shortcode attributes
-if ($options['shortcode_attributes'] == 'true') {
+if ($options['shortcode_attributes'] === 'true') {
   // src value can be hidden in [0] and [1] if the editor does hotlink the url. Therefore I look in there if the src is not set!
   if (!isset($atts['src'])) {
       if (isset($atts[0]) && (stristr($atts[0], 'src') !== FALSE)) {
@@ -187,7 +196,7 @@ if ($options['shortcode_attributes'] == 'true') {
       }
   }
 
-  if ($use_shortcode_attributes_only == 'true') {
+  if ($use_shortcode_attributes_only === 'true') {
        $key_temp = $options['securitykey'];
        $options = $defaults;
        $options['securitykey'] = $key_temp;
@@ -196,11 +205,11 @@ if ($options['shortcode_attributes'] == 'true') {
        $options['width'] = "not set";
   }
 
-  if ($check_shortcode == 'true') {
+  if ($check_shortcode === 'true') {
     $error_array = array();
     // we go through all parameters and theck if they are valid.
-     foreach ($atts as $key => $option) {
-        if ($key == 'id') {
+     foreach ((array) $atts as $key => $option) {
+        if ($key === 'id') {
             $id_new =  preg_replace("/\W/", "_", $option);
             $id_new = preg_replace('/^[0-9]+/', '', $id_new);
             if ($id_new != $option) {
@@ -212,7 +221,7 @@ if ($options['shortcode_attributes'] == 'true') {
         $defaults['enable_ios_mobile_scrolling'] = 'true';
 
         if (!array_key_exists ( $key , $defaults )) {
-          if (strlen($key) == 1 ) {
+          if (strlen($key) === 1 ) {
             $error_array[] = $option;
           } else {
              $error_array[] =  $key . '="' . $option . '"';
@@ -221,12 +230,13 @@ if ($options['shortcode_attributes'] == 'true') {
      }
 
      if (!empty($error_array)) {
-     echo $error_css . '<div class="errordiv">' . __('<strong>The following [advanced_iframe] attributes are unknown or cannot be read properly. Please fix or remove this attributes. You can disable this message in the administration on the "Options" tab:</strong>', 'advanced-iframe');
-        echo '<ul>';
+        $error_html .= $error_css . '<div class="errordiv">' . __('<strong>The following attributes are unknown or cannot be read properly. Please fix or remove this attributes:</strong>', 'advanced-iframe');
+        $error_html .= '<ul style="margin-left: 25px;">';
         foreach ($error_array as $error_string ) {
-          echo '<li>' . $error_string . '</li>';
+          $error_html .= '<li>' . $error_string . '</li>';
         }
-        echo '</ul></div>';
+        $error_html .= '</ul></div>';
+        return;
      }
    }
 
@@ -279,7 +289,8 @@ if ($options['shortcode_attributes'] == 'true') {
       'hide_part_of_iframe'  => $options['hide_part_of_iframe'],
       'change_parent_links_target'  => $options['change_parent_links_target'],
       'change_iframe_links'  => $options['change_iframe_links'],
-      'change_iframe_links_target'  => $options['change_iframe_links_target'],
+      'change_iframe_links_target'  => $options['change_iframe_links_target'], 
+      'change_iframe_links_href'  => $options['change_iframe_links_href'],
       'browser'  => $options['browser'],
       'show_part_of_iframe_style'  => $options['show_part_of_iframe_style'],
       'map_parameter_to_url'  => $options['map_parameter_to_url'],
@@ -332,7 +343,8 @@ if ($options['shortcode_attributes'] == 'true') {
       // this setting is only available in the shortcode as it is only needed in the special case if no footer is rendered.
       'include_scripts_in_content'  => $options['include_scripts_in_content'],
       'debug_js'  => $debug_js, 'title' => $options['title'],
-      'allow' => $options['allow'], 'safari_fix_url' => $options['safari_fix_url']
+      'allow' => $options['allow'], 'safari_fix_url' => $options['safari_fix_url'],
+	  'remove_elements_from_height' => $options['remove_elements_from_height']
        )
       , $atts));
 
@@ -347,7 +359,7 @@ if ($options['shortcode_attributes'] == 'true') {
   if (empty ($name)) { $name = 'advanced_iframe'; }
 
   // autovalue if no id is set but a src
-  if ($id_check['src'] != 'no_src' &&  ($id_check['id'] == 'no_id' || $id_check['name'] == 'no_name')) {
+  if ($id_check['src'] != 'no_src' &&  ($id_check['id'] === 'no_id' || $id_check['name'] === 'no_name')) {
       global $instance_counter;
 
       if (isset($instance_counter)) {
@@ -357,11 +369,11 @@ if ($options['shortcode_attributes'] == 'true') {
            $autoid =  $id;
        }
       // check if we have set id
-      if ($id_check['id'] == 'no_id') {
+      if ($id_check['id'] === 'no_id') {
          $id = $autoid;
       }
       // check if we have name - if not we first use the id if given - if not - autoname!
-      if ($id_check['name'] == 'no_name') {
+      if ($id_check['name'] === 'no_name') {
          if ($id_check['id'] != 'no_id') {
              $name = $id;
          } else {
@@ -390,7 +402,7 @@ $enable_lazy_load = false;
 // ignore for placeholders and sub domains.
 
 // disable stuff that causes javascript errors when used used on an external domain!
-if ($enable_external_height_workaround == "true") {
+if ($enable_external_height_workaround === "true") {
   $onload = '';
   $onload_resize = 'false';
   $resize_on_ajax = '';
@@ -402,6 +414,7 @@ if ($enable_external_height_workaround == "true") {
   $onload_show_element_only = '';
   $change_iframe_links = '';
   $change_iframe_links_target = '';
+  $change_iframe_links_href = ''; 
   $iframe_content_css = '';
   $additional_js_file_iframe = '';
   $additional_css_file_iframe = '';
@@ -436,7 +449,7 @@ if (!empty($add_iframe_url_as_param_prefix)) {
 }
 
 if ($add_iframe_url_as_param != 'false' && empty($map_parameter_to_url)) {
-  $map_parameter_to_url = 'page';
+  $map_parameter_to_url = 'iframe';
 }
 
 $default_options = isset($aip_standalone) ? 1 : get_option('default_a_options');
@@ -447,7 +460,7 @@ if (!file_exists(dirname(__FILE__) . "/class-cw-envato-api.php")) {
   $pro = $enable_replace = false;
   $show_part_of_iframe = 'false';
   $hide_part_of_iframe = $change_parent_links_target = '';
-  $change_iframe_links = $change_iframe_links_target = '';
+  $change_iframe_links = $change_iframe_links_href = '';
   $url_forward_parameter = str_replace('|',',',$url_forward_parameter);
   $browser = $map_parameter_to_url = $iframe_zoom = '';
   $show_iframe_loader = $enable_lazy_load = 'false';
@@ -461,6 +474,7 @@ if (!file_exists(dirname(__FILE__) . "/class-cw-envato-api.php")) {
   $include_html = $show_iframe_as_layer = '';
   $enable_ios_mobile_scolling = $add_document_domain = 'false';
   $parent_content_css = $safari_fix_url = '';
+  $remove_elements_from_height = '';
 } else { $default_options = 0; }
 
 if (!empty($iframe_zoom)) {
@@ -468,7 +482,7 @@ if (!empty($iframe_zoom)) {
 }
 
 // check ratio
-if ($iframe_height_ratio == 'false') {
+if ($iframe_height_ratio === 'false') {
   $iframe_height_ratio = '';
 }
 
@@ -476,14 +490,13 @@ $id = (empty ($id)) ? 'advanced_iframe' : preg_replace("/[^a-zA-Z0-9]/", "_", $i
 $name = (empty ($name)) ? 'advanced_iframe'  : preg_replace("/[^a-zA-Z0-9]/", "_", $name);
 
 // end defaults
-$this->addCustomCss($parent_content_css);
 
-if ($auto_zoom == 'same' || $auto_zoom == 'remote') {
+if ($auto_zoom === 'same' || $auto_zoom === 'remote') {
   $iframe_zoom = '1';
 }
 
-if ($enable_ios_mobile_scolling == 'true' || $browser != '' || (!empty($iframe_zoom) ||
-   ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external'))) {
+if ($enable_ios_mobile_scolling === 'true' || $browser != '' || (!empty($iframe_zoom) ||
+   ($show_iframe_as_layer === 'true' || $show_iframe_as_layer === 'external'))) {
 if (file_exists(dirname(__FILE__) . '/advanced-iframe-browser-detection.php')) {
     include_once dirname(__FILE__) . '/advanced-iframe-browser-detection.php';
     if ($browser != '' || (!empty($iframe_zoom))) {
@@ -498,15 +511,13 @@ if (file_exists(dirname(__FILE__) . '/advanced-iframe-browser-detection.php')) {
 if ($pro) {
 if (strpos($width, '-') !== false || strpos($width, '+') !== false ) {
    // + and - needs a space before and after the + and -. Otherwise is does not work in Firefox
-   $width = str_replace("-", " - ", $width);
-   $width = str_replace("+", " + ", $width);
-   $style .= ';width: calc('.esc_html(trim($width)).');';
+   $width = $this->formatCalcString($width);
+   $style .= ';width: calc('.esc_html($width).');';
    $width = '';
 }
 if (strpos($height, '-') !== false || strpos($height, '+') !== false ) {
-   $height = str_replace("-", " - ", $height);
-   $height = str_replace("+", " + ", $height);
-   $style .= ';height: calc('.esc_html(trim($height)).');';
+   $height = $this->formatCalcString($height);
+   $style .= ';height: calc('.esc_html($height).');';
    $height = '';
 }
 }
@@ -515,18 +526,18 @@ $show_iframe_as_layer_div = false;
 $show_iframe_as_layer_div_header = false;
 $show_iframe_loader_layer = $show_iframe_loader;
 
-if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
-   $ios_scroll = $enable_ios_mobile_scolling == 'true' && ai_is_ios() && ai_is_mobile();
+if ($show_iframe_as_layer === 'true' || $show_iframe_as_layer === 'external') {
+   $ios_scroll = $enable_ios_mobile_scolling === 'true' && ai_is_ios() && ai_is_mobile();
    if ($ios_scroll || !empty($show_iframe_as_layer_header_file)) {
      $show_iframe_as_layer_div = true;
    }
    $layer_width = $layer_height = '100%';
-   if ($show_iframe_as_layer_full == 'true') {
+   if ($show_iframe_as_layer_full === 'true') {
      $layer_div_base = 'top:0;left:0;width:100%;height:100%;border: none';
    } else {
      $layer_div_base = 'top:2%;left:1.9%;width:96%;height:96%;border:solid 2px #eee';
      $layer_width = $layer_height = '96%';
-     if ($show_iframe_as_layer_full == 'original') {
+     if ($show_iframe_as_layer_full === 'original') {
        $esc_width = esc_html($this->addPx($width));
        $esc_height = esc_html($this->addPx($height));
        $layer_width = $esc_width;
@@ -569,9 +580,9 @@ if ($show_iframe_as_layer == 'true' || $show_iframe_as_layer == 'external') {
    // we only make the ios fix for features where it is not implemented directly.
    // show_iframe_as_layer and show_part_of_iframe. Also it is not enabled if we have
    // auto height. Zoom is not supported in the first iteration as it is more complicated!
-   $use_ios_fix =  $enable_ios_mobile_scolling == 'true' && $scrolling != 'no' && empty($iframe_zoom) &&
-     $show_part_of_iframe == 'false' && $onload_resize == 'false' &&
-     ($enable_external_height_workaround == 'false' || $enable_external_height_workaround == 'external') && empty($hide_part_of_iframe);
+   $use_ios_fix =  $enable_ios_mobile_scolling === 'true' && $scrolling != 'no' && empty($iframe_zoom) &&
+     $show_part_of_iframe === 'false' && $onload_resize === 'false' &&
+     ($enable_external_height_workaround === 'false' || $enable_external_height_workaround === 'external') && empty($hide_part_of_iframe);
 
    if ($use_ios_fix && ai_is_ios() && ai_is_mobile()) {
      $show_iframe_as_layer_div = true;

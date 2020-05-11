@@ -1,11 +1,8 @@
 <?php
 defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+
+    aiPostboxOpen("id-help-support", "Get support", $closedArray); 
 ?>
-<div>
-    <div id="icon-options-general" class="icon_ai">
-      <br />
-    </div> <h2>
-<?php _e('Get support', 'advanced-iframe'); ?>       </h2>
     <p>
       <?php _e('The basic settings are the settings a normal iframe solution does offer. They don\'t require any specific html, css or programming knowhow.' , 'advanced-iframe'); ?>
     </p>
@@ -18,4 +15,6 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
     <p>
       <?php _e('This offer is only available for Advanced iFrame Pro users.<br/>If you are interested please visit <a id="as" target="_blank" href="http://www.tinywebgallery.com/blog/advanced-iframe-support/">http://www.tinywebgallery.com/blog/advanced-iframe-support/</a> for more information.' , 'advanced-iframe'); ?>
     </p>
-</div>
+<?php	
+	aiPostboxClose();	
+?>
