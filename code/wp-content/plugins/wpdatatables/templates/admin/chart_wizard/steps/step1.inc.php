@@ -2,10 +2,15 @@
 
 <div class="row">
 
-    <?php echo '<div class="alert alert-warning alert-dismissible" role="alert">
+    <div class="alert alert-warning alert-dismissible" role="alert" hidden>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        This feature is available in the <a class="tms-store-checkout-wpdatatables">full version of wpDataTables.</a>
-    </div>' ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <?php _e('This feature is available in the ', 'wpdatatables'); ?><a class="tms-store-checkout-wpdatatables"><?php _e('full version of wpDataTables.', 'wpdatatables'); ?></a>
+    </div>
+    <div class="alert alert-info alert-dismissible" role="alert" hidden>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <?php _e('NEW awesome features!!! From version wpDataTables Lite 2.1 you can create Google charts: Line, Column and Pie. All other chart types are available in the', 'wpdatatables'); ?> <a class="tms-store-checkout-wpdatatables dark"><?php _e('full version of wpDataTables.', 'wpdatatables'); ?></a>
+    </div>
 
     <!-- .col-sm-4 -->
     <div class="col-sm-6 col-md-6 chart-name">

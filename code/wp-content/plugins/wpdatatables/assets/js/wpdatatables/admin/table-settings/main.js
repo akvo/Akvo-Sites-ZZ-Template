@@ -41,7 +41,7 @@
         /**
          * Change URL
          */
-        $('#wdt-input-url').change(function(e){
+        $('#wdt-input-url').bind('input change',function(e){
             wpdatatable_config.setContent( $(this).val() );
         });
 

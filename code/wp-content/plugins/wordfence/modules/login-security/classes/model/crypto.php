@@ -55,15 +55,16 @@ abstract class Model_Crypto {
 				if (is_string($rand) && self::strlen($rand) === $bytes) {
 					return $rand;
 				}
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				// Fall through
-			} catch (TypeError $e) {
+			} catch (\TypeError $e) {
 				// Fall through
-			} catch (Error $e) {
+			} catch (\Error $e) {
 				// Fall through
 			}
 		}
 		if (function_exists('mcrypt_create_iv')) {
+			// phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.mcrypt_create_ivDeprecatedRemoved,PHPCompatibility.Extensions.RemovedExtensions.mcryptDeprecatedRemoved,PHPCompatibility.Constants.RemovedConstants.mcrypt_dev_urandomDeprecatedRemoved
 			$rand = @mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
 			if (is_string($rand) && self::strlen($rand) === $bytes) {
 				return $rand;
@@ -94,18 +95,18 @@ abstract class Model_Crypto {
 		if (function_exists('random_int')) {
 			try {
 				return random_int($min, $max);
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				// Fall through
-			} catch (TypeError $e) {
+			} catch (\TypeError $e) {
 				// Fall through
-			} catch (Error $e) {
+			} catch (\Error $e) {
 				// Fall through
 			}
 		}
 		$diff = $max - $min;
 		$bytes = self::random_bytes(4);
 		if ($bytes === false || self::strlen($bytes) != 4) {
-			throw new RuntimeException("Unable to get 4 bytes");
+			throw new \RuntimeException("Unable to get 4 bytes");
 		}
 		$val = @unpack("Nint", $bytes);
 		$val = $val['int'] & 0x7FFFFFFF;
@@ -163,11 +164,12 @@ abstract class Model_Crypto {
 		static $encodings = array();
 		static $overloaded = null;
 		
-		if (is_null($overloaded))
+		if (is_null($overloaded)) {
+			// phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated
 			$overloaded = function_exists('mb_internal_encoding') && (ini_get('mbstring.func_overload') & 2);
+		}
 		
-		if (false === $overloaded)
-			return;
+		if (false === $overloaded) { return; }
 		
 		if (!$reset) {
 			$encoding = mb_internal_encoding();

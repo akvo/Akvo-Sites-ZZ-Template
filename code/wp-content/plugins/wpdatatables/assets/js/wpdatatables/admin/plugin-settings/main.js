@@ -10,7 +10,6 @@
 (function($) {
     $(function(){
 
-        
 
         /**
          * Change language on select change - "Interface language"
@@ -249,8 +248,6 @@
             $('input#wdt-font-size').val('');
         });
 
-        
-
         /**
          * Save settings on Apply button
          */
@@ -258,12 +255,9 @@
 
             $('.wdt-preload-layer').animateFadeIn();
 
-            
-
             savePluginSettings();
         });
 
-        
 
         function savePluginSettings() {
             $.ajax({
@@ -272,7 +266,8 @@
                 method: 'POST',
                 data: {
                     action: 'wpdatatables_save_plugin_settings',
-                    settings: wdt_current_config
+                    settings: wdt_current_config,
+                    wdtNonce: $('#wdtNonce').val()
                 },
                 success: function () {
                     $('.wdt-preload-layer').animateFadeOut();

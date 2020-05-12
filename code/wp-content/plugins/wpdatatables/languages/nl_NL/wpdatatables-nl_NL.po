@@ -1,17 +1,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wpdatatables\n"
-"POT-Creation-Date: 2019-03-07 15:05+0100\n"
-"PO-Revision-Date: 2019-03-07 15:06+0100\n"
+"POT-Creation-Date: 2019-07-25 10:30+0200\n"
+"PO-Revision-Date: 2019-07-25 10:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: wpdatatables <cjbug@yandex.ru>\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
 "X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ../../.\n"
 
 #: ../.././assets/js/handsontable/handsontable.full.min.js:31
@@ -35,13 +36,11 @@ msgstr ""
 #: ../.././controllers/wdt_admin.php:35 ../.././controllers/wdt_admin.php:36
 #: ../.././templates/admin/chart_wizard/chart_wizard.inc.php:36
 #, fuzzy
-#| msgid "Area chart"
 msgid "Create a Chart"
 msgstr "Omgevingsgrafiek"
 
 #: ../.././controllers/wdt_admin.php:43 ../.././controllers/wdt_admin.php:44
 #, fuzzy
-#| msgid "Main settings"
 msgid "Settings"
 msgstr "Hoofdinstellingen"
 
@@ -53,109 +52,111 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
-#: ../.././controllers/wdt_admin.php:307 ../.././controllers/wdt_admin.php:356
-#: ../.././controllers/wdt_admin.php:386 ../.././controllers/wdt_admin.php:407
-#: ../.././controllers/wdt_admin.php:454 ../.././controllers/wdt_admin.php:480
-#: ../.././controllers/wdt_admin.php:499
+#: ../.././controllers/wdt_admin.php:310 ../.././controllers/wdt_admin.php:359
+#: ../.././controllers/wdt_admin.php:389 ../.././controllers/wdt_admin.php:410
+#: ../.././controllers/wdt_admin.php:457 ../.././controllers/wdt_admin.php:483
+#: ../.././controllers/wdt_admin.php:502
 msgid "You do not have sufficient permissions to access this page."
 msgstr "Je hebt niet voldoende permissies om de pagina te laden."
 
-#: ../.././controllers/wdt_functions.php:380
+#: ../.././controllers/wdt_functions.php:437
 #, fuzzy
-#| msgid "wpDataTable with provided ID not found!"
 msgid "wpDataChart with provided ID not found!"
 msgstr "wpDataTable met geleverde ID niet gevonden!"
 
-#: ../.././controllers/wdt_functions.php:416
-#: ../.././controllers/wdt_functions.php:487
+#: ../.././controllers/wdt_functions.php:473
+#: ../.././controllers/wdt_functions.php:544
 msgid "wpDataTable with provided ID not found!"
 msgstr "wpDataTable met geleverde ID niet gevonden!"
 
-#: ../.././controllers/wdt_functions.php:497
+#: ../.././controllers/wdt_functions.php:554
 msgid "Provided column is not Integer or Float column type"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:700
+#: ../.././controllers/wdt_functions.php:732
 #, fuzzy
-#| msgid "Choose roles"
 msgid "Choose a table"
 msgstr "Kies rollen"
 
-#: ../.././controllers/wdt_functions.php:732
+#: ../.././controllers/wdt_functions.php:764
 msgid "Interactive Responsive Table"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:733
-#: ../.././controllers/wdt_functions.php:794
+#: ../.././controllers/wdt_functions.php:765
+#: ../.././controllers/wdt_functions.php:826
 msgid "Content"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:739
+#: ../.././controllers/wdt_functions.php:771
 msgid "wpDataTable"
 msgstr "wpDataTable"
 
-#: ../.././controllers/wdt_functions.php:743
+#: ../.././controllers/wdt_functions.php:775
 msgid "Choose the wpDataTable from a dropdown"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:748
+#: ../.././controllers/wdt_functions.php:780
 #, fuzzy
-#| msgid "Table title"
 msgid "Table view"
 msgstr "Tabel titel"
 
-#: ../.././controllers/wdt_functions.php:752
+#: ../.././controllers/wdt_functions.php:784
 #, fuzzy
-#| msgid "Use in wpDataTable"
 msgid "Regular wpDataTable"
 msgstr "Gebruik in wpDataTable"
 
-#: ../.././controllers/wdt_functions.php:754
+#: ../.././controllers/wdt_functions.php:786
 #, fuzzy
-#| msgid "Excel file"
 msgid "Excel-like table"
 msgstr "Excel bestand"
 
-#: ../.././controllers/wdt_functions.php:760
+#: ../.././controllers/wdt_functions.php:792
 msgid "Variable placeholder #1"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:763
-#: ../.././controllers/wdt_functions.php:771
-#: ../.././controllers/wdt_functions.php:779
+#: ../.././controllers/wdt_functions.php:795
+#: ../.././controllers/wdt_functions.php:803
+#: ../.././controllers/wdt_functions.php:811
 msgid "Variables"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:764
+#: ../.././controllers/wdt_functions.php:796
 msgid "If you used the VAR1 placeholder you can assign a value to it here"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:768
+#: ../.././controllers/wdt_functions.php:800
 msgid "Variable placeholder #2"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:772
+#: ../.././controllers/wdt_functions.php:804
 msgid "If you used the VAR2 placeholder you can assign a value to it here"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:776
+#: ../.././controllers/wdt_functions.php:808
 msgid "Variable placeholder #3"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:780
+#: ../.././controllers/wdt_functions.php:812
 msgid "If you used the VAR3 placeholder you can assign a value to it here"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:793
+#: ../.././controllers/wdt_functions.php:825
 msgid "Google or Highcharts chart based on a wpDataTable"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:800
+#: ../.././controllers/wdt_functions.php:832
 msgid "wpDataChart"
 msgstr ""
 
-#: ../.././controllers/wdt_functions.php:804
+#: ../.././controllers/wdt_functions.php:836
 msgid "Choose one of wpDataCharts from the list"
+msgstr ""
+
+#: ../.././source/WpDataTablesGutenbergBlock.php:25
+msgid ""
+"Choose the table that you’ve just created in the dropdown below, and the "
+"shortcode will be inserted automatically. You are able to provide Export "
+"file name as well."
 msgstr ""
 
 #: ../.././source/class.wdtbrowsechartstable.php:137
@@ -175,9 +176,8 @@ msgid "Delete"
 msgstr "Verwijderen"
 
 #: ../.././source/class.wdtbrowsechartstable.php:188
-#: ../.././source/class.wdtbrowsechartstable.php:278
+#: ../.././source/class.wdtbrowsechartstable.php:290
 #, fuzzy
-#| msgid "Column chart"
 msgid "Column Chart"
 msgstr "Kolomgrafiek"
 
@@ -189,173 +189,168 @@ msgstr ""
 
 #: ../.././source/class.wdtbrowsechartstable.php:194
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Bar Chart"
 msgstr "Staafgrafiek"
 
 #: ../.././source/class.wdtbrowsechartstable.php:197
-#: ../.././source/class.wdtbrowsechartstable.php:239
+#: ../.././source/class.wdtbrowsechartstable.php:251
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Stacked Bar Chart"
 msgstr "Staafgrafiek"
 
 #: ../.././source/class.wdtbrowsechartstable.php:200
-#: ../.././source/class.wdtbrowsechartstable.php:272
+#: ../.././source/class.wdtbrowsechartstable.php:284
 #, fuzzy
-#| msgid "Area chart"
 msgid "Area Chart"
 msgstr "Omgevingsgrafiek"
 
 #: ../.././source/class.wdtbrowsechartstable.php:203
 #, fuzzy
-#| msgid "Area chart"
 msgid "Stepped Area Chart"
 msgstr "Omgevingsgrafiek"
 
 #: ../.././source/class.wdtbrowsechartstable.php:206
-#: ../.././source/class.wdtbrowsechartstable.php:224
-#: ../.././source/class.wdtbrowsechartstable.php:269
+#: ../.././source/class.wdtbrowsechartstable.php:230
+#: ../.././source/class.wdtbrowsechartstable.php:281
 #, fuzzy
-#| msgid "Line chart"
 msgid "Line Chart"
 msgstr "Lijngrafiek"
 
 #: ../.././source/class.wdtbrowsechartstable.php:209
-#: ../.././source/class.wdtbrowsechartstable.php:248
-#: ../.././source/class.wdtbrowsechartstable.php:287
+#: ../.././source/class.wdtbrowsechartstable.php:260
+#: ../.././source/class.wdtbrowsechartstable.php:299
 #, fuzzy
-#| msgid "Pie chart"
 msgid "Pie Chart"
 msgstr "Taartdiagram"
 
 #: ../.././source/class.wdtbrowsechartstable.php:212
-#: ../.././source/class.wdtbrowsechartstable.php:293
+#: ../.././source/class.wdtbrowsechartstable.php:305
 msgid "Bubble Chart"
 msgstr ""
 
 #: ../.././source/class.wdtbrowsechartstable.php:215
-#: ../.././source/class.wdtbrowsechartstable.php:254
+#: ../.././source/class.wdtbrowsechartstable.php:266
 #, fuzzy
-#| msgid "No chart"
 msgid "Donut Chart"
 msgstr "Geen grafiek"
 
 #: ../.././source/class.wdtbrowsechartstable.php:218
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Gauge Chart"
 msgstr "Staafgrafiek"
 
 #: ../.././source/class.wdtbrowsechartstable.php:221
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Scatter Chart"
 msgstr "Staafgrafiek"
 
+#: ../.././source/class.wdtbrowsechartstable.php:224
+msgid "Candlestick Chart"
+msgstr ""
+
 #: ../.././source/class.wdtbrowsechartstable.php:227
+msgid "Waterfall Chart"
+msgstr ""
+
+#: ../.././source/class.wdtbrowsechartstable.php:233
+#: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:239
+msgid "Polar chart"
+msgstr ""
+
+#: ../.././source/class.wdtbrowsechartstable.php:236
+#: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:255
+msgid "Spiderweb chart"
+msgstr ""
+
+#: ../.././source/class.wdtbrowsechartstable.php:239
 #, fuzzy
-#| msgid "Line chart"
 msgid "Spline Chart"
 msgstr "Lijngrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:230
+#: ../.././source/class.wdtbrowsechartstable.php:242
 #, fuzzy
-#| msgid "Area chart"
 msgid "Basic Area Chart"
 msgstr "Omgevingsgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:233
-#: ../.././source/class.wdtbrowsechartstable.php:275
+#: ../.././source/class.wdtbrowsechartstable.php:245
+#: ../.././source/class.wdtbrowsechartstable.php:287
 #, fuzzy
-#| msgid "Area chart"
 msgid "Stacked Area Chart"
 msgstr "Omgevingsgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:236
+#: ../.././source/class.wdtbrowsechartstable.php:248
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Basic Bar Chart"
 msgstr "Staafgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:242
+#: ../.././source/class.wdtbrowsechartstable.php:254
 #, fuzzy
-#| msgid "Column chart"
 msgid "Basic Column Chart"
 msgstr "Kolomgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:245
+#: ../.././source/class.wdtbrowsechartstable.php:257
 #, fuzzy
-#| msgid "Column chart"
 msgid "Stacked Column Chart"
 msgstr "Kolomgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:251
+#: ../.././source/class.wdtbrowsechartstable.php:263
 msgid "Pie With Gradient Chart"
 msgstr ""
 
-#: ../.././source/class.wdtbrowsechartstable.php:257
+#: ../.././source/class.wdtbrowsechartstable.php:269
 msgid "Scatter Plot"
 msgstr ""
 
-#: ../.././source/class.wdtbrowsechartstable.php:260
+#: ../.././source/class.wdtbrowsechartstable.php:272
 #, fuzzy
-#| msgid "Column chart"
 msgid "3D Column Chart"
 msgstr "Kolomgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:263
+#: ../.././source/class.wdtbrowsechartstable.php:275
 #, fuzzy
-#| msgid "Pie chart"
 msgid "3D Pie Chart"
 msgstr "Taartdiagram"
 
-#: ../.././source/class.wdtbrowsechartstable.php:266
+#: ../.././source/class.wdtbrowsechartstable.php:278
 msgid "3D Donut Chart"
 msgstr ""
 
-#: ../.././source/class.wdtbrowsechartstable.php:281
+#: ../.././source/class.wdtbrowsechartstable.php:293
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Radar Chart"
 msgstr "Staafgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:284
+#: ../.././source/class.wdtbrowsechartstable.php:296
 #, fuzzy
-#| msgid "Area chart"
 msgid "Polar Area Chart"
 msgstr "Omgevingsgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:290
+#: ../.././source/class.wdtbrowsechartstable.php:302
 #, fuzzy
-#| msgid "Column chart"
 msgid "Doughnut Chart"
 msgstr "Kolomgrafiek"
 
-#: ../.././source/class.wdtbrowsechartstable.php:305
+#: ../.././source/class.wdtbrowsechartstable.php:317
 msgid "Google"
 msgstr ""
 
-#: ../.././source/class.wdtbrowsechartstable.php:308
+#: ../.././source/class.wdtbrowsechartstable.php:320
 #, fuzzy
-#| msgid "Pie chart"
 msgid "Highcharts"
 msgstr "Taartdiagram"
 
-#: ../.././source/class.wdtbrowsechartstable.php:311
+#: ../.././source/class.wdtbrowsechartstable.php:323
 #, fuzzy
-#| msgid "Chart hor. axis"
 msgid "Chart.js"
 msgstr "Grafiek hor. as"
 
-#: ../.././source/class.wdtbrowsechartstable.php:375
+#: ../.././source/class.wdtbrowsechartstable.php:387
 #: ../.././source/class.wdtbrowsetable.php:272
 msgid "Select All"
 msgstr ""
 
-#: ../.././source/class.wdtbrowsechartstable.php:427
+#: ../.././source/class.wdtbrowsechartstable.php:439
 #, fuzzy
-#| msgid "No wpDataTables in the system yet."
 msgid "No wpDataCharts in the system yet."
 msgstr "Nog geen wpDataTables in het systeem"
 
@@ -367,7 +362,6 @@ msgstr "Dubbel"
 #: ../.././source/class.wdtbrowsetable.php:165
 #: ../.././templates/edit_table.inc.php:99
 #, fuzzy
-#| msgid "Edit wpDataTable"
 msgid "Edit data"
 msgstr "wpDataTable aanpassen"
 
@@ -377,7 +371,6 @@ msgstr ""
 
 #: ../.././source/class.wdtbrowsetable.php:209
 #, fuzzy
-#| msgid "MySQL host"
 msgid "MySQL"
 msgstr "MySQL host"
 
@@ -390,7 +383,6 @@ msgstr ""
 #: ../.././source/class.wpdatatable.php:1961
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:954
 #, fuzzy
-#| msgid "Excel file"
 msgid "Excel"
 msgstr "Excel bestand"
 
@@ -407,7 +399,6 @@ msgstr ""
 
 #: ../.././source/class.wdtbrowsetable.php:224
 #, fuzzy
-#| msgid "JSON file"
 msgid "JSON"
 msgstr "JSON bestand"
 
@@ -436,89 +427,87 @@ msgstr ""
 
 #: ../.././source/class.wdtconfigcontroller.php:449
 #, fuzzy
-#| msgid "Table input data source cannot be empty"
 msgid "Table in data source has no rows."
 msgstr "Tabel invoer data bron mag niet leeg zijn"
 
-#: ../.././source/class.wdttools.php:16
+#: ../.././source/class.wdttools.php:15
 msgid "One line string"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:17
+#: ../.././source/class.wdttools.php:16
 msgid "Multi-line string"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:18
+#: ../.././source/class.wdttools.php:17
 msgid "One-line selectbox"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:19
+#: ../.././source/class.wdttools.php:18
 msgid "Multi-line selectbox"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:20
+#: ../.././source/class.wdttools.php:19
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:361
 msgid "Integer"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:21
+#: ../.././source/class.wdttools.php:20
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:362
 msgid "Float"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:22
+#: ../.././source/class.wdttools.php:21
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:363
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:988
 msgid "Date"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:23
+#: ../.././source/class.wdttools.php:22
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:989
 msgid "Datetime"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:24
+#: ../.././source/class.wdttools.php:23
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:365
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:990
 msgid "Time"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:25
+#: ../.././source/class.wdttools.php:24
 msgid "URL Link"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:26
+#: ../.././source/class.wdttools.php:25
 msgid "E-mail"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:27
+#: ../.././source/class.wdttools.php:26
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:368
 msgid "Image"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:28
+#: ../.././source/class.wdttools.php:27
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:993
 #, fuzzy
-#| msgid "Upload attachment"
 msgid "Attachment"
 msgstr "Upload bijlage"
 
-#: ../.././source/class.wdttools.php:155
+#: ../.././source/class.wdttools.php:154
 msgid ""
 "wpDataTables was unable to read your Google Spreadsheet, probably it is not "
 "published correctly. <br/> You can publish it by going to <b>File -> Publish "
 "to the web</b> "
 msgstr ""
 
-#: ../.././source/class.wdttools.php:288
+#: ../.././source/class.wdttools.php:287
 msgid "Back to date"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:289
+#: ../.././source/class.wdttools.php:288
 msgid "Browse"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:290
+#: ../.././source/class.wdttools.php:289
 #: ../.././templates/admin/browse/table/duplicate_modal.inc.php:60
 #: ../.././templates/admin/common/close_modal.inc.php:36
 #: ../.././templates/admin/constructor/constructor.inc.php:30
@@ -536,23 +525,21 @@ msgstr ""
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: ../.././source/class.wdttools.php:291
+#: ../.././source/class.wdttools.php:290
 #, fuzzy
-#| msgid "Table type cannot be empty"
 msgid " field cannot be empty!"
 msgstr "Tabel type mag niet leeg zijn"
 
-#: ../.././source/class.wdttools.php:292
+#: ../.././source/class.wdttools.php:291
 msgid "Use selected file"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:293
+#: ../.././source/class.wdttools.php:292
 #, fuzzy
-#| msgid "Choose roles"
 msgid "Choose file"
 msgstr "Kies rollen"
 
-#: ../.././source/class.wdttools.php:294
+#: ../.././source/class.wdttools.php:293
 #: ../.././templates/admin/common/error_modal.inc.php:23
 #: ../.././templates/admin/table-settings/columns_list_modal.inc.php:27
 #: ../.././templates/admin/table-settings/foreign_key_config.inc.php:95
@@ -563,198 +550,192 @@ msgstr "Kies rollen"
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../.././source/class.wdttools.php:295
+#: ../.././source/class.wdttools.php:294
 msgid "Column has been added!"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:296
+#: ../.././source/class.wdttools.php:295
 #, fuzzy
-#| msgid "Table type cannot be empty"
 msgid "Column header cannot be empty!"
 msgstr "Tabel type mag niet leeg zijn"
 
-#: ../.././source/class.wdttools.php:297
+#: ../.././source/class.wdttools.php:296
 msgid "Please confirm column deletion!"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:298
+#: ../.././source/class.wdttools.php:297
 msgid "Column has been removed!"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:299
+#: ../.././source/class.wdttools.php:298
 msgid "Please select columns that you want to use in table"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:300
+#: ../.././source/class.wdttools.php:299
 #: ../.././source/class.wpdatatable.php:1910
 #: ../.././source/class.wpdatatable.php:1981
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:956
 msgid "Copy"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:301
+#: ../.././source/class.wdttools.php:300
 msgid "There was an error trying to insert a new row!"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:302
+#: ../.././source/class.wdttools.php:301
 msgid "Data has been saved!"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:303
+#: ../.././source/class.wdttools.php:302
 msgid "detach"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:304 ../.././templates/settings.inc.php:553
+#: ../.././source/class.wdttools.php:303 ../.././templates/settings.inc.php:553
 #: ../.././templates/settings.inc.php:627
 msgid "Error!"
 msgstr "Fout!"
 
-#: ../.././source/class.wdttools.php:305
+#: ../.././source/class.wdttools.php:304
 msgid "Please upload or choose a file from Media Library!"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:306
+#: ../.././source/class.wdttools.php:305
 msgid "From"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:307
+#: ../.././source/class.wdttools.php:306
 msgid "Please provide a valid e-mail address for field"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:308
+#: ../.././source/class.wdttools.php:307
 msgid "Please provide a valid URL link for field"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:309
+#: ../.././source/class.wdttools.php:308
 msgid "You have entered invalid value. Press ESC to cancel."
 msgstr ""
 
-#: ../.././source/class.wdttools.php:310 ../.././source/class.wdttools.php:336
+#: ../.././source/class.wdttools.php:309 ../.././source/class.wdttools.php:335
 msgid "Show _MENU_ entries"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:311
+#: ../.././source/class.wdttools.php:310
 #: ../.././templates/admin/table-settings/possible_values_merge_list_modal.inc.php:23
 msgid "Merge"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:312
+#: ../.././source/class.wdttools.php:311
 #, fuzzy
-#| msgid "ID column"
 msgid "New column"
 msgstr "ID kolom"
 
-#: ../.././source/class.wdttools.php:314
+#: ../.././source/class.wdttools.php:313
 msgid ": activate to sort column ascending"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:315
+#: ../.././source/class.wdttools.php:314
 msgid ": activate to sort column descending"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:317
+#: ../.././source/class.wdttools.php:316
 msgid "Ok"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:319
+#: ../.././source/class.wdttools.php:318
 msgid "First"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:320
+#: ../.././source/class.wdttools.php:319
 msgid "Last"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:321
+#: ../.././source/class.wdttools.php:320
 msgid "Next"
 msgstr "Volgende"
 
-#: ../.././source/class.wdttools.php:322
+#: ../.././source/class.wdttools.php:321
 #, fuzzy
-#| msgid "Preview"
 msgid "Previous"
 msgstr "Preview"
 
-#: ../.././source/class.wdttools.php:324
+#: ../.././source/class.wdttools.php:323
 #: ../.././templates/admin/table-settings/possible_values_merge_list_modal.inc.php:27
 msgid "Replace"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:325
+#: ../.././source/class.wdttools.php:324
 msgid "Row has been deleted!"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:326
+#: ../.././source/class.wdttools.php:325
 msgid "Select a file to use in table"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:327
+#: ../.././source/class.wdttools.php:326
 #, fuzzy
-#| msgid "Select Excel or CSV file"
 msgid "Select an Excel or CSV file"
 msgstr "Selecteer Excel of CSV besand"
 
-#: ../.././source/class.wdttools.php:328
+#: ../.././source/class.wdttools.php:327
 msgid "No data available in table"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:329
+#: ../.././source/class.wdttools.php:328
 #, fuzzy
-#| msgid "Settings saved successfully"
 msgid "Plugin settings saved successfully"
 msgstr "Instellingen zijn opgeslagen"
 
-#: ../.././source/class.wdttools.php:330
+#: ../.././source/class.wdttools.php:329
 msgid "Shortcode has been copied to the clipboard."
 msgstr ""
 
-#: ../.././source/class.wdttools.php:331
+#: ../.././source/class.wdttools.php:330
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:332
+#: ../.././source/class.wdttools.php:331
 msgid "Showing 0 to 0 of 0 entries"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:333
+#: ../.././source/class.wdttools.php:332
 msgid "(filtered from _MAX_ total entries)"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:335
+#: ../.././source/class.wdttools.php:334
 msgid ","
 msgstr ""
 
-#: ../.././source/class.wdttools.php:337
+#: ../.././source/class.wdttools.php:336
 msgid "Loading..."
 msgstr ""
 
-#: ../.././source/class.wdttools.php:338
+#: ../.././source/class.wdttools.php:337
 msgid "Processing..."
 msgstr ""
 
-#: ../.././source/class.wdttools.php:339
+#: ../.././source/class.wdttools.php:338
 #, fuzzy
-#| msgid "MySQL user"
 msgid "SQL error"
 msgstr "MySQL gebruiker"
 
-#: ../.././source/class.wdttools.php:340
+#: ../.././source/class.wdttools.php:339
 msgid "Search: "
 msgstr ""
 
-#: ../.././source/class.wdttools.php:341 ../.././templates/settings.inc.php:559
+#: ../.././source/class.wdttools.php:340 ../.././templates/settings.inc.php:559
 #: ../.././templates/settings.inc.php:625
 msgid "Success!"
 msgstr "Succes!"
 
-#: ../.././source/class.wdttools.php:342
+#: ../.././source/class.wdttools.php:341
 msgid "No matching records found"
 msgstr ""
 
-#: ../.././source/class.wdttools.php:343
+#: ../.././source/class.wdttools.php:342
 msgid "Table saved successfully!"
 msgstr "Tabel succesvol opgeslagen!"
 
-#: ../.././source/class.wdttools.php:344
+#: ../.././source/class.wdttools.php:343
 msgid "To"
 msgstr ""
 
@@ -775,7 +756,6 @@ msgstr "Alles"
 #: ../.././source/class.wpdatatable.php:1940
 #: ../.././templates/admin/table-settings/columns_list_modal.inc.php:9
 #, fuzzy
-#| msgid "Column type"
 msgid "Columns"
 msgstr "Kolom type"
 
@@ -825,7 +805,6 @@ msgstr "als je vragen of problemen hebt met deze plugin."
 
 #: ../.././templates/addons.inc.php:10
 #, fuzzy
-#| msgid "wpDataTables settings"
 msgid "wpDataTables Addons"
 msgstr "wpDataTables instellingen"
 
@@ -857,13 +836,11 @@ msgstr ""
 
 #: ../.././templates/admin/addons/addons.inc.php:22
 #, fuzzy
-#| msgid "Choose the base skin for the plugin"
 msgid "Addons for the plugin"
 msgstr "Kies een skin voor de plugin"
 
 #: ../.././templates/admin/addons/addons.inc.php:24
 #, fuzzy
-#| msgid "Use in wpDataTable"
 msgid "Unique extensions for wpDataTables"
 msgstr "Gebruik in wpDataTable"
 
@@ -924,13 +901,16 @@ msgstr ""
 #: ../.././templates/admin/browse/chart/browse.inc.php:32
 #: ../.././templates/admin/browse/table/browse.inc.php:32
 #, fuzzy
-#| msgid "Add new"
 msgid "Add New"
 msgstr "Nieuwe toevoegen"
 
+#: ../.././templates/admin/browse/chart/browse.inc.php:36
+#: ../.././templates/admin/browse/table/browse.inc.php:36
+msgid "Buy Full Version"
+msgstr ""
+
 #: ../.././templates/admin/browse/table/browse.inc.php:25
 #, fuzzy
-#| msgid "wpDataTables settings"
 msgid "wpDataTables browse"
 msgstr "wpDataTables instellingen"
 
@@ -946,7 +926,6 @@ msgstr "Nieuwe tabelnaam"
 
 #: ../.././templates/admin/browse/table/duplicate_modal.inc.php:39
 #, fuzzy
-#| msgid "Duplicate table"
 msgid "Duplicate database table"
 msgstr "Dupliceer tabel"
 
@@ -978,7 +957,6 @@ msgstr ""
 #: ../.././templates/admin/chart_wizard/chart_wizard.inc.php:57
 #: ../.././templates/chart_wizard.inc.php:32
 #, fuzzy
-#| msgid "Chart title"
 msgid "Chart title & type"
 msgstr "Grafiek titel"
 
@@ -1009,14 +987,12 @@ msgstr ""
 #: ../.././templates/admin/chart_wizard/chart_wizard.inc.php:86
 #: ../.././templates/admin/constructor/constructor.inc.php:60
 #, fuzzy
-#| msgid "Next"
 msgid "Next "
 msgstr "Volgende"
 
 #: ../.././templates/admin/chart_wizard/chart_wizard.inc.php:88
 #: ../.././templates/admin/constructor/constructor.inc.php:62
 #, fuzzy
-#| msgid "Preview"
 msgid " Previous"
 msgstr "Preview"
 
@@ -1038,7 +1014,6 @@ msgstr "Omgevingsgrafiek"
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:52
 #: ../.././templates/chart_wizard.inc.php:110
 #, fuzzy
-#| msgid "Area chart"
 msgid "Stacked area chart"
 msgstr "Omgevingsgrafiek"
 
@@ -1050,13 +1025,11 @@ msgstr "Kolomgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/chartjs.inc.php:62
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Radar chart"
 msgstr "Staafgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/chartjs.inc.php:75
 #, fuzzy
-#| msgid "Area chart"
 msgid "Polar area chart"
 msgstr "Omgevingsgrafiek"
 
@@ -1070,7 +1043,6 @@ msgstr "Taartdiagram"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/chartjs.inc.php:104
 #, fuzzy
-#| msgid "Column chart"
 msgid "Doughnut chart"
 msgstr "Kolomgrafiek"
 
@@ -1078,14 +1050,12 @@ msgstr "Kolomgrafiek"
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/google_charts.inc.php:113
 #: ../.././templates/chart_wizard.inc.php:97
 #, fuzzy
-#| msgid "Pie chart"
 msgid "Bubble chart"
 msgstr "Taartdiagram"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/google_charts.inc.php:37
 #: ../.././templates/chart_wizard.inc.php:94
 #, fuzzy
-#| msgid "Area chart"
 msgid "Stepped area chart"
 msgstr "Omgevingsgrafiek"
 
@@ -1098,7 +1068,6 @@ msgstr "Staafgrafiek"
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:78
 #: ../.././templates/chart_wizard.inc.php:112
 #, fuzzy
-#| msgid "Add a chart"
 msgid "Stacked bar chart"
 msgstr "Voeg een grafiek toe"
 
@@ -1107,55 +1076,55 @@ msgstr "Voeg een grafiek toe"
 #: ../.././templates/chart_wizard.inc.php:98
 #: ../.././templates/chart_wizard.inc.php:117
 #, fuzzy
-#| msgid "No chart"
 msgid "Donut chart"
 msgstr "Geen grafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/google_charts.inc.php:137
 #: ../.././templates/chart_wizard.inc.php:99
 #, fuzzy
-#| msgid "Pie chart"
 msgid "Gauge chart"
 msgstr "Taartdiagram"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/google_charts.inc.php:150
 #: ../.././templates/chart_wizard.inc.php:100
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Scatter chart"
 msgstr "Staafgrafiek"
 
+#: ../.././templates/admin/chart_wizard/steps/charts_pick/google_charts.inc.php:167
+msgid "Candlestick chart"
+msgstr ""
+
+#: ../.././templates/admin/chart_wizard/steps/charts_pick/google_charts.inc.php:180
+msgid "Waterfall chart"
+msgstr ""
+
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:26
 #, fuzzy
-#| msgid "Line chart"
 msgid "Spline chart"
 msgstr "Lijngrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:39
 #: ../.././templates/chart_wizard.inc.php:109
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Basic area chart"
 msgstr "Staafgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:65
 #: ../.././templates/chart_wizard.inc.php:111
 #, fuzzy
-#| msgid "Bar chart"
 msgid "Basic bar chart"
 msgstr "Staafgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:95
 #: ../.././templates/chart_wizard.inc.php:113
 #, fuzzy
-#| msgid "Column chart"
 msgid "Basic column chart"
 msgstr "Kolomgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:108
 #: ../.././templates/chart_wizard.inc.php:114
 #, fuzzy
-#| msgid "Column chart"
 msgid "Stacked column chart"
 msgstr "Kolomgrafiek"
 
@@ -1172,40 +1141,34 @@ msgstr ""
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:177
 #: ../.././templates/chart_wizard.inc.php:119
 #, fuzzy
-#| msgid "Column chart"
 msgid "3D column chart"
 msgstr "Kolomgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:190
 #: ../.././templates/chart_wizard.inc.php:120
 #, fuzzy
-#| msgid "Pie chart"
 msgid "3D pie chart"
 msgstr "Taartdiagram"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:203
 #: ../.././templates/chart_wizard.inc.php:121
 #, fuzzy
-#| msgid "No chart"
 msgid "3D donut chart"
 msgstr "Geen grafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:215
 #, fuzzy
-#| msgid "Area chart"
 msgid "Treemap chart"
 msgstr "Omgevingsgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/charts_pick/highcharts.inc.php:227
 #, fuzzy
-#| msgid "Area chart"
 msgid "Treemap level chart"
 msgstr "Omgevingsgrafiek"
 
 #: ../.././templates/admin/chart_wizard/steps/step1.inc.php:13
 #: ../.././templates/chart_wizard.inc.php:65
 #, fuzzy
-#| msgid "Chart title"
 msgid "Chart name"
 msgstr "Grafiek titel"
 
@@ -1216,7 +1179,6 @@ msgstr ""
 #: ../.././templates/admin/chart_wizard/steps/step1.inc.php:22
 #: ../.././templates/chart_wizard.inc.php:69
 #, fuzzy
-#| msgid "Use in wpDataTable"
 msgid "New wpDataTable Chart"
 msgstr "Gebruik in wpDataTable"
 
@@ -1258,9 +1220,34 @@ msgstr ""
 #: ../.././templates/admin/common/error_modal.inc.php:16
 #: ../.././templates/common/error.inc.php:3
 #, fuzzy
-#| msgid "Error!"
 msgid "Error"
 msgstr "Fout!"
+
+#: ../.././templates/admin/common/ratingDiv.inc.php:8
+msgid "Leave a Review?"
+msgstr ""
+
+#: ../.././templates/admin/common/ratingDiv.inc.php:9
+msgid ""
+"We hope you've enjoyed using wpDataTables Lite. Would you consider\n"
+"            leaving us a review on WordPress.org?"
+msgstr ""
+
+#: ../.././templates/admin/common/ratingDiv.inc.php:18
+msgid "Sure! I Like wpDataTables Lite"
+msgstr ""
+
+#: ../.././templates/admin/common/ratingDiv.inc.php:20
+msgid "I've already left a review"
+msgstr ""
+
+#: ../.././templates/admin/common/ratingDiv.inc.php:21
+msgid "Maybe Later"
+msgstr ""
+
+#: ../.././templates/admin/common/ratingDiv.inc.php:22
+msgid "Never show again"
+msgstr ""
 
 #: ../.././templates/admin/constructor/constructor.inc.php:25
 #: ../.././templates/constructor.inc.php:21
@@ -1281,7 +1268,6 @@ msgstr ""
 #: ../.././templates/admin/table-settings/table_preview_block.inc.php:68
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:1120
 #, fuzzy
-#| msgid "wpDataTables documentation"
 msgid "Documentation"
 msgstr "wpDataTables documentatie"
 
@@ -1345,7 +1331,6 @@ msgstr ""
 #: ../.././templates/admin/settings/settings.inc.php:22
 #: ../.././templates/admin/settings/settings.inc.php:23
 #, fuzzy
-#| msgid "Choose the base skin for the plugin"
 msgid "Settings for the plugin"
 msgstr "Kies een skin voor de plugin"
 
@@ -1370,7 +1355,6 @@ msgstr "Hoofdinstellingen"
 #: ../.././templates/admin/settings/settings.inc.php:51
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:15
 #, fuzzy
-#| msgid "Use separate MySQL connection"
 msgid "Separate DB connection"
 msgstr "Gebruik losse MySQL verbinding"
 
@@ -1419,7 +1403,6 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:47
 #, fuzzy
-#| msgid "In the footer"
 msgid "Define the font size"
 msgstr "In de footer"
 
@@ -1427,13 +1410,11 @@ msgstr "In de footer"
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:136
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:459
 #, fuzzy
-#| msgid "Table font color"
 msgid "Font color"
 msgstr "Tabel font kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:64
 #, fuzzy
-#| msgid "This color is used for the main font in table cells"
 msgid "This color is used for the main font in table cells."
 msgstr "Deze kleur wordt gebruikt voor de hoofdfont in de tabelcellen"
 
@@ -1441,46 +1422,37 @@ msgstr "Deze kleur wordt gebruikt voor de hoofdfont in de tabelcellen"
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:420
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:647
 #, fuzzy
-#| msgid "Buttons background color"
 msgid "Background color"
 msgstr "Achtergrondkleur van de Buttons"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:99
 #, fuzzy
-#| msgid "The color is used for background of the table header"
 msgid "The color is used for background of the table header."
 msgstr "Deze kleur wordt gebruikt voor de achtergrond van de tabel header"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:116
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:439
 #, fuzzy
-#| msgid "Buttons border color"
 msgid "Border color"
 msgstr "Buttons border kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:118
 #, fuzzy
-#| msgid "This color is used for the border in the table header"
 msgid "This color is used for the border in the table header."
 msgstr "Deze kleur wordt gebruikt voor de border rondom de tabel header"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:138
 #, fuzzy
-#| msgid "This color is used for the font in the table header"
 msgid "This color is used for the font in the table header."
 msgstr "Deze kleur wordt gebruikt voor de font in de tabel header"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:155
 #, fuzzy
-#| msgid "Header active and hover color"
 msgid "Active and hover color\t"
 msgstr "Header actef en hover kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:157
 #, fuzzy
-#| msgid ""
-#| "This color is used when you hover the mouse above the table header, or "
-#| "when you choose a column"
 msgid ""
 "This color is used when you hover the mouse above the table header, or when "
 "you choose a column."
@@ -1490,13 +1462,11 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:191
 #, fuzzy
-#| msgid "Table inner border color"
 msgid "Inner border"
 msgstr "Binnenste borderkleur van de tabel"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:193
 #, fuzzy
-#| msgid "This color is used for the inner border in the table between cells"
 msgid "This color is used for the inner border in the table between cells."
 msgstr ""
 "Deze kleur wordt gebruikt voor de binnenste border in de tabel, tussen de "
@@ -1504,20 +1474,17 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:211
 #, fuzzy
-#| msgid "Table outer border color"
 msgid "Outer border"
 msgstr "Tabel buitenste border kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:213
 #, fuzzy
-#| msgid "This color is used for the outer border of the whole table body"
 msgid "This color is used for the outer border of the whole table body."
 msgstr ""
 "Deze kleur wordt gebruikt voor de buitenste border, om de hele tabel heen"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:231
 #, fuzzy
-#| msgid "Table tools"
 msgid "Table borders"
 msgstr "Tabel tools"
 
@@ -1527,7 +1494,6 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:243
 #, fuzzy
-#| msgid "Header border color"
 msgid "Header border"
 msgstr "Header border kleur"
 
@@ -1537,39 +1503,31 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:271
 #, fuzzy
-#| msgid "Even row background color"
 msgid "Even row background"
 msgstr "Even rijen achtergrond kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:273
 #, fuzzy
-#| msgid "This color is used for for background in even rows"
 msgid "This color is used for for background in even rows."
 msgstr "Deze kleur wordt gebruikt voor de achtergrond van de even rijen"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:290
 #, fuzzy
-#| msgid "Odd row background color"
 msgid "Odd row background"
 msgstr "Oneven rijen achtergrond kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:292
 #, fuzzy
-#| msgid "This color is used for for background in odd rows"
 msgid "This color is used for for background in odd rows."
 msgstr "Deze kleur wordt gebruikt voor de achtergrond van de oneven rijen"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:309
 #, fuzzy
-#| msgid "Hover row color"
 msgid "Hover row"
 msgstr "Hover rij kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:311
 #, fuzzy
-#| msgid ""
-#| "This color is used for to highlight the row when you hover your mouse "
-#| "above it"
 msgid ""
 "This color is used for to highlight the row when you hover your mouse above "
 "it."
@@ -1579,28 +1537,22 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:328
 #, fuzzy
-#| msgid "Backround color for selected rows"
 msgid "Background for selected rows"
 msgstr "Achtergrond kleur voor geselecteerde rijen"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:330
 #, fuzzy
-#| msgid "This color is used for background in selected rows"
 msgid "This color is used for background in selected rows."
 msgstr ""
 "Deze kleur wordt gebruikt voor de achtergrond van de geselecteerde rijen"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:364
 #, fuzzy
-#| msgid "Cell color in active (sorted) columns for even rows"
 msgid "Sorted columns, even rows"
 msgstr "Celkleur in actieve (gesorteerde) klommen voor even rijen"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:366
 #, fuzzy
-#| msgid ""
-#| "This color is used for background in cells which are in the active "
-#| "columns (columns used for sorting) in even rows"
 msgid ""
 "This color is used for background in cells which are in the active columns "
 "(columns used for sorting) in even rows."
@@ -1614,9 +1566,6 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:386
 #, fuzzy
-#| msgid ""
-#| "This color is used for background in cells which are in the active "
-#| "columns (columns used for sorting) in odd rows"
 msgid ""
 "This color is used for background in cells which are in the active columns "
 "(columns used for sorting) in odd rows."
@@ -1626,32 +1575,26 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:422
 #, fuzzy
-#| msgid "This color is used for background in buttons"
 msgid "This color is used for background in buttons."
 msgstr "Deze kleur wordt gebruikt voor de achtergrondkleur van de Buttons"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:441
 #, fuzzy
-#| msgid "This color is used for border in buttons"
 msgid "This color is used for border in buttons."
 msgstr "Deze kleur wordt gebruikt voor de border van de buttons"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:461
 #, fuzzy
-#| msgid "This color is used for font in buttons"
 msgid "This color is used for font in buttons."
 msgstr "Deze kleur wordt gebruikt voor de font op de Buttons"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:478
 #, fuzzy
-#| msgid "Buttons background hover color"
 msgid "Background hover color"
 msgstr "Buttons gehooverd achtergrondkleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:480
 #, fuzzy
-#| msgid ""
-#| "This color will be used for button backgrounds when you hover above them"
 msgid ""
 "This color will be used for button backgrounds when you hover above them."
 msgstr ""
@@ -1660,13 +1603,11 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:498
 #, fuzzy
-#| msgid "Header font color"
 msgid "Hover font color"
 msgstr "Header font kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:500
 #, fuzzy
-#| msgid "This color will be used for buttons font when you hover above them"
 msgid "This color will be used for buttons font when you hover above them."
 msgstr ""
 "Deze kleur wordt getoond als fontkleur van de Button als je je muis er boven "
@@ -1679,7 +1620,6 @@ msgstr "Buttons hoover achtergrondkleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:520
 #, fuzzy
-#| msgid "This color will be used for button borders when you hover above them"
 msgid "This color will be used for button borders when you hover above them."
 msgstr ""
 "Deze kleur wordt gebruikt voor de border als je met je muis boven de Button "
@@ -1702,8 +1642,6 @@ msgstr "Modals fontkleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:573
 #, fuzzy
-#| msgid ""
-#| "This color will be used for wpDataTable popup (filter, datepicker) fonts"
 msgid ""
 "This color will be used for wpDataTable popup (filter, datepicker) fonts."
 msgstr ""
@@ -1712,15 +1650,11 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:591
 #, fuzzy
-#| msgid "Modals background color"
 msgid "Modals background"
 msgstr "Modals achtergrondkleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:593
 #, fuzzy
-#| msgid ""
-#| "This color will be used for wpDataTable popup (filter, datepicker) "
-#| "background"
 msgid ""
 "This color will be used for wpDataTable popup (filter, datepicker) "
 "background."
@@ -1730,14 +1664,11 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:612
 #, fuzzy
-#| msgid "Overlay background color"
 msgid "Overlay background"
 msgstr "Overlay achtergrondkleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:614
 #, fuzzy
-#| msgid ""
-#| "This color will be used for overlay which appears below the plugin popups"
 msgid ""
 "This color will be used for overlay which appears below the plugin popups."
 msgstr ""
@@ -1746,7 +1677,6 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:649
 #, fuzzy
-#| msgid "This color is used for background in buttons"
 msgid "This color is used for the background of the pagination"
 msgstr "Deze kleur wordt gebruikt voor de achtergrondkleur van de Buttons"
 
@@ -1757,20 +1687,17 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:669
 #, fuzzy
-#| msgid "This color is used for the outer border of the whole table body"
 msgid "This color is used for the color of the links in the pagination."
 msgstr ""
 "Deze kleur wordt gebruikt voor de buitenste border, om de hele tabel heen"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:687
 #, fuzzy
-#| msgid "Header background color"
 msgid "Current page background color"
 msgstr "Header achtergrond kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:689
 #, fuzzy
-#| msgid "The color is used for background of the table header"
 msgid "The color is used for background of the current page"
 msgstr "Deze kleur wordt gebruikt voor de achtergrond van de tabel header"
 
@@ -1780,21 +1707,16 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:708
 #, fuzzy
-#| msgid "This color is used for the border in the table header"
 msgid "This color is used for the color of the current page."
 msgstr "Deze kleur wordt gebruikt voor de border rondom de tabel header"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:726
 #, fuzzy
-#| msgid "Header background color"
 msgid "Other pages hover background color"
 msgstr "Header achtergrond kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:728
 #, fuzzy
-#| msgid ""
-#| "This color is used when you hover the mouse above the table header, or "
-#| "when you choose a column"
 msgid ""
 "This background color is used when you hover the mouse above the other pages"
 msgstr ""
@@ -1803,15 +1725,11 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:745
 #, fuzzy
-#| msgid "Header active and hover color"
 msgid "Other pages hover color"
 msgstr "Header actef en hover kleur"
 
 #: ../.././templates/admin/settings/tabs/color_and_font_settings.php:747
 #, fuzzy
-#| msgid ""
-#| "This color is used when you hover the mouse above the table header, or "
-#| "when you choose a column"
 msgid "This color is used when you hover the mouse above the other pages."
 msgstr ""
 "Deze kleur wordt gebruikt als je met je muis boven de tabel header hoovert, "
@@ -1841,7 +1759,6 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/custom_js_and_css.php:45
 #, fuzzy
-#| msgid "Use in wpDataTable"
 msgid "Use minified wpDataTables Javascript "
 msgstr "Gebruik in wpDataTable"
 
@@ -1852,7 +1769,6 @@ msgstr "Interface taal"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:17
 #, fuzzy
-#| msgid "Pick the language which will be used in tables interface"
 msgid "Pick the language which will be used in tables interface."
 msgstr "Kies de taal welke in de tabel zijn interface wordt gebruikt"
 
@@ -1867,20 +1783,17 @@ msgstr "Datum format"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:38
 #, fuzzy
-#| msgid "Pick the date format to use in date column type"
 msgid "Pick the date format to use in date column type."
 msgstr "Kies de datumformat welke in de datumkolom wordt gebruikt"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:70
 #: ../.././templates/settings.inc.php:119
 #, fuzzy
-#| msgid "Number format"
 msgid "Time format"
 msgstr "Nummer format"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:72
 #, fuzzy
-#| msgid "Pick the date format to use in date column type"
 msgid "Pick the time format to use in datetime and time column type."
 msgstr "Kies de datumformat welke in de datumkolom wordt gebruikt"
 
@@ -1890,7 +1803,6 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:89
 #, fuzzy
-#| msgid "Data source and main settings"
 msgid "Parse shortcodes in strings"
 msgstr "Data bron en hoofd instellingen"
 
@@ -1901,7 +1813,6 @@ msgstr "Standaard skin"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:103
 #, fuzzy
-#| msgid "Choose the base skin for the plugin"
 msgid "Choose the base skin for the plugin."
 msgstr "Kies een skin voor de plugin"
 
@@ -1946,9 +1857,6 @@ msgstr "Render geavanceerd filter"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:143
 #, fuzzy
-#| msgid ""
-#| "Choose where you would like to render the advanced filter for tables "
-#| "where enabled"
 msgid ""
 "Choose where you would like to render the advanced filter for tables where "
 "enabled."
@@ -1974,7 +1882,6 @@ msgstr "Decimaal plaatsen"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:160
 #, fuzzy
-#| msgid "Define the amount of decimal places for the float numbers"
 msgid "Define the amount of decimal places for the float numbers."
 msgstr "Kies het aantal decimaalplaatsen voor de zwevende getallen"
 
@@ -2014,13 +1921,11 @@ msgstr "Tabellen per adminpagina"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:238
 #, fuzzy
-#| msgid "How many tables to show in the browse page"
 msgid "How many tables to show in the browse page."
 msgstr "Hoeveel tabellen moeten weergeven worden op de browse pagina?"
 
 #: ../.././templates/admin/settings/tabs/main_plugin_settings.php:254
 #, fuzzy
-#| msgid "Align numbers to the right"
 msgid "Align numbers"
 msgstr "Sorteer nummers aan de rechter kant"
 
@@ -2068,41 +1973,42 @@ msgid ""
 "default label will be Max ="
 msgstr ""
 
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:355
-msgid "Purchase code"
-msgstr ""
-
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:357
-msgid ""
-"Please enter your Envato purchase code to enable plugin auto-updates. Leave "
-"blank if you do not want the plugin to auto-update."
-msgstr ""
-
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:378
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:360
 msgid "Include full bootstrap front-end"
 msgstr ""
 
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:380
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:392
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:362
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:374
 msgid ""
 "It is recommended to uncheck this option if bootstrap.js is already included "
 "in one of the theme files. Unchecked option means that there is still "
 "bootstrap.js included just in noconflict mode which should prevent errors."
 msgstr ""
 
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:390
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:372
 msgid "Include full bootstrap back-end"
 msgstr ""
 
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:405
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:387
 #: ../.././templates/settings.inc.php:32
 msgid "Show plugin credentials below tables"
 msgstr ""
 
-#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:407
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:389
 #: ../.././templates/settings.inc.php:32
 msgid ""
 "If you want to support our project, please, keep this checkbox as checked"
+msgstr ""
+
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:399
+msgid "Prevent deleting tables in database"
+msgstr ""
+
+#: ../.././templates/admin/settings/tabs/main_plugin_settings.php:401
+msgid ""
+"It is recommended to leave this optiosn as checked if you what to keep your "
+"tables in database after deleting plugin from Plugins page. If you uncheck "
+"this option, it will be deleted all tables in database after deleting plugin"
 msgstr ""
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:17
@@ -2113,13 +2019,11 @@ msgstr ""
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:21
 #, fuzzy
-#| msgid "Use separate MySQL connection"
 msgid "Use separate connection"
 msgstr "Gebruik losse MySQL verbinding"
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:29
 #, fuzzy
-#| msgid "Use separate MySQL connection"
 msgid "Test connection"
 msgstr "Gebruik losse MySQL verbinding"
 
@@ -2135,7 +2039,6 @@ msgstr "MySQL host"
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:44
 #, fuzzy
-#| msgid "MySQL host address"
 msgid "MySQL host address."
 msgstr "MySQL host adres"
 
@@ -2149,7 +2052,6 @@ msgstr "MySQL database"
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:55
 #, fuzzy
-#| msgid "MySQL database name"
 msgid "MySQL database name."
 msgstr "MySQL database naam"
 
@@ -2164,7 +2066,6 @@ msgstr "MySQL gebruiker"
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:69
 #, fuzzy
-#| msgid "MySQL username for the connection"
 msgid "MySQL username for the connection."
 msgstr "MySQL gebruikersnaam voor de verbinding"
 
@@ -2175,32 +2076,27 @@ msgstr "MySQL wachtwoord"
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:81
 #, fuzzy
-#| msgid "MySQL password for the provided user"
 msgid "MySQL password for the provided user."
 msgstr "MySQL wachtwoord voor de gebruiker"
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:93
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:99
 #, fuzzy
-#| msgid "MySQL host"
 msgid "MySQL port"
 msgstr "MySQL host"
 
 #: ../.././templates/admin/settings/tabs/separate_mysql_connection.php:95
 #, fuzzy
-#| msgid "MySQL username for the connection"
 msgid "MySQL port for the connection (default: 3306)."
 msgstr "MySQL gebruikersnaam voor de verbinding"
 
 #: ../.././templates/admin/table-settings/add_column_modal.inc.php:21
 #, fuzzy
-#| msgid "ID column"
 msgid "Add Column"
 msgstr "ID kolom"
 
 #: ../.././templates/admin/table-settings/add_column_modal.inc.php:35
 #, fuzzy
-#| msgid "Column chart"
 msgid "Column header"
 msgstr "Kolomgrafiek"
 
@@ -2218,7 +2114,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/add_column_modal.inc.php:71
 #, fuzzy
-#| msgid "Hide on tablets"
 msgid "End of table"
 msgstr "Verbergen op tablets"
 
@@ -2233,7 +2128,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/add_column_modal.inc.php:107
 #, fuzzy
-#| msgid "Default value(s)"
 msgid "Fill with default value"
 msgstr "Standaardwaarde(n)"
 
@@ -2244,14 +2138,12 @@ msgstr "OK"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:14
 #, fuzzy
-#| msgid "Column position"
 msgid "Column settings"
 msgstr "Kolom positie"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:48
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:65
 #, fuzzy
-#| msgid "Display length"
 msgid "Display"
 msgstr "Display lengte"
 
@@ -2267,21 +2159,18 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:60
 #, fuzzy
-#| msgid "Filter in form"
 msgid "Filtering"
 msgstr "Filter in formulier"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:64
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:73
 #, fuzzy
-#| msgid "Edit"
 msgid "Editing"
 msgstr "Aanpassen"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:69
 #: ../.././templates/edit_table.inc.php:750
 #, fuzzy
-#| msgid "Additional settings"
 msgid "Conditional formatting"
 msgstr "Extra instellingen"
 
@@ -2352,14 +2241,12 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:258
 #, fuzzy
-#| msgid "Column type"
 msgid "Column width"
 msgstr "Kolom type"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:271
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:279
 #, fuzzy
-#| msgid "Column chart"
 msgid "Column color"
 msgstr "Kolomgrafiek"
 
@@ -2462,7 +2349,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:423
 #, fuzzy
-#| msgid "Possible values"
 msgid "Possible values for column"
 msgstr "Mogelijke waardes"
 
@@ -2489,7 +2375,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:443
 #, fuzzy
-#| msgid "Date format"
 msgid "Date input format"
 msgstr "Datum format"
 
@@ -2505,7 +2390,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:486
 #, fuzzy
-#| msgid "Hide on tablets"
 msgid "Read from table"
 msgstr "Verbergen op tablets"
 
@@ -2524,7 +2408,6 @@ msgstr ""
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:503
 #: ../.././templates/admin/table-settings/foreign_key_config.inc.php:12
 #, fuzzy
-#| msgid "Use in wpDataTable"
 msgid "Use values from another wpDataTable"
 msgstr "Gebruik in wpDataTable"
 
@@ -2568,7 +2451,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:572
 #, fuzzy
-#| msgid "Duplicate table"
 msgid "Calculate total"
 msgstr "Dupliceer tabel"
 
@@ -2682,13 +2564,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:715
 #, fuzzy
-#| msgid "Buttons font color"
 msgid "Button class"
 msgstr "Bottons font kleur"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:741
 #, fuzzy
-#| msgid "Enable sorting"
 msgid "Allow sorting"
 msgstr "Sorteren inschakelen"
 
@@ -2702,7 +2582,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:757
 #, fuzzy
-#| msgid "Default sort column"
 msgid "Use as default sorting column"
 msgstr "Standaard sortering kolom"
 
@@ -2713,7 +2592,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:777
 #, fuzzy
-#| msgid "Default sort column"
 msgid "Default sorting direction"
 msgstr "Standaard sortering kolom"
 
@@ -2737,7 +2615,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:819
 #, fuzzy
-#| msgid "Default sort column"
 msgid "Enable filtering for column"
 msgstr "Standaard sortering kolom"
 
@@ -2749,7 +2626,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:834
 #, fuzzy
-#| msgid "Advanced filtering"
 msgid "Allow filtering"
 msgstr "Geavanceerde filtering"
 
@@ -2769,19 +2645,16 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:853
 #, fuzzy
-#| msgid "Number format"
 msgid "Number"
 msgstr "Nummer format"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:854
 #, fuzzy
-#| msgid "Number format"
 msgid "Number range"
 msgstr "Nummer format"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:855
 #, fuzzy
-#| msgid "Date format"
 msgid "Date range"
 msgstr "Datum format"
 
@@ -2803,7 +2676,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:875
 #, fuzzy
-#| msgid "Filter type"
 msgid "Filter label"
 msgstr "Filter type"
 
@@ -2819,7 +2691,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:905
 #, fuzzy
-#| msgid "Advanced filtering"
 msgid "Exact filtering"
 msgstr "Geavanceerde filtering"
 
@@ -2831,14 +2702,12 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:912
 #, fuzzy
-#| msgid "Enable sorting"
 msgid "Enable exact filtering"
 msgstr "Sorteren inschakelen"
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:926
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:1024
 #, fuzzy
-#| msgid "Default value(s)"
 msgid "Predefined value(s)"
 msgstr "Standaardwaarde(n)"
 
@@ -2882,7 +2751,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:1003
 #, fuzzy
-#| msgid "Table type cannot be empty"
 msgid "Column cannot be empty"
 msgstr "Tabel type mag niet leeg zijn"
 
@@ -2894,7 +2762,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:1010
 #, fuzzy
-#| msgid "Table type cannot be empty"
 msgid "Cannot be empty"
 msgstr "Tabel type mag niet leeg zijn"
 
@@ -2906,19 +2773,16 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_settings_panel.inc.php:1071
 #, fuzzy
-#| msgid "Add new"
 msgid "Add rule"
 msgstr "Nieuwe toevoegen"
 
 #: ../.././templates/admin/table-settings/column_small_block.inc.php:13
 #, fuzzy
-#| msgid "Enable sorting"
 msgid "Enable/disable editing"
 msgstr "Sorteren inschakelen"
 
 #: ../.././templates/admin/table-settings/column_small_block.inc.php:15
 #, fuzzy
-#| msgid "Clear filters"
 msgid "Show/hide filters"
 msgstr "Leeg filters"
 
@@ -2932,19 +2796,16 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/column_small_block.inc.php:21
 #, fuzzy
-#| msgid "Hide on mobiles"
 msgid "Show/hide on mobile"
 msgstr "Verbergen op mobiele apparaten"
 
 #: ../.././templates/admin/table-settings/column_small_block.inc.php:23
 #, fuzzy
-#| msgid "Hide on tablets"
 msgid "Show/hide on tablet"
 msgstr "Verbergen op tablets"
 
 #: ../.././templates/admin/table-settings/column_small_block.inc.php:25
 #, fuzzy
-#| msgid "Optional column setup"
 msgid "Open column settings"
 msgstr "Optionele kolom setup"
 
@@ -2982,7 +2843,6 @@ msgstr ""
 #: ../.././templates/admin/table-settings/conditional_formatting_block.inc.php:33
 #: ../.././templates/edit_table.inc.php:784
 #, fuzzy
-#| msgid "Reset colors and fonts to default"
 msgid "Reset cell color to default"
 msgstr "Reset kleuren en fonts naar standaard"
 
@@ -3004,21 +2864,18 @@ msgstr ""
 #: ../.././templates/admin/table-settings/conditional_formatting_block.inc.php:37
 #: ../.././templates/edit_table.inc.php:788
 #, fuzzy
-#| msgid "Hover row color"
 msgid "Set row color"
 msgstr "Hover rij kleur"
 
 #: ../.././templates/admin/table-settings/conditional_formatting_block.inc.php:38
 #: ../.././templates/edit_table.inc.php:789
 #, fuzzy
-#| msgid "Reset colors and fonts to default"
 msgid "Reset row color to default"
 msgstr "Reset kleuren en fonts naar standaard"
 
 #: ../.././templates/admin/table-settings/conditional_formatting_block.inc.php:39
 #: ../.././templates/edit_table.inc.php:790
 #, fuzzy
-#| msgid "CSS class(es)"
 msgid "Set row CSS class"
 msgstr "CSS class(es)"
 
@@ -3030,7 +2887,6 @@ msgstr ""
 #: ../.././templates/admin/table-settings/conditional_formatting_block.inc.php:41
 #: ../.././templates/edit_table.inc.php:792
 #, fuzzy
-#| msgid "Table font color"
 msgid "Set column color"
 msgstr "Tabel font kleur"
 
@@ -3045,7 +2901,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/foreign_key_config.inc.php:18
 #, fuzzy
-#| msgid "Use in wpDataTable"
 msgid "Choose a source wpDataTable"
 msgstr "Gebruik in wpDataTable"
 
@@ -3056,13 +2911,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/foreign_key_config.inc.php:27
 #, fuzzy
-#| msgid "Select a table type..."
 msgid "Pick a table..."
 msgstr "Selecteer een tabel type..."
 
 #: ../.././templates/admin/table-settings/foreign_key_config.inc.php:47
 #, fuzzy
-#| msgid "Display length"
 msgid "Display value"
 msgstr "Display lengte"
 
@@ -3074,7 +2927,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/foreign_key_config.inc.php:71
 #, fuzzy
-#| msgid "Possible values"
 msgid "Store value"
 msgstr "Mogelijke waardes"
 
@@ -3102,7 +2954,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/formula_editor_modal.inc.php:31
 #, fuzzy
-#| msgid "Column type"
 msgid "Columns to use"
 msgstr "Kolom type"
 
@@ -3140,14 +2991,12 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/remove_column_modal.inc.php:62
 #, fuzzy
-#| msgid "Are you sure? You will lose unsaved changes!"
 msgid "Are you sure? There is no undo!"
 msgstr ""
 "Weet je het zeker? Je verliest de aanpassingen die niet opgeslagen zijn!"
 
 #: ../.././templates/admin/table-settings/table_preview_block.inc.php:19
 #, fuzzy
-#| msgid "Optional column setup"
 msgid "Table preview and columns setup"
 msgstr "Optionele kolom setup"
 
@@ -3165,13 +3014,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_preview_block.inc.php:33
 #, fuzzy
-#| msgid "ID column"
 msgid "Add column"
 msgstr "ID kolom"
 
 #: ../.././templates/admin/table-settings/table_preview_block.inc.php:35
 #, fuzzy
-#| msgid "Group column"
 msgid "Remove column"
 msgstr "Groep kolom"
 
@@ -3191,13 +3038,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:26
 #, fuzzy
-#| msgid "wpDataTables backend error: "
 msgid "wpDataTable name, click to edit"
 msgstr "wpDatatables backend fout:"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:30
 #, fuzzy
-#| msgid "Click to toggle"
 msgid "Click to copy shortcode"
 msgstr "Klik om te openen"
 
@@ -3207,14 +3052,12 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:69
 #, fuzzy
-#| msgid "Advanced filtering"
 msgid "Sorting and filtering"
 msgstr "Geavanceerde filtering"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:77
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:912
 #, fuzzy
-#| msgid "Table tools"
 msgid "Table Tools"
 msgstr "Tabel tools"
 
@@ -3224,7 +3067,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:97
 #, fuzzy
-#| msgid "Table input data source cannot be empty"
 msgid "Input data source type"
 msgstr "Tabel invoer data bron mag niet leeg zijn"
 
@@ -3236,7 +3078,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:106
 #, fuzzy
-#| msgid "Select a table type..."
 msgid "Select a data source type"
 msgstr "Selecteer een tabel type..."
 
@@ -3271,7 +3112,6 @@ msgstr "JSON bestand"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:124
 #, fuzzy
-#| msgid "Input file or URL"
 msgid "Input file path or URL"
 msgstr "Voer bestand of URL in"
 
@@ -3305,13 +3145,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:152
 #, fuzzy
-#| msgid "Server-side processing"
 msgid "Enable server-side processing"
 msgstr "Server-side verwerking"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:168
 #, fuzzy
-#| msgid "MySQL query"
 msgid "MySQL Query"
 msgstr "MySQL query"
 
@@ -3347,7 +3185,6 @@ msgstr "Tabel titel"
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:210
 #: ../.././templates/edit_table.inc.php:67
 #, fuzzy
-#| msgid "New table title"
 msgid "Show table title"
 msgstr "Nieuwe tabelnaam"
 
@@ -3359,19 +3196,16 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:224
 #, fuzzy
-#| msgid "How many tables to show in the browse page"
 msgid "Show table title on the page"
 msgstr "Hoeveel tabellen moeten weergeven worden op de browse pagina?"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:234
 #, fuzzy
-#| msgid "Responsive"
 msgid "Responsiveness"
 msgstr "Responsive"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:242
 #, fuzzy
-#| msgid "Responsive"
 msgid "Responsive design"
 msgstr "Responsive"
 
@@ -3401,7 +3235,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:273
 #, fuzzy
-#| msgid "Hide table until page is completely loaded"
 msgid "Hide the table before it is fully loaded"
 msgstr "Verberg tabel tot de pagina volledig geladen is"
 
@@ -3416,13 +3249,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:302
 #, fuzzy
-#| msgid "How many tables to show in the browse page"
 msgid "How many rows to show per page by default."
 msgstr "Hoeveel tabellen moeten weergeven worden op de browse pagina?"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:338
 #, fuzzy
-#| msgid "entries"
 msgid "Show X entries"
 msgstr "data"
 
@@ -3470,7 +3301,6 @@ msgstr ""
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:432
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:440
 #, fuzzy
-#| msgid "Limit table layout"
 msgid "Limit table width"
 msgstr "Limiteer tabel layout"
 
@@ -3506,13 +3336,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:508
 #, fuzzy
-#| msgid "Advanced filtering"
 msgid "Advanced column filters"
 msgstr "Geavanceerde filtering"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:516
 #, fuzzy
-#| msgid "Advanced filtering"
 msgid "Advanced filter"
 msgstr "Geavanceerde filtering"
 
@@ -3524,7 +3352,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:530
 #, fuzzy
-#| msgid "Render advanced filter"
 msgid "Enable advanced column filters"
 msgstr "Render geavanceerd filter"
 
@@ -3536,7 +3363,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:562
 #, fuzzy
-#| msgid "Below the table"
 msgid "Allow sorting for the table"
 msgstr "Onder de grafiek/diagram"
 
@@ -3560,7 +3386,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:610
 #, fuzzy
-#| msgid "Filter in form"
 msgid "Filters in a form"
 msgstr "Filter in formulier"
 
@@ -3581,7 +3406,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:641
 #, fuzzy
-#| msgid "Clear filters"
 msgid "Clear filters button"
 msgstr "Leeg filters"
 
@@ -3608,13 +3432,11 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:669
 #, fuzzy
-#| msgid "Clear filters"
 msgid "Show clear filters button"
 msgstr "Leeg filters"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:691
 #, fuzzy
-#| msgid "Front-end editing"
 msgid "Allow editing"
 msgstr "Front-end aanpassen"
 
@@ -3625,13 +3447,11 @@ msgstr "Front-end aanpassen"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:706
 #, fuzzy
-#| msgid "Make table editable from the front-end"
 msgid "Allow editing the table from the front-end."
 msgstr "Maak tabel aanpasbaar vanaf de front-end"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:713
 #, fuzzy
-#| msgid "Front-end editing"
 msgid "Allow front-end editing"
 msgstr "Front-end aanpassen"
 
@@ -3658,7 +3478,6 @@ msgstr ""
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:755
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:763
 #, fuzzy
-#| msgid "Front-end editing"
 msgid "In-line editing"
 msgstr "Front-end aanpassen"
 
@@ -3670,7 +3489,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:777
 #, fuzzy
-#| msgid "Front-end editing"
 msgid "Allow in-line editing"
 msgstr "Front-end aanpassen"
 
@@ -3681,8 +3499,6 @@ msgstr "MySQL tabel naam voor aanpassen"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:796
 #, fuzzy
-#| msgid ""
-#| "Name of the MySQL table which will be used for updates from front-end"
 msgid ""
 "Name of the MySQL table which will be updated when edited from front-end."
 msgstr ""
@@ -3691,14 +3507,12 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:801
 #, fuzzy
-#| msgid "MySQL database name"
 msgid "MySQL table name"
 msgstr "MySQL database naam"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:810
 #: ../.././templates/edit_table.inc.php:203
 #, fuzzy
-#| msgid "MySQL table name for editing"
 msgid "ID column for editing"
 msgstr "MySQL tabel naam voor aanpassen"
 
@@ -3717,9 +3531,6 @@ msgstr "Editor rollen"
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:828
 #, fuzzy
-#| msgid ""
-#| "Choose user roles allowed to edit this table (leave blank to alllow "
-#| "editing for everyone):"
 msgid ""
 "If you want only specific user roles to be able to edit the table, choose in "
 "this dropdown. Leave unchecked to allow editing for everyone."
@@ -3737,7 +3548,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:835
 #, fuzzy
-#| msgid "Editor roles"
 msgid "Editors"
 msgstr "Editor rollen"
 
@@ -3774,7 +3584,6 @@ msgstr ""
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:885
 #: ../.././templates/edit_table.inc.php:250
 #, fuzzy
-#| msgid "ID column"
 msgid "User ID column"
 msgstr "ID kolom"
 
@@ -3797,7 +3606,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:934
 #, fuzzy
-#| msgid "Table tools"
 msgid "Enable Table Tools"
 msgstr "Tabel tools"
 
@@ -3811,7 +3619,6 @@ msgstr ""
 
 #: ../.././templates/admin/table-settings/table_settings_block.inc.php:952
 #, fuzzy
-#| msgid "Column type"
 msgid "Columns visibility"
 msgstr "Kolom type"
 
@@ -3881,19 +3688,16 @@ msgstr "kopieer"
 #: ../.././templates/browse_charts.inc.php:8
 #: ../.././templates/chart_wizard.inc.php:16
 #, fuzzy
-#| msgid "wpDataTables documentation"
 msgid "wpDataTables documentation on Charts"
 msgstr "wpDataTables documentatie"
 
 #: ../.././templates/browse_charts.inc.php:9
 #, fuzzy
-#| msgid "Add a chart"
 msgid "Add new chart"
 msgstr "Voeg een grafiek toe"
 
 #: ../.././templates/chart_wizard.inc.php:17
 #, fuzzy
-#| msgid "wpDataTables settings"
 msgid "wpDataTables Chart Wizard"
 msgstr "wpDataTables instellingen"
 
@@ -3932,26 +3736,22 @@ msgstr ""
 
 #: ../.././templates/constructor.inc.php:14
 #, fuzzy
-#| msgid "wpDataTables documentation"
 msgid "wpDataTables documentation on Table Consturctor"
 msgstr "wpDataTables documentatie"
 
 #: ../.././templates/constructor.inc.php:14
 #: ../.././templates/edit_table.inc.php:11
 #, fuzzy
-#| msgid "if you have some questions or problems with the plugin."
 msgid "if you have some questions or problems."
 msgstr "als je vragen of problemen hebt met deze plugin."
 
 #: ../.././templates/constructor.inc.php:15
 #, fuzzy
-#| msgid "wpDataTables documentation"
 msgid "wpDataTable constructor"
 msgstr "wpDataTables documentatie"
 
 #: ../.././templates/edit_table.inc.php:11
 #, fuzzy
-#| msgid "wpDataTables documentation"
 msgid "wpDataTables documentation on this page"
 msgstr "wpDataTables documentatie"
 
@@ -4150,15 +3950,11 @@ msgstr ""
 
 #: ../.././templates/edit_table.inc.php:223
 #, fuzzy
-#| msgid "Front-end editing"
 msgid "Inline editing"
 msgstr "Front-end aanpassen"
 
 #: ../.././templates/edit_table.inc.php:227
 #, fuzzy
-#| msgid ""
-#| "Check this checkbox if you would like to have the advanced filter in a "
-#| "form"
 msgid ""
 "Check this checkbox if you would like to be able to edit the table data "
 "inline, by double-clicking a cell, not only in a modal dialog"
@@ -4166,9 +3962,6 @@ msgstr "Aanklikken als je een geavanceerde filter in een formulier wilt hebben"
 
 #: ../.././templates/edit_table.inc.php:236
 #, fuzzy
-#| msgid ""
-#| "Check this checkbox if you would like to have the table tools (copy, save "
-#| "to excel, save to CSV, etc) enabled for this table"
 msgid ""
 "Check this checkbox if you would like to get the New, Edit and Delete "
 "buttons in a popover on click on a table row, instead of in TableTools block "
@@ -4240,9 +4033,6 @@ msgstr ""
 
 #: ../.././templates/edit_table.inc.php:315
 #, fuzzy
-#| msgid ""
-#| "Check this checkbox if you would like to have sorting feature in your "
-#| "table"
 msgid ""
 "Check this checkbox if you would like this table to be horizontal scrollable"
 msgstr "Aanklikken als je een sorteerfunctie wilt hebben"
@@ -4415,7 +4205,6 @@ msgstr ""
 
 #: ../.././templates/edit_table.inc.php:548
 #, fuzzy
-#| msgid "Clear filters"
 msgid "Clear values"
 msgstr "Leeg filters"
 
@@ -4439,13 +4228,11 @@ msgstr ""
 
 #: ../.././templates/edit_table.inc.php:603
 #, fuzzy
-#| msgid "Editor input type"
 msgid "Editor input type:"
 msgstr "Editor input type"
 
 #: ../.././templates/edit_table.inc.php:613
 #, fuzzy
-#| msgid "Table type cannot be empty"
 msgid "Cannot be empty:"
 msgstr "Tabel type mag niet leeg zijn"
 
@@ -4472,13 +4259,11 @@ msgstr ""
 
 #: ../.././templates/edit_table.inc.php:714
 #, fuzzy
-#| msgid "Displayed header"
 msgid "Display text before"
 msgstr "Weergegeven header"
 
 #: ../.././templates/edit_table.inc.php:722
 #, fuzzy
-#| msgid "Displayed header"
 msgid "Display text after"
 msgstr "Weergegeven header"
 
@@ -4499,7 +4284,6 @@ msgstr ""
 
 #: ../.././templates/edit_table.inc.php:802
 #, fuzzy
-#| msgid "Table saved successfully!"
 msgid "Table saved!"
 msgstr "Tabel succesvol opgeslagen!"
 
@@ -4510,7 +4294,6 @@ msgstr ""
 
 #: ../.././templates/settings.inc.php:12
 #, fuzzy
-#| msgid "wpDataTables documentation"
 msgid "wpDataTables documentation on this feature"
 msgstr "wpDataTables documentatie"
 
@@ -4560,7 +4343,6 @@ msgstr "Kies de datumformat welke in de datumkolom wordt gebruikt"
 
 #: ../.././templates/settings.inc.php:126
 #, fuzzy
-#| msgid "Pick the date format to use in date column type"
 msgid "Pick the time format to use in datetime and time column type"
 msgstr "Kies de datumformat welke in de datumkolom wordt gebruikt"
 
@@ -4825,7 +4607,6 @@ msgstr ""
 
 #: ../.././templates/settings.inc.php:472
 #, fuzzy
-#| msgid "Use in wpDataTable"
 msgid "Use minified wpDataTables Javascript"
 msgstr "Gebruik in wpDataTable"
 

@@ -5,6 +5,8 @@ use Tribe__Utils__Array as Arr;
 abstract class Tribe__Repository
 	implements Tribe__Repository__Interface {
 
+	const MAX_NUMBER_OF_POSTS_PER_PAGE = 99999999999;
+
 	/**
 	 * @var  array An array of keys that cannot be updated on this repository.
 	 */
@@ -557,14 +559,19 @@ abstract class Tribe__Repository
 	 * {@inheritdoc}
 	 */
 	public function build_query( $use_query_builder = true ) {
-		if ( null !== $this->last_built_query && $this->last_built_hash === $this->hash()) {
-			return $this->last_built_query;
-		}
-
 		$query = null;
 
+		if ( array_key_exists( 'void_query', $this->query_args ) && false !== $this->query_args['void_query'] ) {
+			$this->void_query = true;
+		}
+
+		// We'll let the query builder decide if the query has to be rebuilt or not.
 		if ( $use_query_builder && null !== $this->query_builder ) {
 			$query = $this->build_query_with_builder();
+		}
+
+		if ( null !== $this->last_built_query && $this->last_built_hash === $this->hash()) {
+			return $this->last_built_query;
 		}
 
 		if ( null === $query ) {
@@ -605,13 +612,14 @@ abstract class Tribe__Repository
 
 		$query = $this->build_query();
 
+		$original_no_found_rows_value = $query->get( 'no_found_rows' );
+
 		// The request property will be set during the `get_posts` method and empty before it.
-		if ( ! empty( $query->request ) && ( 0 < $query->found_posts || ! $this->skip_found_rows ) ) {
+		if ( ! empty( $query->request ) && ( false === (boolean) $original_no_found_rows_value || ! $this->skip_found_rows ) ) {
 			return (int) $query->found_posts;
 		}
 
-		$original_fields_value  = $query->get( 'fields', '' );
-		$original_no_found_rows = $query->get( 'no_found_rows', '' );
+		$original_fields_value = $query->get( 'fields' );
 
 		$query->set( 'fields', 'ids' );
 		$query->set( 'no_found_rows', false );
@@ -628,7 +636,7 @@ abstract class Tribe__Repository
 		$query->get_posts();
 
 		$query->set( 'fields', $original_fields_value );
-		$query->set( 'no_found_rows', $original_no_found_rows );
+		$query->set( 'no_found_rows', $original_no_found_rows_value );
 
 		return (int) $query->found_posts;
 	}
@@ -831,6 +839,10 @@ abstract class Tribe__Repository
 		if ( ! empty( $query->request ) ) {
 			$ids = $this->get_ids();
 
+			if ( empty( $ids ) ) {
+				return null;
+			}
+
 			return $return_id ? reset( $ids ) : $this->format_item( reset( $ids ) );
 		}
 
@@ -859,9 +871,22 @@ abstract class Tribe__Repository
 	 * @return WP_Post
 	 */
 	protected function format_item( $id ) {
-		return null === $this->formatter
+		$formatted =  null === $this->formatter
 			? get_post( $id )
 			: $this->formatter->format_item( $id );
+
+		/**
+		 * Filters a single formatted result.
+		 *
+		 * @since 4.9.11
+		 *
+		 * @param mixed|WP_Post                $formatted The formatted post result, usually a post object.
+		 * @param int                          $id        The formatted post ID.
+		 * @param Tribe__Repository__Interface $this      The current repository object.
+		 */
+		$formatted = apply_filters( "tribe_repository_{$this->filter_name}_format_item", $formatted, $id, $this );
+
+		return $formatted;
 	}
 
 	/**
@@ -877,6 +902,10 @@ abstract class Tribe__Repository
 		// The request property will be set during the `get_posts` method and empty before it.
 		if ( ! empty( $query->request ) ) {
 			$ids = $this->get_ids();
+
+			if ( empty( $ids ) ) {
+				return null;
+			}
 
 			return $return_id ? end( $ids ) : $this->format_item( end( $ids ) );
 		}
@@ -1045,7 +1074,9 @@ abstract class Tribe__Repository
 	 * {@inheritdoc}
 	 */
 	public function by( $key, $value = null ) {
-		if ( $this->void_query ) {
+		if ( $this->void_query || ( 'void_query' === $key && false !== $value ) ) {
+			$this->void_query = true;
+
 			// No point in doing more computations if the query is void.
 			return $this;
 		}
@@ -1329,16 +1360,24 @@ abstract class Tribe__Repository
 			$query = $this->get_query();
 
 			// The request property will be set during the `get_posts` method and empty before it.
-			if ( ! empty( $query->request ) ) {
-				return array_map( static function ( $post ) {
+			if ( empty( $query->request ) ) {
+				$query->set( 'fields', 'ids' );
+
+				return $query->get_posts();
+			}
+
+			return array_map(
+				static function ( $post ) {
 					if ( is_int( $post ) ) {
 						return $post;
 					}
 					$post_arr = (array) $post;
 
 					return Arr::get( $post_arr, 'ID', Arr::get( $post_arr, 'id', 0 ) );
-				}, $query->posts );
-			}
+				},
+				$query->posts
+			);
+
 		} catch ( Tribe__Repository__Void_Query_Exception $e ) {
 			/*
 			 * Extending classes might use this method to run sub-queries
@@ -1346,10 +1385,6 @@ abstract class Tribe__Repository
 			 */
 			return array();
 		}
-
-		$query->set( 'fields', 'ids' );
-
-		return $query->get_posts();
 	}
 
 	/**
@@ -1529,9 +1564,9 @@ abstract class Tribe__Repository
 	 * Filters the query to only return posts that are related, via a meta key, to posts
 	 * that satisfy a condition.
 	 *
-	 * @param string|array $meta_keys One ore more `meta_keys` relating the queried post type(s)
+	 * @param string|array $meta_keys One or more `meta_keys` relating the queried post type(s)
 	 *                                to another post type.
-	 * @param string       $compare   The SQL compoarison operator.
+	 * @param string       $compare   The SQL comparison operator.
 	 * @param string       $field     One (a column in the `posts` table) that should match
 	 *                                the comparison criteria; required if the comparison operator is not `EXISTS` or
 	 *                                `NOT EXISTS`.
@@ -1548,8 +1583,9 @@ abstract class Tribe__Repository
 			if ( empty( $field ) || empty( $values ) ) {
 				throw Tribe__Repository__Usage_Error::because_this_comparison_operator_requires_fields_and_values( $meta_keys, $compare, $this );
 			}
-			$field = esc_sql( $field );
 		}
+
+		$field = esc_sql( $field );
 
 		/** @var wpdb $wpdb */
 		global $wpdb;
@@ -1572,6 +1608,90 @@ abstract class Tribe__Repository
 				$values = $this->prepare_value( $values );
 			}
 			$this->filter_query->where( "{$pm}.meta_key IN {$keys_in} AND {$p}.{$field} {$compare} {$values}" );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Filters the query to only return posts that are related, via a meta key, to posts
+	 * that satisfy a condition.
+	 *
+	 * @since 4.10.3
+	 *
+	 * @throws Tribe__Repository__Usage_Error If the comparison operator requires and no value provided.
+	 *
+	 * @param string|array $meta_keys     One or more `meta_keys` relating the queried post type(s)
+	 *                                    to another post type.
+	 * @param string       $compare       The SQL comparison operator.
+	 * @param string       $meta_field    One (a column in the `postmeta` table) that should match
+	 *                                    the comparison criteria; required if the comparison operator is not `EXISTS` or
+	 *                                    `NOT EXISTS`.
+	 * @param string|array $meta_values   One or more values the post field(s) should be compared to;
+	 *                                    required if the comparison operator is not `EXISTS` or `NOT EXISTS`.
+	 * @param boolean      $or_not_exists Whether or not to also include a clause to check if value IS NULL.
+	 *                                    Example with this as true: `value = X OR value IS NULL`.
+	 *
+	 * @return $this
+	 */
+	public function where_meta_related_by_meta( $meta_keys, $compare, $meta_field = null, $meta_values = null, $or_not_exists = false ) {
+		$meta_keys = Tribe__Utils__Array::list_to_array( $meta_keys );
+
+		if ( ! in_array( $compare, array( 'EXISTS', 'NOT EXISTS' ), true ) ) {
+			if ( empty( $meta_field ) || empty( $meta_values ) ) {
+				throw Tribe__Repository__Usage_Error::because_this_comparison_operator_requires_fields_and_values( $meta_keys, $compare, $this );
+			}
+		}
+
+		$meta_field = esc_sql( $meta_field );
+
+		/** @var wpdb $wpdb */
+		global $wpdb;
+
+		$pm  = $this->sql_slug( 'post_meta_related_post_meta', $compare, $meta_keys );
+		$pmm = $this->sql_slug( 'meta_post_meta_related_post_meta', $compare, $meta_keys );
+
+		$this->filter_query->join( "LEFT JOIN {$wpdb->postmeta} {$pm} ON {$pm}.post_id = {$wpdb->posts}.ID" );
+		$this->filter_query->join( "
+			LEFT JOIN {$wpdb->postmeta} {$pmm}
+				ON {$pmm}.post_id = {$pm}.meta_value
+					AND {$pmm}.meta_key = '{$meta_field}'
+		" );
+
+		$keys_in = $this->prepare_interval( $meta_keys );
+
+		if ( 'EXISTS' === $compare ) {
+			$this->filter_query->where( "
+				{$pm}.meta_key IN {$keys_in}
+				AND {$pmm}.meta_id IS NOT NULL
+			" );
+		} elseif ( 'NOT EXISTS' === $compare ) {
+			$this->filter_query->where( "
+				{$pm}.meta_key IN {$keys_in}
+				AND {$pmm}.meta_id IS NULL
+			" );
+		} else {
+			if ( in_array( $compare, static::$multi_value_keys, true ) ) {
+				$meta_values = $this->prepare_interval( $meta_values );
+			} else {
+				$meta_values = $this->prepare_value( $meta_values );
+			}
+
+			$clause = "{$pmm}.meta_value {$compare} {$meta_values}";
+
+			if ( $or_not_exists ) {
+				$clause = "
+					(
+						{$clause}
+						OR {$pmm}.meta_id IS NULL
+					)
+				";
+			}
+
+			$this->filter_query->where( "
+				{$pm}.meta_key IN {$keys_in}
+				AND {$clause}
+			" );
 		}
 
 		return $this;
@@ -1640,9 +1760,9 @@ abstract class Tribe__Repository
 	 *
 	 * @since 4.9.5
 	 *
-	 * @param string      $key      The filter key, the one that will be used in `by` and `where` calls.
-	 * @param string      $meta_key The meta key to use for the meta lookup.
-	 * @param string|null $by       The ->by() lookup to use (defaults to meta_regexp_or_like).
+	 * @param string       $key      The filter key, the one that will be used in `by` and `where` calls.
+	 * @param string|array $meta_key The meta key(s) to use for the meta lookup.
+	 * @param string|null  $by       The ->by() lookup to use (defaults to meta_regexp_or_like).
 	 */
 	public function add_simple_meta_schema_entry( $key, $meta_key, $by = null ) {
 		$this->schema[ $key ] = array( $this, 'filter_by_simple_meta_schema' );
@@ -1658,9 +1778,9 @@ abstract class Tribe__Repository
 	 *
 	 * @since 4.9.5
 	 *
-	 * @param string      $key      The filter key, the one that will be used in `by` and `where` calls.
-	 * @param string      $taxonomy The taxonomy to use for the tax lookup.
-	 * @param string|null $by       The ->by() lookup to use (defaults to term_in).
+	 * @param string       $key      The filter key, the one that will be used in `by` and `where` calls.
+	 * @param string|array $taxonomy The taxonomy/taxonomies to use for the tax lookup.
+	 * @param string|null  $by       The ->by() lookup to use (defaults to term_in).
 	 */
 	public function add_simple_tax_schema_entry( $key, $taxonomy, $by = null ) {
 		$this->schema[ $key ] = array( $this, 'filter_by_simple_tax_schema' );
@@ -2764,7 +2884,7 @@ abstract class Tribe__Repository
 
 		$created = call_user_func( $this->get_create_callback( $postarr ), $postarr );
 
-		$post = get_post( $created );
+		$post = $this->format_item( $created );
 
 		return $post instanceof WP_Post && $post->ID === $created ? $post : false;
 	}
@@ -3049,20 +3169,38 @@ abstract class Tribe__Repository
 		 */
 		$query_args = apply_filters( "tribe_repository_{$this->filter_name}_query_args", $query_args, $query, $this );
 
-		if ( isset( $query_args['offset'] ) ) {
-			$offset = absint( $query_args['offset'] );
+		/**
+		 * Provides a last-ditch effort to override the filtered offset.
+		 *
+		 * This should only be used if doing creating pagination for performance purposes.
+		 *
+		 * @since 4.11.0
+		 *
+		 * @param null|int $filtered_offset Offset parameter setting.
+		 * @param array    $query_args      List of query arguments.
+		 */
+		$filtered_offset = apply_filters( 'tribe_repository_query_arg_offset_override', null, $query_args );
+
+		if ( $filtered_offset || isset( $query_args['offset'] ) ) {
 			$per_page = (int) Tribe__Utils__Array::get( $query_args, 'posts_per_page', get_option( 'posts_per_page' ) );
-			$page = (int) Tribe__Utils__Array::get( $query_args, 'paged', 1 );
 
-			$real_offset = $per_page === - 1 ? $offset : ( $per_page * ( $page - 1 ) ) + $offset;
-			$query_args['offset'] = $real_offset;
-			$query_args['posts_per_page'] = $per_page === - 1 ? 99999999999 : $per_page;
+			if ( $filtered_offset ) {
+				$query_args['offset'] = $filtered_offset;
+			} elseif ( isset( $query_args['offset'] ) ) {
+				$offset = absint( $query_args['offset'] );
+				$page   = (int) Tribe__Utils__Array::get( $query_args, 'paged', 1 );
 
-			/**
-			 * Unset the `offset` query argument to avoid applying it multiple times when this method
-			 * is used, on the same repository, more than once.
-			 */
-			unset( $this->query_args['offset'] );
+				$real_offset          = $per_page === -1 ? $offset : ( $per_page * ( $page - 1 ) ) + $offset;
+				$query_args['offset'] = $real_offset;
+
+				/**
+				 * Unset the `offset` query argument to avoid applying it multiple times when this method
+				 * is used, on the same repository, more than once.
+				 */
+				unset( $this->query_args['offset'] );
+			}
+
+			$query_args['posts_per_page'] = $per_page === -1 ? self::MAX_NUMBER_OF_POSTS_PER_PAGE : $per_page;
 		}
 
 		foreach ( $query_args as $key => $value ) {
@@ -3098,8 +3236,10 @@ abstract class Tribe__Repository
 	 * {@inheritDoc}
 	 */
 	public function get_hash_data( array $settings, WP_Query $query = null ) {
-		$filters = $this->current_filters;
-		$query_vars = null !== $query ? $query->query : [];
+		$filters    = $this->current_filters;
+		$query_vars = null !== $query
+			? $query->query
+			: array_merge( $this->default_args, $this->query_args );
 
 		if ( isset( $settings['exclude'] ) ) {
 			$filters = array_diff_key(
@@ -3316,8 +3456,6 @@ abstract class Tribe__Repository
 		foreach ( $fields as $field ) {
 			if ( $this->is_a_post_field( $field ) ) {
 				$post_fields[] = $field;
-			} elseif ( $this->is_a_taxonomy( $field ) ) {
-				$taxonomies[] = $field;
 			} elseif ( array_key_exists( $field, $this->simple_tax_schema ) ) {
 				// Handle simple tax schema aliases.
 				$schema = $this->simple_tax_schema[ $field ]['taxonomy'];
@@ -3358,6 +3496,8 @@ abstract class Tribe__Repository
 				foreach ( $schema as $meta_key ) {
 					$custom_fields[] = $meta_key;
 				}
+			} elseif ( $this->is_a_taxonomy( $field ) ) {
+				$taxonomies[] = $field;
 			} else {
 				$custom_fields[] = $field;
 			}
@@ -3439,7 +3579,7 @@ abstract class Tribe__Repository
 
 			if ( 'AND' === $where_relation && 0 === count( $intersection ) ) {
 				// Let's not waste any more time.
-				$this->void_query;
+				$this->void_query = true;
 
 				return $this;
 			}
@@ -3503,6 +3643,89 @@ abstract class Tribe__Repository
 		}
 		$this->last_built_query = $query;
 		$this->last_built_hash  = $this->hash();
+
+		return $this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function set_found_rows( $found_rows ) {
+		$this->skip_found_rows = ! $found_rows;
+
+		return $this;
+	}
+
+	/**
+	 * Flush current filters and query information.
+	 *
+	 * @since 4.9.10
+	 *
+	 * @return self
+	 */
+	public function flush() {
+		$this->current_query    = null;
+		$this->current_filters  = [];
+		$this->current_filter   = null;
+		$this->last_built_query = null;
+		$this->last_built_hash  = '';
+
+		return $this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function next() {
+		$next         = clone $this;
+		$current_page = isset( $this->query_args['paged'] )
+			? (int) $this->query_args['paged']
+			: 1;
+		$next->page( $current_page + 1 );
+
+		// Let's try to avoid running a query if we already know if a next page will yield any result or not.
+		$query_ran = ! empty( $this->last_built_query ) && ! empty( $this->last_built_query->request );
+		if ( $query_ran && ( false === (bool) $this->last_built_query->get( 'no_found_rows' ) ) ) {
+			$found             = $this->last_built_query->found_posts;
+			$posts_per_page    = $this->last_built_query->get( 'posts_per_page' );
+			$this_is_last_page = ( $current_page * $posts_per_page ) >= $found;
+			if ( $this_is_last_page ) {
+				$next->void_query = true;
+			}
+		}
+
+		$next->last_built_query = null;
+
+		return $next;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function prev() {
+		$prev         = clone $this;
+		$current_page = isset( $this->query_args['paged'] )
+			? (int) $this->query_args['paged']
+			: 1;
+
+		if ( $current_page === 1 ) {
+			$prev->void_query = true;
+
+			return $prev;
+		}
+
+		// If we're on page 1 we know there will be previous posts.
+		$prev->page( $current_page - 1 );
+		$prev->last_built_query = null;
+
+		return $prev;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function void_query( $void_query = true ) {
+		$this->void_query = (bool) $void_query;
 
 		return $this;
 	}

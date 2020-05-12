@@ -10,7 +10,7 @@
         <div class="row">
 
             <div class="card plugin-settings">
-
+                <?php wp_nonce_field('wdtSettingsNonce', 'wdtNonce'); ?>
                 <!-- Preloader -->
                 <?php include WDT_TEMPLATE_PATH . 'admin/common/preloader.inc.php'; ?>
                 <!-- /Preloader -->

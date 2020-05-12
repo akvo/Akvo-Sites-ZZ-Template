@@ -89,6 +89,7 @@ if ( ! class_exists( 'Tribe__Field' ) ) {
 				'can_be_empty'        => false,
 				'clear_after'         => true,
 				'tooltip_first'       => false,
+				'allow_clear'         => false,
 			);
 
 			// a list of valid field types, to prevent screwy behavior
@@ -187,6 +188,7 @@ if ( ! class_exists( 'Tribe__Field' ) ) {
 			$can_be_empty     = (bool) $args['can_be_empty'];
 			$clear_after      = (bool) $args['clear_after'];
 			$tooltip_first    = (bool) $args['tooltip_first'];
+			$allow_clear      = (bool) $args['allow_clear'];
 
 			// set the ID
 			$this->id = apply_filters( 'tribe_field_id', $id );
@@ -521,8 +523,15 @@ if ( ! class_exists( 'Tribe__Field' ) ) {
 			$field .= $this->do_field_div_start();
 			if ( is_array( $this->options ) ) {
 				foreach ( $this->options as $option_id => $title ) {
+					$field_id = sprintf(
+						'%1$s-%2$s',
+						sanitize_html_class( trim( $this->id ) ),
+						sanitize_html_class( trim( $option_id ) )
+					);
+
 					$field .= '<label title="' . esc_attr( strip_tags( $title ) ) . '">';
 					$field .= '<input type="radio"';
+					$field .= ' id="tribe-field-' . esc_attr( $field_id ) . '"';
 					$field .= $this->do_field_name();
 					$field .= ' value="' . esc_attr( $option_id ) . '" ' . checked( $this->value, $option_id, false ) . '/>';
 					$field .= $title;
@@ -608,6 +617,9 @@ if ( ! class_exists( 'Tribe__Field' ) ) {
 				$field .= $this->do_field_name();
 				$field .= " id='{$this->id}-select'";
 				$field .= " class='tribe-dropdown'";
+				if ( empty( $this->allow_clear ) ) {
+					$field .= " data-prevent-clear='true'";
+				}
 				$field .= '>';
 				foreach ( $this->options as $option_id => $title ) {
 					$field .= '<option value="' . esc_attr( $option_id ) . '"';

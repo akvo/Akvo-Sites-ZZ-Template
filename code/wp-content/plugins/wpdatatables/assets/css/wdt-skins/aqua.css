@@ -29,7 +29,10 @@
 .wpdt-c .wpDataTableContainer {
     background:none;
 }
-
+div#wpdatatable-preview-container.wpDataTablesWrapper, div#wpdatatable-preview-container.wpDataTablesWrapper .wpDataTablesWrapper {
+    background: #ffffff;
+    padding: 0;
+}
       /*  Above the table  */
 
 /*  Display length and Global search  */
@@ -380,7 +383,7 @@
 }
 
 .wpdt-c .wpDataTablesWrapper .dataTables_paginate .ellipsis {
-    padding: 5px 7px 7px;
+    padding: 6px 7px 7px;
     display: inline-block;
 }
 

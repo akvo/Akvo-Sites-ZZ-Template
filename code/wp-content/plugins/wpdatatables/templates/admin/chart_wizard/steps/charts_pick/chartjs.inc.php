@@ -2,7 +2,7 @@
 
 <div class="row">
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_line_chart" data-min_columns="2" data-max_columns="0">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_area_chart" data-min_columns="2" data-max_columns="0">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_stacked_area_chart" data-min_columns="2" data-max_columns="0">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_column_chart" data-min_columns="2" data-max_columns="0">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_radar_chart" data-min_columns="2" data-max_columns="0">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_polar_area_chart" data-min_columns="2" data-max_columns="2">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -81,7 +81,7 @@
 
 <div class="row">
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_pie_chart" data-min_columns="2" data-max_columns="2">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -93,7 +93,7 @@
         </div>
     </div>
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_doughnut_chart" data-min_columns="2" data-max_columns="2">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>
@@ -106,7 +106,7 @@
         </div>
     </div>
 
-    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2">
+    <div class="wdt-chart-wizard-chart-selecter-block col-sm-2 disabled">
         <div class="card" data-type="chartjs_bubble_chart" data-min_columns="4" data-max_columns="4">
             <div class="card-header">
                 <div class="wdt-chart-wizard-overlay"></div>

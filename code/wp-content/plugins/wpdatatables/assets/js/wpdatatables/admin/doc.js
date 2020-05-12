@@ -1,6 +1,6 @@
 var activeTab = '';
 var step = '';
-var docsHomeUrl = 'http://wpdatatables.com';
+var docsHomeUrl = 'https://wpdatatables.com';
 
 var tableSettingsLinks = {
     'main-table-settings': '#table-settings-data-source',

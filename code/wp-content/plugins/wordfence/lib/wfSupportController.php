@@ -8,6 +8,7 @@ class wfSupportController {
 	const ITEM_CHANGELOG = 'changelog';
 	
 	const ITEM_NOTICE_WAF_INACCESSIBLE_CONFIG = 'notice-waf-inaccessible-config';
+	const ITEM_NOTICE_WAF_MOD_PHP_FIX = 'notice-waf-mod-php-fix';
 	const ITEM_NOTICE_WAF_READ_ONLY_WARNING = 'notice-waf-read-only-warning';
 	const ITEM_NOTICE_MISCONFIGURED_HOW_GET_IPS = 'notice-misconfigured-how-get-ips';
 	const ITEM_NOTICE_SWITCH_LIVE_TRAFFIC = 'notice-switch-live-traffic';
@@ -123,7 +124,6 @@ class wfSupportController {
 	const ITEM_SCAN_OPTION_PASSWORD_STRENGTH = 'scan-option-password-strength';
 	const ITEM_SCAN_OPTION_DISK_SPACE = 'scan-option-disk-space';
 	const ITEM_SCAN_OPTION_WAF_STATUS = 'scan-option-waf-status';
-	const ITEM_SCAN_OPTION_DNS_CHANGES = 'scan-option-dns-changes';
 	const ITEM_SCAN_OPTION_OUTSIDE_WORDPRESS = 'scan-option-outside-wordpress';
 	const ITEM_SCAN_OPTION_IMAGES_EXECUTABLE = 'scan-option-images-executable';
 	const ITEM_SCAN_OPTION_HIGH_SENSITIVITY = 'scan-option-high-sensitivity';
@@ -145,6 +145,8 @@ class wfSupportController {
 	const ITEM_SCAN_RESULT_OPTION_MALWARE_URL = 'scan-result-option-malware-url';
 	const ITEM_SCAN_RESULT_GEOIP_UPDATE = 'scan-result-geoip-update';
 	const ITEM_SCAN_RESULT_WAF_DISABLED = 'scan-result-waf-disabled';
+	const ITEM_SCAN_RESULT_UNKNOWN_FILE_CORE = 'scan-result-unknown-file-in-wordpress-core';
+	const ITEM_SCAN_RESULT_SKIPPED_PATHS = 'scan-result-skipped-paths';
 	
 	const ITEM_TOOLS_TWO_FACTOR = 'tools-two-factor';
 	const ITEM_TOOLS_LIVE_TRAFFIC = 'tools-live-traffic';
@@ -183,6 +185,7 @@ class wfSupportController {
 			//These all fall through to the query format
 				
 			case self::ITEM_NOTICE_WAF_INACCESSIBLE_CONFIG:
+			case self::ITEM_NOTICE_WAF_MOD_PHP_FIX:
 			case self::ITEM_NOTICE_WAF_READ_ONLY_WARNING:
 			case self::ITEM_NOTICE_MISCONFIGURED_HOW_GET_IPS:
 			case self::ITEM_NOTICE_SWITCH_LIVE_TRAFFIC:
@@ -303,7 +306,6 @@ class wfSupportController {
 			case self::ITEM_SCAN_OPTION_PASSWORD_STRENGTH:
 			case self::ITEM_SCAN_OPTION_DISK_SPACE:
 			case self::ITEM_SCAN_OPTION_WAF_STATUS:
-			case self::ITEM_SCAN_OPTION_DNS_CHANGES:
 			case self::ITEM_SCAN_OPTION_OUTSIDE_WORDPRESS:
 			case self::ITEM_SCAN_OPTION_IMAGES_EXECUTABLE:
 			case self::ITEM_SCAN_OPTION_HIGH_SENSITIVITY:
@@ -320,6 +322,8 @@ class wfSupportController {
 			case self::ITEM_SCAN_RESULT_OPTION_MALWARE_URL:
 			case self::ITEM_SCAN_RESULT_GEOIP_UPDATE:
 			case self::ITEM_SCAN_RESULT_WAF_DISABLED:
+			case self::ITEM_SCAN_RESULT_UNKNOWN_FILE_CORE:
+			case self::ITEM_SCAN_RESULT_SKIPPED_PATHS:
 				
 			case self::ITEM_TOOLS_TWO_FACTOR:
 			case self::ITEM_TOOLS_LIVE_TRAFFIC:

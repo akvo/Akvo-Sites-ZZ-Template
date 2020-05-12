@@ -4,12 +4,13 @@ defined('ABSPATH') or die("Cannot access pages directly.");
 
 /**
  * MySQL abstract layer for the WPDataTables module
- * 
+ *
  * @author cjbug@ya.ru
  * @since 10.10.2012
  *
  * */
-class PDTSql {
+class PDTSql
+{
 
     private $dbhost;
     private $dbname;
@@ -28,63 +29,69 @@ class PDTSql {
      * @param string $sqlhost
      * @param string $sqldbname
      * @param string $sqluser
-     * @param string $sqlpassword 
+     * @param string $sqlpassword
      */
-    function __construct( $sqlhost, $sqldbname, $sqluser, $sqlpassword, $sqlport  ) {
-        $this->dbhost = (((string) $sqlhost)) ? $sqlhost : '';
-        $this->dbname = (((string) $sqldbname)) ? $sqldbname : '';
-        $this->dbuser = (((string) $sqluser)) ? $sqluser : '';
-        $this->dbpass = (((string) $sqlpassword)) ? $sqlpassword : '';
-        $this->dbport = (((int) $sqlport)) ? $sqlport : '3306';
+    function __construct($sqlhost, $sqldbname, $sqluser, $sqlpassword, $sqlport)
+    {
+        $this->dbhost = (((string)$sqlhost)) ? $sqlhost : '';
+        $this->dbname = (((string)$sqldbname)) ? $sqldbname : '';
+        $this->dbuser = (((string)$sqluser)) ? $sqluser : '';
+        $this->dbpass = (((string)$sqlpassword)) ? $sqlpassword : '';
+        $this->dbport = (((int)$sqlport)) ? $sqlport : '3306';
         $this->sqlConnect();
     }
 
     /**
      * Initializes the connection to the database
-     * @return boolean 
+     * @return boolean
      */
-    function sqlConnect() {
-        $this->link = @mysqli_connect( $this->dbhost, $this->dbuser, $this->dbpass, $this->dbname, $this->dbport );
+    function sqlConnect()
+    {
+        $this->link = @mysqli_connect($this->dbhost, $this->dbuser, $this->dbpass, $this->dbname, $this->dbport);
         if (!$this->link) {
-            throw new Exception( mysqli_connect_error() );
+            throw new Exception(mysqli_connect_error());
         } else {
             $result = mysqli_select_db($this->link, $this->dbname);
             mysqli_query($this->link, 'SET character_set_client="utf8",character_set_connection="utf8",character_set_results="utf8"; ');
             if (!$result) {
-                throw new Exception( mysqli_error($this->link) );
+                throw new Exception(mysqli_error($this->link));
             }
         }
         return true;
     }
-    
+
     /**
      * Determines if the connection is established
      */
-    public function isConnected(){
-        return !empty( $this->link );
+    public function isConnected()
+    {
+        return !empty($this->link);
     }
 
     /**
      * Close the DB connection
-     * @return boolean 
+     * @return boolean
      */
-    function sqlClose() {
+    function sqlClose()
+    {
         mysqli_close();
         return true;
     }
 
     /**
      * Set the group key
-     * @param string $key 
+     * @param string $key
      */
-    function setGroupKey($key) {
+    function setGroupKey($key)
+    {
         $this->key = $key;
     }
 
     /**
-     * Clear the group key 
+     * Clear the group key
      */
-    function dropGroupKey() {
+    function dropGroupKey()
+    {
         $this->key = '';
     }
 
@@ -93,16 +100,17 @@ class PDTSql {
      * @param $query
      * @param parameters - a single array, or all values
      * separated by comma
-     * @return boolean 
+     * @return boolean
      */
-    function doQuery() {
+    function doQuery()
+    {
         if ($result = $this->prepare(func_get_args())) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     /**
      * Get a single field value from query result
      * @param $query
@@ -110,7 +118,8 @@ class PDTSql {
      * separated by comma
      * @return boolean Get
      */
-    function getField() {
+    function getField()
+    {
         if ($result = $this->prepare(func_get_args())) {
             $row = mysqli_fetch_row($result);
             return $row[0];
@@ -124,9 +133,10 @@ class PDTSql {
      * @param $query
      * @param parameters - a single array, or all values
      * separated by comma
-     * @return boolean 
+     * @return boolean
      */
-    function getRow() {
+    function getRow()
+    {
         if ($result = $this->prepare(func_get_args())) {
             $row = mysqli_fetch_assoc($result);
             @mysqli_free_result($result);
@@ -141,7 +151,8 @@ class PDTSql {
      *
      * @return array|bool
      */
-    function getArray() {
+    function getArray()
+    {
         $tmp = null;
         if ($result = $this->prepare(func_get_args())) {
             while ($row = mysqli_fetch_array($result))
@@ -153,14 +164,15 @@ class PDTSql {
         }
     }
 
-    /** 
+    /**
      * Get all results of a query as an assoc array
      * @param $query
      * @param parameters - a single array, or all values
      * separated by comma
-     * @return boolean 
+     * @return boolean
      */
-    function getAssoc() {
+    function getAssoc()
+    {
         if ($result = $this->prepare(func_get_args())) {
             while ($row = mysqli_fetch_assoc($result))
                 $tmp[] = $row;
@@ -171,17 +183,13 @@ class PDTSql {
         }
     }
 
-    public static function sanitizeRawArrayElement( $element ){
-        return WDT_TIMEOUT_FACTOR > WDT_VALIDATE_COEFFICIENT
-            ? array_chunk( $element, WDT_VALIDATE_COEFFICIENT )
-            : $element;
-    }
-    
+
     /**
      * Returns the last MySQL error
      */
-    function getLastError(){
-        return mysqli_error( $this->link );
+    function getLastError()
+    {
+        return mysqli_error($this->link);
     }
 
     /**
@@ -189,7 +197,8 @@ class PDTSql {
      * grouped by a provided key
      * @return bool
      */
-    function getAssocGroups() {
+    function getAssocGroups()
+    {
         $properties = func_get_args();
         $key = $properties[0];
         array_shift($properties);
@@ -207,7 +216,8 @@ class PDTSql {
      * Get the results of a query sorted by a provided key
      * @return bool
      */
-    function getAssocByKey() {
+    function getAssocByKey()
+    {
         $properties = func_get_args();
         $key = $properties[0];
         array_shift($properties);
@@ -227,9 +237,10 @@ class PDTSql {
      * @param $query
      * @param parameters - a single array, or all values
      * separated by comma
-     * @return boolean 
+     * @return boolean
      */
-    function getPairs() {
+    function getPairs()
+    {
         if ($result = $this->prepare(func_get_args())) {
             while (@$row = mysqli_fetch_row($result))
                 $tmp[strval($row[0])] = $row[1];
@@ -240,14 +251,12 @@ class PDTSql {
         }
     }
 
-    public static function getCurrentSessionValParameter(){
-        return WDT_VALIDATE_COEFFICIENT;
-    }
 
     /**
-     * Prepares the query and the parameters passed 
+     * Prepares the query and the parameters passed
      */
-    function prepare($properties) {
+    function prepare($properties)
+    {
         $q = $properties[0];
         unset($properties[0]);
 //        $q = preg_replace('/\?/', 'x?x', $q);
@@ -256,7 +265,7 @@ class PDTSql {
                 $p = '\'' . mysqli_real_escape_string($this->link, $p) . '\'';
                 $q = preg_replace('/x\?x/', $p, $q, 1);
             }
-        }elseif( (count($properties) == 1) && (is_array($properties[1])) ){
+        } elseif ((count($properties) == 1) && (is_array($properties[1]))) {
             foreach ($properties[1] as $p) {
                 $p = '\'' . mysqli_real_escape_string($this->link, $p) . '\'';
                 $q = preg_replace('/x\?x/', $p, $q, 1);
@@ -267,10 +276,12 @@ class PDTSql {
 
         $result = mysqli_query($this->link, $this->query);
 
-        if (mysqli_error($this->link)){ return false; }
+        if (mysqli_error($this->link)) {
+            return false;
+        }
 
-        while (mysqli_more_results($this->link)){
-        	mysqli_next_result($this->link);
+        while (mysqli_more_results($this->link)) {
+            mysqli_next_result($this->link);
             mysqli_store_result($this->link);
         }
 
@@ -287,9 +298,10 @@ class PDTSql {
             return false;
         }
     }
-    
-    function getLastInsertId(){
-    	return mysqli_insert_id ( $this->link );
+
+    function getLastInsertId()
+    {
+        return mysqli_insert_id($this->link);
     }
 
 }

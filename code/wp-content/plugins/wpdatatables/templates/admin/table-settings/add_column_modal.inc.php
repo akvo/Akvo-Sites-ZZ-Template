@@ -69,8 +69,10 @@
                                         <select class="wdt-add-column-insert-after selectpicker">
                                             <option value="%%beginning%%"><?php _e('Beginning of table', 'wpdatatables'); ?></option>
                                             <option value="%%end%%"><?php _e('End of table', 'wpdatatables'); ?></option>
-                                            <?php foreach ($tableData->table->columns as $column) { ?>
+                                            <?php if (isset($tableData)){
+                                                foreach ($tableData->table->columns as $column) { ?>
                                                 <option value="<?php echo $column->orig_header; ?>"><?php echo $column->display_header; ?></option>
+                                                <?php } ?>
                                             <?php } ?>
                                         </select>
                                     </div>

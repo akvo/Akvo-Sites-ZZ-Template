@@ -1398,6 +1398,21 @@
     text-decoration: none;
 }
 
+.wpdt-c a.dark {
+    color: #23282d;
+    cursor: pointer;
+}
+
+.wpdt-c .card.disabled,
+.wpdt-c .p-l-0.data-filtering.disabled,
+.wpdt-c .pull-right.p-r-0.disabled,
+.wpdt-c #chart-container-tabs .disabled,
+.wpdt-c .highcharts-charts-type .disabled,
+.wpdt-c .chartjs-charts-type .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .wpdt-c a:hover,
 .wpdt-c a:focus {
     color: #0a6ebd;
@@ -2206,6 +2221,10 @@
 
     .wpdt-c .col-sm-4 {
         width: 33.33333333%;
+    }
+
+    .wpdt-c .wdt-addons .col-sm-3{
+        margin-bottom: 18px;
     }
 
     .wpdt-c .col-sm-3 {
@@ -8163,7 +8182,7 @@ select.input-group-lg > .input-group-btn > .btn {
 }
 
 .wpdt-c .waves-button,
-.wpdt-c  .waves-circle,
+.wpdt-c .waves-circle,
 .wpdt-c .wpDataTablesWrapper .waves-button,
 .wpdt-c .wpDataTablesWrapper .waves-circle {
     -webkit-transform: translateZ(0);
@@ -8216,7 +8235,7 @@ select.input-group-lg > .input-group-btn > .btn {
 }
 
 .wpdt-c .waves-circle,
-.wpdt-c .wpDataTablesWrapper .waves-circle{
+.wpdt-c .wpDataTablesWrapper .waves-circle {
     text-align: center;
     width: 2.5em;
     height: 2.5em;
@@ -10497,7 +10516,6 @@ select.input-group-lg > .input-group-btn > .btn {
     line-height: 100%;
     color: #fff;
 }
-
 
 
 /*-------------------------
@@ -13009,6 +13027,6 @@ input:focus {
     font-size: 14px;
 }
 
-.wdt-include-bootstrap-block,.wdt-include-bootstrap-back-end-block {
+.wdt-include-bootstrap-block, .wdt-include-bootstrap-back-end-block {
     margin-bottom: 25px;
 }

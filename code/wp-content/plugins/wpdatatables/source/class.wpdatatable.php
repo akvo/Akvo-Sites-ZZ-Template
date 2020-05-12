@@ -6,7 +6,8 @@ defined('ABSPATH') or die("Cannot access pages directly.");
 /**
  * Main engine of wpDataTables plugin
  */
-class WPDataTable {
+class WPDataTable
+{
 
     protected static $_columnClass = 'WDTColumn';
     protected $_wdtIndexedColumns = array();
@@ -76,238 +77,288 @@ class WPDataTable {
     /**
      * @return bool
      */
-    public function isClearFilters() {
+    public function isClearFilters()
+    {
         return $this->_clearFilters;
     }
 
     /**
      * @param bool $clearFilters
      */
-    public function setClearFilters($clearFilters) {
+    public function setClearFilters($clearFilters)
+    {
         $this->_clearFilters = $clearFilters;
     }
 
     /**
      * @return bool
      */
-    public function isFixedLayout() {
+    public function isFixedLayout()
+    {
         return $this->_fixedLayout;
     }
 
     /**
      * @param bool $fixedLayout
      */
-    public function setFixedLayout($fixedLayout) {
+    public function setFixedLayout($fixedLayout)
+    {
         $this->_fixedLayout = $fixedLayout;
     }
 
     /**
      * @return bool
      */
-    public function isWordWrap() {
+    public function isWordWrap()
+    {
         return $this->_wordWrap;
     }
 
     /**
      * @param bool $wordWrap
      */
-    public function setWordWrap($wordWrap) {
+    public function setWordWrap($wordWrap)
+    {
         $this->_wordWrap = $wordWrap;
     }
 
     /**
      * @return bool
      */
-    public function isAjaxReturn() {
+    public function isAjaxReturn()
+    {
         return $this->_ajaxReturn;
     }
 
     /**
      * @param bool $ajaxReturn
      */
-    public function setAjaxReturn($ajaxReturn) {
+    public function setAjaxReturn($ajaxReturn)
+    {
         $this->_ajaxReturn = $ajaxReturn;
     }
 
-    public function setNoData($no_data) {
+    public function setNoData($no_data)
+    {
         $this->_no_data = $no_data;
     }
 
-    public function getNoData() {
+    public function getNoData()
+    {
         return $this->_no_data;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->_id;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->_id = $id;
     }
 
     /**
      * @return string
      */
-    public function getTableContent() {
+    public function getTableContent()
+    {
         return $this->_tableContent;
     }
 
     /**
      * @param string $tableContent
      */
-    public function setTableContent($tableContent) {
+    public function setTableContent($tableContent)
+    {
         $this->_tableContent = $tableContent;
     }
 
     /**
      * @return string
      */
-    public function getTableType() {
+    public function getTableType()
+    {
         return $this->_tableType;
     }
 
     /**
      * @param string $tableType
      */
-    public function setTableType($tableType) {
+    public function setTableType($tableType)
+    {
         $this->_tableType = $tableType;
     }
 
-    public function setDefaultSearchValue($value) {
+    public function setDefaultSearchValue($value)
+    {
         if (!empty($value)) {
             $this->_defaultSearchValue = urlencode($value);
         }
     }
 
-    public function getDefaultSearchValue() {
+    public function getDefaultSearchValue()
+    {
         return urldecode($this->_defaultSearchValue);
     }
 
-    public function sortEnabled() {
+    public function sortEnabled()
+    {
         return $this->_wdtTableSort;
     }
 
-    public function sortEnable() {
+    public function sortEnable()
+    {
         $this->_wdtTableSort = true;
     }
 
-    public function sortDisable() {
+    public function sortDisable()
+    {
         $this->_wdtTableSort = false;
     }
 
-    public function addSumColumn($columnKey) {
+    public function addSumColumn($columnKey)
+    {
         $this->_sumColumns[] = $columnKey;
     }
 
-    public function setSumColumns($sumColumns) {
+    public function setSumColumns($sumColumns)
+    {
         $this->_sumColumns = $sumColumns;
     }
 
-    public function getSumColumns() {
+    public function getSumColumns()
+    {
         return $this->_sumColumns;
     }
 
-    public function addAvgColumn($columnKey) {
+    public function addAvgColumn($columnKey)
+    {
         $this->_avgColumns[] = $columnKey;
     }
 
-    public function setAvgColumns($avgColumns) {
+    public function setAvgColumns($avgColumns)
+    {
         $this->_avgColumns = $avgColumns;
     }
 
-    public function getAvgColumns() {
+    public function getAvgColumns()
+    {
         return $this->_avgColumns;
     }
 
-    public function addMinColumn($columnKey) {
+    public function addMinColumn($columnKey)
+    {
         $this->_minColumns[] = $columnKey;
     }
 
-    public function setMinColumns($minColumns) {
+    public function setMinColumns($minColumns)
+    {
         $this->_minColumns = $minColumns;
     }
 
-    public function getMinColumns() {
+    public function getMinColumns()
+    {
         return $this->_minColumns;
     }
 
-    public function addMaxColumn($columnKey) {
+    public function addMaxColumn($columnKey)
+    {
         $this->_maxColumns[] = $columnKey;
     }
 
-    public function setMaxColumns($maxColumns) {
+    public function setMaxColumns($maxColumns)
+    {
         $this->_maxColumns = $maxColumns;
     }
 
-    public function getMaxColumns() {
+    public function getMaxColumns()
+    {
         return $this->_maxColumns;
     }
 
-    public function addSumFooterColumn($columnKey) {
+    public function addSumFooterColumn($columnKey)
+    {
         $this->_sumFooterColumns[] = $columnKey;
     }
 
-    public function setSumFooterColumns($sumColumns) {
+    public function setSumFooterColumns($sumColumns)
+    {
         $this->_sumFooterColumns = $sumColumns;
     }
 
-    public function getSumFooterColumns() {
+    public function getSumFooterColumns()
+    {
         return $this->_sumFooterColumns;
     }
 
-    public function addAvgFooterColumn($columnKey) {
+    public function addAvgFooterColumn($columnKey)
+    {
         $this->_avgFooterColumns[] = $columnKey;
     }
 
-    public function setAvgFooterColumns($avgColumns) {
+    public function setAvgFooterColumns($avgColumns)
+    {
         $this->_avgFooterColumns = $avgColumns;
     }
 
-    public function getAvgFooterColumns() {
+    public function getAvgFooterColumns()
+    {
         return $this->_avgFooterColumns;
     }
 
-    public function addMinFooterColumn($columnKey) {
+    public function addMinFooterColumn($columnKey)
+    {
         $this->_minFooterColumns[] = $columnKey;
     }
 
-    public function setMinFooterColumns($minColumns) {
+    public function setMinFooterColumns($minColumns)
+    {
         $this->_minFooterColumns = $minColumns;
     }
 
-    public function getMinFooterColumns() {
+    public function getMinFooterColumns()
+    {
         return $this->_minFooterColumns;
     }
 
-    public function addMaxFooterColumn($columnKey) {
+    public function addMaxFooterColumn($columnKey)
+    {
         $this->_maxFooterColumns[] = $columnKey;
     }
 
-    public function setMaxFooterColumns($maxColumns) {
+    public function setMaxFooterColumns($maxColumns)
+    {
         $this->_maxFooterColumns = $maxColumns;
     }
 
-    public function getMaxFooterColumns() {
+    public function getMaxFooterColumns()
+    {
         return $this->_maxFooterColumns;
     }
 
-    public function addColumnsDecimalPlaces($columnKey, $decimalPlaces) {
+    public function addColumnsDecimalPlaces($columnKey, $decimalPlaces)
+    {
         $this->_columnsDecimalPlaces[$columnKey] = $decimalPlaces;
     }
 
-    public function addColumnsThousandsSeparator($columnKey, $thousandsSeparator) {
+    public function addColumnsThousandsSeparator($columnKey, $thousandsSeparator)
+    {
         $this->_columnsThousandsSeparator[$columnKey] = $thousandsSeparator;
     }
 
-    public function getColumnsCSS() {
+    public function getColumnsCSS()
+    {
         return $this->_columnsCSS;
     }
 
-    public function setColumnsCss($css) {
+    public function setColumnsCss($css)
+    {
         $this->_columnsCSS = $css;
     }
 
-    public function reorderColumns($posArray) {
+    public function reorderColumns($posArray)
+    {
         if (!is_array($posArray)) {
             throw new WDTException('Invalid position data provided!');
         }
@@ -322,45 +373,55 @@ class WPDataTable {
         $this->_wdtNamedColumns = $resultByKeys;
     }
 
-    public function getWpId() {
+    public function getWpId()
+    {
         return $this->_wpId;
     }
 
-    public function setWpId($wpId) {
+    public function setWpId($wpId)
+    {
         $this->_wpId = $wpId;
     }
 
-    public function getCssClassesArr() {
+    public function getCssClassesArr()
+    {
         $classesStr = $this->_cssClassArray;
         $classesStr = apply_filters('wpdatatables_filter_table_cssClassArray', $classesStr, $this->getWpId());
         return $classesStr;
     }
 
-    public function getCSSClasses() {
+    public function getCSSClasses()
+    {
         return implode(' ', $this->_cssClassArray);
     }
 
-    public function addCSSClass($cssClass) {
+    public function addCSSClass($cssClass)
+    {
         $this->_cssClassArray[] = $cssClass;
     }
 
-    public function getCSSStyle() {
+    public function getCSSStyle()
+    {
         return $this->_style;
     }
 
-    public function setCSSStyle($style) {
+    public function setCSSStyle($style)
+    {
         $this->_style = $style;
     }
 
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->_title = $title;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->_title;
     }
 
-    public function setScrollable($scrollable) {
+    public function setScrollable($scrollable)
+    {
         if ($scrollable) {
             $this->_scrollable = true;
         } else {
@@ -368,11 +429,13 @@ class WPDataTable {
         }
     }
 
-    public function isScrollable() {
+    public function isScrollable()
+    {
         return $this->_scrollable;
     }
 
-    public function setInterfaceLanguage($lang) {
+    public function setInterfaceLanguage($lang)
+    {
         if (empty($lang)) {
             throw new WDTException('Incorrect language parameter!');
         }
@@ -382,47 +445,58 @@ class WPDataTable {
         $this->_interfaceLanguage = WDT_ROOT_PATH . 'source/lang/' . $lang;
     }
 
-    public function getInterfaceLanguage() {
+    public function getInterfaceLanguage()
+    {
         return $this->_interfaceLanguage;
     }
 
-    public function setAutoRefresh($refresh_interval) {
+    public function setAutoRefresh($refresh_interval)
+    {
         $this->_autoRefreshInterval = (int)$refresh_interval;
     }
 
-    public function getRefreshInterval() {
+    public function getRefreshInterval()
+    {
         return (int)$this->_autoRefreshInterval;
     }
 
-    public function paginationEnabled() {
+    public function paginationEnabled()
+    {
         return $this->_pagination;
     }
 
-    public function enablePagination() {
+    public function enablePagination()
+    {
         $this->_pagination = true;
     }
 
-    public function disablePagination() {
+    public function disablePagination()
+    {
         $this->_pagination = false;
     }
 
-    public function enableTT() {
+    public function enableTT()
+    {
         $this->_showTT = true;
     }
 
-    public function disableTT() {
+    public function disableTT()
+    {
         $this->_showTT = false;
     }
 
-    public function TTEnabled() {
+    public function TTEnabled()
+    {
         return $this->_showTT;
     }
 
-    public function hideToolbar() {
+    public function hideToolbar()
+    {
         $this->_toolbar = false;
     }
 
-    public function setDefaultSortColumn($key) {
+    public function setDefaultSortColumn($key)
+    {
         if (!isset($this->_wdtIndexedColumns[$key])
             && !isset($this->_wdtNamedColumns[$key])
         ) {
@@ -435,11 +509,13 @@ class WPDataTable {
         $this->_defaultSortColumn = $key;
     }
 
-    public function getDefaultSortColumn() {
+    public function getDefaultSortColumn()
+    {
         return $this->_defaultSortColumn;
     }
 
-    public function setDefaultSortDirection($direction) {
+    public function setDefaultSortDirection($direction)
+    {
         if (
         !in_array(
             $direction,
@@ -454,86 +530,101 @@ class WPDataTable {
         $this->_defaultSortDirection = $direction;
     }
 
-    public function getDefaultSortDirection() {
+    public function getDefaultSortDirection()
+    {
         return $this->_defaultSortDirection;
     }
 
-    public function hideBeforeLoad() {
+    public function hideBeforeLoad()
+    {
         $this->setCSSStyle('display: none; ');
         $this->_hide_before_load = true;
     }
 
-    public function showBeforeLoad() {
+    public function showBeforeLoad()
+    {
         $this->_hide_before_load = false;
     }
 
-    public function doHideBeforeLoad() {
+    public function doHideBeforeLoad()
+    {
         return $this->_hide_before_load;
     }
 
-    public function getDisplayLength() {
+    public function getDisplayLength()
+    {
         return $this->_lengthDisplay;
     }
 
-    public function setDisplayLength($length) {
+    public function setDisplayLength($length)
+    {
         if (!in_array($length, array(1, 5, 10, 20, 25, 30, 50, 100, 200, -1))) {
             return false;
         }
         $this->_lengthDisplay = $length;
     }
 
-    public function setIdColumnKey($key) {
+    public function setIdColumnKey($key)
+    {
         $this->_idColumnKey = $key;
     }
 
-    public function getIdColumnKey() {
+    public function getIdColumnKey()
+    {
         return $this->_idColumnKey;
     }
 
     /**
      * @return boolean
      */
-    public function isInfoBlock() {
+    public function isInfoBlock()
+    {
         return $this->_infoBlock;
     }
 
     /**
      * @param boolean $infoBlock
      */
-    public function setInfoBlock($infoBlock) {
+    public function setInfoBlock($infoBlock)
+    {
         $this->_infoBlock = (bool)$infoBlock;
     }
 
     /**
      * @return boolean
      */
-    public function isGlobalSearch() {
+    public function isGlobalSearch()
+    {
         return $this->_globalSearch;
     }
 
     /**
      * @param boolean $globalSearch
      */
-    public function setGlobalSearch($globalSearch) {
+    public function setGlobalSearch($globalSearch)
+    {
         $this->_globalSearch = (bool)$globalSearch;
     }
 
     /**
      * @return boolean
      */
-    public function isShowRowsPerPage() {
+    public function isShowRowsPerPage()
+    {
         return $this->_showRowsPerPage;
     }
 
     /**
      * @param boolean $showRowsPerPage
      */
-    public function setShowRowsPerPage($showRowsPerPage) {
+    public function setShowRowsPerPage($showRowsPerPage)
+    {
         $this->_showRowsPerPage = (bool)$showRowsPerPage;
     }
 
-    public function __construct() {
-        
+    public function __construct()
+    {
+
         if (self::$wdt_internal_idcount == 0) {
             $this->_firstOnPage = true;
         }
@@ -541,7 +632,8 @@ class WPDataTable {
         $this->_id = 'table_' . self::$wdt_internal_idcount;
     }
 
-    public function wdtDefineColumnsWidth($widthsArray) {
+    public function wdtDefineColumnsWidth($widthsArray)
+    {
         if (empty($this->_wdtIndexedColumns)) {
             throw new WDTException('wpDataTable reports no columns are defined!');
         }
@@ -563,7 +655,8 @@ class WPDataTable {
         }
     }
 
-    public function setColumnsPossibleValues($valuesArray) {
+    public function setColumnsPossibleValues($valuesArray)
+    {
         if (empty($this->_wdtIndexedColumns)) {
             throw new WDTException('No columns in the table!');
         }
@@ -587,7 +680,8 @@ class WPDataTable {
         }
     }
 
-    public function getHiddenColumnCount() {
+    public function getHiddenColumnCount()
+    {
         $count = 0;
         foreach ($this->_wdtIndexedColumns as $dataColumn) {
             if (!$dataColumn->isVisible()) {
@@ -597,21 +691,24 @@ class WPDataTable {
         return $count;
     }
 
-    
 
-    public function enableGrouping() {
+    public function enableGrouping()
+    {
         $this->_groupingEnabled = true;
     }
 
-    public function disableGrouping() {
+    public function disableGrouping()
+    {
         $this->_groupingEnabled = false;
     }
 
-    public function groupingEnabled() {
+    public function groupingEnabled()
+    {
         return $this->_groupingEnabled;
     }
 
-    public function groupByColumn($key) {
+    public function groupByColumn($key)
+    {
         if (!isset($this->_wdtIndexedColumns[$key])
             && !isset($this->_wdtNamedColumns[$key])
         ) {
@@ -632,58 +729,71 @@ class WPDataTable {
     /**
      * Returns the index of grouping column
      */
-    public function groupingColumnIndex() {
+    public function groupingColumnIndex()
+    {
         return $this->_wdtColumnGroupIndex;
     }
 
     /**
      * Returns the grouping column index
      */
-    public function groupingColumn() {
+    public function groupingColumn()
+    {
         return $this->_wdtColumnGroupIndex;
     }
 
-    public function countColumns() {
+    public function countColumns()
+    {
         return count($this->_wdtIndexedColumns);
     }
 
-    public function getColumnKeys() {
+    public function getColumnKeys()
+    {
         return array_keys($this->_wdtNamedColumns);
     }
 
-    public function setOnlyOwnRows($ownRows) {
+    public function setOnlyOwnRows($ownRows)
+    {
         $this->_onlyOwnRows = (bool)$ownRows;
     }
 
-    public function getOnlyOwnRows() {
+    public function getOnlyOwnRows()
+    {
         return $this->_onlyOwnRows;
     }
 
-    public function setUserIdColumn($column) {
+    public function setUserIdColumn($column)
+    {
         $this->_userIdColumn = $column;
     }
 
-    public function getUserIdColumn() {
+    public function getUserIdColumn()
+    {
         return $this->_userIdColumn;
     }
 
-    public function getColumns() {
+    public function getColumns()
+    {
         return $this->_wdtIndexedColumns;
     }
 
-    public function getColumnsByHeaders() {
+    public function getColumnsByHeaders()
+    {
         return $this->_wdtNamedColumns;
     }
 
-    public function addConditionalFormattingColumn($column) {
+    public function addConditionalFormattingColumn($column)
+    {
         $this->_conditionalFormattingColumns[] = $column;
     }
 
-    public function getConditionalFormattingColumns() {
+    public function getConditionalFormattingColumns()
+    {
         return $this->_conditionalFormattingColumns;
     }
 
-    public function createColumnsFromArr($headerArr, $wdtParameters, $wdtColumnTypes) {
+    public function createColumnsFromArr($headerArr, $wdtParameters, $wdtColumnTypes)
+    {
         foreach ($headerArr as $key) {
             $dataColumnProperties = array();
             $dataColumnProperties['title'] = isset($wdtParameters['columnTitles'][$key]) ? $wdtParameters['columnTitles'][$key] : $key;
@@ -737,7 +847,8 @@ class WPDataTable {
 
     }
 
-    public function getColumnHeaderOffset($key) {
+    public function getColumnHeaderOffset($key)
+    {
         $keys = $this->getColumnKeys();
         if (!empty($key) && in_array($key, $keys)) {
             return array_search($key, $keys);
@@ -746,7 +857,8 @@ class WPDataTable {
         }
     }
 
-    public function getColumnDefinitions() {
+    public function getColumnDefinitions()
+    {
         $defs = array();
         foreach ($this->_wdtIndexedColumns as $key => &$dataColumn) {
             $def = $dataColumn->getColumnJSON($key);
@@ -761,7 +873,8 @@ class WPDataTable {
      *
      * @return string
      */
-    public function getColumnFilterDefinitions() {
+    public function getColumnFilterDefinitions()
+    {
         $columnDefinitions = array();
         foreach ($this->_wdtIndexedColumns as $key => $dataColumn) {
 
@@ -782,7 +895,8 @@ class WPDataTable {
      *
      * @return string
      */
-    public function getColumnEditingDefinitions() {
+    public function getColumnEditingDefinitions()
+    {
         $columnDefinitions = array();
         foreach ($this->_wdtIndexedColumns as $key => $dataColumn) {
 
@@ -800,7 +914,8 @@ class WPDataTable {
      * @param $originalHeader
      * @return bool|mixed
      */
-    public function getColumn($originalHeader) {
+    public function getColumn($originalHeader)
+    {
         if (!isset($originalHeader)
             || (!isset($this->_wdtNamedColumns[$originalHeader])
                 && !isset($this->_wdtIndexedColumns[$originalHeader]))
@@ -821,7 +936,8 @@ class WPDataTable {
      * @param array $wdtParameters Array of rendering parameters
      * @return bool Result of generation
      */
-    public function arrayBasedConstruct($rawDataArr, $wdtParameters) {
+    public function arrayBasedConstruct($rawDataArr, $wdtParameters)
+    {
 
         if (empty($rawDataArr)) {
             if (!isset($wdtParameters['data_types'])) {
@@ -837,7 +953,7 @@ class WPDataTable {
         }
 
         $headerArr = WDTTools::extractHeaders($rawDataArr);
-        $rawDataArr = WDTTools::validateData( $rawDataArr );
+
         if (!empty($wdtParameters['columnTitles'])) {
             $headerArr = array_unique(
                 array_merge(
@@ -904,15 +1020,14 @@ class WPDataTable {
             }
         }
 
-        
 
         return true;
 
     }
 
-    
 
-    public function hideColumn($dataColumnIndex) {
+    public function hideColumn($dataColumnIndex)
+    {
         if (!isset($dataColumnIndex)
             || !isset($this->_wdtNamedColumns[$dataColumnIndex])
         ) {
@@ -921,7 +1036,8 @@ class WPDataTable {
         $this->_wdtNamedColumns[$dataColumnIndex]->setIsVisible(false);
     }
 
-    public function showColumn($dataColumnIndex) {
+    public function showColumn($dataColumnIndex)
+    {
         if (!isset($dataColumnIndex)
             || !isset($this->_wdtNamedColumns[$dataColumnIndex])
         ) {
@@ -931,7 +1047,8 @@ class WPDataTable {
     }
 
 
-    public function getCell($dataColumnIndex, $rowKey) {
+    public function getCell($dataColumnIndex, $rowKey)
+    {
         if (!isset($dataColumnIndex)
             || !isset($rowKey)
         ) {
@@ -948,7 +1065,8 @@ class WPDataTable {
         return $this->_dataRows[$rowKey][$dataColumnIndex];
     }
 
-    public function returnCellValue($cellContent, $wdtColumnIndex) {
+    public function returnCellValue($cellContent, $wdtColumnIndex)
+    {
         if (!isset($wdtColumnIndex)) {
             throw new WDTException('Column index not provided!');
         }
@@ -958,11 +1076,13 @@ class WPDataTable {
         return $this->_wdtNamedColumns[$wdtColumnIndex]->returnCellValue($cellContent);
     }
 
-    public function getDataRows() {
+    public function getDataRows()
+    {
         return $this->_dataRows;
     }
 
-    public function getDataRowsFormatted() {
+    public function getDataRowsFormatted()
+    {
         $dataRowsFormatted = array();
         foreach ($this->_dataRows as $dataRow) {
             $formattedRow = array();
@@ -974,7 +1094,8 @@ class WPDataTable {
         return $dataRowsFormatted;
     }
 
-    public function getRow($index) {
+    public function getRow($index)
+    {
         if (!isset($index) || !isset($this->_dataRows[$index])) {
             throw new WDTException('Invalid row index!');
         }
@@ -983,7 +1104,8 @@ class WPDataTable {
         return $rowArray;
     }
 
-    public function addDataColumn(&$dataColumn) {
+    public function addDataColumn(&$dataColumn)
+    {
         if (!($dataColumn instanceof WDTColumn)) {
             throw new WDTException('Please provide a wpDataTable column.');
         }
@@ -992,7 +1114,8 @@ class WPDataTable {
         return true;
     }
 
-    public function addColumns(&$dataColumns) {
+    public function addColumns(&$dataColumns)
+    {
         if (!is_array($dataColumns)) {
             throw new WDTException('Please provide an array of wpDataTable column objects.');
         }
@@ -1009,7 +1132,8 @@ class WPDataTable {
      * @param $function
      * @return float|int
      */
-    public function calcColumnFunction($columnKey, $function) {
+    public function calcColumnFunction($columnKey, $function)
+    {
         $result = null;
         if ($function == 'sum' || $function == 'avg') {
             foreach ($this->getDataRows() as $wdtRowDataArr) {
@@ -1046,7 +1170,8 @@ class WPDataTable {
     /**
      * Helper method to generate values for SUM, MIN, MAX, AVG
      */
-    private function calcColumnsAggregateFuncs() {
+    private function calcColumnsAggregateFuncs()
+    {
         if (empty($this->_aggregateFuncsRes)) {
             $this->_aggregateFuncsRes = array(
                 'sum' => array(),
@@ -1130,33 +1255,36 @@ class WPDataTable {
      * @param $function
      * @return mixed
      */
-    public function getColumnsAggregateFuncsResult($columnKey, $function) {
+    public function getColumnsAggregateFuncsResult($columnKey, $function)
+    {
         if (!isset($this->_aggregateFuncsRes[$function][$columnKey])) {
             $this->calcColumnsAggregateFuncs();
         }
         return $this->_aggregateFuncsRes[$function][$columnKey];
     }
 
-    
 
     /**
      * Formatting row data structure for ajax display table
      * @param $row - key => value pairs as column name and cell value of a row
      * @return array
      */
-    protected function formatAjaxQueryResultRow($row) {
+    protected function formatAjaxQueryResultRow($row)
+    {
         return array_values($row);
     }
 
 
-    public function jsonBasedConstruct($json, $wdtParameters = array()) {
+    public function jsonBasedConstruct($json, $wdtParameters = array())
+    {
         $json = WDTTools::applyPlaceholders($json);
         $json = WDTTools::curlGetData($json);
         $json = apply_filters('wpdatatables_filter_json', $json, $this->getWpId());
         return $this->arrayBasedConstruct(json_decode($json, true), $wdtParameters);
     }
 
-    public function XMLBasedConstruct($xml, $wdtParameters = array()) {
+    public function XMLBasedConstruct($xml, $wdtParameters = array())
+    {
         if (!$xml) {
             throw new WDTException('File you provided cannot be found.');
         }
@@ -1175,7 +1303,8 @@ class WPDataTable {
         return $this->arrayBasedConstruct($XMLArray, $wdtParameters);
     }
 
-    public function excelBasedConstruct($xls_url, $wdtParameters = array()) {
+    public function excelBasedConstruct($xls_url, $wdtParameters = array())
+    {
         ini_set('memory_limit', '2048M');
         if (!$xls_url) {
             throw new WDTException('Excel file not found!');
@@ -1245,7 +1374,8 @@ class WPDataTable {
     /**
      * Helper method that renders the modal
      */
-    public static function renderModal() {
+    public static function renderModal()
+    {
         include_once WDT_TEMPLATE_PATH . 'frontend/modal.inc.php';
         include_once WDT_TEMPLATE_PATH . 'common/delete_modal.inc.php';
     }
@@ -1254,7 +1384,8 @@ class WPDataTable {
      * Generates table HTML
      * @return string
      */
-    public function generateTable() {
+    public function generateTable()
+    {
         /** @noinspection PhpUnusedLocalVariableInspection */
         $tableContent = $this->renderWithJSAndStyles();
 
@@ -1288,7 +1419,6 @@ class WPDataTable {
         }
         $returnData .= "</style>\n";
 
-        
 
         return $returnData;
     }
@@ -1298,7 +1428,8 @@ class WPDataTable {
      * enqueue all necessary JS and CSS files
      * @return string
      */
-    protected function renderWithJSAndStyles() {
+    protected function renderWithJSAndStyles()
+    {
 
         $this->enqueueJSAndStyles();
 
@@ -1326,7 +1457,8 @@ class WPDataTable {
     /**
      * Function that enqueue all necessary JS and CSS files for wpDataTable
      */
-    protected function enqueueJSAndStyles() {
+    protected function enqueueJSAndStyles()
+    {
 
         WDTTools::wdtUIKitEnqueue();
 
@@ -1339,19 +1471,16 @@ class WPDataTable {
             wp_enqueue_style('wdt-wpdatatables', WDT_CSS_PATH . 'wpdatatables.min.css');
             wp_enqueue_style('wdt-table-tools', WDT_CSS_PATH . 'TableTools.css');
 
-            
 
             if (WDT_INCLUDE_DATATABLES_CORE) {
                 wp_enqueue_script('wdt-datatables', WDT_JS_PATH . 'jquery-datatables/jquery.dataTables.min.js', array(), false, true);
             }
 
-            
 
             if ($this->groupingEnabled()) {
                 wp_enqueue_script('wdt-row-grouping', WDT_JS_PATH . 'jquery-datatables/jquery.dataTables.rowGrouping.js', array('jquery', 'wdt-datatables'), false, true);
             }
 
-            
 
             wp_enqueue_script('wdt-funcs-js', WDT_JS_PATH . 'wpdatatables/wdt.funcs.js', array('jquery', 'wdt-datatables', 'wdt-common'), false, true);
             wp_enqueue_script('wdt-wpdatatables', WDT_JS_PATH . 'wpdatatables/wpdatatables.js', array('jquery', 'wdt-datatables'), false, true);
@@ -1392,7 +1521,6 @@ class WPDataTable {
         !empty($this->_tableToolsConfig['pdf']) ? wp_enqueue_script('wdt-pdf-make', WDT_JS_PATH . 'export-tools/pdfmake.min.js', array('jquery'), false, true) : null;
         !empty($this->_tableToolsConfig['pdf']) ? wp_enqueue_script('wdt-vfs-fonts', WDT_JS_PATH . 'export-tools/vfs_fonts.js', array('jquery'), false, true) : null;
 
-        
 
         wp_localize_script('wdt-common', 'wpdatatables_edit_strings', WDTTools::getTranslationStrings());
         wp_localize_script('wdt-wpdatatables', 'wpdatatables_settings', WDTTools::getDateTimeSettings());
@@ -1405,7 +1533,8 @@ class WPDataTable {
      * @param $tableData
      * @return array
      */
-    public function prepareColumnData($tableData) {
+    public function prepareColumnData($tableData)
+    {
 
         $returnArray = array(
             'dateInputFormat' => array(),
@@ -1463,17 +1592,16 @@ class WPDataTable {
                 $returnArray['possibleValuesAddEmpty'][$column->orig_header] = isset($column->possibleValuesAddEmpty) ? $column->possibleValuesAddEmpty : null;
                 $returnArray['possibleValuesType'][$column->orig_header] = isset($column->possibleValuesType) ? $column->possibleValuesType : null;
                 $returnArray['sorting'][$column->orig_header] = isset($column->sorting) ? $column->sorting : null;
-                $returnArray['linkTargetAttribute'][$column->orig_header]= isset($column->linkTargetAttribute) ? $column->linkTargetAttribute : null;
-                $returnArray['linkButtonAttribute'][$column->orig_header]= isset($column->linkButtonAttribute) ? $column->linkButtonAttribute : null;
-                $returnArray['linkButtonLabel'][$column->orig_header]= isset($column->linkButtonLabel) ? $column->linkButtonLabel : null;
-                $returnArray['linkButtonClass'][$column->orig_header]= isset($column->linkButtonClass) ? $column->linkButtonClass : null;
+                $returnArray['linkTargetAttribute'][$column->orig_header] = isset($column->linkTargetAttribute) ? $column->linkTargetAttribute : null;
+                $returnArray['linkButtonAttribute'][$column->orig_header] = isset($column->linkButtonAttribute) ? $column->linkButtonAttribute : null;
+                $returnArray['linkButtonLabel'][$column->orig_header] = isset($column->linkButtonLabel) ? $column->linkButtonLabel : null;
+                $returnArray['linkButtonClass'][$column->orig_header] = isset($column->linkButtonClass) ? $column->linkButtonClass : null;
 
             }
         }
         return $returnArray;
     }
 
-    
 
     /**
      * Helper method which populates the wpdatatables object with passed in parameters and data (stored in DB)
@@ -1481,7 +1609,8 @@ class WPDataTable {
      * @param $tableData
      * @param $columnData
      */
-    public function fillFromData($tableData, $columnData) {
+    public function fillFromData($tableData, $columnData)
+    {
         if (empty($tableData->table_type)) {
             return;
         }
@@ -1539,21 +1668,21 @@ class WPDataTable {
         if (isset($columnData['dateInputFormat'])) {
             $params['dateInputFormat'] = $columnData['dateInputFormat'];
         }
-        if (isset($columnData['linkTargetAttribute'])){
+        if (isset($columnData['linkTargetAttribute'])) {
             $params['linkTargetAttribute'] = $columnData['linkTargetAttribute'];
         }
-        if (isset($columnData['linkButtonAttribute'])){
+        if (isset($columnData['linkButtonAttribute'])) {
             $params['linkButtonAttribute'] = $columnData['linkButtonAttribute'];
         }
-        if (isset($columnData['linkButtonLabel'])){
+        if (isset($columnData['linkButtonLabel'])) {
             $params['linkButtonLabel'] = $columnData['linkButtonLabel'];
         }
-        if (isset($columnData['linkButtonClass'])){
+        if (isset($columnData['linkButtonClass'])) {
             $params['linkButtonClass'] = $columnData['linkButtonClass'];
         }
 
         switch ($tableData->table_type) {
-            
+
             case 'xls':
             case 'csv':
                 $this->excelBasedConstruct(
@@ -1582,7 +1711,6 @@ class WPDataTable {
                 );
                 break;
 
-            
 
             default:
                 // Solution for addons
@@ -1619,7 +1747,6 @@ class WPDataTable {
             $this->setWordWrap(true);
         }
 
-        
 
         if (!empty($tableData->scrollable)) {
             $this->setScrollable(true);
@@ -1681,7 +1808,8 @@ class WPDataTable {
      * Helper method that prepares the rendering rules
      * @param array $columnData
      */
-    public function prepareRenderingRules($columnData) {
+    public function prepareRenderingRules($columnData)
+    {
         $columnIndex = 1;
         // Check the search values passed from URL
         if (isset($_GET['wdt_search'])) {
@@ -1689,7 +1817,7 @@ class WPDataTable {
         }
 
         // Define all column-dependent rendering rules
-        foreach ($columnData as $key=>$column) {
+        foreach ($columnData as $key => $column) {
 
             $this->column_id = $key;
             // Set filter types
@@ -1701,7 +1829,6 @@ class WPDataTable {
                 $this->getColumn($column->orig_header)->setIsVisible(false);
             }
 
-            
 
             // if grouping enabled for this column, passing it to table class
             if ($column->groupColumn) {
@@ -1741,7 +1868,7 @@ class WPDataTable {
             if (sanitize_html_class(strtolower(str_replace(' ', '-', $column->orig_header))) === '') {
                 $cssColumnHeader = 'column-' . $this->column_id;
             } else {
-                $cssColumnHeader = 'column-' . sanitize_html_class( strtolower( str_replace( ' ', '-', $column->orig_header ) ) );
+                $cssColumnHeader = 'column-' . sanitize_html_class(strtolower(str_replace(' ', '-', $column->orig_header)));
             }
             if ($column->text_before != '') {
                 $this->_columnsCSS .= "\n#{$this->getId()} > tbody > tr > td.{$cssColumnHeader}:not(:empty):before,
@@ -1776,8 +1903,9 @@ class WPDataTable {
     /**
      * Returns JSON object for table description
      */
-    public function getJsonDescription() {
-        
+    public function getJsonDescription()
+    {
+
         global $wdtExportFileName;
 
         $obj = new stdClass();
@@ -1786,11 +1914,11 @@ class WPDataTable {
         $obj->infoBlock = $this->isInfoBlock();
         $obj->globalSearch = $this->isGlobalSearch();
         $obj->showRowsPerPage = $this->isShowRowsPerPage();
-        
+
         $obj->hideBeforeLoad = $this->doHideBeforeLoad();
         $obj->number_format = (int)(get_option('wdtNumberFormat') ? get_option('wdtNumberFormat') : 1);
         $obj->decimalPlaces = (int)(get_option('wdtDecimalPlaces') ? get_option('wdtDecimalPlaces') : 2);
-        
+
         $obj->spinnerSrc = WDT_ASSETS_PATH . '/img/spinner.gif';
         $obj->groupingEnabled = $this->groupingEnabled();
         if ($this->groupingEnabled()) {
@@ -1806,7 +1934,7 @@ class WPDataTable {
         $obj->dataTableParams->sDom = "BT<'clear'>{$showRowsPerPage}{$globalSearch}{$scrollable}{$infoBlock}p";
 
         $obj->dataTableParams->bSortCellsTop = false;
-        
+
         if ($this->paginationEnabled()) {
             $obj->dataTableParams->bPaginate = true;
             $obj->dataTableParams->aLengthMenu = json_decode('[[1,5,10,25,50,100,-1],[1,5,10,25,50,100,"' . __('All', 'wpdatatables') . '"]]');
@@ -1858,11 +1986,11 @@ class WPDataTable {
         }
 
         $currentSkin = get_option('wdtBaseSkin');
-        $skinsWithNewTableToolsButtons = ['aqua','purple','dark'];
+        $skinsWithNewTableToolsButtons = ['aqua', 'purple', 'dark'];
 
         if ($this->TTEnabled()) {
             (!isset($obj->dataTableParams->buttons)) ? $obj->dataTableParams->buttons = array() : '';
-            if (in_array($currentSkin, $skinsWithNewTableToolsButtons)){
+            if (in_array($currentSkin, $skinsWithNewTableToolsButtons)) {
 
                 if (!empty($this->_tableToolsConfig['columns'])) {
                     $obj->dataTableParams->buttons[] =
@@ -1879,7 +2007,8 @@ class WPDataTable {
                             'extend' => 'print',
                             'exportOptions' => array('columns' => ':visible'),
                             'className' => 'DTTT_button DTTT_button_print',
-                            'text' => __('Print', 'wpdatatables')
+                            'text' => __('Print', 'wpdatatables'),
+                            'title' => $wdtExportFileName
                         );
                 }
 
@@ -1947,7 +2076,8 @@ class WPDataTable {
                             'extend' => 'print',
                             'exportOptions' => array('columns' => ':visible'),
                             'className' => 'DTTT_button DTTT_button_print',
-                            'text' => __('Print', 'wpdatatables')
+                            'text' => __('Print', 'wpdatatables'),
+                            'title' => $wdtExportFileName
                         );
                 }
 
@@ -2006,18 +2136,15 @@ class WPDataTable {
             $obj->dataTableParams->oLanguage->sLengthMenu = __('Showing _MENU_ Entries', 'wpdatatables');
         }
 
-        
 
         if (!isset($obj->dataTableParams->buttons)) {
             $obj->dataTableParams->buttons = array();
         }
 
-        
 
         $obj->dataTableParams->sPaginationType = 'full_numbers';
         $obj->columnsFixed = 0;
 
-        
 
         $init_format = get_option('wdtDateFormat');
         $datepick_format = str_replace('d', 'dd', $init_format);
@@ -2041,7 +2168,8 @@ class WPDataTable {
      * @param $dataRows
      * @return mixed
      */
-    public function joinWithForeignWpDataTable($columnKey, $foreignKeyRule, $dataRows) {
+    public function joinWithForeignWpDataTable($columnKey, $foreignKeyRule, $dataRows)
+    {
         $joinedTable = WPDataTable::loadWpDataTable($foreignKeyRule->tableId);
         $distinctValues = $joinedTable->getDistinctValuesForColumns($foreignKeyRule);
         foreach ($dataRows as &$dataRow) {
@@ -2062,7 +2190,8 @@ class WPDataTable {
      * storeColumnId and storeColumnName
      * @return array
      */
-    public function getDistinctValuesForColumns($foreignKeyRule) {
+    public function getDistinctValuesForColumns($foreignKeyRule)
+    {
         $distinctValues = array();
         $storeColumnName = $foreignKeyRule->storeColumnName;
         $displayColumnName = $foreignKeyRule->displayColumnName;
@@ -2103,7 +2232,8 @@ class WPDataTable {
      * @param $tableId
      * @return bool
      */
-    public static function deleteTable($tableId) {
+    public static function deleteTable($tableId)
+    {
         global $wpdb;
 
         if (!isset($_REQUEST['wdtNonce']) || empty($tableId) || !current_user_can('manage_options') || !wp_verify_nonce($_REQUEST['wdtNonce'], 'wdtDeleteTableNonce')) {
@@ -2138,7 +2268,8 @@ class WPDataTable {
      * Get all tables
      * @return array|null|object
      */
-    public static function getAllTables() {
+    public static function getAllTables()
+    {
         global $wpdb;
         $query = "SELECT id, title, table_type, server_side FROM {$wpdb->prefix}wpdatatables ORDER BY id";
         $allTables = $wpdb->get_results($query, ARRAY_A);
@@ -2153,7 +2284,8 @@ class WPDataTable {
      * @param bool $disableLimit
      * @return WPDataTable|WPExcelDataTable|bool
      */
-    public static function loadWpDataTable($tableId, $tableView = null, $disableLimit = false) {
+    public static function loadWpDataTable($tableId, $tableView = null, $disableLimit = false)
+    {
         $tableData = WDTConfigController::loadTableFromDB($tableId);
 
         if ($tableData) {

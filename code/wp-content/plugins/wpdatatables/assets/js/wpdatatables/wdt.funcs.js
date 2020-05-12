@@ -455,7 +455,7 @@ function wdtAddDatePlaceholders(input) {
 }
 
 function getMomentWdtDateFormat () {
-    return wpdatatables_settings.wdtDateFormat.replace('d', 'DD').replace('M', 'MMM').replace('m', 'MM').replace('y', 'YY');
+    return wpdatatables_settings.wdtDateFormat.replace('d', 'DD').replace('M', 'MMM').replace('m', 'MM').replace('y', 'YY').replace('F', 'MMMM').replace('j', 'DD');
 }
 
 function getMomentWdtTimeFormat () {

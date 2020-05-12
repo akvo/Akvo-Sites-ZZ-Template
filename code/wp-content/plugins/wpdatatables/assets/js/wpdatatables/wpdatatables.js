@@ -148,7 +148,7 @@ var wdtRenderDataTable = null;
          * Loop through all tables on the page and render the wpDataTables elements
          */
         $('table.wpDataTable').each(function () {
-            var tableDescription = $.parseJSON($('#' + $(this).data('described-by')).val());
+            var tableDescription = JSON.parse($('#' + $(this).data('described-by')).val());
             wdtRenderDataTable($(this), tableDescription);
         });
 

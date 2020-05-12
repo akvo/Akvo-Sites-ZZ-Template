@@ -1,26 +1,30 @@
-=== wpDataTables Lite - WordPress Table Plugin ===
-Contributors: wpDataTables
-Author URI: http://tms-plugins.com/
-Plugin URI: http://wpdatatables.com/
-Tags: wordpress table plugin, tables, wpdatatables, tables from excel, tables from CSV, datatables
+=== wpDataTables - Tables & Table Charts ===
+Contributors: wpDataTables, WebFactory
+Author URI: https://tms-outsource.com
+Plugin URI: https://wpdatatables.com/
+Tags: data tables, table, charts, tables from csv, tables from excel, datatables, responsive tables, charting, pie charts, mysql tables, table plugin, wp table, WordPress table Plugin, Google Charts, Excel, JSON, XML, PHP array
 Requires at least: 4.0
-Tested up to: 5.2.1
+Tested up to: 5.4
 Requires PHP: 5.4
-Stable tag: 2.0.9
+Stable tag: 2.0.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin allows you to quickly create interactive sortable tables on your WordPress site based on a number of input sources - Excel, CSV, XML, JSON, PHP array. Modern Material-based design, polished UX and vast functionalities make table creation process quick and efficient.
+Create responsive, sortable tables & charts from Excel, CSV & PHP. Add tables & charts to posts in minutes with DataTables. Best WP table plugin.
 
 == Description ==
 
-wpDataTables Lite is a basic version of a popular best-selling WordPress table plugin. While some of the premium features are reduced, wpDataTables Lite is still quite a handy tool that allows you to quickly create tables in WordPress from different sources:
+wpDataTables is a popular WordPress table plugin used to **quickly create tables & table charts** from Excel, CVS, PHP and other data sources. Use our WP table plugin to represent vast amounts of complicated data in concise, user-friendly way using tables or charts.
+
+[youtube https://www.youtube.com/watch?v=06QF0wNEf94]
 
 * Excel - [Text and video documentation](https://wpdatatables.com/documentation/creating-wpdatatables/creating-wpdatatables-from-excel/)
 * CSV - [Text and video documentation](https://wpdatatables.com/documentation/creating-wpdatatables/creating-wpdatatables-from-csv/)
 * JSON - [Text and video documentation](https://wpdatatables.com/documentation/creating-wpdatatables/creating-wpdatatables-from-json-input/)
 * XML - [Text and video documentation](https://wpdatatables.com/documentation/creating-wpdatatables/creating-wpdatatables-from-xml/)
 * Serialized PHP array - [Text and video documentation](https://wpdatatables.com/documentation/creating-wpdatatables/creating-wpdatatables-from-serialized-php-array/)
+
+wpDataTables allows creating Line, Column and Pie charts using the Google Charts rendering engine, or simply show data in a table.
 
 Creating tables and charts with a WordPress tables plugin has never been easier. It only takes 3 basic steps:
 
@@ -34,7 +38,7 @@ You can customize and configure the columns of your WordPress table (rename, reo
 
 **Step 3 - Publish in a post or page**
 
-Once you are happy with the design of your WordPress table, you can easily insert it on any post or page via the standard WP Editor or Visual Composer. All tables will become sortable and will have pagination by default.
+Once you are happy with the design of your WordPress table, you can easily insert it on any post or page through Gutenberg, standard WP Editor and shortcode, or through page builders like WPBakery Page Builder, Visual Composer or Elementor. All tables will become sortable and will have pagination by default.
 
 Additionally, each table can have a search bar and can have the following functions: “Copy to Clipboard”, “Export to CSV”, “Export to PDF”, “Export to XLS”. All these functionalities are configurable and it is your decision whether to toggle these on or off.
 
@@ -50,49 +54,47 @@ Following column data types are supported. Most column types, except the images,
 * URL link - [Text and video documentation](https://wpdatatables.com/documentation/column-features/url-link-columns/)
 * E-mail link - [Text and video documentation](https://wpdatatables.com/documentation/column-features/e-mail-link-columns/)
 
-Please note some limitations of the Lite version of this WordPress table plugin:
+Please note some limitations compared to the Premium version of the wpDataTables plugin:
 
-1. The plugin will allow only tables up to 150 rows.
-2. MySQL-query based tables support is not included.
-3. Creating tables from the Google Spreadsheet files is not included.
-4. Create a table manually is not included.
-5. Server-side processing is not included.
-6. Responsive mode for the tables is not included.
-7. Table filters are not included.
-8. Front-end editing is not included.
-9. Excel-like editing is not included
-10. Google Charts, HighCharts and Chart.js are not included.
-11. Table Constructor Wizard (step-by-step table generator) is not included.
-12. Access to our premium support system is not included.
+1. MySQL-query based tables support is not included.
+2. Creating tables from the Google Spreadsheet files is not included.
+3. Create a table manually is not included.
+4. Server-side processing is not included.
+5. Responsive mode for the tables is not included.
+6. Table filters are not included.
+7. Front-end table editing is not included.
+8. Excel-like editing is not included.
+9. Advanced Google Charts (except for Line, Column and Pie), HighCharts and Chart.js are not included
+10. Table Constructor Wizard (step-by-step table generator) is not included.
+11. Access to our premium support system is not included.
 
 You can get all of these features by purchasing the full version on [the plugin's site](https://wpdatatables.com).
 
 Please note that wpDataTables requires PHP 5.4 or newer!
 
-**wpDataTables Lite vs wpDataTables Premium**
+**wpDataTables vs wpDataTables Premium**
 
 If you still can’t decide which wpDataTables version to choose, you should get familiar with the basic features of both of them, and then take it from there. It all boils down to the type of tables in WordPress that you want to create.
 
-**wpDataTables Lite**
+**wpDataTables**
 
-If you don’t require the most advanced features because you only create a table in WordPress every now and then, or you only create WordPress tables with little data, wpDataTables Lite is perfect for you.
-The basic difference between the Lite and the Premium version is the table size limitation. With wpDataTables Lite you can create responsive tables in WordPress with the maximum of 150 rows.
+If you don’t require the most advanced features because you only create a table in WordPress every now and then, wpDataTables is perfect for you.
 
 **wpDataTables Premium**
 
-While the Lite plugin version is great for people who create small and simple tables, wpDataTables Premium is the best table plugin for WordPress and it comes with a huge set of amazing features.
+While the basic version is great for people who create small and simple tables, wpDataTables Premium is the best WordPress table plugin and it comes with a huge set of amazing features.
 However, the thing that really sets it apart is the possibility to manage any amount of data and create huge responsive tables in WordPress.
 
 **Do I Need wpDataTables?**
 
-Well, the short answer is – yes. If you want to create fully functional and great looking WordPress tables, you need wpDataTables. The number of the users currently taking advantage of this plugin is 19,000 and counting.
+Well, the short answer is – yes. If you want to create fully functional and great looking WordPress tables, you need wpDataTables. The number of the users currently taking advantage of this plugin is 30,000 and counting.
 The major features of wpDataTables include but are not limited to:
 
 * Building WordPress tables quickly and easily – no complicated configuration; just simple clicking;
 * No coding knowledge required;
 * Fully customizable WordPress tables and charts – from choosing the color palette to inserting elements such as your company logo, wpDataTables allows you to customize your tables and charts in any way you see fit;
 * A WordPress table plugin that works like a spreadsheet app – with all the advanced features and tools, wpDataTables truly stands out from the competition;
-* Lifetime updates and 6 months of support – there will be no added fees for the newest updates once you purchase the Premium version of this plugin. In addition to that, you will get 6 months of free support.
+* 1 year of updates and support
 
 Additional useful features include:
 
@@ -123,7 +125,7 @@ Installation of the plugin is really simple.
 
 Usually this happens when PHP version is older than 5.4 is installed. Please first check this, and upgrade to PHP 5.4 or more, if that’s the issue.
 
-= How to hide “Showing X of X entries” in pagination? = 
+= How to hide “Showing X of X entries” in pagination? =
 
 Go to display tab of the table settings block and disable the “Info block” setting.
 
@@ -160,8 +162,59 @@ This can be changed from the “Number format” drop-down menu in the wpDataTab
 5. General settings
 6. Column settings
 7. Plugin settings
+8. Google charts
+9. Google chart settings
 
 == Changelog ==
+
+= 2.0.19 =
+* Bug fix: Issue with padding in container for Aqua skin in backend
+* Bug fix: Issue with padding for ellipsis button in pagination
+* Compatibility with WordPress 5.4 approved.
+
+= 2.0.18 =
+* Added option for title on Print button
+* Bug fix: Issue for enabling Apply button on input/paste URL input
+* Bug fixes and stability improvements.
+
+= 2.0.17 =
+* Updated Russian translation
+* Bug fixes and stability improvements.
+
+= 2.0.16 =
+* A minor update with a couple of small bugfixes:
+* Bugfix: Fixed conflict with WooCommerce product page and Gutenberg
+* Resolved minor security issue - added nonce on Settings page
+* Compatibility with WordPress 5.3.2 approved.
+
+= 2.0.15 =
+* A minor update with a couple of small bugfixes:
+* BugFix: Plugin is now compatible with jQuery 3.x.
+* BugFix: Fix PHP notices
+* Compatibility with WordPress 5.3 approved.
+
+= 2.0.14 =
+* Feature: Added new date formats
+* Updated French translation
+* Updated core of Datatables library
+* Bug fixes and stability improvements.
+* Compatibility with WordPress 5.2.3 approved.
+
+= 2.0.13 =
+* Feature: Removed limitation for number of rows in tables
+* Feature: Added functionality for creating Google charts(Line, Column and Pie)
+* Feature: Added options for customizing Google charts(Line, Column and Pie)
+* Bug fixes and stability improvements.
+
+= 2.0.12 =
+* Bug fixes and stability improvements.
+
+= 2.0.11 =
+* Bug fixes and stability improvements.
+* Compatibility with WordPress 5.2.2 approved.
+
+= 2.0.10 =
+* Bug fixes and stability improvements.
 
 = 2.0.9 =
 * Feature: Added Gutenberg block – the plugin is now Gutenberg optimized.
@@ -230,11 +283,10 @@ This can be changed from the “Number format” drop-down menu in the wpDataTab
 = 1.1 =
 * Migrated Table Tools to use HTML5 instead of Adobe Flash
 * Advanced settings for configuring Table Tools (individually per button)
-* Wide tables can be configured to be horizontally scrollable 
+* Wide tables can be configured to be horizontally scrollable
 * Upgraded used libraries
 * Compatibility with WP 4.5.2 approved
 * Numerous bugfixes
 
 = 1.0 =
-* Launch of the Lite version
-
+* Initial version for wp.org

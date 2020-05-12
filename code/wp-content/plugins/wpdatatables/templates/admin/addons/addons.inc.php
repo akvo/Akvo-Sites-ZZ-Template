@@ -1,4 +1,4 @@
-<?php defined('ABSPATH') or die("Cannot access pages directly."); ?>
+<?php defined('ABSPATH') or die('Access denied.'); ?>
 
 <div class="wrap wdt-datatables-admin-wrap">
     <?php do_action('wpdatatables_admin_before_addons'); ?>
@@ -37,7 +37,32 @@
 
                         <div class="col-sm-3">
                             <div class="thumbnail">
-                                <a href="https://wpdatatables.com/powerful-filtering/?utm_source=wpdt-admin&medium=addons&campaign=addons" target="_blank">
+                                <div class="ribbon"><span>NEW</span></div>
+                                <a href="https://wpdatatables.com/documentation/addons/master-detail-tables/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                   target="_blank">
+                                    <img class="img-responsive"
+                                         src="<?php echo WDT_ASSETS_PATH; ?>/img/addons/master-detail.png" alt="">
+                                </a>
+                                <div class="caption">
+                                    <h4><?php _e('Master Detail Tables for wpDataTables', 'wpdatatables'); ?></h4>
+                                    <p><?php _e('A wpDataTables addon which allows showing additional details for a specific row in a popup or a separate page or post. Handy when you would like to keep fewer columns in the table, while allowing user to access full details of particular entries.', 'wpdatatables'); ?></p>
+                                </div>
+                                <div class="wdt-addons-find-out-more">
+                                    <a href="https://wpdatatables.com/documentation/addons/master-detail-tables/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                       target="_blank"
+                                       class="btn btn-sm btn-icon-text btn-primary waves-effect"
+                                       role="button"><?php _e('Find out more ', 'wpdatatables'); ?>
+                                        <i class="zmdi zmdi-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="thumbnail">
+                                <div class="ribbon"><span>NEW</span></div>
+                                <a href="https://wpdatatables.com/powerful-filtering/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                   target="_blank">
                                     <img class="img-responsive"
                                          src="<?php echo WDT_ASSETS_PATH; ?>/img/addons/powerful-filters.png" alt="">
                                 </a>
@@ -46,7 +71,8 @@
                                     <p><?php _e('An add-on for wpDataTables that provides powerful filtering features: cascade filtering, applying filters on button click, show only filter without the table before user defines the search values.', 'wpdatatables'); ?></p>
                                 </div>
                                 <div class="wdt-addons-find-out-more">
-                                    <a href="https://wpdatatables.com/powerful-filtering/?utm_source=wpdt-admin&medium=addons&campaign=addons" target="_blank"
+                                    <a href="https://wpdatatables.com/powerful-filtering/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                       target="_blank"
                                        class="btn btn-sm btn-icon-text btn-primary waves-effect"
                                        role="button"><?php _e('Find out more ', 'wpdatatables'); ?>
                                         <i class="zmdi zmdi-search"></i>
@@ -77,7 +103,8 @@
                         <!-- /.col-sm-3 -->
                         <div class="col-sm-3">
                             <div class="thumbnail">
-                                <a href="https://wpdatatables.com/documentation/addons/gravity-forms-integration/" target="_blank">
+                                <a href="https://wpdatatables.com/documentation/addons/gravity-forms-integration/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                   target="_blank">
                                     <img class="img-responsive"
                                          src="<?php echo WDT_ASSETS_PATH; ?>/img/addons/gravity.png" alt="">
                                 </a>
@@ -86,7 +113,8 @@
                                     <p><?php _e('Tool that adds "Gravity Form" as a new table type and allows you to create wpDataTables from Gravity Forms entries data.', 'wpdatatables'); ?></p>
                                 </div>
                                 <div class="wdt-addons-find-out-more">
-                                    <a href="https://wpdatatables.com/documentation/addons/gravity-forms-integration/" target="_blank"
+                                    <a href="https://wpdatatables.com/documentation/addons/gravity-forms-integration/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                       target="_blank"
                                        class="btn btn-sm btn-icon-text btn-primary waves-effect"
                                        role="button"><?php _e('Find out more ', 'wpdatatables'); ?>
                                         <i class="zmdi zmdi-search"></i>
@@ -95,9 +123,15 @@
                             </div>
                         </div>
                         <!-- /.col-sm-3 -->
+                    </div>
+                    <!-- /.row -->
+
+                    <!-- .row -->
+                    <div class="row">
                         <div class="col-sm-3">
                             <div class="thumbnail">
-                                <a href="https://wpdatatables.com/documentation/addons/formidable-forms-integration/" target="_blank">
+                                <a href="https://wpdatatables.com/documentation/addons/formidable-forms-integration/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                   target="_blank">
                                     <img class="img-responsive"
                                          src="<?php echo WDT_ASSETS_PATH; ?>/img/addons/formidable.png" alt="">
                                 </a>
@@ -106,7 +140,8 @@
                                     <p><?php _e('Tool that adds "Formidable Form" as a new table type and allows you to create wpDataTables from Formidable Forms entries data.', 'wpdatatables'); ?></p>
                                 </div>
                                 <div class="wdt-addons-find-out-more">
-                                    <a href="https://wpdatatables.com/documentation/addons/formidable-forms-integration/" target="_blank"
+                                    <a href="https://wpdatatables.com/documentation/addons/formidable-forms-integration/?utm_source=wpdt-admin&medium=addons&campaign=addons"
+                                       target="_blank"
                                        class="btn btn-sm btn-icon-text btn-primary waves-effect"
                                        role="button"><?php _e('Find out more ', 'wpdatatables'); ?>
                                         <i class="zmdi zmdi-search"></i>

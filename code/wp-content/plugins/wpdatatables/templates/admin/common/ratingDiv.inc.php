@@ -1,13 +1,23 @@
 <?php defined('ABSPATH') or die("Cannot access pages directly."); ?>
 
+<?php
+if( isset($allTables) && $allTables > 100 ) {
+    $messageTables = __("Awesome! You are a wpDataTables Master! 8-) You’ve created more than 100 tables!", "wpdatatables");
+} else if( isset($allTables) && $allTables > 50 ) {
+    $messageTables = __("Well done! You’ve created more then 50 tables - you are a wpDataTables Professional!", "wpdatatables");
+} else if( isset($allTables) && $allTables > 10 ) {
+    $messageTables = __("Nice job! You created more then 10 tables.", "wpdatatables");
+} else if( isset($allTables) && $allTables > 5 ) {
+    $messageTables = __("We hope you’ve enjoyed using wpDataTables.", "wpdatatables");
+}
+?>
 <div class="wdt-rating-notice notice notice-success">
     <div class="wdt-float-left">
         <img class="wdt-icon-rating" src="<?php echo WDT_ROOT_URL ?>assets/img/logo-large.png" alt="">
     </div>
     <div class="wdt-float-left">
-        <h1 class="wdt-rating-heading"><?php _e("Leave a Review?", "wpdatatables") ?></h1>
-        <p class="wdt-rating-massage"><?php _e("We hope you've enjoyed using wpDataTables Lite. Would you consider
-            leaving us a review on WordPress.org?", "wpdatatables") ?></p>
+        <p class="wdt-rating-massage"><?php echo $messageTables; ?></p>
+        <h1 class="wdt-rating-heading"><?php _e("Would you consider leaving us a review on WordPress.org?", "wpdatatables") ?></h1>
     </div>
     <div class="wdt-dismiss-dash">
         <span class="wdt-dismiss dashicons dashicons-dismiss"></span>
