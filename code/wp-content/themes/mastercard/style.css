@@ -32,6 +32,32 @@ h1, h2, h3, h4, h5, h6{
 }
 
 
+.mf-results .sow-icon-container{ display: none; }
+
+.mf-results .textwidget{
+  padding-top: 100px;
+  position: relative;
+}
+
+.mf-results .textwidget .mf-indicator{
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX( -50% );
+}
+
+.mf-indicator{
+  text-align: center;
+  padding: 16px 0;
+  width: 90px;
+  background: #FF5E03;
+  border: #fe9c15 solid 9px;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 100%;
+}
+
+
 
 .list-rsr-updates li.rsr-update a[href]{
   display: block;

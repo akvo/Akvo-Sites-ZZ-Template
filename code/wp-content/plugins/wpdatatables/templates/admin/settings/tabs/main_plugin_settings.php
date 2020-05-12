@@ -56,7 +56,10 @@
                             <option value="m-d-y"> 07-15-05 (m-d-y)</option>
                             <option value="d M Y"> 15 July 2005 (d Mon Y)</option>
                             <option value="m/Y"> 07/2005 (m/Y)</option>
-                            <option value="M Y"> July 2005 (Mon Y)</option>
+                            <option value="M Y"> Jul 2005 (Mon Y)</option>
+                            <option value="F Y"> July 2005 (F Y)</option>
+                            <option value="F j, Y"> July 15, 2005 (F j, Y)</option>
+                            <option value="j. F Y."> 15. July 2005. (j. F Y.)</option>
                             <option value="Y">2005 (Y)</option>
                         </select>
                     </div>

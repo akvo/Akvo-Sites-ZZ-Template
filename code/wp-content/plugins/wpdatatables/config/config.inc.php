@@ -9,8 +9,7 @@ defined('ABSPATH') or die("Cannot access pages directly.");
 
 // Current version
 
-define('WDT_CURRENT_VERSION', '2.0.9');
-define('WDT_TIMEOUT_FACTOR', 5);
+define('WDT_CURRENT_VERSION', '2.0.19');
 
 /**
  * Regular Expressions
@@ -42,7 +41,6 @@ define('WDT_INCLUDE_DATATABLES_CORE', true); // Whether to include link to jQuer
 define('WDT_STORE_URL', 'https://store.tms-plugins.com/');
 define('WDT_STORE_API_URL', 'https://store.tms-plugins.com/api/');
 
-define('WDT_VALIDATE_COEFFICIENT', 30);
 
 /**
  * MySQL settings for query-based tables

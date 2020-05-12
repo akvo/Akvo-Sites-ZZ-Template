@@ -3,14 +3,13 @@
 Plugin Name: Page-list
 Plugin URI: http://wordpress.org/plugins/page-list/
 Description: [pagelist], [subpages], [siblings] and [pagelist_ext] shortcodes
-Version: 5.1
+Version: 5.2
 Author: webvitaly
-Author URI: http://web-profile.com.ua/wordpress/plugins/
+Author URI: http://web-profile.net/wordpress/plugins/
 License: GPLv3
 */
 
-define('PAGE_LIST_PLUGIN_VERSION', '5.1');
-define('PAGE_LIST_VERSION', PAGE_LIST_PLUGIN_VERSION); // deprecated
+define('PAGE_LIST_PLUGIN_VERSION', '5.2');
 
 $pagelist_unq_settings = array(
 	'version' => PAGE_LIST_PLUGIN_VERSION,
@@ -58,8 +57,8 @@ if ( !function_exists('pagelist_unqprfx_shortcode') ) {
 			'depth'        => $depth,
 			'child_of'     => pagelist_unqprfx_norm_params($child_of),
 			'exclude'      => pagelist_unqprfx_norm_params($exclude),
-			'exclude_tree' => $exclude_tree,
-			'include'      => $include,
+			'exclude_tree' => pagelist_unqprfx_norm_params($exclude_tree),
+			'include'      => pagelist_unqprfx_norm_params($include),
 			'title_li'     => $title_li,
 			'number'       => $number,
 			'offset'       => $offset,
@@ -103,8 +102,8 @@ if ( !function_exists('subpages_unqprfx_shortcode') ) {
 			'depth'        => $depth,
 			'child_of'     => $post->ID,
 			'exclude'      => pagelist_unqprfx_norm_params($exclude),
-			'exclude_tree' => $exclude_tree,
-			'include'      => $include,
+			'exclude_tree' => pagelist_unqprfx_norm_params($exclude_tree),
+			'include'      => pagelist_unqprfx_norm_params($include),
 			'title_li'     => $title_li,
 			'number'       => $number,
 			'offset'       => $offset,
@@ -150,8 +149,8 @@ if ( !function_exists('siblings_unqprfx_shortcode') ) {
 			'depth'        => $depth,
 			'child_of'     => $post->post_parent,
 			'exclude'      => pagelist_unqprfx_norm_params($exclude),
-			'exclude_tree' => $exclude_tree,
-			'include'      => $include,
+			'exclude_tree' => pagelist_unqprfx_norm_params($exclude_tree),
+			'include'      => pagelist_unqprfx_norm_params($include),
 			'title_li'     => $title_li,
 			'number'       => $number,
 			'offset'       => $offset,
@@ -236,13 +235,13 @@ if ( !function_exists('pagelist_unqprfx_ext_shortcode') ) {
 			'sort_column' => $sort_column,
 			'hierarchical' => $hierarchical,
 			'exclude' => pagelist_unqprfx_norm_params($exclude),
-			'include' => $include,
+			'include' => pagelist_unqprfx_norm_params($include),
 			'meta_key' => $meta_key,
 			'meta_value' => $meta_value,
 			'authors' => $authors,
 			'child_of' => pagelist_unqprfx_norm_params($child_of),
 			'parent' => pagelist_unqprfx_norm_params($parent),
-			'exclude_tree' => $exclude_tree,
+			'exclude_tree' => pagelist_unqprfx_norm_params($exclude_tree),
 			'number' => '', // $number - own counter
 			'offset' => 0, // $offset - own offset
 			'post_type' => $post_type,
@@ -268,13 +267,13 @@ if ( !function_exists('pagelist_unqprfx_ext_shortcode') ) {
 			'sort_column' => $sort_column,
 			'hierarchical' => $hierarchical,
 			'exclude' => pagelist_unqprfx_norm_params($exclude),
-			'include' => $include,
+			'include' => pagelist_unqprfx_norm_params($include),
 			'meta_key' => $meta_key,
 			'meta_value' => $meta_value,
 			'authors' => $authors,
 			'child_of' => 0, // for showing all pages
 			'parent' => pagelist_unqprfx_norm_params($parent),
-			'exclude_tree' => $exclude_tree,
+			'exclude_tree' => pagelist_unqprfx_norm_params($exclude_tree),
 			'number' => '', // $number - own counter
 			'offset' => 0, // $offset - own offset
 			'post_type' => $post_type,
@@ -369,7 +368,7 @@ if ( !function_exists('pagelist_unqprfx_ext_shortcode') ) {
 							}
 						}
 						if ( $show_meta_key != '' ) {
-							$post_meta = get_post_meta($page->ID, $show_meta_key, true);
+							$post_meta = do_shortcode(get_post_meta($page->ID, $show_meta_key, true));
 							if ( !empty($post_meta) ) { // hide empty
 								$meta_pos = strpos($meta_template, '%meta%'); // check if we have %meta% marker in template
 								if ($meta_pos === false) { // %meta% not found in template
@@ -485,9 +484,9 @@ if ( ! function_exists('pagelist_unqprfx_plugin_meta') ) {
 	function pagelist_unqprfx_plugin_meta( $links, $file ) { // add links to plugin meta row
 		if ( $file == plugin_basename( __FILE__ ) ) {
 			$row_meta = array(
-				'support' => '<a href="http://web-profile.com.ua/wordpress/plugins/page-list/" target="_blank"><span class="dashicons dashicons-editor-help"></span> ' . __( 'Page-list', 'page-list' ) . '</a>',
-				'donate' => '<a href="http://web-profile.com.ua/donate/" target="_blank"><span class="dashicons dashicons-heart"></span> ' . __( 'Donate', 'page-list' ) . '</a>',
-				'pro' => '<a href="http://codecanyon.net/item/antispam-pro/6491169?ref=webvitalii" target="_blank" title="Speedup and protect WordPress in a smart way"><span class="dashicons dashicons-star-filled"></span> ' . __( 'Silver Bullet Pro', 'page-list' ) . '</a>'
+				'support' => '<a href="http://web-profile.net/wordpress/plugins/page-list/" target="_blank">' . __( 'Page-list', 'page-list' ) . '</a>',
+				'donate' => '<a href="http://web-profile.net/donate/" target="_blank">' . __( 'Donate', 'page-list' ) . '</a>',
+				'pro' => '<a href="https://1.envato.market/KdRNz" target="_blank" title="Advanced iFrame Pro">' . __( 'Advanced iFrame Pro', 'page-list' ) . '</a>'
 			);
 			$links = array_merge( $links, $row_meta );
 		}

@@ -2,7 +2,7 @@
 defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 
 if ($evanto || $isDemo) {  
-if ($devOptions['accordeon_menu'] == 'false') { ?>
+if ($devOptions['accordeon_menu'] === 'false') { ?>
 <div class="ai-anchor" id="zo"></div>
 <?php } ?>
 <h1 id="h1-zo"><?php _e('Zoom', 'advanced-iframe') ?></h1>
@@ -22,7 +22,7 @@ echo '<table class="form-table">';
 echo '</table>';
 
 ?>
-<?php if ($devOptions['single_save_button'] == 'false') { ?>      
+<?php if ($devOptions['single_save_button'] === 'false') { ?>      
       <p class="button-submit">
         <input class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>
       </p>

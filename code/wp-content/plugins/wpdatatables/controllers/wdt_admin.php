@@ -247,10 +247,10 @@ function wdtBrowseChartsEnqueue() {
     wp_enqueue_style('wdt-browse-css');
 
     wp_enqueue_script('wdt-common');
-    wp_enqueue_script('wdt-browse-js', WDT_JS_PATH . 'wpdatatables/admin/browse/wdt.browse.js', array(), false, true);
+    wp_enqueue_script('wdt-browse-js', WDT_JS_PATH . 'wpdatatables/admin/browse/wdt.browse.js', array(), WDT_CURRENT_VERSION, true);
     wp_enqueue_script('wdt-doc-js');
 
-    wp_localize_script('wdt-browse-js', 'wpdatatablesEditStrings', WDTTools::getTranslationStrings());
+    wp_localize_script('wdt-browse-js', 'wpdatatablesStrings', WDTTools::getTranslationStrings());
 }
 
 /**
@@ -265,9 +265,11 @@ function wdtChartWizardEnqueue() {
     wp_enqueue_script('wdt-jsrender');
     wp_enqueue_script('wdt-dragula');
 
+    wp_enqueue_script('wdt-google-charts', '//www.gstatic.com/charts/loader.js', array(), WDT_CURRENT_VERSION, true);
+
     wp_enqueue_script('wdt-common');
     wp_enqueue_script('wdt-chart-wizard', WDT_JS_PATH . 'wpdatatables/wdt.chartWizard.js', array(), false, true);
-
+    wp_enqueue_script('wdt-wp-google-chart', WDT_JS_PATH . 'wpdatatables/wdt.googleCharts.js', array(), WDT_CURRENT_VERSION, true);
     wp_enqueue_script('wdt-doc-js');
 
     wp_localize_script('wdt-chart-wizard', 'wpdatatablesEditStrings', WDTTools::getTranslationStrings());

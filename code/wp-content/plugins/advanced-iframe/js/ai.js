@@ -1,5 +1,5 @@
 /**
- *  Advanced iframe free/pro functions v7.6.x
+ *  Advanced iframe pro functions v2019.8
 */
 /* jslint devel: true, unused: false */
 /* globals ai_show_id_only:false, aiIsIe8: false, aiChangeUrl: false, aiResizeIframeHeightId: false, aiShowIframeId: false, findAndReplaceDOMText: false */
@@ -7,9 +7,11 @@
 var aiEnableCookie=false;
 var aiId='';
 var aiExtraSpace = 0;
-var accTime = 0;
+var aiAccTime = 0;
+var aiOnloadEventsCounter = 0;
 
-var aiReadyCallbacks = ( typeof aiReadyCallbacks !== 'undefined' && aiReadyCallbacks instanceof Array ) ? aiReadyCallbacks : [];
+var aiCallbackExists = typeof aiReadyCallbacks !== 'undefined' && aiReadyCallbacks instanceof Array;
+var aiReadyCallbacks = aiCallbackExists ? aiReadyCallbacks : [];
 
 /**
  *  This function resizes the iframe after loading to the height
@@ -18,16 +20,17 @@ var aiReadyCallbacks = ( typeof aiReadyCallbacks !== 'undefined' && aiReadyCallb
  *  The extra space is not stored in the cookie! The height would
  *  be added every time otherwise and the iframe would grow,
  */
-function aiResizeIframe(obj, resize_width, resize_min_height) {
+function aiResizeIframe(obj, resizeWidth, resizeMinHeight) {
   try {
-    if (obj.contentWindow.location.href == 'about:blank') {
+    if (obj.contentWindow.location.href === 'about:blank') {
         return;
     }
     if (obj.contentWindow.document.body != null) {
-      var oldScrollposition = jQuery(document).scrollTop();
-      obj.style.marginTop = obj.style.marginBottom = 0;
-      obj.height = Number(resize_min_height); // set to 1 because otherwise the iframe does never get smaller.
-      obj.style.height = Number(resize_min_height) + 'px';
+      var oldScrollposition = jQuery(window).scrollTop();
+      obj.style.marginTop = 0; 
+	  obj.style.marginBottom = 0;
+      obj.height = Number(resizeMinHeight); // set to 1 because otherwise the iframe does never get smaller.
+      obj.style.height = Number(resizeMinHeight) + 'px';
       var newheight = aiGetIframeHeight(obj);
       obj.height = newheight;
       obj.style.height = newheight + 'px';
@@ -41,8 +44,24 @@ function aiResizeIframe(obj, resize_width, resize_min_height) {
       if (aiEnableCookie && aiExtraSpace === 0 ) {
           aiWriteCookie(newheight);
       }
-      jQuery(document).scrollTop(oldScrollposition);
-      if (resize_width === 'true') {
+      var hash = aiGetIframeHash(obj.contentWindow.location.href);
+      if (hash !== -1) {
+		  var iframeId = '#'+ obj.id;
+          try {
+              var hashposition = jQuery(iframeId).contents().find('#'+ hash);
+              if (hashposition.length !== 0) {
+                var hashpositionTop = hashposition.offset().top;
+                oldScrollposition = Math.round(jQuery(iframeId).offset().top + hashpositionTop);
+              }
+          } catch(e) {
+              // in case of an invalid hash it is ignored. 
+          }
+      }
+	  setTimeout(function() {
+           jQuery("html,body").scrollTop(oldScrollposition);
+      }, 50);   
+
+      if (resizeWidth === 'true') {
         var newWidth = aiGetIframeWidth(obj);
         obj.width = newWidth;
         obj.style.width = newWidth + 'px';
@@ -55,7 +74,7 @@ function aiResizeIframe(obj, resize_width, resize_min_height) {
       }
     } else {
       // body is not loaded yet - we wait 100 ms.
-      setTimeout(function() { aiResizeIframe(obj, resize_width); },100);
+      setTimeout(function() { aiResizeIframe(obj, resizeWidth); },100);
     }
   } catch(e) {
     if (console && console.log) {
@@ -63,6 +82,15 @@ function aiResizeIframe(obj, resize_width, resize_min_height) {
       console.log(e);
     }
   }
+}
+
+/**
+ * returns the position of a #hash in the iframe or -1 if none was found.
+ */
+ 
+function aiGetIframeHash(url) {
+    var hash = url.split('#')[1];
+    return (hash) ? hash : '-1';
 }
 
 /**
@@ -121,11 +149,10 @@ function aiResizeIframeHeightById(id, nHeight) {
     fCallback();
     var height = parseInt(nHeight,10) + aiExtraSpace;
     var iframe = document.getElementById(id);
-		var oldScrollposition = jQuery(document).scrollTop();
+	var oldScrollposition = jQuery(document).scrollTop();
     iframe.height = height;
     iframe.style.height = height + 'px';
-
-    jQuery(document).scrollTop(oldScrollposition);
+    jQuery("html,body").scrollTop(oldScrollposition); 
     if (aiEnableCookie && aiExtraSpace === 0) {
       aiWriteCookie(height);
     }
@@ -147,14 +174,23 @@ function aiResizeIframeHeightById(id, nHeight) {
  * Scrolls the parent window to the top.
  * This is e.g. wanted when you have a link in the iframe and you want that the
  * page starts at the top and not that only the iframe changes.
+ *
+ * Sometimes are 2 onload events after another. To prevent that this causes 
+ * a jump to the top a delay of 1 sec is used for the increase of the counter.
  */
 function aiScrollToTop(id, position) {
-  if (position === 'iframe') {
-    var pos = jQuery('#' + id).position();
-    window.scrollTo(0, pos.top);
-  } else {
-    window.scrollTo(0,0);
+  if (aiOnloadEventsCounter > 0) {
+	  var posTop = 0;
+	  if (position === 'iframe') {
+		posTop = jQuery('#' + id).offset().top;
+	  }
+	  setTimeout(function() {
+		window.scrollTo(0, posTop);
+	  }, 100);   
   }
+  setTimeout(function() {
+    aiOnloadEventsCounter++;
+  }, 1000);  
 }
 
 /**
@@ -181,11 +217,11 @@ function aiUseCookie() {
   // Get all the cookies pairs in an array
   var cookiearray  = allcookies.split(';');
   // Now take key value pair out of this array
-  for(var i=0; i<cookiearray.length; i++){
+  for (var i = 0; i < cookiearray.length; i++) {
     var name = cookiearray[i].split('=')[0];
     var value = cookiearray[i].split('=')[1];
     // cookie does exist and has a numeric value
-    if (name === cookieName && value !== null && ai_is_numeric(value)) {
+    if (name === cookieName && value !== null && aiIsNumeric(value)) {
        var iframe = document.getElementById(aiId);
        iframe.height = parseInt(value,10);
        iframe.style.height = value + 'px';
@@ -196,7 +232,7 @@ function aiUseCookie() {
 /**
  *  check if we have a numeric input
  */
-function ai_is_numeric(input){
+function aiIsNumeric(input){
     return !isNaN(input);
 }
 
@@ -235,7 +271,7 @@ function aiShowElementOnly( iframeId, showElement ) {
   }
 }
 
-function checkIfValidTarget(evt, elements) {
+function aiCheckIfValidTarget(evt, elements) {
   var targ;
   if (!evt) {
     evt = window.event;
@@ -266,47 +302,43 @@ function checkIfValidTarget(evt, elements) {
   return false;
 }
 
-function openSelectorWindow (url) {
-   var local_width =  jQuery('#width').val();
-   var local_height = jQuery('#height').val();
+function aiOpenSelectorWindow (url) {
+   var localWidth =  jQuery('#width').val();
+   var localHeight = jQuery('#height').val();
 
-   if (local_width.indexOf('%') >= 0 || Number(local_width) < 900) {
-       local_width = 900;
+   if (localWidth.indexOf('%') >= 0 || Number(localWidth) < 900) {
+       localWidth = 900;
    }
-   local_width = Number(local_width) + 40;
-   if ( local_width > (screen.width)) {
-       local_width = screen.width;
+   localWidth = Number(localWidth) + 40;
+   if ( localWidth > (screen.width)) {
+       localWidth = screen.width;
    }
-   if (local_height.indexOf('%') >= 0) {
-       local_height = screen.height;
+   if (localHeight.indexOf('%') >= 0) {
+       localHeight = screen.height;
    } else {
-        local_height =  Number(local_height) + 480;
+        localHeight =  Number(localHeight) + 480;
    }
-   if ( local_height > (screen.height-50)) {
-       local_height = screen.height-50;
+   if ( localHeight > (screen.height-50)) {
+       localHeight = screen.height-50;
    }
-   var options = 'width='+local_width+',height='+local_height+',left=0,top=0,resizable=1,scrollbars=1';
+   var options = 'width='+localWidth+',height='+localHeight+',left=0,top=0,resizable=1,scrollbars=1';
    var popup_window = window.open(url, '', options);
    popup_window.focus();
 }
 
-function openTab(id) {
-    jQuery(id).next().show();
-}
-
-
 function aiDisableAiResizeOptions(value) {
   jQuery('#onload_resize_delay').prop('readonly',value);
-  jQuery('input[id=store_height_in_cookie1]:radio').attr('disabled',value);
-  jQuery('input[id=store_height_in_cookie2]:radio').attr('disabled',value);
+  jQuery('input[id=store_height_in_cookie1]:radio, input[id=store_height_in_cookie2]:radio').attr('disabled',value);
   jQuery('#additional_height').prop('readonly', value);
-  jQuery('input[id=onload_resize_width1]:radio').attr('disabled',value);
-  jQuery('input[id=onload_resize_width2]:radio').attr('disabled',value);
+  jQuery('input[id=onload_resize_width1]:radio, input[id=onload_resize_width2]:radio').attr('disabled',value);
   jQuery('#resize_on_click').prop('readonly', value);
   jQuery('#resize_on_click_elements').prop('readonly', value);
   jQuery('#resize_on_ajax').prop('readonly', value);
-  jQuery('input[id=resize_on_ajax_jquery1]:radio').attr('disabled',value);
-  jQuery('input[id=resize_on_ajax_jquery2]:radio').attr('disabled',value);
+  jQuery('input[id=resize_on_ajax_jquery1]:radio, input[id=resize_on_ajax_jquery2]:radio').attr('disabled',value);
+  
+  var selector = '#onload_resize_delay, #store_height_in_cookie1, #additional_height, #onload_resize_width1, ';
+  selector += '#resize_on_click, #resize_on_click_elements, #resize_on_ajax, #resize_on_ajax_jquery1';
+  aiDisableTextSection(value, selector);
 }
 
 function aiDisablePartOfIframeOptions(value) {
@@ -314,54 +346,61 @@ function aiDisablePartOfIframeOptions(value) {
   jQuery('#show_part_of_iframe_y').prop('readonly',value);
   jQuery('#show_part_of_iframe_height').prop('readonly',value);
   jQuery('#show_part_of_iframe_width').prop('readonly',value);
-  jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal1]:radio').attr('disabled',value);
-  jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal2]:radio').attr('disabled',value);
-  jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical1]:radio').attr('disabled',value);
-  jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical2]:radio').attr('disabled',value);
+  jQuery('input[id=show_part_of_iframe_allow_scrollbar_horizontal1]:radio, input[id=show_part_of_iframe_allow_scrollbar_horizontal2]:radio').attr('disabled',value);
+  jQuery('input[id=show_part_of_iframe_allow_scrollbar_vertical1]:radio, input[id=show_part_of_iframe_allow_scrollbar_vertical2]:radio').attr('disabled',value);
   jQuery('#show_part_of_iframe_next_viewports').prop('readonly',value);
-  jQuery('input[id=show_part_of_iframe_next_viewports_loop1]:radio').attr('disabled',value);
-  jQuery('input[id=show_part_of_iframe_next_viewports_loop2]:radio').attr('disabled',value);
+  jQuery('input[id=show_part_of_iframe_next_viewports_loop1]:radio, input[id=show_part_of_iframe_next_viewports_loop2]:radio').attr('disabled',value);
   jQuery('#show_part_of_iframe_new_window').prop('readonly',value);
   jQuery('#show_part_of_iframe_new_url').prop('readonly',value);
-  jQuery('input[id=show_part_of_iframe_next_viewports_hide1]:radio').attr('disabled',value);
-  jQuery('input[id=show_part_of_iframe_next_viewports_hide2]:radio').attr('disabled',value);
+  jQuery('input[id=show_part_of_iframe_next_viewports_hide1]:radio, input[id=show_part_of_iframe_next_viewports_hide2]:radio').attr('disabled',value);
   jQuery('#show_part_of_iframe_style').prop('readonly',value);
-  jQuery('input[id=show_part_of_iframe_zoom1]:radio').attr('disabled',value);
-  jQuery('input[id=show_part_of_iframe_zoom2]:radio').attr('disabled',value);
-  jQuery('input[id=show_part_of_iframe_zoom3]:radio').attr('disabled',value);
+  jQuery('input[id=show_part_of_iframe_zoom1]:radio, input[id=show_part_of_iframe_zoom2]:radio, input[id=show_part_of_iframe_zoom3]:radio').attr('disabled',value);
+
+  var selector = '#show_part_of_iframe_x, #show_part_of_iframe_y, #show_part_of_iframe_height, #show_part_of_iframe_width, ';
+  selector += '#show_part_of_iframe_allow_scrollbar_horizontal1, #show_part_of_iframe_next_viewports, #show_part_of_iframe_next_viewports_loop1, ';
+  selector += '#show_part_of_iframe_new_window, #show_part_of_iframe_new_url, #show_part_of_iframe_next_viewports_hide1, #show_part_of_iframe_style, ';
+  selector += '#show_part_of_iframe_zoom1, #show_part_of_iframe_allow_scrollbar_vertical1';
+  aiDisableTextSection(value, selector);
 }
 
 function aiDisableLazyLoadOptions(value) {
   jQuery('#enable_lazy_load_threshold').prop('readonly', value);
   jQuery('#enable_lazy_load_fadetime').prop('readonly', value);
-  jQuery('input[id=enable_lazy_load_reserve_space1]:radio').attr('disabled',value);
-  jQuery('input[id=enable_lazy_load_reserve_space2]:radio').attr('disabled',value);
-  jQuery('input[id=enable_lazy_load_manual1]:radio').attr('disabled',value);
-  jQuery('input[id=enable_lazy_load_manual2]:radio').attr('disabled',value);
-  jQuery('input[id=enable_lazy_load_manual3]:radio').attr('disabled',value);
-}
+  jQuery('input[id=enable_lazy_load_reserve_space1]:radio, input[id=enable_lazy_load_reserve_space2]:radio').attr('disabled',value);
+  jQuery('input[id=enable_lazy_load_manual1]:radio, input[id=enable_lazy_load_manual2]:radio, input[id=enable_lazy_load_manual3]:radio').attr('disabled',value);
+   
+  var selector = '#enable_lazy_load_threshold, #enable_lazy_load_fadetime, #enable_lazy_load_reserve_space1, #enable_lazy_load_manual1';
+  aiDisableTextSection(value, selector);
+  }
 
 function aiDisableIframeAsLayerOptions(value) {
   jQuery('input[id=show_iframe_as_layer_full]:radio').attr('disabled',value);
   jQuery('#show_iframe_as_layer_header_file').prop('readonly', value);
   jQuery('#show_iframe_as_layer_header_height').prop('readonly', value);
-  jQuery('input[id=show_iframe_as_layer_header_position1]:radio').attr('disabled',value);
-  jQuery('input[id=show_iframe_as_layer_header_position2]:radio').attr('disabled',value);
-  jQuery('input[id=show_iframe_as_layer_full1]:radio').attr('disabled',value);
-  jQuery('input[id=show_iframe_as_layer_full2]:radio').attr('disabled',value);
-  jQuery('input[id=show_iframe_as_layer_full3]:radio').attr('disabled',value);
-  jQuery('input[id=show_iframe_as_layer_keep_content1]:radio').attr('disabled',value);
-  jQuery('input[id=show_iframe_as_layer_keep_content2]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_header_position1]:radio, input[id=show_iframe_as_layer_header_position2]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_full1]:radio, input[id=show_iframe_as_layer_full2]:radio, input[id=show_iframe_as_layer_full3]:radio').attr('disabled',value);
+  jQuery('input[id=show_iframe_as_layer_keep_content1]:radio, input[id=show_iframe_as_layer_keep_content2]:radio').attr('disabled',value);
+
+  var selector = '#show_iframe_as_layer_full, #show_iframe_as_layer_header_file, #show_iframe_as_layer_header_height, ';
+  selector += '#show_iframe_as_layer_header_position1, #show_iframe_as_layer_full1, #show_iframe_as_layer_keep_content1';
+  aiDisableTextSection(value, selector);
 }
 
+function aiDisableTextSection(value, selector) {
+	if (value) {
+        jQuery(selector).closest('tr').addClass('disabled');
+    } else {
+	    jQuery(selector).closest('tr').removeClass('disabled');
+    }
+}
 
-var instance;
+var aiInstance;
 
 /**
  *  This function initializes all checks that are done by Javascript
  *  on the admin page like enabling disabling fields...
  */
-function initAdminConfiguration(isPro, acc_type) {
+function aiInitAdminConfiguration(isPro, acc_type) {
 
     // enable checkbox of onload_resize_delay and if resize is set to true external workaround is set to false
     if (jQuery('input[type=radio][name=onload_resize]:checked').val() === 'false') {
@@ -444,7 +483,7 @@ function initAdminConfiguration(isPro, acc_type) {
 
 
      jQuery('#accordion').find('h1').click(function(){
-         jQuery(this).next().slideToggle(accTime);
+         jQuery(this).next().slideToggle(aiAccTime);
      }).next().hide();
 
      jQuery('#accordion').find('a').click(function(){
@@ -488,7 +527,7 @@ function initAdminConfiguration(isPro, acc_type) {
     });
 
     jQuery('.confirmation').on('click', function () {
-        return confirm('Are you sure?');
+        return confirm('Are you sure? Selecting OK will set all settings to the default.');
     });
 
      jQuery('a.post').click(function(e) {
@@ -533,7 +572,8 @@ function initAdminConfiguration(isPro, acc_type) {
       // set the links between tabs and open the right one at the right section.
         jQuery(document).on( 'click', 'a#external-workaround-link', function() {
           jQuery('.external-workaround').click();
-          jQuery(document).scrollTop(0);
+          location.hash = 'tab_3';
+		   aiShowHeader('tab_3');
           return false;
         });
         jQuery(document).on( 'click', 'a#resize-same-link', function() {
@@ -543,37 +583,53 @@ function initAdminConfiguration(isPro, acc_type) {
         });
          jQuery(document).on( 'click', 'a.jquery-help-link', function() {
           jQuery('.help-tab').click();
+		  jQuery('#id-help-jquery').removeClass('closed');
           jQuery('#jquery-help').show();
-          location.hash = 'jqh';
-          showHeader();
-          return false;
+          location.hash = 'id-help-jquery';
+		  aiShowHeader('id-help-jquery');
+		  return false;
         });
         jQuery(document).on( 'click', 'a#browser-detection-link', function() {
           jQuery('.help-tab').click();
+		  jQuery('#id-help-browser').removeClass('closed');
           jQuery('#browser-help').show();
-          location.hash = 'browser-detection-id';
-          showHeader();
+          location.hash = 'id-help-browser';
+          aiShowHeader('id-help-browser');
           return false;
         });
         jQuery(document).on( 'click', 'a.howto-id-link', function() {
           jQuery('.help-tab').click();
-          location.hash = 'how-id';
-          showHeader();
+		  jQuery('#id-help-id').removeClass('closed');
+          location.hash = 'id-help-id';
+          aiShowHeader('id-help-id');
           return false;
         });
         jQuery(document).on( 'click', '.modifycontent-link', function() {
           jQuery('.advanced-settings-tab').click();
           jQuery('#h1-mi').next().show();
           location.hash = '#mi-id';
-          showHeader();
+          aiShowHeader('mi-id');
           return false;
         });
-         jQuery(document).on( 'click', 'a.link-external-domain', function() {
-          location.hash = '#h-external-domain';
-          showHeader();
+         jQuery(document).on( 'click', 'a.link-external-domain', function() {     
+          jQuery('#id-external-different').removeClass('closed');
+		  location.hash = '#id-external-different';
+		  aiShowHeader('id-external-different');
           return false;
         });
-
+		jQuery(document).on( 'click', 'a.link-id-external-ai-config-post', function() {
+          jQuery('#id-external-ai-config-post').removeClass('closed');
+		  location.hash = '#id-external-ai-config-post';  
+		  aiShowHeader('id-external-ai-config-post');
+          return false;
+        });
+		jQuery(document).on( 'click', 'a.link-id-external-ai-overview', function() {
+          jQuery('#id-external-ai-overview').removeClass('closed');
+		  location.hash = '#id-external-ai-overview';
+		  aiShowHeader('id-external-ai-overview');
+          return false;
+        });
+	
       jQuery(document).on( 'click', 'a#user-help-link', function() {
           jQuery('#user-help').css('display', 'block');
           return false;
@@ -589,15 +645,16 @@ function initAdminConfiguration(isPro, acc_type) {
         });
 
       jQuery(document).on( 'click', '.ai-selector-help-link-move', function() {
-          location.hash = '#ai-selector-help-link';
-          showHeader();
           jQuery('#ai-selector-help').show('slow');
+		  location.hash = '#ai-selector-help-link';
+          aiShowHeader('ai-selector-help-link');   
           return false;
         });
         jQuery(document).on( 'click', 'a.post-message-help-link', function() {
           jQuery('.help-tab').click();
-          location.hash = 'com-post-message';
-          showHeader();
+          jQuery('#id-help-communication').removeClass('closed');
+		  location.hash = 'id-help-communication';
+          aiShowHeader('id-help-communication');
           return false;
         });
 
@@ -617,18 +674,34 @@ function initAdminConfiguration(isPro, acc_type) {
         });
         // set the hidden variable
         jQuery('#current_open_sections').val(openSections);
-        setAiScrollposition();
+        aiSetScrollposition();
       });
+			
+	// Close postboxes that should be closed.
+	jQuery('.if-js-closed').removeClass('if-js-closed').addClass('closed');
+	// Postboxes setup.
+	if (typeof postboxes !== 'undefined') {
+		postboxes.add_postbox_toggles('toplevel_page_advanced-iframe');
+	}
+ 	
+	jQuery('.ai-spinner').css('display','none');
+	jQuery("#" + acc_type).next().show();
+	
+	jQuery(document).on( 'click', '#test-pro-admin.is-permanent-closable button', function() {
+          closeInfoPermanent('test-pro-admin');
+    });
+	
+	
 }
-
-function aiSettingsSearch(searchTerm, acc_type) {
+		   
+function aiSettingsSearch(searchTerm, accType) {
  var found = 0;
 
  if (searchTerm !== '') {
    jQuery('#ai p').not('.form-table p').hide();
    jQuery('#ai ul').not('.form-table ul').hide();
    jQuery('#ai ol').not('.form-table ol').hide();
-   if (acc_type !== 'false') {
+   if (accType !== 'false') {
      jQuery('#ai h1').not('.show-always').hide();
      jQuery('#ai #accordion').attr('id','acc');
      jQuery('#ai #acc > div').show();
@@ -639,13 +712,13 @@ function aiSettingsSearch(searchTerm, acc_type) {
    jQuery('#ai hr, .signup_account_container, .config-file-block').hide();
    jQuery('#ai .hide-always').hide();
    jQuery('#ai .hide-search').hide();
-
+   jQuery('#ai .postbox-container').not('.show-always').hide();
  } else {
    jQuery('#ai p').not('.form-table p').show();
    jQuery('#ai section .ai-anchor').show();
    jQuery('#ai ul').not('.form-table ul').show();
    jQuery('#ai ol').not('.form-table ol').show();
-   if (acc_type !== 'false') {
+   if (accType !== 'false') {
      jQuery('#ai h1').not('.show-always').show();
      jQuery('#ai #acc').attr('id','accordion');
      jQuery('#ai #accordion > div').hide();
@@ -655,9 +728,14 @@ function aiSettingsSearch(searchTerm, acc_type) {
    jQuery('#ai .form-table').removeClass('ai-remove-margin');
    jQuery('#ai hr, .signup_account_container, .config-file-block').show();
    jQuery('#ai .sub-domain-container').show();
-    jQuery('#ai .hide-search').show();
-
+   jQuery('#ai .hide-search').show();
    jQuery('#ai .hide-always').hide();
+   jQuery('#ai .postbox-container').show();
+   
+   setTimeout(function() {
+       jQuery('#ai .postbox-container .closed .inside').css('display', '');
+   }, 5);   
+   
  }
 
  jQuery('#ai .mark-tab-header').removeClass('mark-tab-header');
@@ -676,18 +754,20 @@ function aiSettingsSearch(searchTerm, acc_type) {
     if (valueLabel.indexOf(searchTerm) === -1 && valueDescription.indexOf(searchTerm) === -1) {
       $this.addClass('hide-setting');
     } else {
-      $this.closest('table').prevAll('h2:first').show();
+	  $this.closest('table').prevAll('h2:first').show();
+	  $this.closest('.postbox-container').show();
+	  $this.closest('.postbox-container').find('h2, .inside').show();
       $this.closest('table').prevAll('#ai .icon_ai:first').show();
       $this.closest('table').nextAll('p.button-submit:first').show();
       $this.removeClass('hide-setting');
       $this.closest('.hide-search').show();
 
       if (searchTerm.length > 2) {
-        var header_id = $this.closest('section').attr('class');
-        if (header_id !== undefined) {
-            jQuery('#' + header_id).addClass('mark-tab-header');
+        var headerId = $this.closest('section').attr('class');
+        if (headerId !== undefined) {
+            jQuery('#' + headerId).addClass('mark-tab-header');
             if (firstHit==='') {
-              firstHit = header_id;
+              firstHit = headerId;
             }
         }
       }
@@ -700,10 +780,10 @@ function aiSettingsSearch(searchTerm, acc_type) {
   } else {
     jQuery('#ai-input-search-result').hide();
     // https://github.com/padolsey/findAndReplaceDOMText
-    instance && instance.revert();
+    aiInstance && aiInstance.revert();
       if (searchTerm !== '' && searchTerm.length > 2) {
       var regex = RegExp(searchTerm, 'gi');
-      instance = findAndReplaceDOMText(document.getElementById('tab_wrapper'), {
+      aiInstance = findAndReplaceDOMText(document.getElementById('tab_wrapper'), {
         find: regex,
         wrap: 'em'
       });
@@ -729,7 +809,7 @@ function aiResizeIframeRatio(obj, ratio) {
 /**
  * Generate a shortcode string from the current settings.
  */
-function aiGenerateShortcode() {
+function aiGenerateShortcode(isPro) {
     var output = '[advanced_iframe ';
 
     // default section
@@ -760,7 +840,7 @@ function aiGenerateShortcode() {
         output += aiGenerateRadioShortcode('transparency','true');
         output += aiGenerateTextShortcode('class');
         output += aiGenerateTextShortcode('style');
-        output += aiGenerateTextShortcode('id');
+        output += aiGenerateTextShortcodeWithDefault('id', 'advanced_iframe');
         output += aiGenerateTextShortcode('name');
         output += aiGenerateRadioShortcode('allowfullscreen','false');
         output += aiGenerateTextShortcode('safari_fix_url');
@@ -840,6 +920,8 @@ function aiGenerateShortcode() {
        output += aiGenerateTextShortcode('iframe_content_css');
        output += aiGenerateTextShortcode('change_iframe_links');
        output += aiGenerateTextShortcode('change_iframe_links_target');
+       output += aiGenerateTextShortcode('change_iframe_links_href');
+       
        // resize content height
        output += aiGenerateTextShortcode('onload');
        output += aiGenerateRadioShortcode('onload_resize','false');
@@ -867,8 +949,13 @@ function aiGenerateShortcode() {
        output += aiGenerateRadioShortcode('enable_external_height_workaround','external');
        output += aiGenerateRadioShortcode('hide_page_until_loaded_external','false');
        output += aiGenerateTextShortcode('pass_id_by_url');
-       output += aiGenerateRadioShortcode('multi_domain_enabled','false');
-       output += aiGenerateRadioShortcode('use_post_message','false');
+       if (isPro === 'true') {
+	       output += aiGenerateRadioShortcode('multi_domain_enabled','true');
+           output += aiGenerateRadioShortcode('use_post_message','true');
+	   } else {
+		   output += aiGenerateRadioShortcode('multi_domain_enabled','false');
+           output += aiGenerateRadioShortcode('use_post_message','false');
+	   }
        // additional files
        output += aiGenerateTextShortcode('additional_css');
        output += aiGenerateTextShortcode('additional_js');
@@ -887,7 +974,7 @@ function aiGenerateShortcode() {
    }
    // options
    output += aiGenerateRadioShortcode('debug_js','false');
-
+   output = output.slice(0, -1);
    output += ']';
    jQuery('#gen-shortcode').html(output);
 }
@@ -925,7 +1012,12 @@ function aiGenerateRadioShortcode(field, defaultValue) {
     var output = '';
     var value = jQuery('input:radio[name='+field+']:checked');
     var val = value.val();
-    if (value.length > 0 && val !== defaultValue) {
+    
+	if (field === 'enable_ios_mobile_scolling') {
+	    field = 'enable_ios_mobile_scrolling';
+	}
+	
+	if (value.length > 0 && val !== defaultValue) {
         output += field + '="' + val + '" ';
     }
     return output;
@@ -957,7 +1049,7 @@ function aiAutoZoomExternalHeight(id, width, height, responsive) {
     var oldScrollposition = jQuery(document).scrollTop();
     var newHeight = Math.ceil(height*zoomRatio);
     jQuery('#ai-zoom-div-' + id).css('height', newHeight);
-    jQuery(document).scrollTop(oldScrollposition);
+    jQuery("html,body").scrollTop(oldScrollposition); 
  return parentWidth;
 }
 
@@ -982,7 +1074,7 @@ function aiAutoZoomExternal(id, width, responsive) {
      zoomRatioRounded = 1;
    }
 
-   setZoom(id, zoomRatioRounded);
+   aiSetZoom(id, zoomRatioRounded);
    window['zoom_' + id] = zoomRatioRounded;
    jObj.width(iframeWidth).css('max-width', 'none');
    return parentWidth;
@@ -1026,7 +1118,7 @@ function aiAutoZoom(id, responsive, ratio) {
 /**
  * Set the zoom div settings dynamically.
  */
-function setZoom(id, zoom) {
+function aiSetZoom(id, zoom) {
 
   var obj = jQuery('#' + id);
 
@@ -1045,43 +1137,43 @@ function setZoom(id, zoom) {
 
 function aiAutoZoomViewport(id, full) {
 
-  var viewport_div = jQuery(id);
-  var outer_div = viewport_div.parent();
+  var viewportDiv = jQuery(id);
+  var outerDiv = viewportDiv.parent();
   var counter = 0;
 
   // We only go up and look for divs which are not from ai or p elements which are rendered by mistake.
-  while (outer_div.is('p') || (outer_div.attr('id') !== undefined && outer_div.attr('id').indexOf('ai-') === 0)) {
-     outer_div = outer_div.parent();
+  while (outerDiv.is('p') || (outerDiv.attr('id') !== undefined && outerDiv.attr('id').indexOf('ai-') === 0)) {
+     outerDiv = outerDiv.parent();
      if (counter++ > 10) {
         alert('Unexpected div structure. Please disable the zoom.');
         break;
      }
   }
 
-  var viewport_div_width = viewport_div.width();
-  var outer_div_width = outer_div.width();
-  var viewport_div_height = viewport_div.height();
-  var zoom = outer_div_width / viewport_div_width;
+  var viewportDivWidth = viewportDiv.width();
+  var outer_div_width = outerDiv.width();
+  var viewportDivHeight = viewportDiv.height();
+  var zoom = outer_div_width / viewportDivWidth;
 
   if (full === 'true' && zoom > 1) {
      zoom = 1;
   }
 
-  setZoom(viewport_div.attr('id'), zoom);
+  aiSetZoom(viewportDiv.attr('id'), zoom);
   // set the margin because otherwise it is normally "centered" in the old area
-  var margin_left = -Math.round((viewport_div_width - viewport_div_width * zoom) / 2);
-  var margin_top = -Math.round((viewport_div_height - viewport_div_height * zoom) / 2);
-  viewport_div.css({
-    'margin-left':  margin_left + 'px',
-    'margin-right':  margin_left + 'px',
-    'margin-top':  margin_top + 'px',
-    'margin-bottom':  margin_top + 'px'
+  var marginLeft = -Math.round((viewportDivWidth - viewportDivWidth * zoom) / 2);
+  var marginTop = -Math.round((viewportDivHeight - viewportDivHeight * zoom) / 2);
+  viewportDiv.css({
+    'margin-left':  marginLeft + 'px',
+    'margin-right':  marginLeft + 'px',
+    'margin-top':  marginTop + 'px',
+    'margin-bottom':  marginTop + 'px'
   });
 
 
 }
 
-function resetAiSettings() {
+function aiResetAiSettings() {
   jQuery('#action').val('reset');
 }
 
@@ -1091,8 +1183,7 @@ function aiCheckInputNumber(inputField) {
     if (inputField.value === '') { 
         return;
     }
-    // var match = f.match(/^(\-){0,1}[\d\.]+(px|%|em|pt)?[\+\-]?[\d\.]?(px|%|em|pt)?$/);
-    var match = f.match(/^(\-){0,1}([\d\.])+(px|%|em|pt)?(\-|\+){0,1}([\d\.]){0,7}(px|%|em|pt)?$/);
+    var match = f.match(/^(\-){0,1}([\d.])+(px|%|em|pt|vh|vw|rem|ch)?(\-|\+){0,1}([\d.]){0,7}(px|%|em|pt|vh|vw|rem|ch)?$/);
 
     if (!match) {
         alert('Please check the value you have entered. Only numbers with a dot or with an optional px, %, em or pt are allowed.');
@@ -1107,42 +1198,42 @@ function aiCheckInputNumberOnly(inputField) {
       inputField.value = '0';
       return;
     }
-    var match = f.match(/^(\-){0,1}([\d\.])+$/);
+    var match = f.match(/^(\-){0,1}([\d.])+$/);
 
     if (!match) {
         alert('Please check the value you have entered. Only numbers without a dot or optional px, %, em or pt are allowed.');
         setTimeout(function(){inputField.focus();}, 10);
     }
 }
-
-function showHeader() {
+// https://codepen.io/anon/pen/baaLYB/
+function aiShowHeader(id) {
   var y = jQuery(window).scrollTop();
   jQuery(window).scrollTop(y-40);
 }
 
-function setAiScrollposition() {
+function aiSetScrollposition() {
   var scrollposition = jQuery(document).scrollTop();
   jQuery('#scrollposition').val(scrollposition); // +32
 }
 
-function resetShowPartOfAnIframe(id) {
+function aiResetShowPartOfAnIframe(id) {
   jQuery('#' + id).css('top','0px').css('left','0px').css('position','static');
   jQuery('#ai-div-' + id).css('width','auto').css('height','auto').css('overflow','auto').css('position','static');
 }
 
-function ai_showLayerIframe(event, id, path, hide_until_loaded, show_loading_icon, keep, reload) {
+function aiShowLayerIframe(event, id, path, hideUntilLoaded, showLoadingIcon, keep, reload) {
   keep = (keep === undefined) ? false : keep;
   reload = (reload === undefined) ? true : reload;
 
-  var layer_id = '#' + id;
+  var layerId = '#' + id;
   jQuery('#ai-zoom-div-' + id).show();
-  if  (reload && hide_until_loaded === 'true') {
-      jQuery(layer_id).css('visibility', 'hidden');
+  if  (reload && hideUntilLoaded === 'true') {
+      jQuery(layerId).css('visibility', 'hidden');
   }
-  jQuery(layer_id).show();
+  jQuery(layerId).show();
   if ( jQuery( '#ai-layer-div-' + id ).length ) {
-    layer_id = '#ai-layer-div-' + id;
-    jQuery(layer_id).show();
+    layerId = '#ai-layer-div-' + id;
+    jQuery(layerId).show();
   }
 
   jQuery('body').css('overflow','hidden');
@@ -1151,14 +1242,14 @@ function ai_showLayerIframe(event, id, path, hide_until_loaded, show_loading_ico
   // was 'body' before
 
   var icon = '<!-- -->';
-  if (reload && show_loading_icon==='true') {
+  if (reload && showLoadingIcon==='true') {
     icon = '<div id="ai-div-loader-global" style="position: fixed;z-index:100004;margin-left:-33px;left: 50%;top:50%;margin-top:-33px"><img src="' + path + 'loader.gif" width="66" height="66" title="Loading" alt="Loading"></div>';
   }
 
-  jQuery(layer_id).parent().append('<div id="ai_backlayer" style="z-index:100001;position:fixed;top:0;left:0;width:100%;height:100%;background-color: rgba(50,50,50,0.5);overflow:hidden;cursor:pointer"><!-- --></div>' + icon);
+  jQuery(layerId).parent().append('<div id="ai_backlayer" style="z-index:100001;position:fixed;top:0;left:0;width:100%;height:100%;background-color: rgba(50,50,50,0.5);overflow:hidden;cursor:pointer"><!-- --></div>' + icon);
 
   jQuery( '#ai_backlink, #ai_backlayer' ).click(function() {
-    ai_hideLayerIframe(id, keep);
+    aiHideLayerIframe(id, keep);
   });
   if (!reload) {
       event.preventDefault();
@@ -1166,12 +1257,12 @@ function ai_showLayerIframe(event, id, path, hide_until_loaded, show_loading_ico
   }
 }
 
-function ai_hideLayerIframe(id, keep) {
+function aiHideLayerIframe(id, keep) {
 
   jQuery('#' + id).hide();
   if (!keep) {
       jQuery('#' + id).attr('src', 'about:blank');
-      ai_layer_iframe_hrefs[id] = 'about:blank';
+      aiLayerIframeHrefs[id] = 'about:blank';
   }
   jQuery('#ai-zoom-div-' + id).hide();
   jQuery('#ai-layer-div-' + id).hide();
@@ -1187,7 +1278,7 @@ function ai_hideLayerIframe(id, keep) {
  * As the src of an iframe cannot be read from a remote domain we remember
  * the urls from the links here for each opened iframe.
  */
-var ai_layer_iframe_hrefs = [];
+var aiLayerIframeHrefs = [];
 
 /**
  * Check if the location of the iframe is already the one of the link.
@@ -1198,17 +1289,17 @@ var ai_layer_iframe_hrefs = [];
  */
 
 
-function ai_checkReload (link, id) {
-    var iframe_src;
-    if(typeof ai_layer_iframe_hrefs[id] === 'undefined') {
-        iframe_src = jQuery('#' + id).attr('src');
+function aiCheckReload (link, id) {
+    var iframeSrc;
+    if(typeof aiLayerIframeHrefs[id] === 'undefined') {
+        iframeSrc = jQuery('#' + id).attr('src');
     } else {
-        iframe_src = ai_layer_iframe_hrefs[id];
+        iframeSrc = aiLayerIframeHrefs[id];
     }
-    var link_href = jQuery(link).attr('href');
-    // alert(link_href + ": iframe:" + iframe_src);
-    ai_layer_iframe_hrefs[id] = link_href;
-    return (iframe_src !== link_href);
+    var linkHref = jQuery(link).attr('href');
+    // alert(linkHref + ": iframe:" + iframeSrc);
+    aiLayerIframeHrefs[id] = linkHref;
+    return (iframeSrc !== linkHref);
 }
 
 /**
@@ -1216,32 +1307,65 @@ function ai_checkReload (link, id) {
  * existing parameter with the given url
  */
 function aiChangeUrlParam(loc, param, orig, prefix) {
-
    var newUrl;
    if (loc !== encodeURIComponent(orig)) {
-     newUrl = aiSetGetParameter(param, loc);
-     var removeProtocol = true;
-     if (prefix) {
+	 newUrl = aiSetGetParameter(param, loc);
+	 var removeProtocol = true;
+     if (prefix === 'hash' || prefix === 'hashrewrite') {
+		 var locBase = aiRemoveQueryString(loc);
+		 return aiGetUrlMapping(locBase, param, prefix);
+	 } else if (prefix) {
        var repUrl = newUrl.replace(prefix,'');
        if (repUrl === newUrl) {
          removeProtocol = false;
        }
        newUrl = repUrl;
      }
-     // remove protocoll
+     
+	 // remove protocoll
      if (removeProtocol) {
        newUrl = newUrl.replace('http%3A%2F%2F','');
-       if (window.location.href.toLowerCase().startsWith("http:")) {
+       if (window.location.href.toLowerCase().lastIndexOf("http:", 0) !== -1) {
            newUrl = newUrl.replace('https%3A%2F%2F','s|');  
        } else {
            newUrl = newUrl.replace('https%3A%2F%2F','');
        }
      }
-    } else {
+   } else {
       var fullUrl = window.location.href;
-      newUrl = aiRemoveURLParameter(fullUrl, param);
-    }
-    if (aiSupportsHistoryApi()) {
+	  // remove param/* first
+	  fullUrl = fullUrl.split("/" + param + "/",1)[0];
+	  newUrl = aiRemoveURLParameter(fullUrl, param);
+   }
+   aiSetBrowserUrl(newUrl); 
+}
+
+function aiGetUrlMappingUrl(locBase, param, prefix, id) {
+	 var fullUrl = window.location.href;
+	 newUrl = aiRemoveURLParameter(fullUrl, param);
+	 if (prefix === 'hash') {
+		 var seperator = (newUrl.indexOf('?') >= 0) ? '&' : '?'; 
+		 newUrl += seperator+param+"=" + id;
+	 } else {
+		 // remove param/* first
+		 var queryString = "/";
+		 if (newUrl.indexOf('?') >= 0) {
+			 var newUrlArray = newUrl.split('?'); 
+			 newUrl = newUrlArray[0];
+			 queryString = '/?' + newUrlArray[1]; 
+		 }
+		 var baseUrl = newUrl.split("/" + param + "/",1)[0];
+		 // add the path before the query string 
+		 if (!aiEndsWidth(baseUrl, "/")) {
+			 baseUrl += '/';
+		 }
+		 newUrl = baseUrl + param+"/" + id + queryString;
+	 }		 
+	return newUrl;
+}
+
+function aiSetBrowserUrl(newUrl) {
+	if (aiSupportsHistoryApi()) {
         newUrl = newUrl.replace(/%2F/g,'/');
         window.history.pushState({}, '', newUrl);
         // I asume the back button is clicked.
@@ -1252,6 +1376,42 @@ function aiChangeUrlParam(loc, param, orig, prefix) {
         };
     }
 }
+
+function aiRemoveQueryString(loc) {
+    if (loc.indexOf('%3F') >= 0) {
+	    return loc.split('%3F')[0]; 
+	} else {
+	    return loc;
+	}
+}	
+
+function aiGetUrlMapping(url, param, prefix) {
+	var data = {
+      action: 'aip_map_url_action',
+      security : MyAjax.security,
+      url: url
+    };
+	
+    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+    jQuery.post(MyAjax.ajaxurl, data, function(id) {
+       var newUrl = aiGetUrlMappingUrl(url, param, prefix, id);
+	   aiSetBrowserUrl(newUrl);   
+   });  
+}
+
+function closeInfoPermanent(id) {
+	var data = {
+      action: 'aip_close_message_permanent',
+      security : MyAjax.security,
+      id: id
+    };
+    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+    jQuery.post(MyAjax.ajaxurl, data, function(id) {
+	   jQuery('h1').after('<div class="message-notice notice notice-success"><p>The message before will only appear again when you reset the settings.</p></div>'); 
+    }); 
+    setTimeout(function() { jQuery(".message-notice").fadeOut() }, 4000);     
+}
+
 
 function aiSupportsHistoryApi() {
   return !!(window.history && history.pushState);
@@ -1280,8 +1440,8 @@ function aiSetGetParameter(paramName, paramValue)
     url = splitAtAnchor[0];
     var anchor = typeof splitAtAnchor[1] === 'undefined' ? '' : '#' + splitAtAnchor[1];
     if (url.indexOf(paramName + '=') >= 0) {
-        var prefix = url.substring(0, url.indexOf(paramName));
-        var suffix = url.substring(url.indexOf(paramName));
+        var prefix = url.substring(0, url.indexOf(paramName+ '='));
+        var suffix = url.substring(url.indexOf(paramName+ '='));
         suffix = suffix.substring(suffix.indexOf('=') + 1);
         suffix = (suffix.indexOf('&') >= 0) ? suffix.substring(suffix.indexOf('&')) : '';
         url = prefix + paramName + '=' + paramValue + suffix;
@@ -1322,6 +1482,10 @@ function aiRemoveURLParameter(url, parameter) {
     } else {
         return url;
     }
+}
+
+function aiEndsWidth(string, target) {
+  return string.substr(-target.length) === target;
 }
 
 /**
@@ -1383,14 +1547,19 @@ function aiPresetFullscreen() {
  * when the page is read to aiReadyCallbacks
  */
 jQuery(document).ready(function() {
+	// wordpress adds often p elements that have margins we remove here. 
+	jQuery('iframe').parent('p').css('margin','0');
+	
     jQuery.each(aiReadyCallbacks, function(index, callback){
       callback();
     });
-
-    jQuery('#checkIframes').on('click', function(){
-        jQuery(this).addClass('disabled');
+	
+	setTimeout(function() { jQuery("#ai #ai-updated-text").css("visibility","hidden")}, 4000);
+	
+    jQuery('#ai #checkIframes').on('click', function(){ 
         jQuery('.ai-spinner').css('display','inline-table');
-        setTimeout(ai_disableCheckIframes, 200);
+		jQuery(this).addClass('disabled');
+		setTimeout(aiDisableCheckIframes, 200);
     });
 
     var moved=false;
@@ -1398,7 +1567,7 @@ jQuery(document).ready(function() {
         if(!moved){
            var elem = jQuery('#aiDebugDiv');
             if (Math.floor(elem.height()) > '300') {
-                elem.height('38px');
+                elem.height('0px');
             } else {
                elem.height('400px');
             }
@@ -1413,11 +1582,13 @@ jQuery(document).ready(function() {
              element.siblings().hide();
              var parents = element.parents();
              parents.siblings().hide();
-             parents.css('padding', '0px').css('margin', '0px');
+             parents.css('padding', '0px').css('margin', '0px').css('overflow', 'hidden');
 
              // we send the size of the element as post message if we are in an iframe
              if(parent===top) {
                 var elementRaw = element[0];
+				elementRaw.style.marginTop = elementRaw.style.marginBottom = 0;
+                elementRaw.style.overflow = "hidden";
                 var newHeightRaw =  Math.max(elementRaw.scrollHeight, elementRaw.offsetHeight);
                 var newHeight = parseInt(newHeightRaw,10);
                 var data = { 'aitype' : 'height', 'height' : newHeight, 'id' : ai_show_id_only};
@@ -1428,20 +1599,11 @@ jQuery(document).ready(function() {
     }
 });
 
-function ai_disableCheckIframes() {
+function aiDisableCheckIframes() {
+	var input = jQuery("<input>").attr("type", "hidden").attr("name", "checkIframes").val("true");
+    jQuery("#ai_form").append(input);
+	jQuery( "#ai_form" ).submit();
     jQuery('#checkIframes').prop('disabled','disabled');
-}
-
-
-function gup( name, url ) {
-    if (!url) {
-      url = location.href; 
-    }
-    name = name.replace(/[\[]/,'\\\[').replace(/[\]]/,'\\\]');
-    var regexS = '[\\?&]'+name+'=([^&#]*)';
-    var regex = new RegExp( regexS );
-    var results = regex.exec( url );
-    return results == null ? null : results[1];
 }
 
 function aiProcessMessage(event,id,debug) {
@@ -1458,7 +1620,7 @@ function aiProcessMessage(event,id,debug) {
     var jsObject = event.data; 
   }  
   try {
-    // we only process objects from advenced iframe
+    // we only process objects from advanced iframe
     if (jsObject.hasOwnProperty('aitype')) {
       // we only process the ones for the same id here.
       if ( id === jsObject.id) {
@@ -1484,7 +1646,7 @@ function aiProcessMessage(event,id,debug) {
     }
 	} catch(e) {
         if (debug === 'debug' && console && console.log) {
-          console.log('The received message cannot be parsed and seems not to belong to advanced iframe pro. Please disable the postMessage debug mode if this o.k. and that this message is not shown anymore.');
+          console.log('The received message do not belong to advanced iframe pro. Please disable the postMessage debug mode if this o.k. and that this message is not shown anymore.');
           console.log(e);
         }
   }
@@ -1493,7 +1655,9 @@ function aiProcessMessage(event,id,debug) {
 function aiProcessDebug(jsObject) {
     var debugData = jsObject.data;
     if (jQuery('#aiDebugDiv').length !== 0) {
-        jQuery('#aiDebugDiv').append('<p class="ai-debug-remote"> r: ' + debugData + '</p>');
+		debugData = debugData.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        debugData = debugData.replace('\"', '"').replace(/\\/g,"");
+		jQuery('#aiDebugDiv').append('<p class="ai-debug-remote"> r: ' + debugData + '</p>');
     }
 }
 
@@ -1503,13 +1667,14 @@ function aiProcessScrollToTop(jsObject) {
 }
 
 function aiProcessHeight(jsObject) {
-    var nHeight = jsObject.height; // gup("height",data);
-    var nWidth = jsObject.width; // gup("width",data);
-    var id = jsObject.id; // gup("id",data);
+    var nHeight = jsObject.height; 
+    var nWidth = jsObject.width; 
+    var iAnchor = parseInt(jsObject.anchor,10);
+    var id = jsObject.id;
 
     if (nHeight != null) {
       try {
-        var loc = jsObject.loc; // gup("loc",data);
+        var loc = jsObject.loc;
         if (loc != null) {
           aiChangeUrl(loc);
         }
@@ -1517,7 +1682,16 @@ function aiProcessHeight(jsObject) {
             var iHeight = parseInt(nHeight,10);
             var iWidth = parseInt(nWidth,10);
             aiResizeIframeHeightId(iHeight,iWidth, id);
-            aiShowIframeId(id);
+            if (!isNaN(iAnchor) && iAnchor > -1) {
+				// 
+				var iframeTop = jQuery("#" + id).offset().top; 
+                setTimeout(function() {
+                    jQuery("html,body").scrollTop(Math.round(iframeTop + iAnchor));
+					aiShowIframeId(id);
+                }, 100);   
+            } else {
+				aiShowIframeId(id);
+			}
         } else {
             alert('Please update the ai_external.js to the current version.');
         }
@@ -1539,4 +1713,48 @@ function aiProcessShow(jsObject) {
       console.log(e);
     }
   }
+}
+
+function aiRemoveElementsFromHeight(id,height,removeElements) {
+	var iframe = jQuery('#' + id);
+	var elementArray  = removeElements.split(',');
+    var totalHeight = 0;
+	for (var i = 0; i < elementArray.length; i++) {
+		try {
+			var el = elementArray[i];
+			if (el.includes("|")) {
+			  var rangeArray = el.split('|');
+			  var bottomElement = jQuery(rangeArray[0]);
+			  var beforeBottom = Math.round(bottomElement.offset().top + bottomElement.outerHeight(true));
+			  var nextTop = Math.round(jQuery(rangeArray[1]).offset().top);
+			  totalHeight += nextTop - beforeBottom;
+			} else if (el === 'top') { 
+			  totalHeight +=  Math.round(jQuery('#' + id).offset().top);
+			} else if (isNaN(el)) {
+			  totalHeight += jQuery(el).outerHeight(true);
+			} else {
+			  totalHeight += parseInt(el);
+			}
+		}  catch(e) {
+			if (console && console.log) {
+			  console.log('Advanced iframe configuration error: The configuration of remove_elements_from_height "'+removeElements+'" is invalid. Please check if the elements you defined do exist and ids/classes are defined properly.');
+			  console.log(e);
+			}
+		  }
+    }
+	var calc = 'calc(' + height + ' - ' + totalHeight + 'px)';
+	iframe.css('height', calc);
+}
+// IE11 does not support includes
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    if (typeof start !== 'number') {
+      start = 0;
+    }
+    if (start + search.length > this.length) {
+      return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
 }

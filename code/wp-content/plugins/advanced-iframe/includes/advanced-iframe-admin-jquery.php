@@ -1,11 +1,8 @@
 <?php
 defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
+
+aiPostboxOpen("id-help-jquery", "Small jQuery help", $closedArray); 
 ?>
-<div>
-    <div id="icon-options-general" class="icon_ai">
-      <br>
-    </div><h2 id="jqh">
-      <?php _e('Small jQuery help', 'advanced-iframe'); ?></h2>
       <p>
      <?php _e('You can use jquery selector patterns directly to identify the elements you want to modify at some of the settings. This plugin does use this selectors than at the right place. This is already an advanced topic if you are not familiar with jQuery.', 'advanced-iframe') ?>
       </p>
@@ -173,5 +170,6 @@ Omitting E is identical to *#i.</td>
           </p>
           ', 'advanced-iframe');
      }
-      ?>
-</div>
+	
+	aiPostboxClose();	
+?>

@@ -1,10 +1,14 @@
+/**
+ *  This is the Javascript file for the standalone area selector.
+ *  This file is not used inside Wordpress
+ */
 var selector;
 // retry counter is used for Firefox right now!
 var retryCounter=0;
-var default_url = '';
-var parent_key = 'not-set'
-var parent_id = 'not-set';
-var current_selection;
+var defaultUrl = '';
+var parentKey = 'not-set'
+var parentId = 'not-set';
+var currentSelection;
 
 $(document).ready(function () {
   loadData();
@@ -17,7 +21,7 @@ function loadData() {
     if(window.opener && window.opener.document) {
       isWordpress = true;
     }
-  }  catch (e) {
+  } catch (e) {
     isWordpress = false;   
   } 
   if (isWordpress) {
@@ -25,9 +29,9 @@ function loadData() {
      $("#url").val($("#src", window.opener.document).val());
      $("#iframe_width").val($("#width", window.opener.document).val());
      $("#iframe_height").val($("#height", window.opener.document).val());
-     var parent_key = $("#securitykey", window.opener.document).val();
-     var parent_id = $("#id", window.opener.document).val(); 
-     if (typeof parent_key === 'undefined') {
+     var parentKey = $("#securitykey", window.opener.document).val();
+     var parentId = $("#id", window.opener.document).val(); 
+     if (typeof parentKey === 'undefined') {
         retryCounter++;
         if (retryCounter < 20) {
            window.setTimeout("loadData()", 100);
@@ -45,13 +49,13 @@ function loadData() {
 
   } else {
      $("#main_selector").hide();
-     $("#url").val(default_url);
+     $("#url").val(defaultUrl);
      $("#iframe_width").val("");
      $("#iframe_height").val("");
      alert("The area selector is not called from within the wordpress administraton.\nPlease enter your url, width and height of the iframe manually."); 
   }
   selector = $('#image').imgAreaSelect({ instance: true, handles: true, onSelectChange: function (img, selection) {
-    current_selection = selection;
+    currentSelection = selection;
     updateInputs();
     } });
     
@@ -71,7 +75,7 @@ function loadData() {
 }
 
 function updateInputs() {
-    selection = current_selection;
+    selection = currentSelection;
     $("#selection_x").val(selection.x1);
     $("#selection_y").val(selection.y1);
     $("#selection_width").val(selection.width);
@@ -103,8 +107,8 @@ function updateInputs() {
     }
      
     $("#selection_hide").val("hide_part_of_iframe=\"" + outputString + "\"");
-    var secKeyString = (parent_key === '' || parent_key === 'not-set') ? '' : 'securitykey="'+parent_key+'" ';
-    $("#selection_shortcode").val("[advanced_iframe "+secKeyString+"use_shortcode_attributes_only=\"true\" src=\""+$("#url").val()+"\" id=\""+parent_id+"\" height=\""+$("#iframe_height").val()+"\" width=\""+$("#iframe_width").val()+"\" show_part_of_iframe=\"true\" show_part_of_iframe_x=\""+$("#selection_x").val()+"\" show_part_of_iframe_y=\""+$("#selection_y").val()+"\" show_part_of_iframe_width=\""+$("#selection_width").val()+"\" show_part_of_iframe_height=\""+$("#selection_height").val()+"\"]");    
+    var secKeyString = (parentKey === '' || parentKey === 'not-set') ? '' : 'securitykey="'+parentKey+'" ';
+    $("#selection_shortcode").val("[advanced_iframe "+secKeyString+"use_shortcode_attributes_only=\"true\" src=\""+$("#url").val()+"\" id=\""+parentId+"\" height=\""+$("#iframe_height").val()+"\" width=\""+$("#iframe_width").val()+"\" show_part_of_iframe=\"true\" show_part_of_iframe_x=\""+$("#selection_x").val()+"\" show_part_of_iframe_y=\""+$("#selection_y").val()+"\" show_part_of_iframe_width=\""+$("#selection_width").val()+"\" show_part_of_iframe_height=\""+$("#selection_height").val()+"\"]");    
 }
 
 function updateIframe() {
@@ -117,7 +121,7 @@ function updateIframe() {
      // reset all inputs!
      $("#selection_x,#selection_y,#selection_width,#selection_height,#selection_viewport,#selection_hide,#selection_shortcode").val('');
           
-     if (width != "" && height != "" && url != '' && url != default_url) {
+     if (width != "" && height != "" && url != '' && url != defaultUrl) {
          if (width.indexOf("%") >= 0 || height.indexOf("%") >= 0 ) {
             alert("You have set % for the width or the height. The selected area will than vary dependant on the browser size. The area selector selects the area in pixel and therefore you might not get the result you expect. For responsive sites setting the width of the selected area in pixels does make sense. Please set this manually if this is your requirement.");           
          } else {

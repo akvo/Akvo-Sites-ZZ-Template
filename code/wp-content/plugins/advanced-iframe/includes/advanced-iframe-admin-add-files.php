@@ -5,13 +5,18 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
 <div>
     <div id="icon-options-general" class="icon_ai">
       <br>
-    </div>    <h2>
+    </div>    <h2 class="default-h2">
       <?php _e('Add additional files', 'advanced-iframe') ?></h2>
-     <p>
+    
+<?php   
+    aiPostboxOpen("id-files-overview", "Overview and manage files", $closedArray);  
+?>
+
+	<p>
       <?php _e('All settings above are designed for smaller changes of the parent or the iframe. If you want to make bigger changes and you are able to store this in a file including a whole file is the better solution. Below you can add additional Javascript or css files to the different pages.', 'advanced-iframe'); ?>
     </p> 
       <p>
-      <?php _e('<strong>Please note:</strong> The files are edited/viewed by the default Worpdress plugin editor! It is o.k. that "inactive" is shown in the editor as the advanced-iframe-custom folder is not a real plugin folder. If the editor does not work because of file permissions please edit the files directly on your server.', 'advanced-iframe'); ?>
+      <?php _e('<strong>Please note:</strong> The files are edited/viewed by the default Wordpress plugin editor! It is o.k. that "inactive" is shown in the editor as the advanced-iframe-custom folder is not a real plugin folder. If the editor does not work because of file permissions please edit the files directly on your server.', 'advanced-iframe'); ?>
     </p> 
     
     
@@ -28,7 +33,7 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
     $config_files[] = $base ; 
   }
 echo "<hr height=1>";
-if (count($config_files) == 0) {
+if (count($config_files) === 0) {
     echo "<ul><li>";
     _e('No custom additional files found.', 'advanced-iframe');
     echo "</li></ul>";
@@ -52,31 +57,38 @@ echo "<hr height=1>";
       <input id="ccf" class="button-primary" type="submit" name="create-custom-id" value="<?php _e('Create custom file', 'advanced-iframe') ?>"/>
     </p>
     </div>
-     
-    <h3><?php _e('Parent', 'advanced-iframe') ?></h3>
+<?php 	  
+	  aiPostboxClose();	
+	  aiPostboxOpen("id-file-parent", "Include files to the parent page", $closedArray);  
+?>	     
     <p>
       <?php _e('For some features in iframes additional css or js files are needed in the parent(!) page. E.g. for the newest version of lytebox this is needed. Each of the files do get a version number which is randomly changed each time you save the settings. So if you change the css or the js file you should save the settings to make sure your users to get the new version right away and not a chached one. If you need to add css or Javascipt to the iframe please check the settings of the external workaround.', 'advanced-iframe'); ?>
     </p>
     <table class="form-table">
 <?php
         printTextInput(false,$devOptions, __('Additional css', 'advanced-iframe'), 'additional_css', __('If you want to include an additional css into the parent page please specify the path to this file here. The css file will be added into the header of the page. You can specify a full or relative url. Make sure you take "<a href="https://designshack.net/articles/css/what-the-heck-is-css-specificity/" target="blank">CSS specificity"</a> into account if you want to overwrite styles! If you specify a relative one /style.css means that the style.css is located in the main directory of Wordpress. Start relative urls with /. Please note: Before Wordpress 3.3 the shortcode attribute cannot be used. You can only set it here. Shortcode attribute: additional_css=""', 'advanced-iframe'));
-        printTextInput(false,$devOptions, __('Additional js', 'advanced-iframe'), 'additional_js', __('If you want to include an additional Javascript into the parent page please specify the path to this file here. The Javascript will be added after the iframe or if you use Wordpress >= 3.3 in the footer section. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of Wordpress. Start relative urls with /. Please note: Before Wordpress 3.3 the shortcode attribute cannot be used. You can only set it here. Shortcode attribute: additional_js=""', 'advanced-iframe'));
+        printTextInput(false,$devOptions, __('Additional js', 'advanced-iframe'), 'additional_js', __('If you want to include an additional Javascript into the parent page please specify the path to this file here. The Javascript will be added after the iframe or if you use Wordpress >= 3.3 in the same location you specify for the ai.js in "Include ai.js in the footer" on the options tab. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of Wordpress. Start relative urls with /. Please note: Before Wordpress 3.3 the shortcode attribute cannot be used. You can only set it here. Shortcode attribute: additional_js=""', 'advanced-iframe'));
                           ?>
     </table>
     
-    <?php if ($evanto || $isDemo) { ?> 
-    <h3><?php _e('Iframe', 'advanced-iframe') ?></h3>
+<?php 	  
+	aiPostboxClose();	 
+    if ($evanto || $isDemo) { 
+	  aiPostboxOpen("id-file-iframe", "Include files to the iframe page", $closedArray);  
+    ?>	 
     <p>
      <?php _e('You can also include a css file directly into the iframe page. This setting is also saved in the external workaround file. In the external workaround file the settings below are written at the place where the ai_external.js is included!', 'advanced-iframe'); ?>
     </p>
         <table class="form-table">
 <?php
         printTextInput(true,$devOptions, __('Additional css in iframe', 'advanced-iframe'), 'additional_css_file_iframe', __('You can also include a css file directly into the iframe page. The css file will be added at the bottom of the body to overwrite also all inline styles. The styles are added after the page is loaded. Make sure you take "<a href="https://designshack.net/articles/css/what-the-heck-is-css-specificity/" target="blank">CSS specificity"</a> into account if you want to overwrite styles! You can specify a full or relative url. If you specify a relative one /style.css means that the style.css is located in the main directory of the iframe page. In the external workaround the file is added after the ai_external.js. Shortcode attribute: additional_css_file_iframe=""', 'advanced-iframe'),'text','', $evanto);
-        printTextInput(true,$devOptions, __('Additional Javascript in iframe', 'advanced-iframe'), 'additional_js_file_iframe', __('You can also include a js file directly into the iframe page. The js file will be added at the bottom of the body. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of the iframe page. In the external workaround the file is added after the ai_external.js. Shortcode attribute: additional_js_file_iframe=""', 'advanced-iframe'),'text','', $evanto);
+        printTextInput(true,$devOptions, __('Additional Javascript in iframe', 'advanced-iframe'), 'additional_js_file_iframe', __('You can also include a js file directly into the iframe page. The js file will be added at the bottom of the body. You can specify a full or relative url. If you specify a relative one /javascript.js means that the javascript.js is located in the main directory of the iframe page. In the external workaround the file is added after the ai_external.js. For the external workaround I also recommend to use "Include a config file to ai_external.js" Shortcode attribute: additional_js_file_iframe=""', 'advanced-iframe'),'text','', $evanto);
 ?>
     </table>
-<?php } ?>    
-<?php if ($devOptions['single_save_button'] == 'false') { ?>
+<?php
+    aiPostboxClose();
+    } 
+    if ($devOptions['single_save_button'] === 'false') { ?>
     <p class="button-submit">
       <input id="ic" class="button-primary" type="submit" name="update_iframe-loader" value="<?php _e('Update Settings', 'advanced-iframe') ?>"/>
     </p>

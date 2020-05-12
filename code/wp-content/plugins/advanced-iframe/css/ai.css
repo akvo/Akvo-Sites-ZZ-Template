@@ -1,3 +1,6 @@
+/**
+ *   This file contains the styles for the advanced iframe administration. 
+ */
 #ai .errordiv {
 	padding: 10px;
 	margin: 10px;
@@ -18,7 +21,7 @@
 }
 #ai .icon_ai {
 	display: table-cell;
-  vertical-align: middle;
+    vertical-align: middle;
 	height: 36px;
 	width: 36px;
 	background-image: url(../img/jfu_logo_32x32.png) !important;
@@ -30,6 +33,12 @@
   display: table-cell;
   vertical-align: middle;
   padding-top: 2px;
+}
+
+#ai div.postbox-container h2 { 
+  display: block;
+  padding-top: 8px;
+  font-size: 16px;
 }
 
 #ai #accordion h1 {
@@ -196,6 +205,15 @@ ul#browser-list {
 	display: none;
 }
 
+#ai #user-help, #ai #meta-help {
+    word-break: break-all;
+	white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: pre-wrap;       /* css-3 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    word-break: break-all;
+    white-space: normal;
+}
+
 #ai .nounderline a {
 	text-decoration: none;
 }
@@ -206,7 +224,7 @@ ul#browser-list {
 	width: 100px;
 }
 #ai #accordion {
-	border: 1px solid #ddd;
+	// border: 1px solid #ddd;
 	border-top: none;
 	margin: 10px 0;
 	width: 100%;
@@ -222,37 +240,30 @@ ul#browser-list {
 }
 #ai #accordion > h1,#ai .accordion > a {
 	background-color: #fff;
-	background-image: -moz-linear-gradient(bottom, #e1e1e1, #fff);
-	background-image: -ms-linear-gradient(bottom, #e1e1e1, #fff);
-	background-image: -o-linear-gradient(bottom, #e1e1e1, #fff);
-	background-image: -webkit-linear-gradient(bottom, #e1e1e1, #fff);
-	background-image: linear-gradient(bottom, #e1e1e1, #fff);
-	border-top: 1px solid #ddd;
+	border: 1px solid #ddd;
+	// border-bottom: 1px solid #ddd;
 	color: #222;
-	font: 15px/30px 'Verdana', sans-serif;
-	height: 32px;
+	font-size: 16px;
+	font-weight: 600;
+	height: 36px;
 	margin: 0;
 	padding: 0;
 	text-indent: 10px;
-	cursor: pointer
+	cursor: pointer;
+	margin-top: 10px;
+	padding-top: 4px;
 }
-#ai #accordion > h1:hover,#ai .accordion > a {
-	background-color: #eee;
-  	background-image: -moz-linear-gradient(bottom, #b1b1b1, #eee);
-	background-image: -ms-linear-gradient(bottom, #b1b1b1, #eee);
-	background-image: -o-linear-gradient(bottom, #b1b1b1, #eee);
-	background-image: -webkit-linear-gradient(bottom, #b1b1b1, #eee);
-	background-image: linear-gradient(bottom, #b1b1b1, #eee);
-	border-top: 1px solid #ddd;
-	color: #222;
-	font: 15px/30px 'Verdana', sans-serif;
-	height: 32px;
-	margin: 0;
-	padding: 0;
-	text-indent: 10px;
-	cursor: pointer
+#ai #accordion > h1:hover {
+	background-color: #fff;
+  	background-image: -moz-linear-gradient(bottom, #fafafa, #fff);
+	background-image: -ms-linear-gradient(bottom, #fafafa, #fff);
+	background-image: -o-linear-gradient(bottom, #fafafa, #fff);
+	background-image: -webkit-linear-gradient(bottom, #fafafa, #fff);
+	background-image: linear-gradient(bottom, #fafafa, #fff);
 }
 #ai #accordion > div {
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
 	padding: 5px;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -282,7 +293,7 @@ ul#browser-list {
 #ai #wpadminbar.ai-save-bar>div {
 	margin: 7px;
 }
-#ai #updated_text {
+#ai #ai-updated-text {
 	color: #090;
 	display: inline-block;
 	line-height: 28px;
@@ -301,13 +312,17 @@ ul#browser-list {
 	border-radius: 3px;
 }
 
+#ai #wpbarbutton {
+	margin-left: 14px;
+}
+
 #ai #wpresetbutton {
   margin-left:5px;
   line-height: 28px;
 }
 
 
-#ai #ds, #ai #gs, #ai #mp ,#ai #so ,#ai #rt ,#ai #xss ,#ai #ad ,#ai #ic,#vi,#qu {
+#ai #ds, #ai #gs, #ai #mp ,#ai #so ,#ai #rt ,#ai #xss ,#ai #ad ,#ai #ic,#ai #vi,#ai #qu {
 margin-bottom:10px;
 }
 
@@ -327,7 +342,7 @@ margin-bottom:10px;
 
 #ai .ai-file {
     background-image:url(../img/filesave.png);
-    display:inline-table;
+    display:inline-table !important;
     height:16px;
     text-indent:-9999px;
     width:16px;
@@ -379,7 +394,7 @@ font-size:1.1em
     text-overflow: clip;
 }
 
-#ai div.ai-external-config::after {
+#ai div.ai-external-config::after, #ai .clear {
     clear: both;
 }
 
@@ -404,9 +419,12 @@ font-size:1.1em
 
 
 #ai .ai-input-search {
-  width: 250px;
+  // margin-top: 10px;
+  margin-bottom: 5px;
+  width: 200px;
   float:left;
   border-color: #00b600;
+  font-size: 1.3em;
 }
 
 #ai .hide-setting {
@@ -457,7 +475,7 @@ margin-right:30px;
 }
 
 #ai #ai-input-search-help {
-margin-bottom: 10px;
+// margin-bottom: 10px;
 }
 
 #ai .manage-menus {
@@ -479,7 +497,7 @@ margin-bottom: 10px;
 }
 
 #ai .ai-pro th {
-  color: #003399;
+  color: #0033FF;
 }
 
 #ai a.mark-tab-header span {
@@ -534,19 +552,19 @@ display: none;
     margin-left:20px;
 }
 
-.description span {
+#ai .description span {
  display: block;
  padding-left: 20px;
 }
 
-.description > span:before{
+#ai .description > span:before{
   color: 000;
   z-index: -1;
   content: '•   ';
   margin-left: -10px;
 }
 
-.scan-results {
+#ai .scan-results {
  margin-top: 20px;
  width: 100%;
  border-collapse: collapse; border-spacing: 0; 
@@ -554,7 +572,7 @@ display: none;
   white-space: nowrap;
 }
 
-.scan-results tbody tr th {
+#ai .scan-results tbody tr th {
    padding-bottom: 10px;
    font-weight: bold;
    padding-top: 10px;
@@ -563,12 +581,11 @@ display: none;
    border-bottom: 1px solid #000;
 }
 
-.scan-results tbody:nth-child(odd)		{ 
+#ai .scan-results tbody:nth-child(odd)		{ 
     background-color:#eee; 
 }
 
-
-.scan-results td {
+#ai .scan-results td {
    padding-top: 1px;
    padding-bottom: 1px;
    vertical-align: top;
@@ -577,7 +594,7 @@ display: none;
    text-overflow: ellipsis; 
 }
 
-.scan-results tr {
+#ai .scan-results tr {
    padding-bottom: 5px;
    vertical-align: top; 
 }
@@ -593,30 +610,30 @@ display: none;
  width: 60%;
 }
 
-.scan-results .center {
+#ai .scan-results .center {
     text-align: center;
 }
 
-.ai-spinner {
+#ai .ai-spinner {
 background: url('../../../../wp-admin/images/wpspin_light.gif') no-repeat;
 background-size: 16px 16px;
 width: 16px;
 height: 16px;
 margin: 5px 5px 6px;
-display:none;
+display:inline-block;
 vertical-align:middle;
 }
 
-.ai-input-width {
+#ai .ai-input-width {
 width: 98%;
 }
 
-#checkIframes {
+#ai #checkIframes {
 line-height: 28px;
 height: 32px;
 }
 
-#checkIframes .checkIframes-text {
+#ai #checkIframes .checkIframes-text {
 margin-bottom: 12px;
 }
 
@@ -629,3 +646,60 @@ margin-bottom: 12px;
     white-space: normal;
     text-overflow: clip;    
 }
+
+#ai table th {
+    text-align: left;
+}
+
+#ai img.img-loader-icon {
+	width: 66px; 
+	height: 66px; 
+}
+
+#ai input[type="text"][readonly] {
+   color: #aaa;
+}
+
+#ai table.form-table tr.disabled th, #ai table.form-table tr.disabled td, #ai table.form-table tr.disabled td p.description {
+	color: #aaa;
+}	
+
+#ai table.form-table td {
+    padding: 10px 10px;	
+}
+
+#ai table.form-table  .scan-results td {
+    padding: 0px 0px;	
+}
+
+
+#ai table.form-table th {
+	padding-top: 15px;
+}
+
+#ai .postbox {
+	margin-bottom: 10px;
+}
+
+#ai .postbox.closed {
+	margin-bottom: 10px;
+}
+
+#ai .metabox-holder {
+	padding-top: 0px;
+}
+
+#ai .options-h2, #ai .default-h2 {
+	padding-top: 5px;
+	padding-bottom: 20px;
+}
+
+#ai .postbox-container-space {
+	margin-right: 20px;
+}
+
+#ai .postbox .inside {
+    padding-bottom: 5px;	
+}
+
+

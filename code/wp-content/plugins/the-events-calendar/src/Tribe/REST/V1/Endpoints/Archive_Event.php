@@ -161,6 +161,17 @@ class Tribe__Events__REST__V1__Endpoints__Archive_Event
 
 			$data['rest_url'] = $this->get_current_rest_url( $args, $extra_rest_args );
 
+			/**
+			 * Filter the arguments used to get the events on the archive page via REST API.
+			 *
+			 * @since 4.9.4
+			 *
+			 * @param array            $args Arguments used to get the events from the archive page.
+			 * @param array            $data Array with the data to be returned in the REST response.
+			 * @param \WP_REST_Request $request
+			 */
+			$args = apply_filters( 'tribe_events_archive_get_args', $args, $data, $request );
+
 			$events = tribe_get_events( $args );
 
 			$page = $this->parse_page( $request ) ? $this->parse_page( $request ) : 1;
@@ -385,7 +396,7 @@ class Tribe__Events__REST__V1__Endpoints__Archive_Event
 				'parameters' => $this->swaggerize_args( $this->READ_args(), array( 'in' => 'query', 'default' => '' ) ),
 				'responses'  => array(
 					'200' => array(
-						'description' => __( 'Returns all the upcoming events matching the search criteria', 'the-event-calendar' ),
+						'description' => __( 'Returns all the upcoming events matching the search criteria', 'the-events-calendar' ),
 						'schema'      => array(
 							'title' => 'events',
 							'type'  => 'array',

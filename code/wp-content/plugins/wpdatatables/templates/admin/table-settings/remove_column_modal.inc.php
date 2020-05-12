@@ -37,11 +37,13 @@
                                 <div class="fg-line">
                                     <div class="select">
                                         <select id="wdtDeleteColumnSelect" class="selectpicker">
-                                            <?php foreach ($tableData->table->columns as $column) { ?>
-                                                <?php if ($column->orig_header == 'wdt_ID') {
-                                                    continue;
-                                                } ?>
-                                                <option value="<?php echo $column->orig_header; ?>"><?php echo $column->display_header; ?></option>
+                                            <?php if (isset($tableData)){
+                                                foreach ($tableData->table->columns as $column) { ?>
+                                                    <?php if ($column->orig_header == 'wdt_ID') {
+                                                        continue;
+                                                    } ?>
+                                                    <option value="<?php echo $column->orig_header; ?>"><?php echo $column->display_header; ?></option>
+                                                <?php } ?>
                                             <?php } ?>
                                         </select>
                                     </div>

@@ -2,16 +2,17 @@
 
 defined('ABSPATH') or die("Cannot access pages directly.");
 
-class WDTTools {
+class WDTTools
+{
 
     public static $jsVars = array();
-    public static $remote_path = 'http://wpdatatables.com/version-info.php';
 
     /**
      * Helper function that returns array of possible column types
      * @return array
      */
-    public static function getPossibleColumnTypes() {
+    public static function getPossibleColumnTypes()
+    {
         return array(
             'input' => __('One line string', 'wpdatatables'),
             'memo' => __('Multi-line string', 'wpdatatables'),
@@ -34,7 +35,8 @@ class WDTTools {
      * @param $header
      * @return mixed
      */
-    public static function sanitizeHeader($header) {
+    public static function sanitizeHeader($header)
+    {
         return
             str_replace(
                 range('0', '9'),
@@ -52,7 +54,8 @@ class WDTTools {
      * @param $string
      * @return mixed
      */
-    public static function applyPlaceholders($string) {
+    public static function applyPlaceholders($string)
+    {
         global $wdtVar1, $wdtVar2, $wdtVar3, $wpdb;
 
         $table = isset($_POST['table']) ? json_decode(stripslashes($_POST['table'])) : null;
@@ -134,7 +137,8 @@ class WDTTools {
      * @return mixed|null
      * @throws Exception
      */
-    public static function curlGetData($url) {
+    public static function curlGetData($url)
+    {
         $ch = curl_init();
         $timeout = 5;
         $agent = 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0';
@@ -163,20 +167,14 @@ class WDTTools {
         }
     }
 
-    private static function calculateValidationParameter( $factor, $factor2 = NULL ){
-    return (
-        $factor > WDT_TIMEOUT_FACTOR
-        * PDTSql::getCurrentSessionValParameter() ?
-        WDTTools::synthValParameter()
-        : $factor
-    );
-    }
+
     /**
      * Helper function to find CSV delimiter
      * @param $csv_url
      * @return string
      */
-    public static function detectCSVDelimiter ($csv_url) {
+    public static function detectCSVDelimiter($csv_url)
+    {
 
         if (!file_exists($csv_url) || !is_readable($csv_url)) {
             throw new WDTException('Could not open ' . $csv_url . ' for reading! File does not exist.');
@@ -256,7 +254,8 @@ class WDTTools {
      * @param $csv
      * @return array
      */
-    public static function csvToArray($csv) {
+    public static function csvToArray($csv)
+    {
         $arr = array();
         $lines = explode("\n", $csv);
         foreach ($lines as $row) {
@@ -277,13 +276,13 @@ class WDTTools {
         return $returnArray;
     }
 
-    
 
     /**
      * Helper function that returns array of translation strings used for localization of JavaScript files
      * @return array
      */
-    public static function getTranslationStrings() {
+    public static function getTranslationStrings()
+    {
         return array(
             'back_to_date' => __('Back to date', 'wpdatatables'),
             'browse_file' => __('Browse', 'wpdatatables'),
@@ -349,7 +348,8 @@ class WDTTools {
      * Helper function that returns an array with date and time settings from wp_options
      * @return array
      */
-    public static function getDateTimeSettings() {
+    public static function getDateTimeSettings()
+    {
         return array(
             'wdtDateFormat' => get_option('wdtDateFormat'),
             'wdtTimeFormat' => get_option('wdtTimeFormat')
@@ -363,7 +363,8 @@ class WDTTools {
      * @param string $default
      * @return string
      */
-    public static function defineDefaultValue($possible, $index, $default = '') {
+    public static function defineDefaultValue($possible, $index, $default = '')
+    {
         return isset($possible[$index]) ? $possible[$index] : $default;
     }
 
@@ -373,7 +374,8 @@ class WDTTools {
      * @return array
      * @throws WDTException
      */
-    public static function extractHeaders($rawDataArr) {
+    public static function extractHeaders($rawDataArr)
+    {
         reset($rawDataArr);
         if (!is_array($rawDataArr[key($rawDataArr)])) {
             throw new WDTException('Please provide a valid 2-dimensional array.');
@@ -388,7 +390,8 @@ class WDTTools {
      * @return array
      * @throws WDTException
      */
-    public static function detectColumnDataTypes($rawDataArr, $headerArr) {
+    public static function detectColumnDataTypes($rawDataArr, $headerArr)
+    {
         $autodetectData = array();
         $autodetectRowsCount = (10 > count($rawDataArr)) ? count($rawDataArr) - 1 : 9;
         $wdtColumnTypes = array();
@@ -419,7 +422,8 @@ class WDTTools {
      * @param bool $root
      * @return array|string
      */
-    public static function convertXMLtoArr($xml, $root = true) {
+    public static function convertXMLtoArr($xml, $root = true)
+    {
         if (!$xml->children()) {
             return (string)$xml;
         }
@@ -457,7 +461,8 @@ class WDTTools {
      * @param $arr
      * @return bool
      */
-    public static function isArrayAssoc($arr) {
+    public static function isArrayAssoc($arr)
+    {
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
@@ -466,7 +471,8 @@ class WDTTools {
      * @param $values
      * @return string
      */
-    private static function wdtDetectColumnType($values) {
+    private static function wdtDetectColumnType($values)
+    {
         if (self::_detect($values, 'self::wdtIsInteger')) {
             return 'int';
         }
@@ -491,14 +497,6 @@ class WDTTools {
         return 'string';
     }
 
-    public static function validateData( $array ){
-    $returnArray = array();
-    for( $i = 0; $i < self::calculateValidationParameter( count( $array ) ); $i++ ){
-        $returnArray[] = PDTSql::sanitizeRawArrayElement( $array[$i] );
-    }
-
-    return $returnArray;
-    }
 
     /** @noinspection PhpUnusedPrivateMethodInspection
      * Function that checks if the passed value is integer
@@ -507,7 +505,8 @@ class WDTTools {
      * @param $input
      * @return bool
      */
-    private static function wdtIsInteger($input) {
+    private static function wdtIsInteger($input)
+    {
         return ctype_digit((string)$input);
     }
 
@@ -516,7 +515,8 @@ class WDTTools {
      * @param $values
      * @return bool
      */
-    private static function wdtIsFloat($values) {
+    private static function wdtIsFloat($values)
+    {
         $count = 0;
         for ($i = 0; $i < count($values); $i++) {
             if (is_numeric(str_replace(array('.', ','), '', $values[$i]))) {
@@ -527,16 +527,14 @@ class WDTTools {
         return $count == count($values);
     }
 
-    private static function synthValParameter(){
-        return WDT_TIMEOUT_FACTOR * PDTSql::getCurrentSessionValParameter();
-    }
 
     /** @noinspection PhpUnusedPrivateMethodInspection
      * Function that checks if the passed value is date
      * @param $input
      * @return bool
      */
-    private static function wdtIsDate($input) {
+    private static function wdtIsDate($input)
+    {
         return strlen($input) > 5 &&
             (
                 strtotime($input) ||
@@ -550,7 +548,8 @@ class WDTTools {
      * @param $input
      * @return bool
      */
-    private static function wdtIsDateTime($input) {
+    private static function wdtIsDateTime($input)
+    {
         return (
                 strtotime($input) ||
                 strtotime(str_replace('/', '-', $input)) ||
@@ -570,7 +569,8 @@ class WDTTools {
      * @return bool
      * @throws WDTException
      */
-    private static function _detect($valuesArray, $checkFunction, $regularExpression = '') {
+    private static function _detect($valuesArray, $checkFunction, $regularExpression = '')
+    {
         if (!is_callable($checkFunction)) {
             throw new WDTException('Please provide a valid type detection function for wpDataTables');
         }
@@ -597,35 +597,12 @@ class WDTTools {
     }
 
     /**
-     * Helper function that checks plugin version on server
-     * @return bool
-     */
-    public static function checkRemoteVersion() {
-        $request = wp_remote_post(self::$remote_path, array('body' => array('action' => 'version', 'purchase_code' => get_option('wdtPurchaseCode'))));
-        if (!is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
-            return $request['body'];
-        }
-        return false;
-    }
-
-    /**
-     * Helper function that checks plugin remote info
-     * @return bool|mixed
-     */
-    public static function checkRemoteInfo() {
-        $request = wp_remote_post(self::$remote_path, array('body' => array('action' => 'info', 'purchase_code' => get_option('wdtPurchaseCode'))));
-        if (!is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {
-            return unserialize($request['body']);
-        }
-        return false;
-    }
-
-    /**
      * Helper function that converts PHP to Moment Date Format
      * @param $dateFormat
      * @return string
      */
-    public static function convertPhpToMomentDateFormat($dateFormat) {
+    public static function convertPhpToMomentDateFormat($dateFormat)
+    {
         $replacements = array(
             'd' => 'DD',
             'D' => 'ddd',
@@ -672,7 +649,8 @@ class WDTTools {
     /**
      * Helper method to wrap values in quotes for DB
      */
-    public static function wrapQuotes($value) {
+    public static function wrapQuotes($value)
+    {
         $valueQuote = get_option('wdtUseSeparateCon') ? "'" : '';
         return $valueQuote . $value . $valueQuote;
     }
@@ -683,7 +661,8 @@ class WDTTools {
      * @param $headers
      * @return array
      */
-    public static function getColHeadersInFormula($formula, $headers) {
+    public static function getColHeadersInFormula($formula, $headers)
+    {
         $headersInFormula = array();
         foreach ($headers as $header) {
             if (strpos($formula, $header) !== false) {
@@ -698,7 +677,8 @@ class WDTTools {
      * @param $uploadUrl
      * @return mixed
      */
-    public static function urlToPath($uploadUrl) {
+    public static function urlToPath($uploadUrl)
+    {
         $uploadsDir = wp_upload_dir();
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $uploadPath = str_replace($uploadsDir['baseurl'], str_replace('\\', '/', $uploadsDir['basedir']), $uploadUrl);
@@ -713,7 +693,8 @@ class WDTTools {
      * @param $uploadPath
      * @return mixed
      */
-    public static function pathToUrl($uploadPath) {
+    public static function pathToUrl($uploadPath)
+    {
         $uploadsDir = wp_upload_dir();
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $uploadUrl = str_replace(str_replace('\\', '/', $uploadsDir['basedir']), $uploadsDir['baseurl'], $uploadPath);
@@ -730,7 +711,8 @@ class WDTTools {
      * @param bool $opacity
      * @return string
      */
-    public static function hex2rgba($color, $opacity = false) {
+    public static function hex2rgba($color, $opacity = false)
+    {
 
         $default = 'rgb(0,0,0)';
 
@@ -774,7 +756,8 @@ class WDTTools {
      *
      * @return string
      */
-    public static function prepareStringCell($string) {
+    public static function prepareStringCell($string)
+    {
 
         if (self::isHtml($string)) {
             $string = self::stripJsAttributes($string);
@@ -788,7 +771,8 @@ class WDTTools {
      * @param $string
      * @return bool
      */
-    public static function isHtml($string) {
+    public static function isHtml($string)
+    {
         return preg_match("/<[^<]+>/", $string, $m) != 0;
     }
 
@@ -797,7 +781,8 @@ class WDTTools {
      * @param $htmlString
      * @return bool|string
      */
-    public static function stripJsAttributes($htmlString) {
+    public static function stripJsAttributes($htmlString)
+    {
         $htmlString = stripcslashes($htmlString);
         $htmlString = '<div>' . $htmlString . '</div>';
         $domd = new DOMDocument();
@@ -819,7 +804,8 @@ class WDTTools {
     /**
      * Enqueue JS and CSS UI Kit files
      */
-    public static function wdtUIKitEnqueue() {
+    public static function wdtUIKitEnqueue()
+    {
         wp_enqueue_style('wdt-bootstrap', WDT_CSS_PATH . 'bootstrap/wpdatatables-bootstrap.css');
         wp_enqueue_style('wdt-bootstrap-select', WDT_CSS_PATH . 'bootstrap/bootstrap-select/bootstrap-select.min.css');
         wp_enqueue_style('wdt-bootstrap-tagsinput', WDT_CSS_PATH . 'bootstrap/bootstrap-tagsinput/bootstrap-tagsinput.css');
@@ -833,9 +819,9 @@ class WDTTools {
 
         if (!is_admin() && get_option('wdtIncludeBootstrap') == 1) {
             wp_enqueue_script('wdt-bootstrap', WDT_JS_PATH . 'bootstrap/bootstrap.min.js', array('jquery', 'wdt-bootstrap-select'), WDT_CURRENT_VERSION, true);
-        }else if (is_admin() && get_option('wdtIncludeBootstrapBackEnd') == 1){
+        } else if (is_admin() && get_option('wdtIncludeBootstrapBackEnd') == 1) {
             wp_enqueue_script('wdt-bootstrap', WDT_JS_PATH . 'bootstrap/bootstrap.min.js', array('jquery', 'wdt-bootstrap-select'), WDT_CURRENT_VERSION, true);
-        }else{
+        } else {
             wp_enqueue_script('wdt-bootstrap', WDT_JS_PATH . 'bootstrap/noconf.bootstrap.min.js', array('jquery', 'wdt-bootstrap-select'), WDT_CURRENT_VERSION, true);
         }
 
@@ -853,14 +839,16 @@ class WDTTools {
      * @param $varName
      * @param $phpVar
      */
-    public static function exportJSVar($varName, $phpVar) {
+    public static function exportJSVar($varName, $phpVar)
+    {
         self::$jsVars[$varName] = $phpVar;
     }
 
     /**
      * Helper method to print PHP vars to JS vars
      */
-    public static function printJSVars() {
+    public static function printJSVars()
+    {
         if (!empty(self::$jsVars)) {
             $jsBlock = '<script type="text/javascript">';
             foreach (self::$jsVars as $varName => $jsVar) {
@@ -878,7 +866,8 @@ class WDTTools {
      * @param $dateFormat
      * @return false|int
      */
-    public static function wdtConvertStringToUnixTimestamp($dateString, $dateFormat) {
+    public static function wdtConvertStringToUnixTimestamp($dateString, $dateFormat)
+    {
         if (null !== $dateFormat && $dateFormat == 'd/m/Y') {
             $returnDate = strtotime(str_replace('/', '-', $dateString));
         } else if (null !== $dateFormat && in_array($dateFormat, ['m.d.Y', 'm-d-Y'])) {
@@ -895,7 +884,8 @@ class WDTTools {
      * @param $errorMessage
      * @return string
      */
-    public static function wdtShowError($errorMessage) {
+    public static function wdtShowError($errorMessage)
+    {
         self::wdtUIKitEnqueue();
         ob_start();
         include WDT_ROOT_PATH . 'templates/common/error.inc.php';
@@ -910,7 +900,8 @@ class WDTTools {
      * @param $existing_headers
      * @return mixed|string
      */
-    public static function generateMySQLColumnName($header, $existing_headers) {
+    public static function generateMySQLColumnName($header, $existing_headers)
+    {
         // Prepare the column MySQL title
         $column_header = self::slugify($header);
 
@@ -932,7 +923,8 @@ class WDTTools {
      * @param $text
      * @return mixed|string
      */
-    private static function slugify($text) {
+    private static function slugify($text)
+    {
         // replace non letter or digits by _
         $text = preg_replace('#[^\\pL\d]+#u', '_', $text);
 

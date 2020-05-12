@@ -209,7 +209,11 @@ function wdtActivationCreateTables() {
  * Add rating massage on all admin pages after 2 weeks of using
  */
 function wdtAdminRatingMessages() {
+    global $wpdb;
+    $query = "SELECT COUNT(*) FROM {$wpdb->prefix}wpdatatables ORDER BY id";
 
+    $allTables = $wpdb->get_var($query);
+    $wpdtPage = isset($_GET['page']) ? $_GET['page'] : '';
     $installDate = get_option( 'wdtInstallDate' );
     $currentDate = date( 'Y-m-d' );
     $tempIgnoreDate = get_option( 'wdtTempFutureDate' );
@@ -218,7 +222,8 @@ function wdtAdminRatingMessages() {
     $datetimeInstallDate = new DateTime( $installDate );
     $datetimeCurrentDate = new DateTime( $currentDate );
     $diffIntrval = round( ($datetimeCurrentDate->format( 'U' ) - $datetimeInstallDate->format( 'U' )) / (60 * 60 * 24) );
-    if( $diffIntrval >= 14 && get_option( 'wdtRatingDiv' ) == "no" && $tempIgnore) {
+    if( is_admin() && strpos($wpdtPage,'wpdatatables') !== false &&
+        $diffIntrval >= 14 && get_option( 'wdtRatingDiv' ) == "no" && $tempIgnore && isset($allTables) && $allTables > 5) {
         include WDT_TEMPLATE_PATH . 'admin/common/ratingDiv.inc.php';
     }
 }
@@ -642,6 +647,7 @@ function wdtSanitizeQuery($query) {
 
 function initGutenbergBlocks (){
     WpDataTablesGutenbergBlock::init();
+    WpDataChartsGutenbergBlock::init();
     add_filter( 'block_categories', 'addWpDataTablesBlockCategory', 10, 2);
 }
 
@@ -715,52 +721,6 @@ if ($wp_version < 4.4) {
     }
 }
 
-/**
- * Auto update function
- */
-if ('' !== get_option('wdtPurchaseCode')) {
-
-    global $wdt_plugin_slug;
-
-    $filePath = plugin_basename(__FILE__);
-    $filePathArr = explode('/', $filePath);
-    $wdt_plugin_slug = $filePathArr[0] . '/wpdatatables.php';
-
-    function wdtTransientUpdate($transient) {
-        global $wdt_plugin_slug;
-
-        // Remote version
-        $remoteVersion = WDTTools::checkRemoteVersion();
-
-        if (version_compare(WDT_CURRENT_VERSION, $remoteVersion, '<')) {
-            $obj = new stdClass();
-            $obj->slug = $wdt_plugin_slug;
-            $obj->new_version = $remoteVersion;
-            $obj->url = 'http://wpdatatables.com/verified-download.php?purchase_code=' . get_option('wdtPurchaseCode');
-            $obj->package = 'http://wpdatatables.com/verified-download.php?purchase_code=' . get_option('wdtPurchaseCode');
-            $transient->response[$wdt_plugin_slug] = $obj;
-        }
-
-        return $transient;
-    }
-
-    add_filter('pre_set_site_transient_update_plugins', 'wdtTransientUpdate');
-
-    function wdtPluginsApi($false, $action, $arg) {
-        global $wdt_plugin_slug;
-
-        if (property_exists($arg, 'slug') && ($arg->slug === $wdt_plugin_slug || $arg->slug == 'wpdatatables.php')) {
-            $information = WDTTools::checkRemoteInfo();
-
-            return $information;
-        }
-
-        return false;
-    }
-
-    add_filter('plugins_api', 'wdtPluginsApi', 10, 3);
-
-}
 
 /**
  * Optional Visual Composer integration

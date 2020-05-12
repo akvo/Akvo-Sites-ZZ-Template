@@ -8,6 +8,7 @@ defined('ABSPATH') or die("Cannot access pages directly.");
  * Method to save the config for the table and columns
  */
 function wdtSaveTableWithColumns() {
+
     if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtEditNonce')) {
         exit();
     }
@@ -28,7 +29,8 @@ add_action('wp_ajax_wpdatatables_save_table_config', 'wdtSaveTableWithColumns');
  * Save plugin settings
  */
 function wdtSavePluginSettings() {
-    if (!current_user_can('manage_options')) {
+
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtSettingsNonce')) {
         exit();
     }
 
@@ -228,3 +230,90 @@ function wdtListAllTables() {
 add_action('wp_ajax_wpdatatable_list_all_tables', 'wdtListAllTables');
 
 
+function wdtShowChartFromData()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtChartWizardNonce')) {
+        exit();
+    }
+
+    $chartData = $_POST['chart_data'];
+    $wpDataChart = WPDataChart::factory($chartData, false);
+
+    echo json_encode($wpDataChart->returnData());
+    exit();
+}
+
+add_action('wp_ajax_wpdatatable_show_chart_from_data', 'wdtShowChartFromData');
+
+function wdtSaveChart()
+{
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtChartWizardNonce')) {
+        exit();
+    }
+
+    $chartData = $_POST['chart_data'];
+    $wpDataChart = WPDataChart::factory($chartData, false);
+    $wpDataChart->save();
+
+    echo json_encode(array('id' => $wpDataChart->getId(), 'shortcode' => $wpDataChart->getShortCode()));
+    exit();
+}
+
+add_action('wp_ajax_wpdatatable_save_chart_get_shortcode', 'wdtSaveChart');
+
+/**
+ * List all charts in JSON
+ */
+function wdtListAllCharts()
+{
+    if (!current_user_can('manage_options')) {
+        exit();
+    }
+
+    echo json_encode(WPDataChart::getAllCharts());
+    exit();
+}
+
+add_action('wp_ajax_wpdatatable_list_all_charts', 'wdtListAllCharts');
+
+/**
+ * Duplicate the chart
+ */
+
+function wdtDuplicateChart()
+{
+    global $wpdb;
+
+    if (!current_user_can('manage_options') || !wp_verify_nonce($_POST['wdtNonce'], 'wdtDuplicateChartNonce')) {
+        exit();
+    }
+
+    $chartId = (int)$_POST['chart_id'];
+    if (empty($chartId)) {
+        return false;
+    }
+    $newChartName = sanitize_text_field($_POST['new_chart_name']);
+
+    $chartQuery = $wpdb->prepare(
+        'SELECT * FROM ' . $wpdb->prefix . 'wpdatacharts WHERE id = %d',
+        $chartId
+    );
+
+    $wpDataChart = $wpdb->get_row($chartQuery);
+
+    // Creating new table
+    $wpdb->insert(
+        $wpdb->prefix . "wpdatacharts",
+        array(
+            'wpdatatable_id' => $wpDataChart->wpdatatable_id,
+            'title' => $newChartName,
+            'engine' => $wpDataChart->engine,
+            'type' => $wpDataChart->type,
+            'json_render_data' => $wpDataChart->json_render_data
+        )
+    );
+
+    exit();
+}
+
+add_action('wp_ajax_wpdatatables_duplicate_chart', 'wdtDuplicateChart');

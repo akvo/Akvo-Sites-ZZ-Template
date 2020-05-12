@@ -104,7 +104,8 @@
     color: #cdcdcd
 }
 
-.wdt-datatables-admin-wrap .card.wdt-browse-table table .column-functions a.wdt-duplicate-table:before {
+.wdt-datatables-admin-wrap .card.wdt-browse-table table .column-functions a.wdt-duplicate-table:before,
+.wdt-datatables-admin-wrap .card.wdt-browse-table table .column-functions a.wdt-duplicate-chart:before {
     font-family: WPDataTablesIcons;
     content:"\e900";
     font-size: 16px;

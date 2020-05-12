@@ -5,6 +5,127 @@
  * @since 18.10.2016
  */
 
+/**
+ * Hide tooltip on button click or on mouseout event
+ */
+var wdtHideTooltip = function () {
+    jQuery('[data-toggle="tooltip"]').click(function() {
+        jQuery(this).tooltip('hide');
+    });
+
+    jQuery('[data-toggle="tooltip"]').mouseout(function(event) {
+        var e = event.toElement || event.relatedTarget;
+        if (e != null && (e.parentNode == this || e == this)) {
+            return;
+        }
+        jQuery(this).tooltip('hide');
+    });
+};
+
+/**
+ * Extend jQuery to use AnimateCSS
+ */
+jQuery.fn.extend({
+    animateCss: function (animationName, onEnd) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        jQuery(this).addClass('animated ' + animationName).one(animationEnd, function () {
+            jQuery(this).removeClass('animated ' + animationName);
+            if (typeof onEnd == 'function') {
+                onEnd();
+            }
+        });
+    },
+    fadeInDown: function () {
+        jQuery(this)
+          .removeClass('hidden')
+          .show()
+          .animateCss('fadeInDown');
+    },
+    fadeInRight: function (onEnd) {
+        jQuery(this)
+          .removeClass('hidden')
+          .show()
+          .animateCss('fadeInRight');
+        if (typeof onEnd == 'function') {
+            onEnd();
+        }
+    },
+    fadeOutDown: function () {
+        var $this = jQuery(this);
+        jQuery(this).animateCss('fadeOutDown', function () {
+            $this
+              .addClass('hidden')
+              .hide();
+        });
+    },
+    fadeOutRight: function () {
+        var $this =jQuery(this);
+        jQuery(this).animateCss('fadeOutRight', function () {
+            $this
+              .addClass('hidden')
+              .hide();
+        });
+    },
+    animateFadeIn: function () {
+        var $this = jQuery(this);
+        jQuery(this)
+          .removeClass('hidden')
+          .show()
+          .removeClass('fadeOut')
+          .animateCss('fadeIn', function () {
+              $this
+                .removeClass('fadeIn')
+                .removeClass('hidden')
+                .show()
+          });
+    },
+    animateFadeOut: function ( onEnd ) {
+        var $this = jQuery(this);
+        jQuery(this)
+          .removeClass('fadeIn')
+          .animateCss('fadeOut', function () {
+              $this
+                .addClass('hidden')
+                .removeClass('fadeOut')
+                .hide();
+              if( typeof onEnd == 'function' ){
+                  onEnd();
+              }
+          });
+    }
+});
+
+/**
+ * Helper method to insert at textarea cursor position
+ */
+jQuery.fn.extend({
+    insertAtCaret: function (myValue) {
+        return this.each(function (i) {
+            if (document.selection) {
+                //For browsers like Internet Explorer
+                this.focus();
+                var sel = document.selection.createRange();
+                sel.text = myValue;
+                this.focus();
+            }
+            else if (this.selectionStart || this.selectionStart == '0') {
+                //For browsers like Firefox and Webkit based
+                var startPos = this.selectionStart;
+                var endPos = this.selectionEnd;
+                var scrollTop = this.scrollTop;
+                this.value = this.value.substring(0, startPos) + myValue + this.value.substring(endPos, this.value.length);
+                this.focus();
+                this.selectionStart = startPos + myValue.length;
+                this.selectionEnd = startPos + myValue.length;
+                this.scrollTop = scrollTop;
+            } else {
+                this.value += myValue;
+                this.focus();
+            }
+        });
+    }
+});
+
 (function ($) {
 
     $(function () {
@@ -55,109 +176,6 @@
             wdtApplyColorPicker(this);
         });
 
-        /**
-         * Extend jQuery to use AnimateCSS
-         */
-        $.fn.extend({
-            animateCss: function (animationName, onEnd) {
-                var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-                $(this).addClass('animated ' + animationName).one(animationEnd, function () {
-                    $(this).removeClass('animated ' + animationName);
-                    if (typeof onEnd == 'function') {
-                        onEnd();
-                    }
-                });
-            },
-            fadeInDown: function () {
-                $(this)
-                    .removeClass('hidden')
-                    .show()
-                    .animateCss('fadeInDown');
-            },
-            fadeInRight: function (onEnd) {
-                $(this)
-                    .removeClass('hidden')
-                    .show()
-                    .animateCss('fadeInRight');
-                if (typeof onEnd == 'function') {
-                    onEnd();
-                }
-            },
-            fadeOutDown: function () {
-                var $this = $(this);
-                $(this).animateCss('fadeOutDown', function () {
-                    $this
-                        .addClass('hidden')
-                        .hide();
-                });
-            },
-            fadeOutRight: function () {
-                var $this = $(this);
-                $(this).animateCss('fadeOutRight', function () {
-                    $this
-                        .addClass('hidden')
-                        .hide();
-                });
-            },
-            animateFadeIn: function () {
-                var $this = $(this);
-                $(this)
-                    .removeClass('hidden')
-                    .show()
-                    .removeClass('fadeOut')
-                    .animateCss('fadeIn', function () {
-                        $this
-                            .removeClass('fadeIn')
-                            .removeClass('hidden')
-                            .show()
-                    });
-            },
-            animateFadeOut: function ( onEnd ) {
-                var $this = $(this);
-                $(this)
-                    .removeClass('fadeIn')
-                    .animateCss('fadeOut', function () {
-                        $this
-                            .addClass('hidden')
-                            .removeClass('fadeOut')
-                            .hide();
-                        if( typeof onEnd == 'function' ){
-                            onEnd();
-                        }
-                    });
-            }
-        });
-
-        /**
-         * Helper method to insert at textarea cursor position
-         */
-        jQuery.fn.extend({
-            insertAtCaret: function (myValue) {
-                return this.each(function (i) {
-                    if (document.selection) {
-                        //For browsers like Internet Explorer
-                        this.focus();
-                        var sel = document.selection.createRange();
-                        sel.text = myValue;
-                        this.focus();
-                    }
-                    else if (this.selectionStart || this.selectionStart == '0') {
-                        //For browsers like Firefox and Webkit based
-                        var startPos = this.selectionStart;
-                        var endPos = this.selectionEnd;
-                        var scrollTop = this.scrollTop;
-                        this.value = this.value.substring(0, startPos) + myValue + this.value.substring(endPos, this.value.length);
-                        this.focus();
-                        this.selectionStart = startPos + myValue.length;
-                        this.selectionEnd = startPos + myValue.length;
-                        this.scrollTop = scrollTop;
-                    } else {
-                        this.value += myValue;
-                        this.focus();
-                    }
-                });
-            }
-        });
 
         /**
          * Hide modal dialog on Esc button
@@ -237,7 +255,7 @@
 /**
  * Hide preloader on window load
  */
-jQuery(window).load(function(){
+jQuery(window).on('load', function(){
     jQuery('.wdt-preload-layer').animateFadeOut();
 });
 
@@ -372,19 +390,3 @@ var wdtColorPickerToInput = function (selecter) {
     $newEl.val(val).addClass(classes);
 };
 
-/**
- * Hide tooltip on button click or on mouseout event
- */
-var wdtHideTooltip = function () {
-    jQuery('[data-toggle="tooltip"]').click(function() {
-        jQuery(this).tooltip('hide');
-    });
-
-    jQuery('[data-toggle="tooltip"]').mouseout(function(event) {
-        var e = event.toElement || event.relatedTarget;
-        if (e != null && (e.parentNode == this || e == this)) {
-            return;
-        }
-        jQuery(this).tooltip('hide');
-    });
-};

@@ -82,6 +82,8 @@ class WDTBrowseTable extends WP_List_Table {
      */
     function getAllTables() {
         global $wpdb;
+        $predifinedOrderByValue = ['id', 'title', 'table_type'];
+        $orderByValue = 'id';
 
         $query = "SELECT id, title, table_type, editable FROM {$wpdb->prefix}wpdatatables ";
 
@@ -94,8 +96,15 @@ class WDTBrowseTable extends WP_List_Table {
         }
 
         if (isset($_REQUEST['orderby'])) {
-            if (in_array($_REQUEST['orderby'], array('id', 'title', 'table_type'))) {
-                $query .= " ORDER BY " . sanitize_text_field($_REQUEST['orderby']);
+            if (in_array($_REQUEST['orderby'], $predifinedOrderByValue)) {
+
+                $requestOrderByValue = sanitize_text_field($_REQUEST['orderby']);
+                foreach ($predifinedOrderByValue as $value) {
+                    if ($requestOrderByValue === $value){
+                        $orderByValue = $value;
+                    }
+                }
+                $query .= " ORDER BY " . $orderByValue;
                 if ($_REQUEST['order'] == 'desc') {
                     $query .= " DESC";
                 } else {

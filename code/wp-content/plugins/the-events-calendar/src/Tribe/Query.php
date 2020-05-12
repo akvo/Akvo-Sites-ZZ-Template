@@ -12,11 +12,30 @@ use Tribe__Utils__Array as Arr;
 
 if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 	class Tribe__Events__Query {
+		/**
+		 * @since 4.9.4
+		 *
+		 * @var array The WP_Query arguments used in the last `getEvents` method
+		 *            query.
+		 */
+		protected static $last_result = [];
 
 		/**
 		 * Initialize The Events Calendar query filters and post processing.
 		 */
 		public static function init() {
+			/**
+			 * A toggle filter to completely suppress all query filters for the whole request.
+			 *
+			 * @since 4.9.11
+			 *
+			 * @param bool $suppress_filters Whether to completely suppress all query filters for the whole request.
+			 */
+			$suppress_filters = apply_filters( 'tribe_events_suppress_query_filters', false );
+
+			if ( $suppress_filters ) {
+				return;
+			}
 
 			// if tribe event query add filters
 			add_action( 'parse_query', array( __CLASS__, 'parse_query' ), 50 );
@@ -393,7 +412,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 							$query->set( 'orderby', self::set_orderby( null, $query ) );
 							$query->set( 'order', self::set_order( 'ASC', $query ) );
 							$query->set( 'hide_upcoming', $maybe_hide_events );
-
+							$query->set( 'start_date', tribe_format_date( current_time( 'timestamp' ), true, 'Y-m-d H:i:00' ) );
 							break;
 						case 'list':
 						default: // default display query
@@ -403,6 +422,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 								$event_date = date_i18n( Tribe__Date_Utils::DBDATETIMEFORMAT );
 							}
 
+						if ( ! $query->get( 'tribe_remove_date_filters', false ) ) {
 							if ( $query->tribe_is_past ) {
 								// on past view, set the passed date as the end date
 								$query->set( 'start_date', '' );
@@ -412,7 +432,9 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 								if ( '' != $query->get( 'eventDate' ) ) {
 									$event_date = tribe_beginning_of_day( $event_date );
 								} else {
-									$event_date = tribe_format_date( current_time( 'timestamp' ), true, 'Y-m-d H:i:00' );
+									$event_date = tribe_format_date( current_time( 'timestamp' ),
+									                                 true,
+									                                 'Y-m-d H:i:00' );
 								}
 
 								$orm_meta_query = tribe_events()->filter_by_ends_after( $event_date );
@@ -421,10 +443,11 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 
 								$query->set( 'order', self::set_order( 'ASC', $query ) );
 							}
+						}
 
-							$query->set( 'orderby', self::set_orderby( null, $query ) );
-							$query->set( 'hide_upcoming', $maybe_hide_events );
-							break;
+						$query->set( 'orderby', self::set_orderby( null, $query ) );
+						$query->set( 'hide_upcoming', $maybe_hide_events );
+						break;
 					}
 				} else {
 					$query->set( 'hide_upcoming', $maybe_hide_events );
@@ -1290,7 +1313,9 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 					! $has_date_args
 					&& in_array( $display, [ 'upcoming', 'list' ] )
 				) {
-					$args['start_date'] = 'now';
+					if ( empty( $args['tribe_is_past'] ) ) {
+						$args['start_date'] = 'now';
+					}
 					unset( $args['eventDisplay'] );
 				}
 
@@ -1334,7 +1359,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 						$parent_name = Tribe__Utils__Array::get(
 							$args,
 							'name',
-							Tribe__Utils__Array::get( 'tribe_events', false )
+							Tribe__Utils__Array::get( $args, 'tribe_events', false )
 						);
 
 						if ( ! empty( $parent_name ) ) {
@@ -1349,8 +1374,11 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 
 					if ( class_exists( 'Tribe__Events__Pro__Recurrence__Event_Query' ) ) {
 						$recurrence_query = new Tribe__Events__Pro__Recurrence__Event_Query();
-						$recurrence_query->set_parent_event( get_post( $args['post_parent'] ) );
-						add_filter( 'posts_where', array( $recurrence_query, 'include_parent_event' ), 100 );
+						$parent_post      = get_post( $args['post_parent'] );
+						if ( $parent_post instanceof WP_Post ) {
+							$recurrence_query->set_parent_event( $parent_post );
+							add_filter( 'posts_where', array( $recurrence_query, 'include_parent_event' ), 100 );
+						}
 					}
 				}
 
@@ -1398,7 +1426,7 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 				 * that should be updated here. Do not try to move this conditional unpacking logic
 				 * in the ORM: this is an issue the proxy function should handle ad-hoc.
 				 */
-				$requiring_unpack = [ 'date_overlaps' ];
+				$requiring_unpack = [ 'date_overlaps', 'runs_between' ];
 				foreach ( array_intersect( array_keys( $args ), $requiring_unpack ) as $key ) {
 					$event_orm->by( $key, ...$args[ $key ] );
 					unset( $args[ $key ] );
@@ -1418,28 +1446,32 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 
 					// Run the query.
 					$result->get_posts();
+					self::$last_result = empty( $result->posts ) ? [] : $result->posts;
 				}
 
 				$cache->set( $cache_key, $result, Tribe__Cache::NON_PERSISTENT, 'save_post' );
 			}
+
 
 			if ( $return_found_posts ) {
 				return $result;
 			}
 
 			if ( ! empty( $result->posts ) ) {
+				self::$last_result = empty( $result->posts ) ? [] : $result->posts;
 				if ( $full ) {
 					return $result;
 				}
-
 				return $result->posts;
 			}
 
 			if ( $full ) {
+				self::$last_result = empty( $result->posts ) ? [] : $result->posts;
 				return $result;
 			}
 
-			return array();
+			self::$last_result = [];
+			return [];
 		}
 
 		/**
@@ -1511,6 +1543,21 @@ if ( ! class_exists( 'Tribe__Events__Query' ) ) {
 		 */
 		public static function default_page_on_front( $value ) {
 			return tribe( 'tec.front-page-view' )->is_virtual_page_id( $value ) ? 0 : $value;
+		}
+
+		/**
+		 * Reruns the last query used to `getEvents` to fetch
+		 * all the found IDs.
+		 *
+		 * Pagination is ignored; this methods provides a way to
+		 * not only count the found posts but to get their ID too.
+		 *
+		 * @since 4.9.4
+		 *
+		 * @return array
+		 */
+		public static function last_found_events() {
+			return self::$last_result;
 		}
 	}
 }

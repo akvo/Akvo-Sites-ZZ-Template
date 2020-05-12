@@ -3,15 +3,12 @@
 <?php if (isset($chartObj)) { ?>
     <script type='text/javascript'>var editing_chart_data = {
             render_data: <?php echo json_encode($chartObj->getRenderData()); ?>,
-            highcharts_render_data: <?php echo json_encode($chartObj->getHighchartsRenderData()); ?>,
-            chartjs_render_data: <?php echo json_encode($chartObj->getChartJSRenderData()); ?>,
             engine: "<?php echo $chartObj->getEngine();?>",
             type: "<?php echo $chartObj->getType(); ?>",
             selected_columns: <?php echo json_encode($chartObj->getSelectedColumns()) ?>,
             range_type: "<?php echo $chartObj->getRangeType() ?>"<?php if( $chartObj->getRangeType() == 'picked_range' ){ ?>,
             row_range: <?php echo json_encode($chartObj->getRowRange()); } ?>,
             title: "<?php echo $chartObj->getTitle(); ?>",
-            follow_filtering: <?php echo (int)$chartObj->getFollowFiltering(); ?>,
             wpdatatable_id: <?php echo $chartObj->getwpDataTableId(); ?>  };</script>
 <?php } ?>
 
@@ -73,6 +70,30 @@
 
                         </div>
 
+                        <div class="chart-wizard-step step2" data-step="step2" style="display: none">
+
+                            <?php include WDT_TEMPLATE_PATH . 'admin/chart_wizard/steps/step2.inc.php'; ?>
+
+                        </div>
+
+                        <div class="chart-wizard-step step3" data-step="step3" style="display: none">
+
+                            <?php include WDT_TEMPLATE_PATH . 'admin/chart_wizard/steps/step3.inc.php'; ?>
+
+                        </div>
+
+                        <div class="chart-wizard-step step4" data-step="step4" style="display: none">
+
+                            <?php include WDT_TEMPLATE_PATH . 'admin/chart_wizard/steps/step4.inc.php'; ?>
+
+                        </div>
+
+                        <div class="chart-wizard-step step5" data-step="step5" style="display: none">
+
+                            <?php include WDT_TEMPLATE_PATH . 'admin/chart_wizard/steps/step5.inc.php'; ?>
+
+                        </div>
+
                         <?php  ?>
 
                     </div>
@@ -99,8 +120,46 @@
     </div>
     <!-- /.container -->
 
-    <?php  ?>
-
 </div>
 
-<?php  ?>
+<script id="wdt-chart-series-setting-block" type="text/x-jsrender">
+    {{for series}}
+        <div class="chart-series-block" data-orig_header="{{>orig_header}}">
+            <h4 class="c-black m-b-20 title">
+                    <?php _e('Serie', 'wpdatatables'); ?>: {{>label}}
+            </h4>
+            <div class="chart-series-label">
+                <h4 class="c-black m-b-20">
+                    <?php _e('Label', 'wpdatatables'); ?>
+                </h4>
+                <div class="form-group">
+                    <div class="fg-line">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input type="text" name="font-name" id="series-label" value="{{>label}}" class="form-control input-sm series-label" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-series-color" id="chart-series-color">
+                 <h4 class="c-black m-b-20">
+                    <?php _e('Color', 'wpdatatables'); ?>
+                </h4>
+                <div class="cp-container">
+                    <div class="form-group">
+                        <div class="fg-line dropdown">
+                            <div id="cp" class="input-group colorpicker-component colorpicker-element color-picker wpcolorpicker"">
+                                <input type="text" id="series-color" value="" class="form-control cp-value series-color" />
+                                <span class="input-group-addon wpcolorpicker-icon"><i></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/for}}
+
+</script>
+
+

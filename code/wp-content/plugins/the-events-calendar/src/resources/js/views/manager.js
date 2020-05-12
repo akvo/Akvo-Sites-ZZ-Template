@@ -31,6 +31,7 @@ tribe.events.views.manager = {};
 ( function( $, _, obj ) {
 	'use strict';
 	var $document = $( document );
+	var $window = $( window );
 
 	/**
 	 * Selectors used for configuration and setup
@@ -40,14 +41,46 @@ tribe.events.views.manager = {};
 	 * @type {PlainObject}
 	 */
 	obj.selectors = {
-		container: '.tribe-events-container',
-		link: '.tribe-events-navigation-link',
+		container: '[data-js="tribe-events-view"]',
+		form: '[data-js="tribe-events-view-form"]',
+		link: '[data-js="tribe-events-view-link"]',
+		dataScript: '[data-js="tribe-events-view-data"]',
 		loader: '.tribe-events-view-loader',
-		hiddenElement: '.tribe-hidden'
+		hiddenElement: '.tribe-common-a11y-hidden',
 	};
 
 	/**
-	 * Containers on the current page that were initialized
+	 * Flag when a popstate change is happening.
+	 *
+	 * @since 4.9.12
+	 *
+	 * @type {boolean}
+	 */
+	obj.doingPopstate = false;
+
+	/**
+	 * Stores the current ajax request been handled by the manager.
+	 *
+	 * @since 4.9.12
+	 *
+	 * @type {jqXHR|null}
+	 */
+	obj.currentAjaxRequest = null;
+
+	/**
+	 * Stores the last container that used PushState, which prevents fails.
+	 *
+	 * @todo @bordoni @paul once shortcodes start managing URLs this will need
+	 *       to improve to a full tracker of history.
+	 *
+	 * @since 4.9.12
+	 *
+	 * @type {jQuery}
+	 */
+	obj.$lastContainer = $();
+
+	/**
+	 * Containers on the current page that were initialized.
 	 *
 	 * @since 4.9.2
 	 *
@@ -56,26 +89,69 @@ tribe.events.views.manager = {};
 	obj.$containers = $();
 
 	/**
+	 * Clean up the container and event listeners
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param  {jQuery} container Which element we are going to clean up
+	 *
+	 * @return {void}
+	 */
+	obj.cleanup = function( container ) {
+		var $container = $( container );
+		var $form = $container.find( obj.selectors.form );
+		var $data = $container.find( obj.selectors.dataScript );
+		var data  = {};
+
+		// If we have data element set it up.
+		if ( $data.length ) {
+			data = JSON.parse( $.trim( $data.text() ) );
+		}
+
+		$container.trigger( 'beforeCleanup.tribeEvents', [ $container, data ] );
+
+		$container.find( obj.selectors.link ).off( 'click.tribeEvents', obj.onLinkClick );
+
+		if ( $form.length ) {
+			$form.off( 'submit.tribeEvents', obj.onSubmit );
+		}
+
+		$container.trigger( 'afterCleanup.tribeEvents', [ $container, data ] );
+	};
+
+	/**
 	 * Setup the container for views management
 	 *
 	 * @since 4.9.2
 	 *
 	 * @todo  Requirement to setup other JS modules after hijacking Click and Submit
 	 *
-	 * @param  {integer} index     jQuery.each index param
-	 * @param  {Element} container Which element we are going to setup
+	 * @param  {integer}        index     jQuery.each index param
+	 * @param  {Element|jQuery} container Which element we are going to setup
 	 *
 	 * @return {void}
 	 */
 	obj.setup = function( index, container ) {
 		var $container = $( container );
+		var $form = $container.find( obj.selectors.form );
+		var $data = $container.find( obj.selectors.dataScript );
+		var data  = {};
+
+		// If we have data element set it up.
+		if ( $data.length ) {
+			data = JSON.parse( $.trim( $data.text() ) );
+		}
+
+		$container.trigger( 'beforeSetup.tribeEvents', [ index, $container, data ] );
 
 		$container.find( obj.selectors.link ).on( 'click.tribeEvents', obj.onLinkClick );
 
 		// Only catch the submit if properly setup on a form
-		if ( $container.is( 'form' ) ) {
-			$container.on( 'submit.tribeEvents', obj.onSubmit );
+		if ( $form.length ) {
+			$form.on( 'submit.tribeEvents', obj.onSubmit );
 		}
+
+		$container.trigger( 'afterSetup.tribeEvents', [ index, $container, data ] );
 	};
 
 	/**
@@ -98,6 +174,109 @@ tribe.events.views.manager = {};
 	};
 
 	/**
+	 * Given an Element determines it's view container data from the script.
+	 *
+	 * @since 4.9.2
+	 *
+	 * @param  {jQuery} $container Which element we getting the data from.
+	 *
+	 * @return {mixed}
+	 */
+	obj.getContainerData = function( $container ) {
+		var $data = $container.find( obj.selectors.dataScript );
+
+		// Bail in case we dont find data script.
+		if ( ! $data.length ) {
+			return;
+		}
+
+		var data = JSON.parse( $.trim( $data.text() ) );
+
+		return data;
+	};
+
+	/**
+	 * Given an container determines if it should manage URL.
+	 *
+	 * @since 4.9.4
+	 *
+	 * @param  {Element|jQuery} element Which element we are using as the container.
+	 *
+	 * @return {Boolean}
+	 */
+	obj.shouldManageUrl = function( $container ) {
+		var shouldManageUrl = $container.data( 'view-manage-url' );
+		var tribeIsTruthy   = /^(true|1|on|yes)$/;
+
+		// When undefined we use true as the default.
+		if ( typeof shouldManageUrl === typeof undefined ) {
+			shouldManageUrl = true;
+		} else {
+			// When not undefined we cast as string and test for valid boolean truth.
+			shouldManageUrl = tribeIsTruthy.test( String( shouldManageUrl ) );
+		}
+
+		return shouldManageUrl;
+	};
+
+	/**
+	 * Using data passed by the Backend once we fetch a new HTML via an
+	 * container action.
+	 *
+	 * Usage, on the AJAX request we will pass data back using a <script>
+	 * formatted as a `application/json` that we will parse and apply here.
+	 *
+	 * @since 4.9.4
+	 *
+	 * @param  {jQuery} $container Which element we are updating the URL from.
+	 *
+	 * @return {void}
+	 */
+	obj.updateUrl = function( $container ) {
+		// When handling popstate (broswer back/next) it will not handle this part.
+		if ( obj.doingPopstate ) {
+			return;
+		}
+
+		// Bail when we dont manage URLs
+		if ( ! obj.shouldManageUrl( $container ) ) {
+			return;
+		}
+
+		var $data = $container.find( obj.selectors.dataScript );
+
+		// Bail in case we dont find data script.
+		if ( ! $data.length ) {
+			return;
+		}
+
+		var data = JSON.parse( $.trim( $data.text() ) );
+
+		// Bail when the data is not a valid object
+		if ( ! _.isObject( data ) ) {
+			return;
+		}
+
+		// Bail when URL is not present
+		if ( _.isUndefined( data.url ) ) {
+			return;
+		}
+
+		// Bail when Title is not present
+		if ( _.isUndefined( data.title ) ) {
+			return;
+		}
+
+		/**
+		 * Compatitiblity for browsers updating title
+		 */
+		document.title = data.title;
+
+		// Push browser history
+		window.history.pushState( null, data.title, data.url );
+	};
+
+	/**
 	 * Hijacks the link click and passes the URL as param for REST API
 	 *
 	 * @since 4.9.2
@@ -107,15 +286,37 @@ tribe.events.views.manager = {};
 	 * @return {boolean}
 	 */
 	obj.onLinkClick = function( event ) {
-		event.preventDefault();
-		var $link = $( this );
 		var $container = obj.getContainer( this );
+		$container.trigger( 'beforeOnLinkClick.tribeEvents', event );
+
+		event.preventDefault();
+
+		var $link = $( this );
 		var url = $link.attr( 'href' );
+		var currentUrl = window.location.href;
+		var nonce = $link.data( 'view-rest-nonce' );
+		var shouldManageUrl = obj.shouldManageUrl( $container );
+		var shortcodeId = $container.data( 'view-shortcode' );
+
+		// Fetch nonce from container if the link doesnt have any
+		if ( ! nonce ) {
+			nonce = $container.data( 'view-rest-nonce' );
+		}
+
 		var data = {
-			url: url
+			prev_url: encodeURI( decodeURI( currentUrl ) ),
+			url: encodeURI( decodeURI( url ) ),
+			should_manage_url: shouldManageUrl,
+			_wpnonce: nonce,
 		};
 
+		if ( shortcodeId ) {
+			data['shortcode'] = shortcodeId;
+		}
+
 		obj.request( data, $container );
+
+		$container.trigger( 'afterOnLinkClick.tribeEvents', event );
 
 		return false;
 	};
@@ -132,12 +333,67 @@ tribe.events.views.manager = {};
 	 * @return {boolean}
 	 */
 	obj.onSubmit = function( event ) {
-		event.preventDefault();
-		var $container = $( this );
-		var formData = Qs.parse( $container.serialize() );
+		var $container = obj.getContainer( this );
+		$container.trigger( 'beforeOnSubmit.tribeEvents', event );
 
-		// pass the data to the request using `tribe-events-views`
-		obj.request( formData['tribe-events-views'], $container );
+		event.preventDefault();
+
+		// The submit event is triggered on the form, not the container.
+		var $form = $( this );
+		var nonce = $container.data( 'view-rest-nonce' );
+
+		var formData = Qs.parse( $form.serialize() );
+
+		var data = {
+			view_data: formData['tribe-events-views'],
+			_wpnonce: nonce
+		};
+
+		// Pass the data to the request reading it from `tribe-events-views`.
+		obj.request( data, $container );
+
+		$container.trigger( 'afterOnSubmit.tribeEvents', event );
+
+		return false;
+	};
+
+	/**
+	 * Catches the normal browser interactions for Next and Previous pages
+	 * so that we can use the manager to load the page requested instead
+	 * of just chaning the URL.
+	 *
+	 * @since  4.9.12
+	 *
+	 * @param  {Event} event DOM Event related to the window popstate
+	 *
+	 * @return {boolean}     Will always return false on this one.
+	 */
+	obj.onPopState = function( event ) {
+		var target = event.originalEvent.target;
+		var url = target.location.href;
+		var $container = obj.getLastContainer();
+
+		if ( ! $container ) {
+			return false;
+		}
+
+		if ( obj.currentAjaxRequest ) {
+			obj.currentAjaxRequest.abort();
+		}
+
+		// Flag that we are doing popstate globally.
+		obj.doingPopstate = true;
+
+		$container.trigger( 'beforePopState.tribeEvents', event );
+
+		var nonce = $container.data( 'view-rest-nonce' );
+
+		var data = {
+			url: url,
+			_wpnonce: nonce
+		};
+
+		obj.request( data, $container );
 
 		return false;
 	};
@@ -155,11 +411,23 @@ tribe.events.views.manager = {};
 	 */
 	obj.request = function( data, $container ) {
 		var settings = obj.getAjaxSettings( $container );
+		var shouldManageUrl = obj.shouldManageUrl( $container );
+		var containerData = obj.getContainerData( $container );
+
+		if ( ! data.url ) {
+			data.url = containerData.url;
+		}
+
+		if ( ! data.prev_url ) {
+			data.prev_url = containerData.prev_url;
+		}
+
+		data.should_manage_url = shouldManageUrl;
 
 		// Pass the data received to the $.ajax settings
 		settings.data = data;
 
-		$.ajax( settings );
+		obj.currentAjaxRequest = $.ajax( settings );
 	};
 
 	/**
@@ -173,11 +441,11 @@ tribe.events.views.manager = {};
 	 */
 	obj.getAjaxSettings = function( $container ) {
 		var ajaxSettings = {
-			url: $container.data( 'rest-url' ),
+			url: $container.data('view-rest-url'),
 			accepts: 'html',
 			dataType: 'html',
 			method: 'GET',
-			'async': true, // async is keywork
+			'async': true, // async is keyword
 			beforeSend: obj.ajaxBeforeSend,
 			complete: obj.ajaxComplete,
 			success: obj.ajaxSuccess,
@@ -208,8 +476,6 @@ tribe.events.views.manager = {};
 
 		$container.trigger( 'beforeAjaxBeforeSend.tribeEvents', [ jqXHR, settings ] );
 
-		console.log( jqXHR, settings, this );
-
 		if ( $loader.length ) {
 			$loader.removeClass( obj.selectors.hiddenElement.className() );
 		}
@@ -237,13 +503,19 @@ tribe.events.views.manager = {};
 
 		$container.trigger( 'beforeAjaxComplete.tribeEvents', [ jqXHR, textStatus ] );
 
-		console.log( jqXHR, textStatus, this );
-
 		if ( $loader.length ) {
 			$loader.addClass( obj.selectors.hiddenElement.className() );
 		}
 
 		$container.trigger( 'afterAjaxComplete.tribeEvents', [ jqXHR, textStatus ] );
+
+		// Flag that we are done with popstate if that was the case.
+		if ( obj.doingPopstate ) {
+			obj.doingPopstate = false;
+		}
+
+		// Reset the current ajax request on the manager object.
+		obj.currentAjaxRequest = null;
 	};
 
 	/**
@@ -267,17 +539,29 @@ tribe.events.views.manager = {};
 
 		$container.trigger( 'beforeAjaxSuccess.tribeEvents', [ data, textStatus, jqXHR ] );
 
-		console.log( data, textStatus, jqXHR, this );
-
 		var $html = $( data );
 
-		// Replace the current container with the new Data
-		$container.replaceWith( $html );
+		// Clean up the container and event listeners
+		obj.cleanup( $container );
 
-		// Setup the container with the data received
-		obj.setup( 0, $html );
+		// Replace the current container with the new Data.
+		$container.replaceWith( $html );
+		$container = $html;
+
+		// Setup the container with the data received.
+		obj.setup( 0, $container );
+
+		// Update the global set of containers with all of the manager object.
+		obj.selectContainers();
+
+		// Trigger the browser pushState
+		obj.updateUrl( $container );
 
 		$container.trigger( 'afterAjaxSuccess.tribeEvents', [ data, textStatus, jqXHR ] );
+
+		if ( obj.shouldManageUrl( $container ) ) {
+			obj.$lastContainer = $container;
+		}
 	};
 
 	/**
@@ -300,23 +584,57 @@ tribe.events.views.manager = {};
 
 		$container.trigger( 'beforeAjaxError.tribeEvents', [ jqXHR, settings ] );
 
-		console.log( jqXHR, settings, this );
+		/**
+		 * @todo  we need to handle errors here
+		 */
 
 		$container.trigger( 'afterAjaxError.tribeEvents', [ jqXHR, settings ] );
 	};
 
 	/**
-	 * Handles the initialization of the manager when Document is ready
+	 * Saves all the containers in the page into the object.
+	 *
+	 * @since  4.9.12
+	 *
+	 * @return {void}
+	 */
+	obj.selectContainers = function() {
+		obj.$containers = $( obj.selectors.container );
+	};
+
+	/**
+	 * Selects the last container to change the URL.
+	 *
+	 * @since  4.9.12
+	 *
+	 * @return {jQuery}
+	 */
+	obj.getLastContainer = function() {
+		/**
+		 * @todo @bordoni @paul improve this when shortcodes are also managing the URL.
+		 */
+		if ( ! obj.$lastContainer.length ) {
+			obj.$lastContainer = obj.$containers.filter( '[data-view-manage-url="1"]' ).eq( 0 );
+		}
+
+		return obj.$lastContainer;
+	}
+
+	/**
+	 * Handles the initialization of the manager when Document is ready.
 	 *
 	 * @since  4.9.2
 	 *
 	 * @return {void}
 	 */
 	obj.ready = function() {
-		obj.$containers = $( obj.selectors.container );
+		obj.selectContainers();
 		obj.$containers.each( obj.setup );
 	};
 
-	// Configure on document ready
+	// Configure on document ready.
 	$document.ready( obj.ready );
-}( jQuery, window.underscore || window._, tribe.events.views.manager ) );
+
+	// Attaches the popstate method to the window object.
+	$window.on( 'popstate', obj.onPopState );
+} )( jQuery, window.underscore || window._, tribe.events.views.manager );

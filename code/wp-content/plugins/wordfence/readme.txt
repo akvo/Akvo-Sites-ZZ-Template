@@ -1,10 +1,10 @@
 === Wordfence Security - Firewall & Malware Scan ===
-Contributors: mmaunder 
+Contributors: mmaunder, wfryan, wfmatt, wfmattr
 Tags: security, firewall, malware scanner, web application firewall, two factor authentication, block hackers, country blocking, clean hacked site, blacklist, waf, login security
 Requires at least: 3.9
 Requires PHP: 5.3
-Tested up to: 5.2
-Stable tag: 7.3.2
+Tested up to: 5.4
+Stable tag: 7.4.7
 
 Secure your website with the most comprehensive WordPress security plugin. Firewall, malware scan, blocking, live traffic, login security & more.
 
@@ -41,6 +41,8 @@ Wordfence includes an endpoint firewall and malware scanner that were built from
 * Wordfence Central is a powerful and efficient way to manage the security for multiple sites in one place.
 * Efficiently assess the security status of all your websites in one view. View detailed security findings without leaving Wordfence Central.
 * Powerful templates make configuring Wordfence a breeze.
+* Highly configurable alerts can be delivered via email, SMS or Slack. Improve the signal to noise ratio by leveraging severity level options and a daily digest option.
+* Track and alert on important security events including administrator logins, breached password usage and surges in attack activity.
 * Free to use for unlimited sites.
 
 #### SECURITY TOOLS
@@ -60,7 +62,7 @@ Secure your website using the following steps to install Wordfence:
 6. Optionally, change your security level or adjust the advanced options to set individual scanning and protection options for your site.
 7. Click the "Live Traffic" menu option to watch your site activity in real-time. Situational awareness is an important part of website security.
 
-To install the Wordfence on WordPress Multi-Site installations:
+To install Wordfence on WordPress Multi-Site installations:
 
 1. Install Wordfence via the plugin directory or by uploading the ZIP file.
 2. Network Activate Wordfence. This step is important because until you network activate it, your sites will see the plugin option on their plugins menu. Once activated that option disappears. 
@@ -102,7 +104,6 @@ We offer a Premium API key that gives you real-time updates to the Threat Defens
 * See all your traffic in real-time, including robots, humans, 404 errors, logins and logouts and who is consuming most of your content. Enhances your situational awareness of which security threats your site is facing.
 * A real-time view of all traffic including automated bots that often constitute security threats that Javascript analytics packages never show you.
 * Real-time traffic includes reverse DNS and city-level geolocation. Know which geographic area security threats originate from.
-* Monitor your DNS security for unauthorized DNS changes.
 * Monitors disk space which is related to security because many DDoS attacks attempt to consume all disk space to create denial of service.
 
 = What login security features are included =
@@ -110,7 +111,6 @@ We offer a Premium API key that gives you real-time updates to the Threat Defens
 * See all your traffic in real-time, including robots, humans, 404 errors, logins and logouts and who is consuming most of your content. Enhances your situational awareness of which security threats your site is facing.
 * A real-time view of all traffic including automated bots that often constitute security threats that Javascript analytics packages never show you.
 * Real-time traffic includes reverse DNS and city-level geolocation. Know which geographic area security threats originate from.
-* Monitor your DNS security for unauthorized DNS changes.
 * Monitors disk space which is related to security because many DDoS attacks attempt to consume all disk space to create denial of service.
 
 = How will I be alerted if my site has a security problem? =
@@ -182,6 +182,112 @@ Secure your website with Wordfence.
 9. Logging in is easy with Wordfence 2FA.
 
 == Changelog ==
+
+= 7.4.7 - April 23, 2020 =
+* Improvement: Updated bundled GeoIP database.
+* Improvement: Better messaging when selecting restrictive rate limits.
+* Improvement: Scan result emails now include the count of issues that were found again.
+* Improvement: Resolved scan issues will now email again if they reoccur.
+* Improvement: Added the state/province name when applicable to geolocation displays in Live Traffic.
+* Improvement: New blocking page design to better inform blocked visitors on how to resolve the block.
+* Improvement: Custom WP_CONTENT_DIR, WP_PLUGIN_DUR, and UPLOADS path constants will now get scanned correctly.
+* Improvement: Added TLS connection failure detection to brute force reporting and checking and a corresponding backoff period.
+* Fix: Fixed an issue where a bad cron record could interfere with automatic WAF rule updates.
+* Fix: Fixed a PHP warning that could occur if a bad response was received while updating an IP list.
+* Fix: The new user tour and onboarding flow will now work correctly on the 2FA page.
+
+= 7.4.6 - February 12, 2020 =
+* Improvement: Enhanced the detection ability of the WAF for SQLi attacks.
+* Improvement: Updated the bundled GeoIP database.
+* Improvement: Modified some country names in the block configuration to align with those shown in Live Traffic.
+* Change: Moved the skipped files scan check to the Server State category.
+* Fix: Fixed an issue where after scrolling on the Live Traffic page, updates would no longer automatically load.
+* Fix: Modified the number of login records kept to align better with Live Traffic so they're trimmed around the same time.
+
+= 7.4.5 - January 15, 2020 =
+* Improvement: Improved WAF coverage for an Infinite WP authentication bypass vulnerability.
+
+= 7.4.4 - January 14, 2020 =
+* Fix: Fixed a UI issue where the scan summary status marker for malware didn't always match the findings.
+
+= 7.4.3 - January 13, 2020 =
+* Improvement: Added WAF coverage for an Infinite WP authentication bypass vulnerability.
+* Improvement: The malicious URL scan now includes protocol-relative URLs (e.g., //example.com)
+* Improvement: Malware signatures are now better applied to large files read in multiple passes.
+* Improvement: Added a scan issue that will appear when one or more paths are skipped due to scan settings excluding them.
+* Changed: AJAX endpoints now send the application/json Content-Type header.
+* Changed: Updated text on scan issues for plugins removed from wordpress.org to better indicate possible reasons.
+* Changed: Added compatibility messaging for reCAPTCHA when WooCommerce is active.
+* Fixed: Added missing $wp_query->set_404() call when outputting a 404 page on a custom action.
+* Fixed: Fixed the logout username display in Live Traffic broken by a change in WordPress 5.3.
+* Fixed: Improved the response callback used for the WAF status check during extended protection installation.
+* Fixed: The "Require 2FA for all administrators" notice is now automatically dismissed if an administrator sets up 2FA.
+
+= 7.4.2 - December 3, 2019 =
+* Improvement: Increased performance of IP CIDR range comparisons.
+* Improvement: Added parameter signature to remote scanning for better validation during forking.
+* Change: Removed duplicate browser label in Live Traffic.
+* Fix: Added compensation for PHP 7.4 deprecation notice with get_magic_quotes_gpc.
+* Fix: Fixed potential notice in dashboard widget when no updates are found.
+* Fix: Updated JS hashing library to compensate for a variable name collision that could occur.
+* Fix: Fixed an issue where certain symlinks could cause a scan to erroneously skip files.
+* Fix: Fixed PHP memory test for newer PHP versions whose optimizations prevented it from allocating memory as desired.
+
+= 7.4.1 - November 6, 2019 =
+* Improvement: Updated the bundled GeoIP database.
+* Improvement: Minor changes to ensure compatibility with PHP 7.4.
+* Improvement: Updated the WHOIS lookup for better reliability.
+* Improvement: Added better diagnostic data when the WAF MySQL storage engine is active.
+* Improvement: Improved the messaging when switching between premium and free licenses.
+* Change: Deprecated DNS changes scan.
+* Change: The plugin will no longer email alerts when Central is managing them.
+* Fix: Added error suppression to ignore_user_abort calls to silence it on hosts with it disabled.
+* Fix: Improved path generation to better avoid outputting extra slashes in URLs.
+* Fix: Applied a length limit to malware reporting to avoid failures due to large content size.
+
+= 7.4.0 - August 22, 2019 =
+* Improvement: Added a MySQL-based configuration and data storage for the WAF to expand the number of hosting environments supported. For more detail, see: https://www.wordfence.com/help/firewall/mysqli-storage-engine/
+* Improvement: Updated bundled GeoIP database.
+* Fix: Fixed several console notices when running via the CLI.
+
+= 7.3.6 - July 31, 2019 =
+* Improvement: Multiple "php.ini file in core directory" issues are now consolidated into a single issue for clearer scan results.
+* Improvement: The AJAX error detection for false positive WAF blocks now better detects and processes the response for presenting the whitelisting prompt.
+* Improvement: Added overdue cron detection and highlighting to diagnostics to help identify issues.
+* Improvement: Added the necessary directives to exclude backwards compatibility code from creating warnings with phpcs for future compatibility with WP Tide.
+* Improvement: Normalized all PHP require/include calls to use full paths for better code quality.
+* Change: Removed deprecated high sensitivity scan option since current signatures are more accurate.
+* Fix: Fixed the status circle tooltips not showing.
+* Fix: IP detection at the WAF level better mirrors the main plugin exactly when using the automatic setting.
+* Fix: Fixed a currently-unused code path in email address verification for the strict check.
+
+= 7.3.5 - July 16, 2019 =
+* Improvement: Improved tagging of the login endpoint for brute force protection.
+* Improvement: Added additional information about reCAPTCHA to its setting control.
+* Improvement: Added a constant that may be overridden to customize the expiration time of login verification email links.
+* Improvement: reCAPTCHA keys are now tested on saving to prevent accidentally inputting a v2 key.
+* Improvement: Added a setting to control the reCAPTCHA human/bot threshold.
+* Improvement: Added a separate option to trigger removal of Login Security tables and data on deactivation.
+* Improvement: Reworked the reCAPTCHA implementation to trigger the token check on login/registration form submission to avoid the token expiring.
+* Fix: Widened the reCAPTCHA key fields to allow the full keys to be visible.
+* Fix: Fixed encoding of the ellipsis character when reporting malware finds.
+* Fix: Disabling the IP blacklist once again correctly clears the block cache.
+* Fix: Addressed an issue when outbound UDP connections are blocked where the NTP check could log an error.
+* Fix: Added handling for reCAPTCHA's JavaScript failing to load, which previously blocked logging in.
+* Fix: Fixed the functionality of the button to send 2FA grace period notifications.
+* Fix: Fixed a missing icon for some help links when running in standalone mode.
+
+= 7.3.4 - June 17, 2019 =
+* Improvement: Added security events and alerting features built into Wordfence Central.
+
+= 7.3.3 - June 11, 2019 =
+* Improvement: Added support for managing the login security settings to Wordfence Central.
+* Improvement: Updated the bundled root CA certificate store.
+* Improvement: Added a check and update flow for mod_php hosts with only the PHP5 directive set for the WAF's extended protection mode.
+* Improvement: Added additional values to Diagnostics for debugging time-related issues, the new fatal error handler settings, and updated the PHP version check to reflect the new 5.6.20 requirement of WordPress.
+* Change: Changed the autoloader for our copy of sodium_compat to always load after WordPress core does.
+* Fix: Fixed the "removed from wordpress.org" detection for plugin, which was broken due to an API change.
+* Fix: Fixed the bulk repair function in the scan results when it included core files.
 
 = 7.3.2 - May 16, 2019 =
 * Improvement: Updated sodium_compat to address an incompatibility that may occur with the pending WordPress 5.2.1 update.
