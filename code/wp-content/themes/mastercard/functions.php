@@ -86,10 +86,66 @@
 		}
 	} );
 
+	class MC_API{
+
+		function request( $url ){
+			$args['headers'] = array(
+				'Authorization' => 'Token a6a0e042562bdb3c293d8df3874f84f9f55f9c7f',
+			);
+			return wp_remote_get( $url, $args );
+		}
+
+		function response( $url ){
+			$_json_expiration = 60 * 5; // 5 minutes
+			$key = md5( $url );
+			$data = array();
+			if ( ! ( $data = get_transient($key) ) ) {
+				$request = $this->request( $url );
+
+				if( ! is_wp_error( $request ) ) {
+
+					$body = wp_remote_retrieve_body( $request );
+
+					$data = json_decode( $body );		// MORE OF YOUR CODE HERE
+
+					set_transient($key, $data, $_json_expiration); // IF IT IS NEW, SET THE TRANSIENT FOR NEXT TIME
+				}
+			}
+			return $data;
+		}
+
+		function get_photo_url( $update ){
+			$photo_url = "";
+			if( isset( $update->photo->original ) ){
+				$photo_url = $update->photo->original;
+			}
+			elseif( isset( $update->photo ) ){
+				$photo_url = $update->photo;
+			}
+			return $photo_url;
+		}
+
+	}
+
+	global $mc_api;
+	$mc_api = new MC_API;
+
+	function mf_get_data_feed_response( $data_feed_id, $api_key ){
+
+		$json_key = 'df'.$data_feed_id;
+		$_json_expiration = 60 * 5; // 5 minutes
+		$key = $json_key . md5($json_key );
+
+		global $akvo_rsr, $mc_api;
+		$url = $akvo_rsr->get_data_feed_url( $data_feed_id );
+
+		return $mc_api->response( $url );
+
+	}
+
 	function mf_rsr_api( $feed ){
 		$api_key = "a6a0e042562bdb3c293d8df3874f84f9f55f9c7f";
-		global $akvo_rsr;
-		return $akvo_rsr->get_data_feed_response( $feed, $api_key );
+		return mf_get_data_feed_response( $feed, $api_key );
 	}
 
 	add_shortcode( 'akvo_rsr_results', function( $atts ){
@@ -152,7 +208,7 @@
 
 					$akvo_date = date( "d M Y", strtotime( $json_data->results[$i]->created_at ) );
 
-					$link = $base_url.$json_data->results[$i]->absolute_url;
+					$link = get_bloginfo('url') . "/updates/?id=" . $json_data->results[ $i ]->id;			//$base_url.$json_data->results[$i]->absolute_url;
 
 					$photo_url = "";
 					if( isset( $json_data->results[ $i]->photo->original ) ){
@@ -181,4 +237,12 @@
 
 		return ob_get_clean();
 
+	} );
+
+	add_shortcode( 'mc_akvo_updates', function( $atts ){
+		ob_start();
+
+		include( 'partials/mc_akvo_updates.php' );
+
+		return ob_get_clean();
 	} );
