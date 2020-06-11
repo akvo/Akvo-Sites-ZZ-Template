@@ -19,7 +19,7 @@
 <a class='back-btn' href="<?php bloginfo('url');?>"><i class="fa fa-arrow-left"></i>&nbsp;Go Back</a>
 <section style="max-width: 600px; margin: 50px auto 100px;">
 	<h3><?php echo $project_update->title;?></h3>
-	<p class="small text-muted"><?php echo "Published on " . date( "d M Y", strtotime( $project_update->created_at ) );?></p>
+	<p class="small text-muted"><?php echo "Published on " . $mc_api->get_published_date( $project_update );?></p>
 	<?php $featured_image_url = $mc_api->get_photo_url( $project_update ); if( $featured_image_url ):?>
 	<img src="<?php echo $featured_image_url;?>" />
 	<?php endif;?>

@@ -125,6 +125,12 @@
 			return $photo_url;
 		}
 
+		function get_templink( $update ){ return get_bloginfo('url') . "/updates/?id=" . $update->id;	}
+
+		function get_published_date( $update ){
+			return date( "d M Y", strtotime( $update->created_at ) );
+		}
+
 	}
 
 	global $mc_api;
@@ -190,6 +196,8 @@
 
 	add_shortcode( 'akvo_rsr_project_updates', function( $atts ){
 
+		global $mc_api;
+
 		$atts = shortcode_atts( array(
 			'feed'	=> 'Sample',
 			'limit'	=> 3
@@ -203,38 +211,17 @@
 
 		if( isset( $json_data->results ) ){
 			echo "<ul class='list-unstyled list-rsr-updates'>";
-			for( $i = 0; $i < $atts['limit']; $i++ ){
-				if( isset( $json_data->results[ $i ] ) ){
-
-					$akvo_date = date( "d M Y", strtotime( $json_data->results[$i]->created_at ) );
-
-					$link = get_bloginfo('url') . "/updates/?id=" . $json_data->results[ $i ]->id;			//$base_url.$json_data->results[$i]->absolute_url;
-
-					$photo_url = "";
-					if( isset( $json_data->results[ $i]->photo->original ) ){
-						$photo_url = $base_url.$json_data->results[ $i]->photo->original;
-					}
-					else{
-						$photo_url = $base_url.$json_data->results[ $i]->photo;
-					}
-
-					?>
-
-					<li class='rsr-update'>
-						<a href='<?php _e( $link );?>'>
-							<div class="bg-image" style="background-image:url('<?php _e( $photo_url );?>');"></div>
-							<h4><?php _e( $json_data->results[ $i ]->title );?></h4>
-							<div class='date'><?php _e( "Published on ". $akvo_date );?></div>
-						</a>
-					</li>
-
-					<?php
-
-				}
-			}
+			for( $i = 0; $i < $atts['limit']; $i++ ):if( isset( $json_data->results[ $i ] ) ):?>
+				<li class='rsr-update'>
+					<a href='<?php _e( $mc_api->get_templink( $json_data->results[ $i ] ) );?>'>
+						<div class="bg-image" style="background-image:url('<?php _e( $mc_api->get_photo_url( $json_data->results[ $i] ) );?>');"></div>
+						<h4><?php _e( $json_data->results[ $i ]->title );?></h4>
+						<div class='date'><?php _e( "Published on ". $mc_api->get_published_date( $json_data->results[$i] ) );?></div>
+					</a>
+				</li>
+			<?php endif; endfor;
 			echo "</ul>";
 		}
-
 		return ob_get_clean();
 
 	} );
