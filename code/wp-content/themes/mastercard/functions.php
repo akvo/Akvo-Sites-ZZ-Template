@@ -1,5 +1,8 @@
 <?php
 
+	include( 'lib/Parsedown.php' );
+	include( 'lib/class-mc-api.php' );
+
 	function getCustomFonts(){
 
 		return $markFonts = array(
@@ -42,33 +45,7 @@
 
 	} );
 
-	/*
-	add_filter('akvo_fonts', function($fonts){
 
-		$markFonts = array(
-			'MarkForMCExtraLt',
-			//'MarkForMCExtraLtIt',
-			//'MarkForMCLt',
-			//'MarkForMCLtIt',
-			//'MarkForMCBook',
-			//'MarkForMCBookIt',
-			'MarkForMCMed',
-			//'MarkForMCMedIt.ttf',
-			//'MarkForMCBold.ttf',
-			//'MarkForMCBoldIt'
-		);
-
-		foreach( $markFonts as $markFont ){
-			$fonts[] = array(
-				'slug'	=> $markFont,
-				'name'	=> $markFont,
-				'url'	=> get_stylesheet_directory_uri().'/fonts/'.$markFont.'.ttf'
-			);
-		}
-
-		return $fonts;
-	});
-	*/
 
 	add_shortcode( 'akvo_rsr_project_field', function( $atts ){
 		global $akvo_rsr;
@@ -86,60 +63,12 @@
 		}
 	} );
 
-	class MC_API{
 
-		function request( $url ){
-			$args['headers'] = array(
-				'Authorization' => 'Token a6a0e042562bdb3c293d8df3874f84f9f55f9c7f',
-			);
-			return wp_remote_get( $url, $args );
-		}
-
-		function response( $url ){
-			$_json_expiration = 60 * 5; // 5 minutes
-			$key = md5( $url );
-			$data = array();
-			if ( ! ( $data = get_transient($key) ) ) {
-				$request = $this->request( $url );
-
-				if( ! is_wp_error( $request ) ) {
-
-					$body = wp_remote_retrieve_body( $request );
-
-					$data = json_decode( $body );		// MORE OF YOUR CODE HERE
-
-					set_transient($key, $data, $_json_expiration); // IF IT IS NEW, SET THE TRANSIENT FOR NEXT TIME
-				}
-			}
-			return $data;
-		}
-
-		function get_photo_url( $update ){
-			$photo_url = "";
-			if( isset( $update->photo->original ) ){
-				$photo_url = $update->photo->original;
-			}
-			elseif( isset( $update->photo ) ){
-				$photo_url = $update->photo;
-			}
-			return $photo_url;
-		}
-
-		function get_templink( $update ){ return get_bloginfo('url') . "/updates/?id=" . $update->id;	}
-
-		function get_published_date( $update ){
-			return date( "d M Y", strtotime( $update->created_at ) );
-		}
-
-	}
-
-	global $mc_api;
-	$mc_api = new MC_API;
 
 	function mf_get_data_feed_response( $data_feed_id, $api_key ){
 
 		$json_key = 'df'.$data_feed_id;
-		$_json_expiration = 60 * 5; // 5 minutes
+		$_json_expiration = 60 * 15; // 15 minutes
 		$key = $json_key . md5($json_key );
 
 		global $akvo_rsr, $mc_api;
@@ -193,7 +122,7 @@
 
 		return ob_get_clean();
 	} );
-
+	/*
 	add_shortcode( 'akvo_rsr_project_updates', function( $atts ){
 
 		global $mc_api;
@@ -207,29 +136,9 @@
 
 		ob_start();
 
-		$base_url = "https://mcf.akvoapp.org"; //https://rsr.akvo.org
+		$mc_api->list_updates( $json_data, $atts['limit'] );
 
-		if( isset( $json_data->results ) ){
-			echo "<ul class='list-unstyled list-rsr-updates'>";
-			for( $i = 0; $i < $atts['limit']; $i++ ):if( isset( $json_data->results[ $i ] ) ):?>
-				<li class='rsr-update'>
-					<a href='<?php _e( $mc_api->get_templink( $json_data->results[ $i ] ) );?>'>
-						<div class="bg-image" style="background-image:url('<?php _e( $mc_api->get_photo_url( $json_data->results[ $i] ) );?>');"></div>
-						<h4><?php _e( $json_data->results[ $i ]->title );?></h4>
-						<div class='date'><?php _e( "Published on ". $mc_api->get_published_date( $json_data->results[$i] ) );?></div>
-					</a>
-				</li>
-			<?php endif; endfor;
-			echo "</ul>";
-		}
 		return ob_get_clean();
 
 	} );
-
-	add_shortcode( 'mc_akvo_updates', function( $atts ){
-		ob_start();
-
-		include( 'partials/mc_akvo_updates.php' );
-
-		return ob_get_clean();
-	} );
+	*/
