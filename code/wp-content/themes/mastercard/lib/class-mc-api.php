@@ -80,7 +80,7 @@ class MC_API{
 	}
 
 	function response( $url ){
-		$_json_expiration = 60 * 5; // 5 minutes
+		$_json_expiration = 60 * 15; // 15 minutes
 		$key = md5( $url );
 		$data = array();
 		if ( ! ( $data = get_transient($key) ) ) {
