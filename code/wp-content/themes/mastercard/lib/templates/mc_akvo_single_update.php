@@ -5,7 +5,11 @@
 
 
 ?>
-<a class='back-btn' href="<?php echo site_url('updates');?>"><i class="fa fa-arrow-left"></i>&nbsp;See All Updates</a>
+<ol class="breadcrumb" style="margin-bottom: 50px;">
+	<li><a href="<?php _e( $this->url('home') );?>">Home</a></li>
+	<li><a href="<?php _e( $this->url('updates') );?>">All Updates</a></li>
+	<li class='active'><?php echo $project_update->title;?></li>
+</ol>
 <section style="max-width: 600px; margin: 50px auto 100px;">
 	<h3><?php echo $project_update->title;?></h3>
 	<p class="small text-muted"><?php echo "Published on " . $mc_api->get_published_date( $project_update );?></p>
@@ -35,11 +39,5 @@
 	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </section>
 <style>
-	.back-btn, .back-btn:hover{
-		color: #fe9c15;
-		border: #fe9c15 solid 1px;
-		padding: 10px;
-		text-decoration: none;
-	}
 	.header4 nav.navbar-fixed-top .navbar-container{ border: none; }
 </style>

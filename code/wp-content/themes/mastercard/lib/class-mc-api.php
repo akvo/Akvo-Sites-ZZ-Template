@@ -12,13 +12,14 @@ class MC_API{
 
 	function home_updates_shortcode( $atts ){
 		$atts = shortcode_atts( array(
-			'feed'	=> 'Sample',
-			'limit'	=> 3
+			'feed'					=> 'Sample',
+			'limit'					=> 3,
+			'rsr_link_flag'	=> 0
 		), $atts, 'akvo_rsr_project_updates' );
 
 		ob_start();
 		$json_data = mf_rsr_api( $atts['feed'] );
-		$this->list_updates( $json_data, $atts['limit'] );
+		$this->list_updates( $json_data, $atts['limit'], $atts['rsr_link_flag'] );
 		return ob_get_clean();
 	}
 
@@ -63,10 +64,7 @@ class MC_API{
 				$total_items = $response->count;
 			}
 
-			echo "<div style='margin:30px 0 100px;'>";
-			$mc_api->list_updates( $response, $atts['limit'] );
-			$mc_api->pagination( $total_items, $atts['limit'], $atts['page'] );
-			echo "</div>";
+			include( 'templates/mc_akvo_updates.php' );
 		}
 
 		return ob_get_clean();
@@ -109,18 +107,23 @@ class MC_API{
 		return $photo_url;
 	}
 
-	function get_templink( $update ){ return get_bloginfo('url') . "/updates/?id=" . $update->id;	}
+	function get_templink( $update, $rsr_link_flag = 0 ){
+		if( !$rsr_link_flag || $rsr_link_flag == '0' ){
+			return get_bloginfo('url') . "/updates/?id=" . $update->id;
+		}
+		return "https://mcf.akvoapp.org" . $update->absolute_url;
+	}
 
 	function get_published_date( $update ){
 		return date( "d M Y", strtotime( $update->created_at ) );
 	}
 
-	function list_updates( $json_data, $limit = 9 ){
+	function list_updates( $json_data, $limit = 9, $rsr_link_flag = 0 ){
 		if( isset( $json_data->results ) ){
 			echo "<ul class='list-unstyled list-rsr-updates'>";
 			for( $i = 0; $i < $limit; $i++ ):if( isset( $json_data->results[ $i ] ) ):?>
 				<li class='rsr-update'>
-					<a href='<?php _e( $this->get_templink( $json_data->results[ $i ] ) );?>'>
+					<a href='<?php _e( $this->get_templink( $json_data->results[ $i ], $rsr_link_flag ) );?>'>
 						<div class="bg-image" style="background-image:url('<?php _e( $this->get_photo_url( $json_data->results[ $i] ) );?>');"></div>
 						<h4><?php _e( $json_data->results[ $i ]->title );?></h4>
 						<div class='date'><?php _e( "Published on ". $this->get_published_date( $json_data->results[$i] ) );?></div>
@@ -147,6 +150,19 @@ class MC_API{
 			echo '<a class="page-numbers" data-page="' . $num . '" href="' . $link . '">' . $num . '</a>';
 		}
 	}
+
+	function url( $flag ){
+		switch( $flag ){
+			case 'home':
+				return site_url( 'mastercard' );
+				//return get_bloginfo( 'url' );
+
+			case 'updates':
+				return site_url('updates');
+		}
+	}
+
+
 
 }
 
